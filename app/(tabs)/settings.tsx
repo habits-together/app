@@ -17,7 +17,7 @@ export default function SettingsTab() {
       <View className="border border-gray-200 rounded-xl">
         <TouchableOpacity className="flex-row bg-white items-center p-4 rounded-t-xl">
           {themeIcon}
-          <Text className="flex-1 pl-3">Theme (dark/ light mode)</Text>
+          <Text className="flex-1 pl-3">Theme</Text>
           <Entypo name="chevron-right" size={24} color="lightgray" />
         </TouchableOpacity>
         <TouchableOpacity className="flex-row bg-white items-center p-4 border-y border-gray-200">

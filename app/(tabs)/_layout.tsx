@@ -1,4 +1,5 @@
 import React from 'react';
+import { Platform } from 'react-native';
 import { Tabs } from 'expo-router';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
 import { Feather, MaterialCommunityIcons, Octicons } from '@expo/vector-icons';
@@ -12,25 +13,27 @@ export default function TabLayout() {
         // to prevent a hydration error in React Navigation v6.
         headerShown: useClientOnlyValue(false, true),
         headerStyle: {
-          height: 100,
+          height: 110,
           backgroundColor: "#FAFAF9",
           borderBottomWidth: 0,
           shadowOpacity: 0,
-          elevation: 0, 
+          elevation: 0,
         },
+        headerTitleAlign: 'left',
         headerTitleStyle: {
-          paddingTop: 20,
           fontSize: 32,
-          textAlign: 'left',
           fontWeight: '700'
         },
         tabBarStyle: {
           backgroundColor: "#F5F5F4",
-          height: 73,
-          paddingTop: 12
+          height: Platform.select({ ios: 90, android: 75 }),
+          paddingTop: Platform.select({ ios: 12, android: 10 }),
+          alignItems: 'center',
         },
         tabBarLabelStyle: {
-          paddingBottom: 14
+          textAlign: 'center',
+          paddingBottom: Platform.select({ ios: 0, android: 17 }),
+          fontWeight: '600'
         },
       }}>
       <Tabs.Screen
@@ -53,7 +56,6 @@ export default function TabLayout() {
           title: 'Settings',
           tabBarIcon: ({ color }) => <Feather name="settings" color={color} size={24} />
         }}
-
       />
     </Tabs>
   );
