@@ -1,62 +1,69 @@
-import React from 'react';
-import { Platform } from 'react-native';
-import { Tabs } from 'expo-router';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
-import { Feather, MaterialCommunityIcons, Octicons } from '@expo/vector-icons';
+import React from "react";
+import { Platform } from "react-native";
+import { Tabs } from "expo-router";
+import { useClientOnlyValue } from "@/components/useClientOnlyValue";
+import { IconSettings, IconStack2, IconUsers } from "tabler-react-native/icons";
+import colors from "@/constants/colors";
 
 export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: 'black',
+        tabBarActiveTintColor: colors.black,
         // Disable the static render of the header on web
         // to prevent a hydration error in React Navigation v6.
         headerShown: useClientOnlyValue(false, true),
         headerStyle: {
           height: 110,
-          backgroundColor: "#FAFAF9",
+          backgroundColor: colors.grey["50"],
           borderBottomWidth: 0,
           shadowOpacity: 0,
           elevation: 0,
         },
-        headerTitleAlign: 'left',
+        headerTitleAlign: "left",
         headerTitleStyle: {
           fontSize: 32,
-          fontWeight: '700'
+          fontWeight: "700",
         },
         tabBarStyle: {
-          backgroundColor: "#F5F5F4",
+          backgroundColor: colors.grey["100"],
           height: Platform.select({ ios: 90, android: 75 }),
           paddingTop: Platform.select({ ios: 12, android: 10 }),
-          alignItems: 'center',
+          alignItems: "center",
         },
         tabBarLabelStyle: {
-          textAlign: 'center',
+          textAlign: "center",
           paddingBottom: Platform.select({ ios: 0, android: 17 }),
-          fontWeight: '600'
+          fontWeight: "600",
         },
-      }}>
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Habits',
-          tabBarIcon: ({ color }) => <MaterialCommunityIcons name="layers-outline" color={color} size={24} />
+          title: "Habits",
+          tabBarIcon: ({ color }) => (
+            <IconStack2 color={color} size={24} stroke={2.5} />
+          ),
         }}
       />
       <Tabs.Screen
         name="friends"
         options={{
-          title: 'Friends',
-          tabBarIcon: ({ color }) => <Octicons name="people" color={color} size={24} />
+          title: "Friends",
+          tabBarIcon: ({ color }) => (
+            <IconUsers color={color} size={24} stroke={2.5} />
+          ),
         }}
       />
       <Tabs.Screen
         name="settings"
         options={{
-          title: 'Settings',
-          tabBarIcon: ({ color }) => <Feather name="settings" color={color} size={24} />
+          title: "Settings",
+          tabBarIcon: ({ color }) => (
+            <IconSettings color={color} size={24} stroke={2.5} />
+          ),
         }}
-
       />
     </Tabs>
   );

@@ -1,65 +1,88 @@
-
 import { Text, View, TouchableOpacity } from "react-native";
-import { Ionicons, Feather, MaterialCommunityIcons, MaterialIcons, Entypo } from '@expo/vector-icons';
+import {
+  IconAward,
+  IconCategory2,
+  IconChevronRight,
+  IconFileText,
+  IconLock,
+  IconPremiumRights,
+  IconSend,
+  IconSparkles,
+  IconSun,
+} from "tabler-react-native/icons";
+import colors from "@/constants/colors";
 
 export default function SettingsTab() {
-  const themeIcon = <Ionicons name="contrast" size={22} />;
-  const widgetIcon = <MaterialCommunityIcons name="widgets" size={22} />;
-  const purchaseIcon = <Feather name="shopping-cart" size={22} color="black" />;
-  const feedbackIcon = <Feather name="send" size={22} color="black" />;
-  const rateIcon = <Ionicons name="sparkles-outline" size={22} color="black" />;
-  const creditsIcon = <Feather name="award" size={22} color="black" />;
-  const privacyIcon = <MaterialIcons name="lock-outline" size={22} color="black" />;
-  const termsIcon = <MaterialCommunityIcons name="file-document-outline" size={22} color="black"/>;
+  const iconProps = {
+    size: 24,
+    color: colors.black,
+    stroke: 2,
+  };
+
+  function Chevron() {
+    return <IconChevronRight size={24} color={colors.grey["400"]} stroke={2} />;
+  }
 
   return (
-    <View className="flex-1 bg-stone-50 p-4">
+    <View className="flex-1 bg-stone-50 p-4 stroke-blue-500">
       <View className="border border-gray-200 rounded-xl">
         <TouchableOpacity className="flex-row bg-white items-center p-4 rounded-t-xl">
-          {themeIcon}
-          <Text className="flex-1 pl-3">Theme</Text>
-          <Entypo name="chevron-right" size={24} color="lightgray" />
+          <IconSun {...iconProps} />
+          <Text className="flex-1 pl-2 text-base font-medium">Theme</Text>
+          <Chevron />
         </TouchableOpacity>
         <TouchableOpacity className="flex-row bg-white items-center p-4 border-y border-gray-200">
-          {widgetIcon}
-          <Text className="flex-1 pl-3">Widget settings</Text>
-          <Entypo name="chevron-right" size={24} color="lightgray" />
+          <IconCategory2 {...iconProps} />
+          <Text className="flex-1 pl-2 text-base font-medium">
+            Widget settings
+          </Text>
+          <Chevron />
         </TouchableOpacity>
         <TouchableOpacity className="flex-row bg-white items-center p-4 rounded-b-xl">
-          {purchaseIcon}
-          <Text className="flex-1 pl-3">Purchase unlimited access</Text>
-          <Entypo name="chevron-right" size={24} color="lightgray" />
+          <IconPremiumRights {...iconProps} />
+          <Text className="flex-1 pl-2 text-base font-medium">
+            Purchase unlimited access
+          </Text>
+          <Chevron />
         </TouchableOpacity>
       </View>
 
       <View className="mt-6 border border-gray-200 rounded-xl">
         <TouchableOpacity className="flex-row bg-white items-center p-4 rounded-t-xl">
-          {feedbackIcon}
-          <Text className="flex-1 pl-3">Send feedback or report a bug</Text>
-          <Entypo name="chevron-right" size={24} color="lightgray" />
+          <IconSend {...iconProps} />
+          <Text className="flex-1 pl-2 text-base font-medium">
+            Send feedback or report a bug
+          </Text>
+          <Chevron />
         </TouchableOpacity>
         <TouchableOpacity className="flex-row bg-white items-center p-4 border-t border-gray-200 rounded-b-xl">
-          {rateIcon}
-          <Text className="flex-1 pl-3">Rate the app</Text>
-          <Entypo name="chevron-right" size={24} color="lightgray" />
+          <IconSparkles {...iconProps} />
+          <Text className="flex-1 pl-2 text-base font-medium">
+            Rate the app
+          </Text>
+          <Chevron />
         </TouchableOpacity>
       </View>
 
       <View className="mt-6 border border-gray-200 rounded-xl">
         <TouchableOpacity className="flex-row bg-white items-center p-4 rounded-t-xl">
-          {creditsIcon}
-          <Text className="flex-1 pl-3">Credits</Text>
-          <Entypo name="chevron-right" size={24} color="lightgray" />
+          <IconAward {...iconProps} />
+          <Text className="flex-1 pl-2 text-base font-medium">Credits</Text>
+          <Chevron />
         </TouchableOpacity>
         <TouchableOpacity className="flex-row bg-white items-center p-4 border-y border-gray-200">
-          {privacyIcon}
-          <Text className="flex-1 pl-3">Privacy policy</Text>
-          <Entypo name="chevron-right" size={24} color="lightgray" />
+          <IconLock {...iconProps} />
+          <Text className="flex-1 pl-2 text-base font-medium">
+            Privacy policy
+          </Text>
+          <Chevron />
         </TouchableOpacity>
         <TouchableOpacity className="flex-row bg-white items-center p-4 rounded-b-xl">
-          {termsIcon}
-          <Text className="flex-1 pl-3">Terms of use</Text>
-          <Entypo name="chevron-right" size={24} color="lightgray" />
+          <IconFileText {...iconProps} />
+          <Text className="flex-1 pl-2 text-base font-medium">
+            Terms of use
+          </Text>
+          <Chevron />
         </TouchableOpacity>
       </View>
     </View>
