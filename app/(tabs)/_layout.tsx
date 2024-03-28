@@ -2,7 +2,7 @@ import React from "react";
 import { Platform } from "react-native";
 import { Tabs } from "expo-router";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
-import { IconSettings, IconStack2, IconUsers } from "tabler-react-native/icons";
+import { IconSettings, IconStack2, IconUsers } from "@tabler/icons-react-native";
 import colors from "@/constants/colors";
 
 export default function TabLayout() {
@@ -43,7 +43,7 @@ export default function TabLayout() {
         options={{
           title: "Habits",
           tabBarIcon: ({ color }) => (
-            <IconStack2 color={color} size={24} stroke={2.5} />
+            <IconStack2 color={color} size={24} strokeWidth={2.5} />
           ),
         }}
       />
@@ -52,7 +52,7 @@ export default function TabLayout() {
         options={{
           title: "Friends",
           tabBarIcon: ({ color }) => (
-            <IconUsers color={color} size={24} stroke={2.5} />
+            <IconUsers color={color} size={24} strokeWidth={2.5} />
           ),
         }}
       />
@@ -61,7 +61,7 @@ export default function TabLayout() {
         options={{
           title: "Settings",
           tabBarIcon: ({ color }) => (
-            <IconSettings color={color} size={24} stroke={2.5} />
+            <IconSettings color={color} size={24} strokeWidth={2.5} />
           ),
         }}
       />
