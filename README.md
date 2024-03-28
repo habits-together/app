@@ -12,3 +12,5 @@ To setup your development environment, create a .env file based on the .env.exam
 npm install
 npm start
 ```
+
+Install the Expo app on your phone, then scan the QR code created by the commands above.
