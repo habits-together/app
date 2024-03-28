@@ -1,92 +1,128 @@
 import { Text, View, TouchableOpacity, useColorScheme } from "react-native";
 import {
-  Ionicons,
-  Feather,
-  MaterialCommunityIcons,
-  MaterialIcons,
-  Entypo,
-} from "@expo/vector-icons";
+  IconAward,
+  IconCategory2,
+  IconChevronRight,
+  IconFileText,
+  IconLock,
+  IconPremiumRights,
+  IconSend,
+  IconSparkles,
+  IconSun,
+} from "@tabler/icons-react-native";
+import colors from "@/constants/colors";
 
 export default function SettingsTab() {
   let colorScheme = useColorScheme();
 
-  const iconColor = colorScheme === "dark" ? "white" : "black";
+  const iconProps = {
+    size: 24,
+    color: colorScheme === "dark" ? colors.white : colors.black,
+    strokeWidth: 2,
+  };
 
-  const themeIcon = <Ionicons name="contrast" size={22} color={iconColor} />;
-  const widgetIcon = (
-    <MaterialCommunityIcons name="widgets" size={22} color={iconColor} />
-  );
-  const purchaseIcon = (
-    <Feather name="shopping-cart" size={22} color={iconColor} />
-  );
-  const feedbackIcon = <Feather name="send" size={22} color={iconColor} />;
-  const rateIcon = (
-    <Ionicons name="sparkles-outline" size={22} color={iconColor} />
-  );
-  const creditsIcon = <Feather name="award" size={22} color={iconColor} />;
-  const privacyIcon = (
-    <MaterialIcons name="lock-outline" size={22} color={iconColor} />
-  );
-  const termsIcon = (
-    <MaterialCommunityIcons
-      name="file-document-outline"
-      size={22}
-      color={iconColor}
-    />
-  );
+  function Chevron() {
+    return (
+      <IconChevronRight size={24} color={colors.grey["400"]} strokeWidth={2} />
+    );
+  }
 
   return (
-    <View className="flex-1 p-4 bg-stone-50 dark:bg-stone-800">
-      <View className="border border-gray-200 dark:border-stone-500 rounded-xl">
-        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-stone-700 rounded-t-xl">
-          {themeIcon}
-          <Text className="flex-1 pl-3 dark:text-white">Theme</Text>
-          <Entypo name="chevron-right" size={24} color="lightgray" />
+    <View className="flex-1 p-4 bg-grey-50 dark:bg-black">
+      <View className="border border-grey-200 rounded-xl">
+        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-grey-800 dark:border-stone-light rounded-t-xl">
+          <IconSun {...iconProps} />
+          <Text
+            numberOfLines={1}
+            adjustsFontSizeToFit={true}
+            className="flex-1 pl-2 text-base font-medium dark:text-white"
+          >
+            Theme
+          </Text>
+          <Chevron />
         </TouchableOpacity>
-        <TouchableOpacity className="flex-row items-center p-4 bg-white border-gray-200 dark:border-stone-500 dark:bg-stone-700 border-y">
-          {widgetIcon}
-          <Text className="flex-1 pl-3 dark:text-white">Widget settings</Text>
-          <Entypo name="chevron-right" size={24} color="lightgray" />
+        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-grey-800 dark:border-stone-light border-y border-grey-200">
+          <IconCategory2 {...iconProps} />
+          <Text
+            numberOfLines={1}
+            adjustsFontSizeToFit={true}
+            className="flex-1 pl-2 text-base font-medium dark:text-white"
+          >
+            Widget settings
+          </Text>
+          <Chevron />
         </TouchableOpacity>
-        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-stone-700 rounded-b-xl">
-          {purchaseIcon}
-          <Text className="flex-1 pl-3 dark:text-white">
+        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-grey-800 dark:border-stone-light rounded-b-xl">
+          <IconPremiumRights {...iconProps} />
+          <Text
+            numberOfLines={1}
+            adjustsFontSizeToFit={true}
+            className="flex-1 pl-2 text-base font-medium dark:text-white"
+          >
             Purchase unlimited access
           </Text>
-          <Entypo name="chevron-right" size={24} color="lightgray" />
+          <Chevron />
         </TouchableOpacity>
       </View>
 
-      <View className="mt-6 border border-gray-200 dark:border-stone-500 rounded-xl">
-        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-stone-700 rounded-t-xl">
-          {feedbackIcon}
-          <Text className="flex-1 pl-3 dark:text-white">
+      <View className="mt-6 border border-grey-200 rounded-xl">
+        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-grey-800 dark:border-stone-light rounded-t-xl">
+          <IconSend {...iconProps} />
+          <Text
+            numberOfLines={1}
+            adjustsFontSizeToFit={true}
+            className="flex-1 pl-2 text-base font-medium dark:text-white"
+          >
             Send feedback or report a bug
           </Text>
-          <Entypo name="chevron-right" size={24} color="lightgray" />
+          <Chevron />
         </TouchableOpacity>
-        <TouchableOpacity className="flex-row items-center p-4 bg-white border-t border-gray-200 dark:border-stone-500 dark:bg-stone-700 rounded-b-xl">
-          {rateIcon}
-          <Text className="flex-1 pl-3 dark:text-white">Rate the app</Text>
-          <Entypo name="chevron-right" size={24} color="lightgray" />
+        <TouchableOpacity className="flex-row items-center p-4 bg-white border-t dark:bg-grey-800 dark:border-stone-light border-grey-200 rounded-b-xl">
+          <IconSparkles {...iconProps} />
+          <Text
+            numberOfLines={1}
+            adjustsFontSizeToFit={true}
+            className="flex-1 pl-2 text-base font-medium dark:text-white"
+          >
+            Rate the app
+          </Text>
+          <Chevron />
         </TouchableOpacity>
       </View>
 
-      <View className="mt-6 border border-gray-200 dark:border-stone-500 rounded-xl">
-        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-stone-700 rounded-t-xl">
-          {creditsIcon}
-          <Text className="flex-1 pl-3 dark:text-white">Credits</Text>
-          <Entypo name="chevron-right" size={24} color="lightgray" />
+      <View className="mt-6 border border-grey-200 rounded-xl">
+        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-grey-800 dark:border-stone-light rounded-t-xl">
+          <IconAward {...iconProps} />
+          <Text
+            numberOfLines={1}
+            adjustsFontSizeToFit={true}
+            className="flex-1 pl-2 text-base font-medium dark:text-white"
+          >
+            Credits
+          </Text>
+          <Chevron />
         </TouchableOpacity>
-        <TouchableOpacity className="flex-row items-center p-4 bg-white border-gray-200 dark:border-stone-500 dark:bg-stone-700 border-y">
-          {privacyIcon}
-          <Text className="flex-1 pl-3 dark:text-white">Privacy policy</Text>
-          <Entypo name="chevron-right" size={24} color="lightgray" />
+        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-grey-800 dark:border-stone-light border-y border-grey-200">
+          <IconLock {...iconProps} />
+          <Text
+            numberOfLines={1}
+            adjustsFontSizeToFit={true}
+            className="flex-1 pl-2 text-base font-medium dark:text-white"
+          >
+            Privacy policy
+          </Text>
+          <Chevron />
         </TouchableOpacity>
-        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-stone-700 rounded-b-xl">
-          {termsIcon}
-          <Text className="flex-1 pl-3 dark:text-white">Terms of use</Text>
-          <Entypo name="chevron-right" size={24} color="lightgray" />
+        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-grey-800 dark:border-stone-light rounded-b-xl">
+          <IconFileText {...iconProps} />
+          <Text
+            numberOfLines={1}
+            adjustsFontSizeToFit={true}
+            className="flex-1 pl-2 text-base font-medium dark:text-white"
+          >
+            Terms of use
+          </Text>
+          <Chevron />
         </TouchableOpacity>
       </View>
     </View>

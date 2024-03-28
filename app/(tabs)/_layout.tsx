@@ -3,22 +3,31 @@ import { Platform } from "react-native";
 import { Tabs } from "expo-router";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
 import { Feather, MaterialCommunityIcons, Octicons } from "@expo/vector-icons";
+import {
+  IconSettings,
+  IconStack2,
+  IconUsers,
+} from "@tabler/icons-react-native";
 
 import { Appearance, useColorScheme } from "react-native";
+import colors from "@/constants/colors";
 
 export default function TabLayout() {
-  let colorScheme = useColorScheme();
+  const colorScheme = useColorScheme();
+
+  const foreground = colorScheme === "dark" ? colors.grey["50"] : colors.black;
+  const background = colorScheme === "dark" ? colors.black : colors.grey["50"];
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: colorScheme === "dark" ? "#FFF" : "#000",
+        tabBarActiveTintColor: foreground,
         // Disable the static render of the header on web
         // to prevent a hydration error in React Navigation v6.
         headerShown: useClientOnlyValue(false, true),
         headerStyle: {
           height: 110,
-          backgroundColor: colorScheme === "dark" ? "#292524" : "#FFF",
+          backgroundColor: background,
           borderBottomWidth: 0,
           shadowOpacity: 0,
           elevation: 0,
@@ -27,10 +36,10 @@ export default function TabLayout() {
         headerTitleStyle: {
           fontSize: 32,
           fontWeight: "700",
-          color: colorScheme === "dark" ? "#FFF" : "#000",
+          color: foreground,
         },
         tabBarStyle: {
-          backgroundColor: colorScheme === "dark" ? "#000" : "#FFF",
+          backgroundColor: background,
           height: Platform.select({ ios: 90, android: 75 }),
           paddingTop: Platform.select({ ios: 12, android: 10 }),
           alignItems: "center",
@@ -39,7 +48,7 @@ export default function TabLayout() {
           textAlign: "center",
           paddingBottom: Platform.select({ ios: 0, android: 17 }),
           fontWeight: "600",
-          color: colorScheme === "dark" ? "#FFF" : "#000",
+          color: foreground,
         },
       }}
     >
@@ -48,11 +57,7 @@ export default function TabLayout() {
         options={{
           title: "Habits",
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons
-              name="layers-outline"
-              color={color}
-              size={24}
-            />
+            <IconStack2 color={color} size={24} strokeWidth={2.5} />
           ),
         }}
       />
@@ -61,7 +66,7 @@ export default function TabLayout() {
         options={{
           title: "Friends",
           tabBarIcon: ({ color }) => (
-            <Octicons name="people" color={color} size={24} />
+            <IconUsers color={color} size={24} strokeWidth={2.5} />
           ),
         }}
       />
@@ -70,7 +75,7 @@ export default function TabLayout() {
         options={{
           title: "Settings",
           tabBarIcon: ({ color }) => (
-            <Feather name="settings" color={color} size={24} />
+            <IconSettings color={color} size={24} strokeWidth={2.5} />
           ),
         }}
       />
