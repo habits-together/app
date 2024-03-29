@@ -2,22 +2,20 @@ import React from "react";
 import { Platform } from "react-native";
 import { Tabs } from "expo-router";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
-import { Feather, MaterialCommunityIcons, Octicons } from "@expo/vector-icons";
 import {
   IconSettings,
   IconStack2,
   IconUsers,
 } from "@tabler/icons-react-native";
-
-import { Appearance, useColorScheme } from "react-native";
+import { useColorScheme } from "react-native";
 import colors from "@/constants/colors";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
-  const foreground = colorScheme === "dark" ? colors.grey["50"] : colors.black;
-  const background = colorScheme === "dark" ? colors.black : colors.grey["50"];
-
+  const foreground = colorScheme === "dark" ? colors.white : colors.stone.base;
+  const background = colorScheme === "dark" ? colors.stone.base : colors.white;
+  const tabBackGround = colorScheme === "dark" ? colors.stone["900"] : colors.stone["100"];
   return (
     <Tabs
       screenOptions={{
@@ -39,10 +37,11 @@ export default function TabLayout() {
           color: foreground,
         },
         tabBarStyle: {
-          backgroundColor: background,
+          backgroundColor: tabBackGround,
           height: Platform.select({ ios: 90, android: 75 }),
           paddingTop: Platform.select({ ios: 12, android: 10 }),
           alignItems: "center",
+          borderBlockColor: "transparent"
         },
         tabBarLabelStyle: {
           textAlign: "center",
