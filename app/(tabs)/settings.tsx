@@ -28,7 +28,7 @@ export default function SettingsTab() {
   }
 
   return (
-    <View className="flex-1 p-4 bg-grey-50 dark:bg-black">
+    <View className="flex-1 p-4 bg-white dark:bg-stone-base">
       <View className="border border-grey-200 rounded-xl">
         <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-grey-800 dark:border-stone-light rounded-t-xl">
           <IconSun {...iconProps} />

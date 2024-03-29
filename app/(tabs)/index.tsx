@@ -1,11 +1,11 @@
 
 import { Text, View } from '@/components/Themed';
-import { HabitCalender } from '@/components/HabitCalender';
+import { HabitActivity } from '@/components/HabitActivity';
 
 export default function HabitsTab() {
   return (
-    <View className='flex-1 bg-grey-50 p-4'>
-      <HabitCalender/>
+    <View className='flex-1 bg-white dark:bg-stone-base p-4'>
+      <HabitActivity title='Read for 15 minutes'/>
     </View>
   );
 }
