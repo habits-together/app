@@ -59,15 +59,15 @@ export function HabitActivity({title}: {title: string}) {
                 </TouchableOpacity>
             </View>
 
-            <View className="flex flex-row pl-1">
+            <View className="flex flex-row">
                 {WeekDays.map((day, index) => (
-                    <Text key={index} className="w-[7.12%] text-orange-text dark:text-stone-text font-bold">
+                    <Text key={index} className="w-[5.7%] mx-0.5 text-center text-orange-text dark:text-stone-text font-semibold">
                         {day}
                     </Text>
                 ))}
 
                 {WeekDays.map((day, index) => (
-                    <Text key={index} className="w-[7.12%] text-orange-text dark:text-stone-text font-bold">
+                    <Text key={index} className="w-[5.7%] mx-0.5 text-center text-orange-text dark:text-stone-text font-semibold">
                         {day}
                     </Text>
                 ))}
