@@ -48,7 +48,6 @@ export default function TabLayout() {
           textAlign: "center",
           paddingBottom: Platform.select({ ios: 0, android: 17 }),
           fontWeight: "600",
-          color: foreground,
         },
       }}
     >

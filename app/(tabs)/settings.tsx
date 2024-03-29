@@ -11,6 +11,7 @@ import {
   IconSun,
 } from "@tabler/icons-react-native";
 import colors from "@/constants/colors";
+import Divider from "@/components/Divider";
 
 export default function SettingsTab() {
   let colorScheme = useColorScheme();
@@ -21,110 +22,119 @@ export default function SettingsTab() {
     strokeWidth: 2,
   };
 
-  function Chevron() {
-    return (
-      <IconChevronRight size={24} color={colors.grey["400"]} strokeWidth={2} />
-    );
-  }
-
   return (
     <View className="flex-1 p-4 bg-grey-50 dark:bg-black">
-      <View className="border border-grey-200 rounded-xl">
-        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-grey-800 dark:border-stone-light rounded-t-xl">
-          <IconSun {...iconProps} />
-          <Text
-            numberOfLines={1}
-            adjustsFontSizeToFit={true}
-            className="flex-1 pl-2 text-base font-medium dark:text-white"
-          >
-            Theme
-          </Text>
-          <Chevron />
-        </TouchableOpacity>
-        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-grey-800 dark:border-stone-light border-y border-grey-200">
-          <IconCategory2 {...iconProps} />
-          <Text
-            numberOfLines={1}
-            adjustsFontSizeToFit={true}
-            className="flex-1 pl-2 text-base font-medium dark:text-white"
-          >
-            Widget settings
-          </Text>
-          <Chevron />
-        </TouchableOpacity>
-        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-grey-800 dark:border-stone-light rounded-b-xl">
-          <IconPremiumRights {...iconProps} />
-          <Text
-            numberOfLines={1}
-            adjustsFontSizeToFit={true}
-            className="flex-1 pl-2 text-base font-medium dark:text-white"
-          >
-            Purchase unlimited access
-          </Text>
-          <Chevron />
-        </TouchableOpacity>
-      </View>
-
-      <View className="mt-6 border border-grey-200 rounded-xl">
-        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-grey-800 dark:border-stone-light rounded-t-xl">
-          <IconSend {...iconProps} />
-          <Text
-            numberOfLines={1}
-            adjustsFontSizeToFit={true}
-            className="flex-1 pl-2 text-base font-medium dark:text-white"
-          >
-            Send feedback or report a bug
-          </Text>
-          <Chevron />
-        </TouchableOpacity>
-        <TouchableOpacity className="flex-row items-center p-4 bg-white border-t dark:bg-grey-800 dark:border-stone-light border-grey-200 rounded-b-xl">
-          <IconSparkles {...iconProps} />
-          <Text
-            numberOfLines={1}
-            adjustsFontSizeToFit={true}
-            className="flex-1 pl-2 text-base font-medium dark:text-white"
-          >
-            Rate the app
-          </Text>
-          <Chevron />
-        </TouchableOpacity>
-      </View>
-
-      <View className="mt-6 border border-grey-200 rounded-xl">
-        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-grey-800 dark:border-stone-light rounded-t-xl">
-          <IconAward {...iconProps} />
-          <Text
-            numberOfLines={1}
-            adjustsFontSizeToFit={true}
-            className="flex-1 pl-2 text-base font-medium dark:text-white"
-          >
-            Credits
-          </Text>
-          <Chevron />
-        </TouchableOpacity>
-        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-grey-800 dark:border-stone-light border-y border-grey-200">
-          <IconLock {...iconProps} />
-          <Text
-            numberOfLines={1}
-            adjustsFontSizeToFit={true}
-            className="flex-1 pl-2 text-base font-medium dark:text-white"
-          >
-            Privacy policy
-          </Text>
-          <Chevron />
-        </TouchableOpacity>
-        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-grey-800 dark:border-stone-light rounded-b-xl">
-          <IconFileText {...iconProps} />
-          <Text
-            numberOfLines={1}
-            adjustsFontSizeToFit={true}
-            className="flex-1 pl-2 text-base font-medium dark:text-white"
-          >
-            Terms of use
-          </Text>
-          <Chevron />
-        </TouchableOpacity>
-      </View>
+      <Section
+        settings={[
+          <Setting
+            icon={<IconSun {...iconProps} />}
+            title="Theme"
+            onPress={() => {}}
+          />,
+          <Setting
+            icon={<IconCategory2 {...iconProps} />}
+            title="Widget settings"
+            onPress={() => {}}
+          />,
+          <Setting
+            icon={<IconPremiumRights {...iconProps} />}
+            title="Purchase unlimited access"
+            onPress={() => {}}
+          />,
+        ]}
+      />
+      <Section
+        addMargin={true}
+        settings={[
+          <Setting
+            icon={<IconSend {...iconProps} />}
+            title="Send feedback or report a bug"
+            onPress={() => {}}
+          />,
+          <Setting
+            icon={<IconSparkles {...iconProps} />}
+            title="Rate the app"
+            onPress={() => {}}
+          />,
+        ]}
+      />
+      <Section
+        addMargin={true}
+        settings={[
+          <Setting
+            icon={<IconAward {...iconProps} />}
+            title="Credits"
+            onPress={() => {}}
+          />,
+          <Setting
+            icon={<IconLock {...iconProps} />}
+            title="Privacy policy"
+            onPress={() => {}}
+          />,
+          <Setting
+            icon={<IconFileText {...iconProps} />}
+            title="Terms of use"
+            onPress={() => {}}
+          />,
+        ]}
+      />
     </View>
+  );
+}
+
+function Section({
+  settings,
+  addMargin = false,
+}: {
+  settings: React.ReactNode[];
+  addMargin?: boolean;
+}) {
+  return (
+    <View
+      className={`border border-grey-200 rounded-xl overflow-hidden ${
+        addMargin && "mt-6"
+      }`}
+    >
+      {/* settings with Divider in between each one */}
+      {settings.map((setting, index) => (
+        <View key={index}>
+          {setting}
+          {index < settings.length - 1 && <Divider />}
+        </View>
+      ))}
+    </View>
+  );
+}
+
+function Setting({
+  icon,
+  title,
+  onPress,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  onPress: () => void;
+}) {
+  return (
+    <TouchableOpacity
+      onPress={onPress}
+      className="flex-row items-center p-4 bg-white dark:bg-grey-800"
+    >
+      {icon}
+      <Text
+        numberOfLines={1}
+        adjustsFontSizeToFit={true}
+        className="flex-1 pl-2 text-base font-medium dark:text-white"
+      >
+        {title}
+      </Text>
+      <Chevron />
+    </TouchableOpacity>
+  );
+}
+
+function Chevron() {
+  return (
+    <IconChevronRight size={24} color={colors.grey["400"]} strokeWidth={2} />
   );
 }
