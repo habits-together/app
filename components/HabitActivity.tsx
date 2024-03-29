@@ -8,10 +8,9 @@ const WeekDays = ["M", "T", "W", "T", "F", "S", "S"];
 
 export function HabitActivity({ title }: { title: string }) {
   const activityData = getMockCompletionsData();
-
   // make an array with 14 days (2 weeks) chunks
-  function chunkArray(array: any) {
-    let result = [];
+  function chunkArray(array: number[]) {
+    let result: number[][] = [];
     for (let i = 0; i < array.length; i += 14) {
       result.push(array.slice(i, i + 14));
     }
@@ -68,7 +67,7 @@ export function HabitActivity({ title }: { title: string }) {
       </View>
       {chunkedActivityData.map((weekRow, rowIndex) => (
         <View key={`row-${rowIndex}`} className="flex flex-row">
-          {weekRow.map((data: any, index: any) => (
+          {weekRow.map((data: number, index: number) => (
             <View
               key={`data-${rowIndex}-${index}`}
               className={`w-[5.7%] aspect-square ${getColorForValue(
