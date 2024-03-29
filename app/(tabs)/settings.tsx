@@ -29,8 +29,8 @@ export default function SettingsTab() {
 
   return (
     <View className="flex-1 p-4 bg-white dark:bg-stone-base">
-      <View className="border border-grey-200 rounded-xl">
-        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-grey-800 dark:border-stone-light rounded-t-xl">
+      <View className="rounded-xl gap-[1px] border-b border-r border-grey-200 bg-grey-200">
+        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-stone-900 rounded-t-xl ">
           <IconSun {...iconProps} />
           <Text
             numberOfLines={1}
@@ -41,7 +41,7 @@ export default function SettingsTab() {
           </Text>
           <Chevron />
         </TouchableOpacity>
-        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-grey-800 dark:border-stone-light border-y border-grey-200">
+        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-stone-900 ">
           <IconCategory2 {...iconProps} />
           <Text
             numberOfLines={1}
@@ -52,7 +52,7 @@ export default function SettingsTab() {
           </Text>
           <Chevron />
         </TouchableOpacity>
-        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-grey-800 dark:border-stone-light rounded-b-xl">
+        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-stone-900  rounded-b-xl">
           <IconPremiumRights {...iconProps} />
           <Text
             numberOfLines={1}
@@ -65,8 +65,8 @@ export default function SettingsTab() {
         </TouchableOpacity>
       </View>
 
-      <View className="mt-6 border border-grey-200 rounded-xl">
-        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-grey-800 dark:border-stone-light rounded-t-xl">
+      <View className="rounded-xl gap-[1px] border-b border-r border-grey-200 bg-grey-200 mt-6">
+        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-stone-900  rounded-t-xl">
           <IconSend {...iconProps} />
           <Text
             numberOfLines={1}
@@ -77,7 +77,7 @@ export default function SettingsTab() {
           </Text>
           <Chevron />
         </TouchableOpacity>
-        <TouchableOpacity className="flex-row items-center p-4 bg-white border-t dark:bg-grey-800 dark:border-stone-light border-grey-200 rounded-b-xl">
+        <TouchableOpacity className="flex-row items-center p-4 bg-white  dark:bg-stone-900   rounded-b-xl">
           <IconSparkles {...iconProps} />
           <Text
             numberOfLines={1}
@@ -90,8 +90,8 @@ export default function SettingsTab() {
         </TouchableOpacity>
       </View>
 
-      <View className="mt-6 border border-grey-200 rounded-xl">
-        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-grey-800 dark:border-stone-light rounded-t-xl">
+      <View className="rounded-xl gap-[1px] border-b border-r border-grey-200 bg-grey-200 mt-6">
+        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-stone-900 rounded-t-xl">
           <IconAward {...iconProps} />
           <Text
             numberOfLines={1}
@@ -102,7 +102,7 @@ export default function SettingsTab() {
           </Text>
           <Chevron />
         </TouchableOpacity>
-        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-grey-800 dark:border-stone-light border-y border-grey-200">
+        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-stone-900 ">
           <IconLock {...iconProps} />
           <Text
             numberOfLines={1}
@@ -113,7 +113,7 @@ export default function SettingsTab() {
           </Text>
           <Chevron />
         </TouchableOpacity>
-        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-grey-800 dark:border-stone-light rounded-b-xl">
+        <TouchableOpacity className="flex-row items-center p-4 bg-white dark:bg-stone-900  rounded-b-xl">
           <IconFileText {...iconProps} />
           <Text
             numberOfLines={1}
