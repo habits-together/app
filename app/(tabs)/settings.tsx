@@ -4,6 +4,7 @@ import {
   IconCategory2,
   IconChevronRight,
   IconFileText,
+  IconKey,
   IconLock,
   IconPremiumRights,
   IconSend,
@@ -12,6 +13,7 @@ import {
 } from "@tabler/icons-react-native";
 import colors from "@/constants/colors";
 import Divider from "@/components/Divider";
+import { resetNavigationStack } from "@/lib/resetNavigationStack";
 
 export default function SettingsTab() {
   let colorScheme = useColorScheme();
@@ -25,6 +27,7 @@ export default function SettingsTab() {
   return (
     <View className="flex-1 p-4 bg-grey-50 dark:bg-black">
       <Section
+        addMargin={false}
         settings={[
           <Setting
             icon={<IconSun {...iconProps} />}
@@ -44,7 +47,6 @@ export default function SettingsTab() {
         ]}
       />
       <Section
-        addMargin={true}
         settings={[
           <Setting
             icon={<IconSend {...iconProps} />}
@@ -59,7 +61,6 @@ export default function SettingsTab() {
         ]}
       />
       <Section
-        addMargin={true}
         settings={[
           <Setting
             icon={<IconAward {...iconProps} />}
@@ -78,13 +79,24 @@ export default function SettingsTab() {
           />,
         ]}
       />
+      <Section
+        settings={[
+          <Setting
+            icon={<IconKey {...iconProps} />}
+            title="Go to sign in"
+            onPress={() => {
+              resetNavigationStack("/(auth)/signin");
+            }}
+          />,
+        ]}
+      />
     </View>
   );
 }
 
 function Section({
   settings,
-  addMargin = false,
+  addMargin = true,
 }: {
   settings: React.ReactNode[];
   addMargin?: boolean;
@@ -138,4 +150,3 @@ function Chevron() {
     <IconChevronRight size={24} color={colors.grey["400"]} strokeWidth={2} />
   );
 }
-
