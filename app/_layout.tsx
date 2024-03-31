@@ -52,6 +52,11 @@ function RootLayoutNav() {
     <ThemeProvider value={DefaultTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)/signin" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="(auth)/createprofile"
+          options={{ headerShown: false }}
+        />
       </Stack>
     </ThemeProvider>
   );
