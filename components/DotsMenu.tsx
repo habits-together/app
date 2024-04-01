@@ -1,6 +1,7 @@
 import colors from "@/constants/colors";
 import { IconDots } from "@tabler/icons-react-native";
-import { TouchableOpacity, useColorScheme } from "react-native";
+import { TouchableOpacity } from "react-native";
+import Icon from "./Icon";
 
 type Option = {
   label: string;
@@ -8,15 +9,12 @@ type Option = {
   action: () => void;
 };
 
+// TODO: implement the options with a native dropdown
+
 export default function DotsMenu({ options }: { options: Option[] }) {
-  const colorScheme = useColorScheme();
   return (
     <TouchableOpacity>
-      <IconDots
-        size={24}
-        color={colorScheme === "dark" ? colors.white : colors.black}
-        strokeWidth={2}
-      />
+      <Icon icon={IconDots} />
     </TouchableOpacity>
   );
 }
