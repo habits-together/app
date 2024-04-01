@@ -9,6 +9,7 @@ import {
 } from "@tabler/icons-react-native";
 import { useColorScheme } from "react-native";
 import colors from "@/constants/colors";
+import Icon from "@/components/Icon";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -53,7 +54,7 @@ export default function TabLayout() {
         options={{
           title: "Habits",
           tabBarIcon: ({ color }) => (
-            <IconStack2 color={color} size={24} strokeWidth={2.5} />
+            <Icon icon={IconStack2} lightColor={color} darkColor={color} strokeWidth={2.5} />
           ),
         }}
       />
@@ -62,7 +63,7 @@ export default function TabLayout() {
         options={{
           title: "Friends",
           tabBarIcon: ({ color }) => (
-            <IconUsers color={color} size={24} strokeWidth={2.5} />
+            <Icon icon={IconUsers} lightColor={color} darkColor={color} strokeWidth={2.5} />
           ),
         }}
       />
@@ -71,7 +72,7 @@ export default function TabLayout() {
         options={{
           title: "Settings",
           tabBarIcon: ({ color }) => (
-            <IconSettings color={color} size={24} strokeWidth={2.5} />
+            <Icon icon={IconSettings} lightColor={color} darkColor={color} strokeWidth={2.5} />
           ),
           headerStyle: {
             backgroundColor:
