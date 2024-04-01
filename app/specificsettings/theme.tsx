@@ -1,9 +1,9 @@
 import { View } from "@/components/Themed";
 import { Appearance } from "react-native";
 import {
+  IconBrightness,
   IconMoon,
   IconSun,
-  IconTool,
 } from "@tabler/icons-react-native";
 import Icon from "@/components/Icon";
 import { SettingsChoice, SettingsContainer } from "@/components/SettingsComponents";
@@ -15,8 +15,8 @@ export default function Theme() {
         settingKey="theme"
         settings={[
           {
-            icon: <Icon icon={IconTool} />,
-            title: "System",
+            icon: <Icon icon={IconBrightness} />,
+            title: "Match device",
             onPress: () => {
               Appearance.setColorScheme(null);
             },

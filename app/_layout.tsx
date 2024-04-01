@@ -5,9 +5,6 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import { useColorScheme } from "react-native";
-
-// import { useColorScheme } from '@/components/useColorScheme';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -47,15 +44,12 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-  // const colorScheme = useColorScheme();
-
   return (
-    // <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}> // TODO: use when implementing dark mode
     <ThemeProvider value={DefaultTheme}>
       <Stack
         screenOptions={{
           headerShown: false,
-          contentStyle: {backgroundColor : colors.black}
+          contentStyle: { backgroundColor: colors.black },
         }}
       >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

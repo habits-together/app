@@ -1,16 +1,23 @@
 import React, { useState } from "react";
-import { View, Text, useColorScheme, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import colors from "@/constants/colors";
 import { IconBook, IconCheck } from "@tabler/icons-react-native";
 import DotsMenu from "./DotsMenu";
 import { getMockCompletionsData } from "@/lib/mockHabitData";
+import Icon from "./Icon";
 const WeekDays = ["M", "T", "W", "T", "F", "S", "S"];
+
+export type HabitCompletionValue =
+  | "completed"
+  | "missed"
+  | "not-applicable" // for dates in the future
+  | "partial"; // when the goal is multiple times per day
 
 export function HabitActivity({ title }: { title: string }) {
   const activityData = getMockCompletionsData();
   // make an array with 14 days (2 weeks) chunks
-  function chunkArray(array: number[]) {
-    let result: number[][] = [];
+  function chunkArray(array: HabitCompletionValue[]) {
+    let result: HabitCompletionValue[][] = [];
     for (let i = 0; i < array.length; i += 14) {
       result.push(array.slice(i, i + 14));
     }
@@ -18,28 +25,28 @@ export function HabitActivity({ title }: { title: string }) {
   }
   const chunkedActivityData = chunkArray(activityData);
 
-  function getColorForValue(value: any) {
+  function getColorClassesFromCompletionValue(value: HabitCompletionValue) {
     switch (value) {
-      case 0:
-        return "bg-orange-faded dark:bg-stone-faded";
-      case 1:
+      case "completed":
         return "bg-orange-base";
-      default:
+      case "missed":
         return "bg-orange-faded dark:bg-stone-faded";
+      case "not-applicable":
+        return "";
+      case "partial":
+        return "bg-orange-base"; // TODO
     }
   }
-  const colorScheme = useColorScheme();
-  const iconProps = {
-    size: 24,
-    color: colorScheme === "dark" ? colors.white : colors.black,
-    strokeWidth: 2,
-  };
+
   return (
-    <View className="w-full py-3 bg-orange-light dark:bg-stone-light rounded-3xl pl-[10px]">
-      <View className="flex-row items-center justify-between mr-4">
-        <View className="flex-row items-center gap-1 flex-grow">
-          <IconBook {...iconProps} />
-          <Text className="text-black dark:text-white font-bold text-xl mb-1">
+    <View className="w-full p-3 bg-orange-light dark:bg-stone-light rounded-3xl">
+      <View className="ml-2 flex-row items-center justify-between">
+        <View className="mr-2 flex-row items-center gap-1 flex-1">
+          <Icon icon={IconBook} />
+          <Text
+            numberOfLines={1}
+            className="text-black dark:text-white font-bold text-xl mb-1 flex-1"
+          >
             {title}
           </Text>
         </View>
@@ -47,30 +54,26 @@ export function HabitActivity({ title }: { title: string }) {
       </View>
 
       <View className="flex flex-row">
-        {WeekDays.map((day, index) => (
-          <Text
-            key={index}
-            className="w-[5.7%] mx-0.5 text-center text-orange-text dark:text-stone-text font-semibold"
-          >
-            {day}
-          </Text>
-        ))}
-
-        {WeekDays.map((day, index) => (
-          <Text
-            key={index}
-            className="w-[5.7%] mx-0.5 text-center text-orange-text dark:text-stone-text font-semibold"
-          >
-            {day}
-          </Text>
-        ))}
+        {[1, 2].map(
+          (
+            order // need to repeat the days twice
+          ) =>
+            WeekDays.map((day, index) => (
+              <Text
+                key={order * index}
+                className="flex-1 mx-0.5 text-center text-orange-text dark:text-stone-text font-semibold"
+              >
+                {day}
+              </Text>
+            ))
+        )}
       </View>
       {chunkedActivityData.map((weekRow, rowIndex) => (
         <View key={`row-${rowIndex}`} className="flex flex-row">
-          {weekRow.map((data: number, index: number) => (
+          {weekRow.map((data: HabitCompletionValue, index: number) => (
             <View
               key={`data-${rowIndex}-${index}`}
-              className={`w-[5.7%] aspect-square ${getColorForValue(
+              className={`flex-1 aspect-square ${getColorClassesFromCompletionValue(
                 data
               )} rounded m-0.5`}
             />
@@ -83,17 +86,16 @@ export function HabitActivity({ title }: { title: string }) {
 }
 
 function CompletionButton() {
-  const colorScheme = useColorScheme();
   return (
     <TouchableOpacity
-      className="self-end rounded-full w-12 h-12 bg-blue-500 mt-3 mr-3" // Adjust width (w-20) and height (h-20) to your needs
+      className="self-end rounded-full w-12 h-12 bg-blue-500 mt-3" // Adjust width (w-20) and height (h-20) to your needs
     >
       <View className="rounded-full bg-orange-faded dark:bg-stone-faded w-full h-full items-center justify-center">
-        <IconCheck
+        <Icon
+          icon={IconCheck}
           size={34}
-          color={
-            colorScheme === "dark" ? colors.stone.light : colors.orange.light
-          }
+          lightColor={colors.orange.light}
+          darkColor={colors.stone.light}
           strokeWidth={4}
         />
       </View>

@@ -1,4 +1,3 @@
-import { useColorScheme, ScrollView } from "react-native";
 import {
   IconAward,
   IconCategory2,
@@ -10,42 +9,35 @@ import {
   IconSparkles,
   IconSun,
 } from "@tabler/icons-react-native";
-import colors from "@/constants/colors";
 import { resetNavigationStack } from "@/lib/resetNavigationStack";
 import { router } from "expo-router";
 import {
   SettingsContainer,
   SettingsList,
 } from "@/components/SettingsComponents";
+import Icon from "@/components/Icon";
 
 export default function Settings() {
-  let colorScheme = useColorScheme();
-  const iconProps = {
-    size: 24,
-    color: colorScheme === "dark" ? colors.white : colors.black,
-    strokeWidth: 2,
-  };
-
   return (
     <SettingsContainer>
       <SettingsList
         settings={[
           {
-            icon: <IconSun {...iconProps} />,
+            icon: <Icon icon={IconSun} />,
             title: "Theme",
             onPress: () => {
               router.push("/specificsettings/theme");
             },
           },
           {
-            icon: <IconCategory2 {...iconProps} />,
+            icon: <Icon icon={IconCategory2} />,
             title: "Widget settings",
             onPress: () => {
               router.push("/specificsettings/widgetsettings");
             },
           },
           {
-            icon: <IconPremiumRights {...iconProps} />,
+            icon: <Icon icon={IconPremiumRights} />,
             title: "Purchase unlimited access",
             onPress: () => {},
           },
@@ -54,13 +46,13 @@ export default function Settings() {
       <SettingsList
         settings={[
           {
-            icon: <IconSend {...iconProps} />,
+            icon: <Icon icon={IconSend} />,
             title: "Send feedback or report a bug",
             onPress: () => {},
           },
 
           {
-            icon: <IconSparkles {...iconProps} />,
+            icon: <Icon icon={IconSparkles} />,
             title: "Rate the app",
             onPress: () => {},
           },
@@ -69,19 +61,19 @@ export default function Settings() {
       <SettingsList
         settings={[
           {
-            icon: <IconAward {...iconProps} />,
+            icon: <Icon icon={IconAward} />,
             title: "Credits",
             onPress: () => {},
           },
 
           {
-            icon: <IconLock {...iconProps} />,
+            icon: <Icon icon={IconLock} />,
             title: "Privacy policy",
             onPress: () => {},
           },
 
           {
-            icon: <IconFileText {...iconProps} />,
+            icon: <Icon icon={IconFileText} />,
             title: "Terms of use",
             onPress: () => {},
           },
@@ -90,7 +82,7 @@ export default function Settings() {
       <SettingsList
         settings={[
           {
-            icon: <IconKey {...iconProps} />,
+            icon: <Icon icon={IconKey} />,
             title: "Go to sign in",
             onPress: () => {
               resetNavigationStack("/(auth)/signin");

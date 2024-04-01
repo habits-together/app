@@ -1,5 +1,5 @@
 import { Text, View } from "@/components/Themed";
-import { ScrollView, TouchableOpacity, useColorScheme } from "react-native";
+import { ScrollView, TouchableOpacity } from "react-native";
 import colors from "@/constants/colors";
 import {
   IconChevronRight,
@@ -34,6 +34,7 @@ export function SettingsList({
 }) {
   return (
     <SettingsSection
+      groupTitle={groupTitle}
       settingComponents={settings.map((setting) => (
         <Setting
           {...setting}
@@ -108,7 +109,9 @@ function SettingsSection({
   return (
     <>
       {groupTitle && (
-        <Text className="text-lg font-medium mb-2">{groupTitle}</Text>
+        <Text className="text-sm text-stone-500 dark:text-stone-300 font-semibold ml-3 mb-2">
+          {groupTitle}
+        </Text>
       )}
       <View
         className={`border border-grey-200 rounded-xl overflow-hidden mb-6`}
@@ -131,13 +134,6 @@ function Setting({
   onPress,
   rightSideContent,
 }: SettingProps & { rightSideContent: React.ReactNode }) {
-  let colorScheme = useColorScheme();
-  const iconProps = {
-    size: 24,
-    color: colorScheme === "dark" ? colors.white : colors.black,
-    strokeWidth: 2,
-  };
-
   return (
     <TouchableOpacity
       onPress={onPress}
