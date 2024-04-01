@@ -320,27 +320,27 @@ export enum InviteStatus {
 }
 
 // Tables
-export type Friends = Database["public"]["Tables"]["friends"]["Row"];
-export type InsertFriends = Database["public"]["Tables"]["friends"]["Insert"];
-export type UpdateFriends = Database["public"]["Tables"]["friends"]["Update"];
+export type Friend = Database["public"]["Tables"]["friends"]["Row"];
+export type InsertFriend = Database["public"]["Tables"]["friends"]["Insert"];
+export type UpdateFriend = Database["public"]["Tables"]["friends"]["Update"];
 
-export type HabitCompletions =
+export type HabitCompletion =
   Database["public"]["Tables"]["habit_completions"]["Row"];
-export type InsertHabitCompletions =
+export type InsertHabitCompletion =
   Database["public"]["Tables"]["habit_completions"]["Insert"];
-export type UpdateHabitCompletions =
+export type UpdateHabitCompletion =
   Database["public"]["Tables"]["habit_completions"]["Update"];
 
-export type Habits = Database["public"]["Tables"]["habits"]["Row"];
-export type InsertHabits = Database["public"]["Tables"]["habits"]["Insert"];
-export type UpdateHabits = Database["public"]["Tables"]["habits"]["Update"];
+export type Habit = Database["public"]["Tables"]["habits"]["Row"];
+export type InsertHabit = Database["public"]["Tables"]["habits"]["Insert"];
+export type UpdateHabit = Database["public"]["Tables"]["habits"]["Update"];
 
-export type Profiles = Database["public"]["Tables"]["profiles"]["Row"];
-export type InsertProfiles = Database["public"]["Tables"]["profiles"]["Insert"];
-export type UpdateProfiles = Database["public"]["Tables"]["profiles"]["Update"];
+export type Profile = Database["public"]["Tables"]["profiles"]["Row"];
+export type InsertProfile = Database["public"]["Tables"]["profiles"]["Insert"];
+export type UpdateProfile = Database["public"]["Tables"]["profiles"]["Update"];
 
-export type UserHabits = Database["public"]["Tables"]["user_habits"]["Row"];
-export type InsertUserHabits =
+export type UserHabit = Database["public"]["Tables"]["user_habits"]["Row"];
+export type InsertUserHabit =
   Database["public"]["Tables"]["user_habits"]["Insert"];
-export type UpdateUserHabits =
+export type UpdateUserHabit =
   Database["public"]["Tables"]["user_habits"]["Update"];
