@@ -1,5 +1,5 @@
 import { Text, View } from "@/components/Themed";
-import { ScrollView, TouchableOpacity, useColorScheme } from "react-native";
+import { ScrollView, TouchableOpacity } from "react-native";
 import colors from "@/constants/colors";
 import {
   IconChevronRight,

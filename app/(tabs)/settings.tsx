@@ -1,4 +1,3 @@
-import { useColorScheme, ScrollView } from "react-native";
 import {
   IconAward,
   IconCategory2,
@@ -10,7 +9,6 @@ import {
   IconSparkles,
   IconSun,
 } from "@tabler/icons-react-native";
-import colors from "@/constants/colors";
 import { resetNavigationStack } from "@/lib/resetNavigationStack";
 import { router } from "expo-router";
 import {
