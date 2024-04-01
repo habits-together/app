@@ -1,9 +1,11 @@
+import colors from "@/constants/colors";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import { useColorScheme } from "react-native";
 
 // import { useColorScheme } from '@/components/useColorScheme';
 
@@ -50,7 +52,12 @@ function RootLayoutNav() {
   return (
     // <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}> // TODO: use when implementing dark mode
     <ThemeProvider value={DefaultTheme}>
-      <Stack>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: {backgroundColor : colors.black}
+        }}
+      >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)/signin" options={{ headerShown: false }} />
         <Stack.Screen

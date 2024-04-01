@@ -15,7 +15,8 @@ export default function TabLayout() {
 
   const foreground = colorScheme === "dark" ? colors.white : colors.stone.base;
   const background = colorScheme === "dark" ? colors.stone.base : colors.white;
-  const tabBackGround = colorScheme === "dark" ? colors.stone["900"] : colors.stone["100"];
+  const tabBackGround =
+    colorScheme === "dark" ? colors.stone["900"] : colors.stone["100"];
   return (
     <Tabs
       screenOptions={{
@@ -24,11 +25,7 @@ export default function TabLayout() {
         // to prevent a hydration error in React Navigation v6.
         headerShown: useClientOnlyValue(false, true),
         headerStyle: {
-          height: 110,
           backgroundColor: background,
-          borderBottomWidth: 0,
-          shadowOpacity: 0,
-          elevation: 0,
         },
         headerTitleAlign: "left",
         headerTitleStyle: {
@@ -36,12 +33,13 @@ export default function TabLayout() {
           fontWeight: "700",
           color: foreground,
         },
+        headerShadowVisible: false,
         tabBarStyle: {
           backgroundColor: tabBackGround,
           height: Platform.select({ ios: 90, android: 75 }),
           paddingTop: Platform.select({ ios: 12, android: 10 }),
           alignItems: "center",
-          borderBlockColor: "transparent"
+          borderBlockColor: "transparent",
         },
         tabBarLabelStyle: {
           textAlign: "center",
@@ -75,6 +73,10 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <IconSettings color={color} size={24} strokeWidth={2.5} />
           ),
+          headerStyle: {
+            backgroundColor:
+              colorScheme === "dark" ? colors.stone.base : colors.stone["50"],
+          },
         }}
       />
     </Tabs>

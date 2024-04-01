@@ -43,7 +43,8 @@
     "react-native-svg": "14.1.0",
     "react-native-url-polyfill": "^2.0.0",
     "react-native-web": "~0.19.6",
-    "tabler-react-native": "^1.1.0"
+    "tabler-react-native": "^1.1.0",
+    "expo-secure-store": "~12.8.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
