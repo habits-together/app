@@ -14,11 +14,7 @@ export type HabitCardProps = {
   displayType: "habit-tab" | "view-habit-page" | "friend's-habit";
 };
 
-export type HabitCompletionValue =
-  | "completed"
-  | "missed"
-  | "not-applicable" // for dates in the future
-  | "partial"; // when the goal is multiple times per day
+export type HabitCompletionValue = "completed" | "missed" | "not-applicable";
 
 export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
   const colorScheme = useColorScheme();
@@ -44,8 +40,6 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
           : colors.habitColors[color].faded;
       case "not-applicable":
         return;
-      case "partial":
-        return colors.habitColors.orange.base; // TODO
     }
   }
 
@@ -115,7 +109,7 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
       */}
       <View className="flex-row mt-3 justify-between">
         <View className="flex flex-row-reverse shrink">
-          {[1, 2, 3, 4, 5/*, 6, 7, 8, 9, 10*/].map((index) => (
+          {[1, 2, 3, 4, 5 /*, 6, 7, 8, 9, 10*/].map((index) => (
             <View key={index} className="ml-auto">
               <View className="w-12 h-12 rounded-full bg-stone-200 border-2 border-black -mr-3" />
             </View>
