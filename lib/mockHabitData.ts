@@ -1,4 +1,4 @@
-import { HabitCompletionValue } from "@/components/HabitActivity";
+import { HabitCompletionValue } from "@/components/HabitCard";
 
 export function getMockCompletionsData() {
   function getNumberOfDaysInLastWeek() {
