@@ -108,12 +108,16 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
           ))}
         </View>
       ))}
-      {/* pfps */}
+      {/* 
+      pfps:
+      - later create its own component 
+      - max 10 pfps, after that show a "+5" or similar like social media
+      */}
       <View className="flex-row mt-3 justify-between">
         <View className="flex flex-row-reverse shrink">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((index) => (
+          {[1, 2, 3, 4, 5/*, 6, 7, 8, 9, 10*/].map((index) => (
             <View key={index} className="ml-auto">
-              <View className="w-12 h-12 rounded-full bg-stone-200 border-2 border-black -mr-1" />
+              <View className="w-12 h-12 rounded-full bg-stone-200 border-2 border-black -mr-3" />
             </View>
           ))}
         </View>
