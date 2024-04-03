@@ -1,5 +1,5 @@
 import { Icon as TablerIcon } from "@tabler/icons-react-native";
-import { useColorScheme } from "react-native";
+import { useColorScheme } from "nativewind";
 import { colors } from "react-native-elements";
 
 export default function Icon({
@@ -15,7 +15,7 @@ export default function Icon({
   lightColor?: string;
   darkColor?: string;
 }) {
-  const colorScheme = useColorScheme();
+  const { colorScheme } = useColorScheme();
 
   return (
     <DisplayedIcon
