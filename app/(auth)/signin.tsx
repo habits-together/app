@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Alert, StyleSheet, View, AppState } from "react-native";
+import { Alert, View, AppState } from "react-native";
 import { Button, Input } from "react-native-elements";
 import { router } from "expo-router";
 import { resetNavigationStack } from "@/lib/resetNavigationStack";
 import { supabase } from "@/lib/supabase";
+import AuthNative from "@/components/Auth.native";
 
 // Tells Supabase Auth to continuously refresh the session automatically if
 // the app is in the foreground. When this is added, you will continue to receive
@@ -65,8 +66,9 @@ export default function Signin() {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
+    <View className='flex-1 p-1' >
+      <AuthNative />
+      <View >
         <Input
           label="Email"
           leftIcon={{ type: "font-awesome", name: "envelope" }}
@@ -76,7 +78,7 @@ export default function Signin() {
           autoCapitalize={"none"}
         />
       </View>
-      <View style={styles.verticallySpaced}>
+      <View >
         <Input
           label="Password"
           leftIcon={{ type: "font-awesome", name: "lock" }}
@@ -87,7 +89,7 @@ export default function Signin() {
           autoCapitalize={"none"}
         />
       </View>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
+      <View>
         <Button
           title="Sign in"
           disabled={loading}
@@ -97,18 +99,3 @@ export default function Signin() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 40,
-    padding: 12,
-  },
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: "stretch",
-  },
-  mt20: {
-    marginTop: 20,
-  },
-});

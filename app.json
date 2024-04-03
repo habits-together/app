@@ -19,6 +19,7 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.habittogether.app",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -31,7 +32,8 @@
     },
     "plugins": [
       "expo-router",
-      "expo-secure-store"
+      "expo-secure-store",
+      "@react-native-google-signin/google-signin"
     ],
     "experiments": {
       "typedRoutes": true
@@ -39,7 +41,11 @@
     "extra": {
       "router": {
         "origin": false
+      },
+      "eas": {
+        "projectId": "9b2424e8-0aab-417d-b925-c755c7aa3458"
       }
-    }
+    },
+    "owner": "habit-together"
   }
 }
