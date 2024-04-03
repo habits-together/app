@@ -7,12 +7,12 @@ import {
   IconStack2,
   IconUsers,
 } from "@tabler/icons-react-native";
-import { useColorScheme } from "react-native";
 import colors from "@/constants/colors";
 import Icon from "@/components/Icon";
+import { useColorScheme } from "nativewind";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const { colorScheme } = useColorScheme();
 
   const foreground = colorScheme === "dark" ? colors.white : colors.stone.base;
   const background = colorScheme === "dark" ? colors.stone.base : colors.white;

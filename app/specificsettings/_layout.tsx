@@ -4,13 +4,13 @@ import { TouchableOpacity } from "react-native";
 import {
   IconChevronLeft,
 } from "@tabler/icons-react-native";
-import { useColorScheme } from "react-native";
 import colors from "@/constants/colors";
 import Icon from "@/components/Icon";
 import { Text, View } from "react-native";
+import { useColorScheme } from "nativewind";
 
 export default function SettingsLayout() {
-  const colorScheme = useColorScheme();
+  const { colorScheme } = useColorScheme();
 
   return (
     <Stack
