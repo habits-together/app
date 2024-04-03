@@ -1,38 +1,42 @@
 import { View } from "@/components/Themed";
 import { Appearance } from "react-native";
-import {
-  IconBrightness,
-  IconMoon,
-  IconSun,
-} from "@tabler/icons-react-native";
+import { IconBrightness, IconMoon, IconSun } from "@tabler/icons-react-native";
 import Icon from "@/components/Icon";
-import { SettingsChoice, SettingsContainer } from "@/components/SettingsComponents";
+import {
+  SettingsChoice,
+  SettingsContainer,
+} from "@/components/SettingsComponents";
+import { useColorScheme } from "nativewind";
 
 export default function Theme() {
+  const { colorScheme, setColorScheme } = useColorScheme();
+
   return (
     <SettingsContainer>
       <SettingsChoice
         settingKey="theme"
+        // groupTitle={colorScheme + " // " + Appearance.getColorScheme()}
         settings={[
           {
             icon: <Icon icon={IconBrightness} />,
             title: "Match device",
             onPress: () => {
-              Appearance.setColorScheme(null);
+              // gets the device's color scheme
+              setColorScheme(Appearance.getColorScheme() || "light");
             },
           },
           {
             icon: <Icon icon={IconSun} />,
             title: "Light",
             onPress: () => {
-              Appearance.setColorScheme("light");
+              setColorScheme("light");
             },
           },
           {
             icon: <Icon icon={IconMoon} />,
             title: "Dark",
             onPress: () => {
-              Appearance.setColorScheme("dark");
+              setColorScheme("dark");
             },
           },
         ]}
@@ -41,4 +45,3 @@ export default function Theme() {
     </SettingsContainer>
   );
 }
-

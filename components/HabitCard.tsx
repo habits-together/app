@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, useColorScheme } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import colors from "@/constants/colors";
 import { Icon as TablerIcon, IconCheck } from "@tabler/icons-react-native";
 import DotsMenu from "./DotsMenu";
 import { getMockCompletionsData } from "@/lib/mockHabitData";
 import Icon from "./Icon";
+import { useColorScheme } from "nativewind";
 const WeekDays = ["M", "T", "W", "T", "F", "S", "S"];
 
 export type HabitCardProps = {
@@ -17,7 +18,7 @@ export type HabitCardProps = {
 export type HabitCompletionValue = "completed" | "missed" | "not-applicable";
 
 export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
-  const colorScheme = useColorScheme();
+  const { colorScheme } = useColorScheme();
 
   const activityData = getMockCompletionsData();
   // make an array with 14 days (2 weeks) chunks
@@ -128,7 +129,7 @@ function CompletionButton({
 }: {
   color: keyof typeof colors.habitColors;
 }) {
-  const colorScheme = useColorScheme();
+  const { colorScheme } = useColorScheme();
 
   return (
     <TouchableOpacity

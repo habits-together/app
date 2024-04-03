@@ -1,3 +1,4 @@
+import { View } from "@/components/Themed";
 import colors from "@/constants/colors";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
@@ -45,20 +46,22 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   return (
-    <ThemeProvider value={DefaultTheme}>
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: colors.black },
-        }}
-      >
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="(auth)/signin" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="(auth)/createprofile"
-          options={{ headerShown: false }}
-        />
-      </Stack>
-    </ThemeProvider>
+    <View className="flex-1 bg-white dark:bg-stone-base">
+      <ThemeProvider value={DefaultTheme}>
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            contentStyle: { backgroundColor: colors.black },
+          }}
+        >
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="(auth)/signin" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="(auth)/createprofile"
+            options={{ headerShown: false }}
+          />
+        </Stack>
+      </ThemeProvider>
+    </View>
   );
 }
