@@ -39,11 +39,7 @@
     "extra": {
       "router": {
         "origin": false
-      },
-      "eas": {
-        "projectId": "ebd7b0b9-d18f-4869-a8d8-cf2f4cd09ac7"
       }
-    },
-    "owner": "owengretzinger"
+    }
   }
 }
