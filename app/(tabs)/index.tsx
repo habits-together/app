@@ -18,7 +18,14 @@ export default function HabitsTab() {
     <View className='flex-1 p-4'>
       {habits.map(habit => {
         return (
-          <Link push href={`/habit/:${habit.id}`} asChild key={habit.id}>
+          <Link
+            push
+            href={{
+              pathname: "/habit",
+              params: { id: habit.id }
+            }}
+            asChild
+            key={habit.id}>
             <Pressable>
               <HabitCard
                 title={habit.title}
