@@ -1,12 +1,42 @@
-
-import { Text, View } from '@/components/Themed';
+import { View } from '@/components/Themed';
 import { HabitCard } from '@/components/HabitCard';
 import { IconBook } from '@tabler/icons-react-native';
+import { Link } from 'expo-router';
+import { Pressable } from 'react-native';
+
+const habits = [
+  {
+    title: 'Read for 15 minutes',
+    icon: IconBook,
+    color: "fuchsia",
+    id: 1,
+  }
+];
 
 export default function HabitsTab() {
   return (
     <View className='flex-1 p-4'>
-      <HabitCard title='Read for 15 minutes' color="fuchsia" icon={IconBook} displayType="habit-tab" />
-    </View>
+      {habits.map(habit => {
+        return (
+          <Link
+            push
+            href={{
+              pathname: "/habit",
+              params: { id: habit.id }
+            }}
+            asChild
+            key={habit.id}>
+            <Pressable>
+              <HabitCard
+                title={habit.title}
+                color="fuchsia"
+                icon={habit.icon}
+                displayType="habit-tab"
+              />
+            </Pressable>
+          </Link>
+        )
+      })}
+    </View >
   );
 }
