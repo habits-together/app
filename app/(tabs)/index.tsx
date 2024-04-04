@@ -21,7 +21,7 @@ export default function HabitsTab() {
           <Link
             push
             href={{
-              pathname: "/habit",
+              pathname: "/viewhabit",
               params: { id: habit.id }
             }}
             asChild
