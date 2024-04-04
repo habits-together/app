@@ -46,22 +46,21 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   return (
-    <View className="flex-1 bg-white dark:bg-stone-base">
-      <ThemeProvider value={DefaultTheme}>
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            contentStyle: { backgroundColor: colors.black },
-          }}
-        >
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="(auth)/signin" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="(auth)/createprofile"
-            options={{ headerShown: false }}
-          />
-        </Stack>
-      </ThemeProvider>
-    </View>
+    <ThemeProvider value={DefaultTheme}>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: colors.black },
+          animation: "ios",
+        }}
+      >
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)/signin" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="(auth)/createprofile"
+          options={{ headerShown: false }}
+        />
+      </Stack>
+    </ThemeProvider>
   );
 }

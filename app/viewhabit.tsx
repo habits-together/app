@@ -5,6 +5,7 @@ import { Link, useLocalSearchParams } from 'expo-router';
 import Icon from '@/components/Icon';
 import { Pressable } from 'react-native';
 import IconButton from '@/components/IconButton';
+import HeaderBackButton from '@/components/HeaderBackButton';
 
 const habits = [
   {
@@ -28,15 +29,7 @@ export default function Habit() {
       style={{ gap: 40 }}>
       <View className="flex flex-column"
         style={{ gap: 20 }}>
-        {/* Back Button */}
-        <Link href="/" asChild>
-          <Pressable>
-            <View className='flex flex-row content-center'>
-              <Icon icon={IconChevronLeft} />
-              <Text className='text-base'>Back</Text>
-            </View>
-          </Pressable>
-        </Link>
+        <HeaderBackButton showText={true} />
 
         {/* Title */}
         <View>
