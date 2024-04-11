@@ -4,7 +4,7 @@ A group project to learn how to make mobile apps using React Native. The app is 
 
 ## Getting Started
 
-This project uses React Native with Expo, with Supabase as the primary backend service.
+This project uses React Native with Expo, with Firebase as the primary backend service.
 
 To setup your development environment, create a .env file based on the .env.example file. Then run the following commands:
 

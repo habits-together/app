@@ -1,4 +1,4 @@
-import colors from "@/constants/colors";
+import colors from "@/src/constants/colors";
 import { IconDots } from "@tabler/icons-react-native";
 import { TouchableOpacity } from "react-native";
 import Icon from "./Icon";
