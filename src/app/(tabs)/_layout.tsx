@@ -1,14 +1,14 @@
 import React from "react";
 import { Platform } from "react-native";
 import { Tabs } from "expo-router";
-import { useClientOnlyValue } from "@/components/useClientOnlyValue";
+import { useClientOnlyValue } from "@/src/components/useClientOnlyValue";
 import {
   IconSettings,
   IconStack2,
   IconUsers,
 } from "@tabler/icons-react-native";
-import colors from "@/constants/colors";
-import Icon from "@/components/Icon";
+import colors from "@/src/constants/colors";
+import Icon from "@/src/components/Icon";
 import { useColorScheme } from "nativewind";
 
 export default function TabLayout() {

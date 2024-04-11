@@ -9,13 +9,13 @@ import {
   IconSparkles,
   IconSun,
 } from "@tabler/icons-react-native";
-import { resetNavigationStack } from "@/lib/resetNavigationStack";
+import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { router } from "expo-router";
 import {
   SettingsContainer,
   SettingsList,
-} from "@/components/SettingsComponents";
-import Icon from "@/components/Icon";
+} from "@/src/components/SettingsComponents";
+import Icon from "@/src/components/Icon";
 
 export default function Settings() {
   return (
