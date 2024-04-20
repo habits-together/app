@@ -1,11 +1,13 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, TouchableOpacity, Pressable, Image } from "react-native";
 import colors from "@/constants/colors";
 import { Icon as TablerIcon, IconCheck } from "@tabler/icons-react-native";
 import DotsMenu from "./DotsMenu";
 import { getMockCompletionsData } from "@/lib/mockHabitData";
 import Icon from "./Icon";
 import { useColorScheme } from "nativewind";
+import { thumbnailUrlsPromise } from "@/lib/getRanomProfilePic";
+
 const WeekDays = ["M", "T", "W", "T", "F", "S", "S"];
 
 export type HabitCardProps = {
@@ -19,6 +21,11 @@ export type HabitCompletionValue = "completed" | "missed" | "not-applicable";
 
 export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
   const { colorScheme } = useColorScheme();
+  const [thumbnails, setThumbnails] = useState([]);
+
+  useEffect(() => {
+    thumbnailUrlsPromise.then(setThumbnails);
+  }, []);
 
   const activityData = getMockCompletionsData();
   // make an array with 14 days (2 weeks) chunks
@@ -110,12 +117,22 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
       */}
       {displayType !== "view-habit-page" && (
         <View className="flex-row mt-3 justify-between">
-          <View className="flex flex-row-reverse shrink">
-            {[1, 2, 3, 4, 5 /*, 6, 7, 8, 9, 10*/].map((index) => (
+          <View className="flex flex-row shrink">
+            {thumbnails.slice(0, 4).map((url, index) => (
               <View key={index} className="ml-auto">
-                <View className="w-12 h-12 rounded-full bg-stone-200 border-2 border-black -mr-3" />
+                <Image
+                  className="w-12 h-12 rounded-full bg-stone-200 r -mr-3"
+                  source={{ uri: url }}
+                ></Image>
               </View>
             ))}
+            {thumbnails.length > 5 && (
+              <View className="w-12 h-12 rounded-full bg-stone-200 -mr-3">
+                <Text className="text-lg m-auto">
+                  +{thumbnails.length - 5}
+                </Text>
+              </View>
+            )}
           </View>
           {displayType === "habit-tab" && <CompletionButton color={color} />}
         </View>
@@ -125,23 +142,28 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
 }
 
 function CompletionButton({
-  color,
+  color
 }: {
   color: keyof typeof colors.habitColors;
 }) {
   const { colorScheme } = useColorScheme();
-
+  const [active, setActive] = useState(false);
   return (
-    <TouchableOpacity
-      className="rounded-full w-12 h-12 bg-blue-500 ml-8" // Adjust width (w-20) and height (h-20) to your needs
+    <Pressable
+      onPress={() => setActive(!active)}
+      className="rounded-full w-12 h-12 bg-blue-500 ml-8"
     >
       <View
         className="rounded-full w-full h-full items-center justify-center"
         style={{
           backgroundColor:
             colorScheme === "dark"
-              ? colors.stone.faded
-              : colors.habitColors[color].faded,
+              ? (active
+                ? colors.habitColors[color].base
+                : colors.stone.faded)
+              : (active
+                ? colors.habitColors[color].base
+                : colors.habitColors[color].faded)
         }}
       >
         <Icon
@@ -152,6 +174,6 @@ function CompletionButton({
           strokeWidth={4}
         />
       </View>
-    </TouchableOpacity>
+    </Pressable >
   );
 }

@@ -3,7 +3,6 @@ import { HabitCard } from '@/components/HabitCard';
 import { IconBook, IconCalendarMonth, IconChevronLeft, IconEdit, IconHistory, IconShare2, IconTrash, IconUserPlus } from '@tabler/icons-react-native';
 import { Link, useLocalSearchParams } from 'expo-router';
 import Icon from '@/components/Icon';
-import { Pressable } from 'react-native';
 import IconButton from '@/components/IconButton';
 import HeaderBackButton from '@/components/HeaderBackButton';
 
