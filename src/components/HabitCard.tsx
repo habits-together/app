@@ -1,9 +1,15 @@
+<<<<<<< HEAD:components/HabitCard.tsx
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Pressable, Image } from "react-native";
 import colors from "@/constants/colors";
+=======
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity } from "react-native";
+import colors from "@/src/constants/colors";
+>>>>>>> f6b33f389e79fd44d95252fb2d631afe875f5dc7:src/components/HabitCard.tsx
 import { Icon as TablerIcon, IconCheck } from "@tabler/icons-react-native";
 import DotsMenu from "./DotsMenu";
-import { getMockCompletionsData } from "@/lib/mockHabitData";
+import { getMockCompletionsData } from "@/src/lib/mockHabitData";
 import Icon from "./Icon";
 import { useColorScheme } from "nativewind";
 import { thumbnailUrlsPromise } from "@/lib/getRanomProfilePic";

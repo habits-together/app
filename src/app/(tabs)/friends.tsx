@@ -1,4 +1,4 @@
-import { Text, View } from '@/components/Themed';
+import { Text, View } from '@/src/components/Themed';
 
 export default function FriendsTab() {
   return (
