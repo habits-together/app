@@ -1,11 +1,14 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, Pressable } from "react-native";
 import colors from "@/src/constants/colors";
 import { Icon as TablerIcon, IconCheck } from "@tabler/icons-react-native";
 import DotsMenu from "./DotsMenu";
 import { getMockCompletionsData } from "@/src/lib/mockHabitData";
 import Icon from "./Icon";
 import { useColorScheme } from "nativewind";
+import { profilePicsDataPromise } from "@/src/lib/getRandomProfilePics";
+import ProfilePicture from "./ProfilePicture";
+
 const WeekDays = ["M", "T", "W", "T", "F", "S", "S"];
 
 export type HabitCardProps = {
@@ -15,10 +18,20 @@ export type HabitCardProps = {
   displayType: "habit-tab" | "view-habit-page" | "friend's-habit";
 };
 
+export type ProfilePic = {
+  imgurl: string;
+  hasCompleted: boolean;
+};
+
 export type HabitCompletionValue = "completed" | "missed" | "not-applicable";
 
 export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
   const { colorScheme } = useColorScheme();
+  const [profilePicsData, setProfilePicsData] = useState<ProfilePic[]>([]);
+
+  useEffect(() => {
+    profilePicsDataPromise.then(setProfilePicsData);
+  }, []);
 
   const activityData = getMockCompletionsData();
   // make an array with 14 days (2 weeks) chunks
@@ -113,26 +126,18 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
               style={{
                 backgroundColor: getColorClassesFromCompletionValue(data),
               }}
-              className={`flex-1 aspect-square  rounded m-0.5`}
+              className={`flex-1 aspect-square rounded m-0.5`}
             />
           ))}
         </View>
       ))}
-      {/* 
-      pfps:
-      - later create its own component 
-      - max 10 pfps, after that show a "+5" or similar like social media
-      */}
       {displayType !== "view-habit-page" && (
-        <View className="flex-row mt-3 justify-between">
-          <View className="flex flex-row-reverse shrink">
-            {[1, 2, 3, 4, 5 /*, 6, 7, 8, 9, 10*/].map((index) => (
-              <View key={index} className="ml-auto">
-                <View className="w-12 h-12 rounded-full bg-stone-200 border-2 border-black -mr-3" />
-              </View>
-            ))}
-          </View>
-          {displayType === "habit-tab" && <CompletionButton color={color} />}
+        <View className="flex flex-row mt-4">
+          <FreindProfilePictures
+            profilePicsData={profilePicsData}
+            color={color}
+          />
+          <CompletionButton color={color} />
         </View>
       )}
     </View>
@@ -145,18 +150,23 @@ function CompletionButton({
   color: keyof typeof colors.habitColors;
 }) {
   const { colorScheme } = useColorScheme();
-
+  const [active, setActive] = useState(false);
   return (
-    <TouchableOpacity
-      className="rounded-full w-12 h-12 bg-blue-500 ml-8" // Adjust width (w-20) and height (h-20) to your needs
+    <Pressable
+      onPress={() => setActive(!active)}
+      className="rounded-full w-12 h-12 bg-blue-500 ml-7"
     >
       <View
         className="rounded-full w-full h-full items-center justify-center"
         style={{
           backgroundColor:
             colorScheme === "dark"
-              ? colors.stone.faded
-              : colors.habitColors[color].faded,
+              ? active
+                ? colors.habitColors[color].base
+                : colors.stone.faded
+              : active
+                ? colors.habitColors[color].base
+                : colors.habitColors[color].faded,
         }}
       >
         <Icon
@@ -167,6 +177,73 @@ function CompletionButton({
           strokeWidth={4}
         />
       </View>
-    </TouchableOpacity>
+    </Pressable>
+  );
+}
+
+function FreindProfilePictures({
+  profilePicsData,
+  color,
+}: {
+  profilePicsData: ProfilePic[];
+  color: keyof typeof colors.habitColors;
+}) {
+  const { colorScheme } = useColorScheme();
+  return (
+    <View className="flex-row justify-between">
+      <View className="flex flex-row-reverse shrink gap-[0.2rem]">
+        {profilePicsData.length > 5 && (
+          <View
+            className="w-12 h-12 rounded-full"
+            style={{
+              backgroundColor:
+                colorScheme === "dark"
+                  ? colors.stone.faded
+                  : colors.habitColors[color].faded,
+            }}
+          >
+            <Text
+              className="text-lg m-auto"
+              style={{
+                color:
+                  colorScheme === "dark"
+                    ? colors.stone.text
+                    : colors.habitColors[color].text,
+              }}
+            >
+              +{profilePicsData.length - 5}
+            </Text>
+          </View>
+        )}
+        {profilePicsData.slice(0, 5).map((data, index) => (
+          <View className="w-12 h-12 rounded-full -mr-3" key={index}>
+            {data.hasCompleted && (
+              <>
+                <View className="absolute -top-[3px] -right-[4px] z-10">
+                  <Icon
+                    icon={IconCheck}
+                    size={18}
+                    lightColor={colors.stone.light}
+                    darkColor={colors.stone.light}
+                    strokeWidth={7}
+                  />
+                </View>
+                <View className="absolute -top-[3px] -right-[4px] z-10">
+                  <Icon
+                    icon={IconCheck}
+                    size={18}
+                    lightColor={colors.habitColors.green.base}
+                    darkColor={colors.habitColors.green.base}
+                    strokeWidth={3}
+                  />
+                </View>
+              </>
+            )}
+
+            <ProfilePicture picUrl={data.imgurl} />
+          </View>
+        ))}
+      </View>
+    </View>
   );
 }

@@ -11,6 +11,7 @@ import {
   IconUserPlus,
 } from "@tabler/icons-react-native";
 import { Link, useLocalSearchParams } from "expo-router";
+
 import Icon from "@/src/components/Icon";
 import { Pressable } from "react-native";
 import IconButton from "@/src/components/IconButton";
