@@ -5,6 +5,7 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import { MenuProvider } from "react-native-popup-menu";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -45,21 +46,23 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   return (
-    <ThemeProvider value={DefaultTheme}>
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: colors.black },
-          animation: "ios",
-        }}
-      >
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="(auth)/signin" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="(auth)/createprofile"
-          options={{ headerShown: false }}
-        />
-      </Stack>
-    </ThemeProvider>
+    <MenuProvider>
+      <ThemeProvider value={DefaultTheme}>
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            contentStyle: { backgroundColor: colors.black },
+            animation: "ios",
+          }}
+        >
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="(auth)/signin" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="(auth)/createprofile"
+            options={{ headerShown: false }}
+          />
+        </Stack>
+      </ThemeProvider>
+    </MenuProvider>
   );
 }
