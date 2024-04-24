@@ -1,10 +1,10 @@
-import { View } from "@/src/components/Themed";
+import { ScrollView } from "@/src/components/Themed";
 import { HabitCard } from "@/src/components/HabitCard";
-import { IconBook } from "@tabler/icons-react-native";
+import { IconBook, IconBed, IconBarbell } from "@tabler/icons-react-native";
 import { Link } from "expo-router";
 import { Pressable } from "react-native";
 import colors from "@/src/constants/colors";
-import { Icon as TablerIcon} from "@tabler/icons-react-native";
+import { Icon as TablerIcon } from "@tabler/icons-react-native";
 
 export type Habit = {
   title: string;
@@ -15,23 +15,32 @@ export type Habit = {
 
 const habits: Habit[] = [
   {
-    title: "Read for 15 minutes",
-    icon: IconBook,
-    color: "cyan",
-    id: 1,
+    title: "Workout for 1 hour",
+    icon: IconBarbell,
+    color: "red",
+    id: 3,
   },
   {
     title: "Read for 15 minutes",
     icon: IconBook,
-    color: "rose",
-    id: 2,
+    color: "green",
+    id: 1,
   },
+  {
+    title: "Get 8 hours of sleep",
+    icon: IconBed,
+    color: "violet",
+    id: 2,
+  }
 ];
 
 export default function HabitsTab() {
   return (
-    <View className="flex-1 p-4 gap-6">
-      {habits.map((habit) => {
+    <ScrollView className="flex-1 p-4 gap-7">
+      {habits.map((habit, index) => {
+        // if element is last, add padding to bottom (given that there are more than 1 element in the list)
+        const isLastElement = index === habits.length - 1;
+        const paddingBottom = isLastElement && habits.length > 1 ? 100 : 0;
         return (
           <Link
             push
@@ -41,6 +50,7 @@ export default function HabitsTab() {
             }}
             asChild
             key={habit.id}
+            style={{ paddingBottom: paddingBottom }}
           >
             <Pressable>
               <HabitCard
@@ -53,6 +63,6 @@ export default function HabitsTab() {
           </Link>
         );
       })}
-    </View>
+    </ScrollView >
   );
 }
