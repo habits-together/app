@@ -54,7 +54,12 @@ export default function TabLayout() {
         options={{
           title: "Habits",
           tabBarIcon: ({ color }) => (
-            <Icon icon={IconStack2} lightColor={color} darkColor={color} strokeWidth={2.5} />
+            <Icon
+              icon={IconStack2}
+              lightColor={color}
+              darkColor={color}
+              strokeWidth={2.5}
+            />
           ),
         }}
       />
@@ -63,7 +68,12 @@ export default function TabLayout() {
         options={{
           title: "Friends",
           tabBarIcon: ({ color }) => (
-            <Icon icon={IconUsers} lightColor={color} darkColor={color} strokeWidth={2.5} />
+            <Icon
+              icon={IconUsers}
+              lightColor={color}
+              darkColor={color}
+              strokeWidth={2.5}
+            />
           ),
         }}
       />
@@ -72,7 +82,12 @@ export default function TabLayout() {
         options={{
           title: "Settings",
           tabBarIcon: ({ color }) => (
-            <Icon icon={IconSettings} lightColor={color} darkColor={color} strokeWidth={2.5} />
+            <Icon
+              icon={IconSettings}
+              lightColor={color}
+              darkColor={color}
+              strokeWidth={2.5}
+            />
           ),
           headerStyle: {
             backgroundColor:

@@ -21,9 +21,7 @@ export default function SettingsLayout() {
         ),
         headerTitleAlign: "center",
 
-        headerLeft: () => (
-          <HeaderBackButton />
-        ),
+        headerLeft: () => <HeaderBackButton />,
 
         headerStyle: {
           backgroundColor:
