@@ -15,5 +15,8 @@ export function getMockCompletionsData() {
   for (let i = 49 + daysInLastWeek; i < activityData.length; i++) {
     activityData[i] = "not-applicable";
   }
-  return activityData;
+  let indexOftoday = 49 + daysInLastWeek - 1;
+  // make sure last fay is always missed
+  activityData[indexOftoday] = "missed";
+  return [activityData, indexOftoday] as const;
 }

@@ -28,12 +28,22 @@ export type HabitCompletionValue = "completed" | "missed" | "not-applicable";
 export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
   const { colorScheme } = useColorScheme();
   const [profilePicsData, setProfilePicsData] = useState<ProfilePic[]>([]);
-
+  const [activityData, setActivityData] = useState<HabitCompletionValue[]>([]);
+  const [indexOftoday, setIndexOftoday] = useState<number>(0);
   useEffect(() => {
     profilePicsDataPromise.then(setProfilePicsData);
+    const [arrray, index] = getMockCompletionsData();
+    setActivityData(arrray);
+    setIndexOftoday(index);
+
   }, []);
 
-  const activityData = getMockCompletionsData();
+  const updateActivityData = (index:number, value:HabitCompletionValue) => {
+    const newData = [...activityData];
+    newData[index] = value;
+    setActivityData(newData);
+  };
+
   // make an array with 14 days (2 weeks) chunks
   function chunkArray(array: HabitCompletionValue[]) {
     let result: HabitCompletionValue[][] = [];
@@ -137,7 +147,7 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
             profilePicsData={profilePicsData}
             color={color}
           />
-          <CompletionButton color={color} />
+          <CompletionButton activityData={activityData} updateActivityData={updateActivityData} indexOftoday={indexOftoday} color={color} />
         </View>
       )}
     </View>
@@ -146,14 +156,27 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
 
 function CompletionButton({
   color,
+  activityData,
+  indexOftoday,
+  updateActivityData
+
 }: {
   color: keyof typeof colors.habitColors;
+  activityData: HabitCompletionValue[];
+  indexOftoday: number;
+  updateActivityData: (index: number, newValue: HabitCompletionValue) => void;
 }) {
   const { colorScheme } = useColorScheme();
   const [active, setActive] = useState(false);
+
+  const toggleCompletion = () => {
+    // update the data in firebase here (current day compleation status)
+    const newValue = activityData[indexOftoday] === "completed" ? "missed" : "completed";
+    updateActivityData(indexOftoday, newValue); 
+    setActive(newValue === "completed");
+  };
   return (
-    <Pressable
-      onPress={() => setActive(!active)}
+    <Pressable onPress={toggleCompletion}
       className="rounded-full w-12 h-12 bg-blue-500"
     >
       <View
@@ -239,7 +262,6 @@ function FreindProfilePictures({
                 </View>
               </>
             )}
-
             <ProfilePicture picUrl={data.imgurl} />
           </View>
         ))}
