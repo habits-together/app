@@ -65,14 +65,29 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
               {title}
             </Text>
           </View>
-          {displayType === "habit-tab" && <DotsMenu options={[]} />}
+          {displayType === "habit-tab" && (
+            <DotsMenu
+              options={[
+                {
+                  label: "Edit",
+                  color: colors.habitColors.purple.text,
+                  action: () => alert(`Edit`),
+                },
+                {
+                  label: "Delete",
+                  color: colors.black,
+                  action: () => alert(`Delete`),
+                },
+              ]}
+            />
+          )}
         </View>
       )}
 
       <View className="flex flex-row">
         {[1, 2].map(
           (
-            order // need to repeat the days twice
+            order, // need to repeat the days twice
           ) =>
             WeekDays.map((day, index) => (
               <Text
@@ -87,7 +102,7 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
               >
                 {day}
               </Text>
-            ))
+            )),
         )}
       </View>
       {chunkedActivityData.map((weekRow, rowIndex) => (
