@@ -1,4 +1,4 @@
-import { ScrollView } from "@/src/components/Themed";
+import { ScrollView, View, Text } from "@/src/components/Themed";
 import { HabitCard } from "@/src/components/HabitCard";
 import { IconBook, IconBed, IconBarbell } from "@tabler/icons-react-native";
 import { Link } from "expo-router";
@@ -36,7 +36,7 @@ const habits: Habit[] = [
 
 export default function HabitsTab() {
   return (
-    <ScrollView className="flex-1 p-4 gap-7">
+    <ScrollView className="flex-1 p-4 gap-6">
       {habits.map((habit, index) => {
         // if element is last, add padding to bottom (given that there are more than 1 element in the list)
         const isLastElement = index === habits.length - 1;
