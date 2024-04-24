@@ -27,7 +27,7 @@ export default function DotsMenu({ options }: { options: Option[] }) {
       </MenuTrigger>
       <MenuOptions>
         {options.map((item) => (
-          <MenuOption onSelect={item.action}>
+          <MenuOption onSelect={item.action} key={item.label}>
             <Text style={{ color: item.color }}>{item.label}</Text>
           </MenuOption>
         ))}

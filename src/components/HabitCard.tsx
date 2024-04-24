@@ -132,7 +132,7 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
         </View>
       ))}
       {displayType !== "view-habit-page" && (
-        <View className="flex flex-row mt-4">
+        <View className="flex flex-row mt-4 justify-between">
           <FreindProfilePictures
             profilePicsData={profilePicsData}
             color={color}
@@ -154,7 +154,7 @@ function CompletionButton({
   return (
     <Pressable
       onPress={() => setActive(!active)}
-      className="rounded-full w-12 h-12 bg-blue-500 ml-7"
+      className="rounded-full w-12 h-12 bg-blue-500"
     >
       <View
         className="rounded-full w-full h-full items-center justify-center"
@@ -216,7 +216,7 @@ function FreindProfilePictures({
           </View>
         )}
         {profilePicsData.slice(0, 5).map((data, index) => (
-          <View className="w-12 h-12 rounded-full -mr-3" key={index}>
+          <View className="w-12 h-12 rounded-full -mr-3" key={data.imgurl}>
             {data.hasCompleted && (
               <>
                 <View className="absolute -top-[3px] -right-[4px] z-10">
