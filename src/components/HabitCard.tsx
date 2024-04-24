@@ -35,10 +35,9 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
     const [arrray, index] = getMockCompletionsData();
     setActivityData(arrray);
     setIndexOftoday(index);
-
   }, []);
 
-  const updateActivityData = (index:number, value:HabitCompletionValue) => {
+  const updateActivityData = (index: number, value: HabitCompletionValue) => {
     const newData = [...activityData];
     newData[index] = value;
     setActivityData(newData);
@@ -141,13 +140,15 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
           ))}
         </View>
       ))}
-      {displayType === "habit-tab" && (
+      {displayType !== "view-habit-page" && (
         <View className="flex flex-row mt-4 justify-between">
-          <FreindProfilePictures
+          <FriendProfilePictures
             profilePicsData={profilePicsData}
             color={color}
           />
-          <CompletionButton activityData={activityData} updateActivityData={updateActivityData} indexOftoday={indexOftoday} color={color} />
+          {displayType === "habit-tab" && (
+            <CompletionButton activityData={activityData} updateActivityData={updateActivityData} indexOftoday={indexOftoday} color={color} />
+          )}
         </View>
       )}
     </View>
@@ -172,7 +173,7 @@ function CompletionButton({
   const toggleCompletion = () => {
     // update the data in firebase here (current day compleation status)
     const newValue = activityData[indexOftoday] === "completed" ? "missed" : "completed";
-    updateActivityData(indexOftoday, newValue); 
+    updateActivityData(indexOftoday, newValue);
     setActive(newValue === "completed");
   };
   return (
@@ -204,7 +205,7 @@ function CompletionButton({
   );
 }
 
-function FreindProfilePictures({
+function FriendProfilePictures({
   profilePicsData,
   color,
 }: {
