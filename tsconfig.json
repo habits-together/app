@@ -12,6 +12,6 @@
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
     "tailwind.config.js",
-    "constants/colors.js"
+    "src/constants/colors.js"
   ]
 }

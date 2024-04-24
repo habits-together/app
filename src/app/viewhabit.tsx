@@ -1,10 +1,11 @@
-import { Text, View } from '@/components/Themed';
-import { HabitCard } from '@/components/HabitCard';
+import { Text, View } from '@/src/components/Themed';
+import { HabitCard } from '@/src/components/HabitCard';
 import { IconBook, IconCalendarMonth, IconChevronLeft, IconEdit, IconHistory, IconShare2, IconTrash, IconUserPlus } from '@tabler/icons-react-native';
 import { Link, useLocalSearchParams } from 'expo-router';
-import Icon from '@/components/Icon';
+import Icon from '@/src/components/Icon';
 import { Pressable } from 'react-native';
-import IconButton from '@/components/IconButton';
+import IconButton from '@/src/components/IconButton';
+import HeaderBackButton from '@/src/components/HeaderBackButton';
 
 const habits = [
   {
@@ -28,15 +29,7 @@ export default function Habit() {
       style={{ gap: 40 }}>
       <View className="flex flex-column"
         style={{ gap: 20 }}>
-        {/* Back Button */}
-        <Link href="/" asChild>
-          <Pressable>
-            <View className='flex flex-row content-center'>
-              <Icon icon={IconChevronLeft} />
-              <Text className='text-base'>Back</Text>
-            </View>
-          </Pressable>
-        </Link>
+        <HeaderBackButton showText={true} />
 
         {/* Title */}
         <View>

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-import colors from "@/constants/colors";
+import colors from "@/src/constants/colors";
 import { Icon as TablerIcon, IconCheck } from "@tabler/icons-react-native";
 import DotsMenu from "./DotsMenu";
-import { getMockCompletionsData } from "@/lib/mockHabitData";
+import { getMockCompletionsData } from "@/src/lib/mockHabitData";
 import Icon from "./Icon";
 import { useColorScheme } from "nativewind";
 const WeekDays = ["M", "T", "W", "T", "F", "S", "S"];

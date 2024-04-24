@@ -2,20 +2,30 @@ import React, { useState } from "react";
 import { Alert, StyleSheet, View, AppState } from "react-native";
 import { Button, Input } from "react-native-elements";
 import { router } from "expo-router";
-import { resetNavigationStack } from "@/lib/resetNavigationStack";
-import { supabase } from "@/lib/supabase";
+import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 
-// Tells Supabase Auth to continuously refresh the session automatically if
-// the app is in the foreground. When this is added, you will continue to receive
-// `onAuthStateChange` events with the `TOKEN_REFRESHED` or `SIGNED_OUT` event
-// if the user's session is terminated. This should only be registered once.
-AppState.addEventListener("change", (state) => {
-  if (state === "active") {
-    supabase.auth.startAutoRefresh();
-  } else {
-    supabase.auth.stopAutoRefresh();
-  }
-});
+
+// // Import the functions you need from the SDKs you need
+// import { initializeApp } from "firebase/app";
+// import { getAnalytics } from "firebase/analytics";
+// // TODO: Add SDKs for Firebase products that you want to use
+// // https://firebase.google.com/docs/web/setup#available-libraries
+
+// // Your web app's Firebase configuration
+// // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// const firebaseConfig = {
+//   apiKey: "AIzaSyDtBfjTfxG6KvP96yHH6qiJexeS-2-3rJA",
+//   authDomain: "habits-together.firebaseapp.com",
+//   projectId: "habits-together",
+//   storageBucket: "habits-together.appspot.com",
+//   messagingSenderId: "731859375504",
+//   appId: "1:731859375504:web:80b078f13a31b5d897cf15",
+//   measurementId: "G-46NX1BKJK8"
+// };
+
+// // Initialize Firebase
+// const app = initializeApp(firebaseConfig);
+// const analytics = getAnalytics(app);
 
 export default function Signin() {
   // in the future we want to only have sign in with Google & Apple
@@ -26,36 +36,13 @@ export default function Signin() {
 
   async function signInWithEmail() {
     setLoading(true);
-    const { data: signInData, error: signInError } =
-      await supabase.auth.signInWithPassword({
-        email: email,
-        password: password,
-      });
 
-    if (signInError || !signInData || !signInData.user) {
-      Alert.alert(
-        "Sign in failed" + (signInError && ": " + signInError.message)
-      );
-      setLoading(false);
-      return;
-    }
-
-    // see if the account exists by checking profile_created in profiles table
-    const { data: profileData, error: profileError } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", signInData.user.id)
-      .single();
+    // see if the account exists
 
     setLoading(false);
 
-    if (profileError) {
-      Alert.alert("Error fetching profile: " + profileError.message);
-      return;
-    }
-
     // they previously created an account and are logging in
-    if (profileData.profile_created) {
+    if (true) {
       resetNavigationStack("/");
     }
     // they are creating an account for the first time

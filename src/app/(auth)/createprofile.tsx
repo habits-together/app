@@ -1,5 +1,5 @@
-import { Text, View } from "@/components/Themed";
-import { resetNavigationStack } from "@/lib/resetNavigationStack";
+import { Text, View } from "@/src/components/Themed";
+import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { TouchableOpacity } from "react-native";
 
 export default function Createprofile() {

@@ -1,5 +1,5 @@
-import { View } from '@/components/Themed';
-import { HabitCard } from '@/components/HabitCard';
+import { View } from '@/src/components/Themed';
+import { HabitCard } from '@/src/components/HabitCard';
 import { IconBook } from '@tabler/icons-react-native';
 import { Link } from 'expo-router';
 import { Pressable } from 'react-native';
@@ -21,7 +21,7 @@ export default function HabitsTab() {
           <Link
             push
             href={{
-              pathname: "/habit",
+              pathname: "/viewhabit",
               params: { id: habit.id }
             }}
             asChild

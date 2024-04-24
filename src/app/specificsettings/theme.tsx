@@ -1,11 +1,11 @@
-import { View } from "@/components/Themed";
+import { View } from "@/src/components/Themed";
 import { Appearance } from "react-native";
 import { IconBrightness, IconMoon, IconSun } from "@tabler/icons-react-native";
-import Icon from "@/components/Icon";
+import Icon from "@/src/components/Icon";
 import {
   SettingsChoice,
   SettingsContainer,
-} from "@/components/SettingsComponents";
+} from "@/src/components/SettingsComponents";
 import { useColorScheme } from "nativewind";
 
 export default function Theme() {
