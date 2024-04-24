@@ -1,22 +1,31 @@
-import { Text, View } from '@/src/components/Themed';
-import { HabitCard } from '@/src/components/HabitCard';
-import { IconBook, IconCalendarMonth, IconChevronLeft, IconEdit, IconHistory, IconShare2, IconTrash, IconUserPlus } from '@tabler/icons-react-native';
-import { Link, useLocalSearchParams } from 'expo-router';
+import { Text, View } from "@/src/components/Themed";
+import { HabitCard } from "@/src/components/HabitCard";
+import {
+  IconBook,
+  IconCalendarMonth,
+  IconChevronLeft,
+  IconEdit,
+  IconHistory,
+  IconShare2,
+  IconTrash,
+  IconUserPlus,
+} from "@tabler/icons-react-native";
+import { Link, useLocalSearchParams } from "expo-router";
 
-import Icon from '@/src/components/Icon';
-import { Pressable } from 'react-native';
-import IconButton from '@/src/components/IconButton';
-import HeaderBackButton from '@/src/components/HeaderBackButton';
+import Icon from "@/src/components/Icon";
+import { Pressable } from "react-native";
+import IconButton from "@/src/components/IconButton";
+import HeaderBackButton from "@/src/components/HeaderBackButton";
 
 const habits = [
   {
-    title: 'Read for 15 minutes',
-    description: 'Read for at least 15 minutes every day',
+    title: "Read for 15 minutes",
+    description: "Read for at least 15 minutes every day",
     icon: IconBook,
     color: "fuchsia",
     participants: [1, 2], // should be user objects
     id: 1,
-  }
+  },
 ];
 
 export default function Habit() {
@@ -26,17 +35,17 @@ export default function Habit() {
   const habit = habits[0];
 
   return (
-    <View className='flex-1 p-4 pt-12'
-      style={{ gap: 40 }}>
-      <View className="flex flex-column"
-        style={{ gap: 20 }}>
+    <View className="flex-1 p-4 pt-12" style={{ gap: 40 }}>
+      <View className="flex flex-column" style={{ gap: 20 }}>
         <HeaderBackButton showText={true} />
 
         {/* Title */}
         <View>
           <View className="flex flex-row items-center justify-between">
-            <View className="flex flex-row items-center flex-1"
-              style={{ gap: 10 }}>
+            <View
+              className="flex flex-row items-center flex-1"
+              style={{ gap: 10 }}
+            >
               <Icon size={32} icon={habit.icon} />
               <Text
                 numberOfLines={1}
@@ -50,42 +59,41 @@ export default function Habit() {
         </View>
 
         {/* Edit/Delete Buttons */}
-        <View className="flex flex-row"
-          style={{ gap: 10 }}>
+        <View className="flex flex-row" style={{ gap: 10 }}>
           <IconButton icon={IconEdit} text="Edit habit" />
           <IconButton icon={IconTrash} text="Delete habit" />
         </View>
 
         {/* Heatmap */}
         <View>
-          <HabitCard title={habit.title} color={"fuchsia"} icon={habit.icon} displayType='view-habit-page' />
+          <HabitCard
+            title={habit.title}
+            color={"fuchsia"}
+            icon={habit.icon}
+            displayType="view-habit-page"
+          />
         </View>
 
         {/* Full/Edit Heatmap Buttons */}
-        <View className="flex flex-row"
-          style={{ gap: 10 }}>
+        <View className="flex flex-row" style={{ gap: 10 }}>
           <IconButton icon={IconHistory} text="Full history" />
           <IconButton icon={IconCalendarMonth} text="Edit dates" />
         </View>
       </View>
 
       {/* Participants */}
-      <View className="flex flex-column"
-        style={{ gap: 20 }}>
-        <Text
-          className="text-black dark:text-white font-bold text-xl mb-1"
-        >
-        Participants ({habit.participants.length})
+      <View className="flex flex-column" style={{ gap: 20 }}>
+        <Text className="text-black dark:text-white font-bold text-xl mb-1">
+          Participants ({habit.participants.length})
         </Text>
         {/* add participant cards */}
       </View>
 
       {/* Invite/Share Buttons*/}
-      <View className="flex flex-row"
-        style={{ gap: 10 }}>
+      <View className="flex flex-row" style={{ gap: 10 }}>
         <IconButton icon={IconUserPlus} text="Invite friends" />
         <IconButton icon={IconShare2} text="Share link" />
       </View>
     </View>
-  )
+  );
 }

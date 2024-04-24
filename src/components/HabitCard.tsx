@@ -6,9 +6,8 @@ import DotsMenu from "./DotsMenu";
 import { getMockCompletionsData } from "@/src/lib/mockHabitData";
 import Icon from "./Icon";
 import { useColorScheme } from "nativewind";
-import { profilePicsDataPromise } from "@/src/lib/getRanomProfilePic"
+import { profilePicsDataPromise } from "@/src/lib/getRandomProfilePics";
 import ProfilePicture from "./ProfilePicture";
-
 
 const WeekDays = ["M", "T", "W", "T", "F", "S", "S"];
 
@@ -86,7 +85,7 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
       <View className="flex flex-row">
         {[1, 2].map(
           (
-            order // need to repeat the days twice
+            order, // need to repeat the days twice
           ) =>
             WeekDays.map((day, index) => (
               <Text
@@ -101,7 +100,7 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
               >
                 {day}
               </Text>
-            ))
+            )),
         )}
       </View>
       {chunkedActivityData.map((weekRow, rowIndex) => (
@@ -119,7 +118,10 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
       ))}
       {displayType !== "view-habit-page" && (
         <View className="flex flex-row mt-4">
-          <FreindProfilePictures profilePicsData={profilePicsData} color={color} />
+          <FreindProfilePictures
+            profilePicsData={profilePicsData}
+            color={color}
+          />
           <CompletionButton color={color} />
         </View>
       )}
@@ -128,7 +130,7 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
 }
 
 function CompletionButton({
-  color
+  color,
 }: {
   color: keyof typeof colors.habitColors;
 }) {
@@ -144,12 +146,12 @@ function CompletionButton({
         style={{
           backgroundColor:
             colorScheme === "dark"
-              ? (active
+              ? active
                 ? colors.habitColors[color].base
-                : colors.stone.faded)
-              : (active
+                : colors.stone.faded
+              : active
                 ? colors.habitColors[color].base
-                : colors.habitColors[color].faded)
+                : colors.habitColors[color].faded,
         }}
       >
         <Icon
@@ -160,20 +162,24 @@ function CompletionButton({
           strokeWidth={4}
         />
       </View>
-    </Pressable >
+    </Pressable>
   );
 }
 
-function FreindProfilePictures({ profilePicsData, color }: {
+function FreindProfilePictures({
+  profilePicsData,
+  color,
+}: {
   profilePicsData: ProfilePic[];
   color: keyof typeof colors.habitColors;
 }) {
   const { colorScheme } = useColorScheme();
   return (
     <View className="flex-row justify-between">
-      <View className="flex flex-row-reverse shrink">
+      <View className="flex flex-row-reverse shrink gap-[0.2rem]">
         {profilePicsData.length > 5 && (
-          <View className="w-12 h-12 rounded-full"
+          <View
+            className="w-12 h-12 rounded-full"
             style={{
               backgroundColor:
                 colorScheme === "dark"
@@ -181,21 +187,21 @@ function FreindProfilePictures({ profilePicsData, color }: {
                   : colors.habitColors[color].faded,
             }}
           >
-            <Text className="text-lg m-auto"
+            <Text
+              className="text-lg m-auto"
               style={{
                 color:
                   colorScheme === "dark"
                     ? colors.stone.text
                     : colors.habitColors[color].text,
-              }}>
+              }}
+            >
               +{profilePicsData.length - 5}
             </Text>
           </View>
         )}
         {profilePicsData.slice(0, 5).map((data, index) => (
-          <View className="relative w-12 h-12 rounded-full -mr-3"
-            key={index}
-          >
+          <View className="w-12 h-12 rounded-full -mr-3" key={index}>
             {data.hasCompleted && (
               <>
                 <View className="absolute -top-[3px] -right-[4px] z-10">
@@ -204,7 +210,8 @@ function FreindProfilePictures({ profilePicsData, color }: {
                     size={18}
                     lightColor={colors.stone.light}
                     darkColor={colors.stone.light}
-                    strokeWidth={7} />
+                    strokeWidth={7}
+                  />
                 </View>
                 <View className="absolute -top-[3px] -right-[4px] z-10">
                   <Icon
@@ -212,7 +219,8 @@ function FreindProfilePictures({ profilePicsData, color }: {
                     size={18}
                     lightColor={colors.habitColors.green.base}
                     darkColor={colors.habitColors.green.base}
-                    strokeWidth={3} />
+                    strokeWidth={3}
+                  />
                 </View>
               </>
             )}

@@ -1,1 +1,1 @@
-export { useColorScheme } from 'nativewind';
+export { useColorScheme } from "nativewind";
