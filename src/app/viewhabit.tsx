@@ -2,16 +2,11 @@ import { Text, View } from '@/src/components/Themed';
 import { HabitCard } from '@/src/components/HabitCard';
 import { IconBook, IconCalendarMonth, IconChevronLeft, IconEdit, IconHistory, IconShare2, IconTrash, IconUserPlus } from '@tabler/icons-react-native';
 import { Link, useLocalSearchParams } from 'expo-router';
-<<<<<<< HEAD:app/viewhabit.tsx
-import Icon from '@/components/Icon';
-import IconButton from '@/components/IconButton';
-import HeaderBackButton from '@/components/HeaderBackButton';
-=======
+
 import Icon from '@/src/components/Icon';
 import { Pressable } from 'react-native';
 import IconButton from '@/src/components/IconButton';
 import HeaderBackButton from '@/src/components/HeaderBackButton';
->>>>>>> f6b33f389e79fd44d95252fb2d631afe875f5dc7:src/app/viewhabit.tsx
 
 const habits = [
   {

@@ -7,8 +7,14 @@ async function fetchUserThumbnails() {
         }
         const data = await response.json();
         // Map through the results to extract thumbnail URLs
-        const thumbnailUrls = data.results.map((user: { picture: { thumbnail: string } }) => user.picture.thumbnail);
-        return thumbnailUrls;
+        // const thumbnailUrls = data.results.map((user: { picture: { thumbnail: string } }) => user.picture.thumbnail);
+        const profilePicData = data.results.map((user: { picture: { thumbnail: string } }) => {
+            return {
+                imgurl: user.picture.thumbnail,
+                hasCompleted: Math.random() > 0.5 ? true : false
+            };
+        });
+        return profilePicData;
     } catch (error) {
         console.error('Failed to fetch user thumbnails:', error);
         return []; // Return an empty array in case of an error
@@ -16,4 +22,4 @@ async function fetchUserThumbnails() {
 }
 
 
-export const thumbnailUrlsPromise = fetchUserThumbnails();
+export const profilePicsDataPromise = fetchUserThumbnails();
