@@ -141,7 +141,7 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
           ))}
         </View>
       ))}
-      {displayType !== "view-habit-page" && (
+      {displayType === "habit-tab" && (
         <View className="flex flex-row mt-4 justify-between">
           <FreindProfilePictures
             profilePicsData={profilePicsData}
