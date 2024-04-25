@@ -21,7 +21,7 @@ export default function DotsMenu({ options }: { options: Option[] }) {
   return (
     <Menu>
       <MenuTrigger>
-        <View className="p-2 bg-transparent">
+        <View className="bg-transparent p-2">
           <Icon icon={IconDots} />
         </View>
       </MenuTrigger>

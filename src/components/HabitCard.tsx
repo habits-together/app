@@ -68,7 +68,7 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
 
   return (
     <View
-      className="w-full p-3 rounded-3xl"
+      className="w-full rounded-3xl p-3"
       style={{
         backgroundColor:
           colorScheme === "dark"
@@ -78,11 +78,11 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
     >
       {displayType !== "view-habit-page" && (
         <View className="ml-2 flex-row items-center justify-between">
-          <View className="mr-2 flex-row items-center gap-1 flex-1">
+          <View className="mr-2 flex-1 flex-row items-center gap-1">
             <Icon icon={icon} />
             <Text
               numberOfLines={1}
-              className="text-black dark:text-white font-bold text-xl mb-1 flex-1"
+              className="mb-1 flex-1 text-xl font-bold text-black dark:text-white"
             >
               {title}
             </Text>
@@ -109,7 +109,7 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
       <View className="flex flex-row">
         {[1, 2].map(
           (
-            order // need to repeat the days twice
+            order, // need to repeat the days twice
           ) =>
             WeekDays.map((day, index) => (
               <Text
@@ -120,11 +120,11 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
                       ? colors.stone.text
                       : colors.habitColors[color].text,
                 }}
-                className="flex-1 mx-0.5 text-center text-orange-text dark:text-stone-text font-semibold"
+                className="text-orange-text mx-0.5 flex-1 text-center font-semibold dark:text-stone-text"
               >
                 {day}
               </Text>
-            ))
+            )),
         )}
       </View>
       {chunkedActivityData.map((weekRow, rowIndex) => (
@@ -135,13 +135,13 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
               style={{
                 backgroundColor: getColorClassesFromCompletionValue(data),
               }}
-              className={`flex-1 aspect-square rounded m-0.5`}
+              className={`m-0.5 aspect-square flex-1 rounded`}
             />
           ))}
         </View>
       ))}
       {displayType !== "view-habit-page" && (
-        <View className="flex flex-row mt-4 justify-between">
+        <View className="mt-4 flex flex-row justify-between">
           <FriendProfilePictures
             profilePicsData={profilePicsData}
             color={color}
@@ -184,10 +184,10 @@ function CompletionButton({
   return (
     <Pressable
       onPress={toggleCompletion}
-      className="rounded-full w-12 h-12 bg-blue-500"
+      className="bg-blue-500 h-12 w-12 rounded-full"
     >
       <View
-        className="rounded-full w-full h-full items-center justify-center"
+        className="h-full w-full items-center justify-center rounded-full"
         style={{
           backgroundColor:
             colorScheme === "dark"
@@ -195,8 +195,8 @@ function CompletionButton({
                 ? colors.habitColors[color].base
                 : colors.stone.faded
               : active
-              ? colors.habitColors[color].base
-              : colors.habitColors[color].faded,
+                ? colors.habitColors[color].base
+                : colors.habitColors[color].faded,
         }}
       >
         <Icon
@@ -221,10 +221,10 @@ function FriendProfilePictures({
   const { colorScheme } = useColorScheme();
   return (
     <View className="flex-row justify-between">
-      <View className="flex flex-row-reverse shrink gap-[0.2rem]">
+      <View className="flex shrink flex-row-reverse gap-[0.2rem]">
         {profilePicsData.length > 5 && (
           <View
-            className="w-12 h-12 rounded-full"
+            className="h-12 w-12 rounded-full"
             style={{
               backgroundColor:
                 colorScheme === "dark"
@@ -233,7 +233,7 @@ function FriendProfilePictures({
             }}
           >
             <Text
-              className="text-lg m-auto"
+              className="m-auto text-lg"
               style={{
                 color:
                   colorScheme === "dark"
@@ -246,10 +246,10 @@ function FriendProfilePictures({
           </View>
         )}
         {profilePicsData.slice(0, 5).map((data, index) => (
-          <View className="w-12 h-12 rounded-full -mr-3" key={data.imgurl}>
+          <View className="-mr-3 h-12 w-12 rounded-full" key={data.imgurl}>
             {data.hasCompleted && (
               <>
-                <View className="absolute -top-[3px] -right-[4px] z-10">
+                <View className="absolute -right-[4px] -top-[3px] z-10">
                   <Icon
                     icon={IconCheck}
                     size={18}
@@ -258,7 +258,7 @@ function FriendProfilePictures({
                     strokeWidth={7}
                   />
                 </View>
-                <View className="absolute -top-[3px] -right-[4px] z-10">
+                <View className="absolute -right-[4px] -top-[3px] z-10">
                   <Icon
                     icon={IconCheck}
                     size={18}
