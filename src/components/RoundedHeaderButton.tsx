@@ -15,16 +15,12 @@ export default function RoundedHeaderButton({
 }) {
   return (
     <Pressable
-      className="flex-row items-center justify-center absolute right-4 py-1.5 border rounded-full border-stone-300 w-32"
+      className="absolute right-4 w-32 flex-row items-center justify-center rounded-full border border-stone-300 py-1.5"
       android_ripple={{ color: colors.stone["300"], radius: 55 }}
       onPress={onPress}
     >
-      <Icon
-        icon={icon}
-        size={16}
-        strokeWidth={3}
-      />
-      <Text className="font-bold ml-1">{text}</Text>
+      <Icon icon={icon} size={16} strokeWidth={3} />
+      <Text className="ml-1 font-bold">{text}</Text>
     </Pressable>
   );
 }

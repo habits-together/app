@@ -8,7 +8,7 @@ export default function Createprofile() {
       <Text>Create Profile</Text>
       <TouchableOpacity
         onPress={() => resetNavigationStack("/")}
-        className="p-8 m-2 bg-grey-400"
+        className="m-2 bg-grey-400 p-8"
       >
         <Text>Go to Home</Text>
       </TouchableOpacity>
