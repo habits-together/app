@@ -8,7 +8,7 @@ export type Habit = {
   color: keyof typeof colors.habitColors;
   icon: TablerIcon;
   id: number;
-}
+};
 
 export function getMockCompletionsData() {
   function getNumberOfDaysInLastWeek() {
@@ -49,5 +49,5 @@ export const mockHabitData: Habit[] = [
     icon: IconBed,
     color: "violet",
     id: 2,
-  }
+  },
 ];

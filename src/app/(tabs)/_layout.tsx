@@ -7,7 +7,7 @@ import {
   IconSettings,
   IconStack2,
   IconUserPlus,
-  IconUsers
+  IconUsers,
 } from "@tabler/icons-react-native";
 import { Tabs } from "expo-router";
 import { useColorScheme } from "nativewind";
@@ -60,8 +60,10 @@ export default function TabLayout() {
             <RoundedHeaderButton
               text="New Habit"
               icon={IconPlus}
-              onPress={() => {alert("New Habit")}} 
-              />
+              onPress={() => {
+                alert("New Habit");
+              }}
+            />
           ),
           tabBarIcon: ({ color }) => (
             <Icon
@@ -81,8 +83,10 @@ export default function TabLayout() {
             <RoundedHeaderButton
               text="Add friends"
               icon={IconUserPlus}
-              onPress={() => {alert("Add friends")}} 
-              />
+              onPress={() => {
+                alert("Add friends");
+              }}
+            />
           ),
           tabBarIcon: ({ color }) => (
             <Icon

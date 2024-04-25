@@ -36,20 +36,20 @@ export default function Habit() {
 
   return (
     <View className="flex-1 p-4 pt-12" style={{ gap: 40 }}>
-      <View className="flex flex-column" style={{ gap: 20 }}>
+      <View className="flex-column flex" style={{ gap: 20 }}>
         <HeaderBackButton showText={true} />
 
         {/* Title */}
         <View>
           <View className="flex flex-row items-center justify-between">
             <View
-              className="flex flex-row items-center flex-1"
+              className="flex flex-1 flex-row items-center"
               style={{ gap: 10 }}
             >
               <Icon size={32} icon={habit.icon} />
               <Text
                 numberOfLines={1}
-                className="text-black dark:text-white font-bold text-xl mb-1 flex-1"
+                className="mb-1 flex-1 text-xl font-bold text-black dark:text-white"
               >
                 {habit.title}
               </Text>
@@ -82,8 +82,8 @@ export default function Habit() {
       </View>
 
       {/* Participants */}
-      <View className="flex flex-column" style={{ gap: 20 }}>
-        <Text className="text-black dark:text-white font-bold text-xl mb-1">
+      <View className="flex-column flex" style={{ gap: 20 }}>
+        <Text className="mb-1 text-xl font-bold text-black dark:text-white">
           Participants ({habit.participants.length})
         </Text>
         {/* add participant cards */}

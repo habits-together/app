@@ -3,7 +3,11 @@
  * https://docs.expo.io/guides/color-schemes/
  */
 
-import { Text as DefaultText, View as DefaultView, ScrollView as DefaultScrollView ,SafeAreaView as DefaultSafeAreaView} from "react-native";
+import {
+  Text as DefaultText,
+  View as DefaultView,
+  ScrollView as DefaultScrollView,
+} from "react-native";
 import Colors from "@/src/constants/DefaultColors";
 import { useColorScheme } from "nativewind";
 
@@ -15,7 +19,6 @@ type ThemeProps = {
 export type TextProps = ThemeProps & DefaultText["props"];
 export type ViewProps = ThemeProps & DefaultView["props"];
 export type ScrollViewProps = ThemeProps & DefaultScrollView["props"];
-export type SafeAreaViewProps = ThemeProps & DefaultSafeAreaView["props"];
 
 export function useThemeColor(
   props: { light?: string; dark?: string },
@@ -56,15 +59,7 @@ export function ScrollView(props: ScrollViewProps) {
     "background",
   );
 
-  return <DefaultScrollView style={[{ backgroundColor }, style]} {...otherProps} />;
-}
-
-export function SafeAreaView(props: SafeAreaViewProps) {
-  const { style, lightColor, darkColor, ...otherProps } = props;
-  const backgroundColor = useThemeColor(
-    { light: lightColor, dark: darkColor },
-    "background",
+  return (
+    <DefaultScrollView style={[{ backgroundColor }, style]} {...otherProps} />
   );
-
-  return <DefaultSafeAreaView style={[{ backgroundColor }, style]} {...otherProps} />;
 }

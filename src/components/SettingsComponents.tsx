@@ -13,7 +13,7 @@ import Icon from "@/src/components/Icon";
 
 export function SettingsContainer({ children }: { children: React.ReactNode }) {
   return (
-    <ScrollView className="flex-1 p-4 bg-stone-50 dark:bg-stone-base">
+    <ScrollView className="flex-1 bg-stone-50 p-4 dark:bg-stone-base">
       {children}
     </ScrollView>
   );
@@ -109,12 +109,12 @@ function SettingsSection({
   return (
     <>
       {groupTitle && (
-        <Text className="text-sm text-stone-500 dark:text-stone-300 font-semibold ml-3 mb-2">
+        <Text className="mb-2 ml-3 text-sm font-semibold text-stone-500 dark:text-stone-300">
           {groupTitle}
         </Text>
       )}
       <View
-        className={`border border-grey-200 rounded-xl overflow-hidden mb-6`}
+        className={`mb-6 overflow-hidden rounded-xl border border-grey-200`}
       >
         {/* settings with Divider in between each one */}
         {settingComponents.map((setting, index) => (
@@ -137,7 +137,7 @@ function Setting({
   return (
     <TouchableOpacity
       onPress={onPress}
-      className="flex-row items-center p-4 bg-white dark:bg-grey-800"
+      className="flex-row items-center bg-white p-4 dark:bg-grey-800"
     >
       {icon}
       <Text
