@@ -1,16 +1,36 @@
-# Habit Tracker
+# Habits Together
 
-A group project to learn how to make mobile apps using React Native. The app is a habit tracker that allows users to create habits and track their progress. The app will also have a social aspect where users can share their progress with friends.
+## Summary
 
-## Getting Started
+A habit tracking app for Apple and Android where you can add friends and do habits together. Created using React Native and Firebase.
 
-This project uses React Native with Expo, with Firebase as the primary backend service.
+## Development: Getting Started
 
-To setup your development environment, create a .env file based on the .env.example file. Then run the following commands:
+Run the following commands:
 
 ```
 npm install
 npm start
 ```
 
-Install the Expo app on your phone, then scan the QR code created by the commands above.
+Install the Expo Go app on your phone, then scan the QR code that shows up in the terminal. 
+
+More information about Expo Go: https://docs.expo.dev/get-started/expo-go/
+
+## Debugging
+
+If you can't run Expo Go and errors keep showing up, try running the following commands:
+
+```
+npm prune
+npm install
+npx expo start --clear
+```
+
+This syncs the installed packages with `package.json` to remove any problematic packages that might be breaking something, and makes sure all required packages are installed. Running expo start with the clear flag clears expo's cache.
+
+## Contribution
+
+Currently our team has 11 people, including a few who are working specifically on the business/marketing side!
+
+If you are interested in joining our team or making occasional contributions, feel free to reach out.
