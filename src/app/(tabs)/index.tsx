@@ -1,22 +1,16 @@
-import { View } from "@/src/components/Themed";
+import { ScrollView } from "@/src/components/Themed";
 import { HabitCard } from "@/src/components/HabitCard";
-import { IconBook } from "@tabler/icons-react-native";
 import { Link } from "expo-router";
 import { Pressable } from "react-native";
-
-const habits = [
-  {
-    title: "Read for 15 minutes",
-    icon: IconBook,
-    color: "fuchsia",
-    id: 1,
-  },
-];
+import { mockHabitData } from "@/src/lib/mockHabitData";
 
 export default function HabitsTab() {
   return (
-    <View className="flex-1 p-4">
-      {habits.map((habit) => {
+    <ScrollView className="flex-1 p-4 gap-6">
+      {mockHabitData.map((habit, index) => {
+        // if element is last, add padding to bottom (given that there are more than 1 element in the list)
+        const isLastElement = index === mockHabitData.length - 1;
+        const paddingBottom = isLastElement && mockHabitData.length > 1 ? 100 : 0;
         return (
           <Link
             push
@@ -26,11 +20,12 @@ export default function HabitsTab() {
             }}
             asChild
             key={habit.id}
+            style={{ paddingBottom: paddingBottom }}
           >
             <Pressable>
               <HabitCard
                 title={habit.title}
-                color="fuchsia"
+                color={habit.color}
                 icon={habit.icon}
                 displayType="habit-tab"
               />
@@ -38,6 +33,6 @@ export default function HabitsTab() {
           </Link>
         );
       })}
-    </View>
+    </ScrollView >
   );
 }

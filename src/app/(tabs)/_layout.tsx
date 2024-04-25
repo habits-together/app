@@ -1,15 +1,18 @@
-import React from "react";
-import { Platform } from "react-native";
-import { Tabs } from "expo-router";
+import Icon from "@/src/components/Icon";
+import RoundedHeaderButton from "@/src/components/RoundedHeaderButton";
 import { useClientOnlyValue } from "@/src/components/useClientOnlyValue";
+import colors from "@/src/constants/colors";
 import {
+  IconPlus,
   IconSettings,
   IconStack2,
-  IconUsers,
+  IconUserPlus,
+  IconUsers
 } from "@tabler/icons-react-native";
-import colors from "@/src/constants/colors";
-import Icon from "@/src/components/Icon";
+import { Tabs } from "expo-router";
 import { useColorScheme } from "nativewind";
+import React from "react";
+import { Platform } from "react-native";
 
 export default function TabLayout() {
   const { colorScheme } = useColorScheme();
@@ -53,6 +56,13 @@ export default function TabLayout() {
         name="index"
         options={{
           title: "Habits",
+          headerRight: () => (
+            <RoundedHeaderButton
+              text="New Habit"
+              icon={IconPlus}
+              onPress={() => {alert("New Habit")}} 
+              />
+          ),
           tabBarIcon: ({ color }) => (
             <Icon
               icon={IconStack2}
@@ -67,6 +77,13 @@ export default function TabLayout() {
         name="friends"
         options={{
           title: "Friends",
+          headerRight: () => (
+            <RoundedHeaderButton
+              text="Add friends"
+              icon={IconUserPlus}
+              onPress={() => {alert("Add friends")}} 
+              />
+          ),
           tabBarIcon: ({ color }) => (
             <Icon
               icon={IconUsers}

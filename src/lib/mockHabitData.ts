@@ -1,4 +1,14 @@
 import { HabitCompletionValue } from "@/src/components/HabitCard";
+import colors from "@/src/constants/colors";
+import { Icon as TablerIcon } from "@tabler/icons-react-native";
+import { IconBook, IconBed, IconBarbell } from "@tabler/icons-react-native";
+
+export type Habit = {
+  title: string;
+  color: keyof typeof colors.habitColors;
+  icon: TablerIcon;
+  id: number;
+}
 
 export function getMockCompletionsData() {
   function getNumberOfDaysInLastWeek() {
@@ -15,5 +25,29 @@ export function getMockCompletionsData() {
   for (let i = 49 + daysInLastWeek; i < activityData.length; i++) {
     activityData[i] = "not-applicable";
   }
-  return activityData;
+  let indexOftoday = 49 + daysInLastWeek - 1;
+  // make sure last day is always missed
+  activityData[indexOftoday] = "missed";
+  return [activityData, indexOftoday] as const;
 }
+
+export const mockHabitData: Habit[] = [
+  {
+    title: "Workout for 1 hour",
+    icon: IconBarbell,
+    color: "red",
+    id: 3,
+  },
+  {
+    title: "Read for 15 minutes",
+    icon: IconBook,
+    color: "green",
+    id: 1,
+  },
+  {
+    title: "Get 8 hours of sleep",
+    icon: IconBed,
+    color: "violet",
+    id: 2,
+  }
+];
