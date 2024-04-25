@@ -15,8 +15,18 @@ export type HabitInviteProps = {
 
 export default function HabitInvite({ title, color, icon, inviterUserName, numberOfParticipants }: HabitInviteProps) {
     const { colorScheme } = useColorScheme();
+    const deleteInvite = () => {
+        // delete the invite
+        console.log("Invite deleted");
+    };
+    const confirmInvite = () => {
+        // confirm the invite
+        console.log("Invite confirmed");
+    }
     return (
-        <View className="flex flex-row items-center rounded-3xl px-3 py-2"
+        // wanna remove the my-2 later, for some reason i cant use "gap" in ./HabitInviteList.tsx 
+        // gonna look into it later
+        <View className="flex flex-row grow-0 items-center rounded-3xl px-3 py-2 my-2"
             style={
                 {
                     backgroundColor: colorScheme === "dark"
@@ -51,7 +61,7 @@ export default function HabitInvite({ title, color, icon, inviterUserName, numbe
                 <Pressable className="border px-2.5 py-1.5 rounded-xl flex justify-center"
                     style={
                         {
-                            backgroundColor: colorScheme === "dark" ?  "transparent": colors.stone[100],
+                            backgroundColor: colorScheme === "dark" ? "transparent" : colors.stone[100],
                             borderColor: colorScheme === "dark"
                                 ? colors.stone[300]
                                 : colors.stone[400],
@@ -62,17 +72,19 @@ export default function HabitInvite({ title, color, icon, inviterUserName, numbe
                             {
                                 color: colorScheme === "dark" ? colors.stone[100] : colors.black
                             }
-                        }>Confirm</Text>
+                        }
+                        onPress={confirmInvite}>Confirm</Text>
                 </Pressable>
                 <Pressable className="ml-1 border px-1.5 py-1 rounded-xl flex justify-center"
                     style={
                         {
-                            backgroundColor: colorScheme === "dark" ?  "transparent": colors.stone[100],
+                            backgroundColor: colorScheme === "dark" ? "transparent" : colors.stone[100],
                             borderColor: colorScheme === "dark"
                                 ? colors.stone[300]
                                 : colors.stone[400],
                         }
-                    }>
+                    }
+                    onPress={deleteInvite}>
                     <Icon icon={IconTrash} lightColor="black" darkColor="white" size={17} strokeWidth={2.5} />
                 </Pressable>
             </View>
