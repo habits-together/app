@@ -9,6 +9,11 @@ import DotsMenu from "./DotsMenu";
 import Icon from "./Icon";
 import ProfilePicture from "./ProfilePicture";
 
+export type ProfilePic = {
+  imgurl: string;
+  hasCompleted: boolean;
+};
+
 const WeekDays = ["M", "T", "W", "T", "F", "S", "S"];
 
 export type HabitCardProps = {
@@ -18,10 +23,6 @@ export type HabitCardProps = {
   displayType: "habit-tab" | "view-habit-page" | "friend's-habit";
 };
 
-export type ProfilePic = {
-  imgurl: string;
-  hasCompleted: boolean;
-};
 
 export type HabitCompletionValue = "completed" | "missed" | "not-applicable";
 
