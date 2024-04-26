@@ -40,7 +40,7 @@ export default function FriendSearchBar() {
                     : colors.stone[400]}
                 onChangeText={onChangeText}
                 value={text}
-                placeholder="Search your freinds list..."
+                placeholder="Search your friends list..."
                 keyboardType="default"
             />
         </SafeAreaView>

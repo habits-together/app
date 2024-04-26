@@ -89,7 +89,7 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
             </Text>
           </View>
           {displayType === "habit-tab" && (
-            <View className="pr-1">
+            <View className="">
               <DotsMenu
                 options={[
                   {
@@ -249,7 +249,7 @@ function FriendProfilePictures({
           </View>
         )}
         {profilePicsData.slice(0, 5).map((data, index) => (
-          <View className="-mr-3 h-12 w-12 rounded-full" key={data.imgurl}>
+          <View className="-mr-3 h-12 w-12 rounded-full" key={data.imgurl + index}>
             {data.hasCompleted && (
               <>
                 <View className="absolute -right-[4px] -top-[3px] z-10">

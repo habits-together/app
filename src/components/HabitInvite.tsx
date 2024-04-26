@@ -10,19 +10,13 @@ export type HabitInviteProps = {
     color: keyof typeof colors.habitColors;
     icon: TablerIcon;
     numberOfParticipants: number;
-    inviterUserName: string;
+    userName: string;
+    deleteInvite: () => void;
+    confirmInvite: () => void;
 };
 
-export default function HabitInvite({ title, color, icon, inviterUserName, numberOfParticipants }: HabitInviteProps) {
+export default function HabitInvite({ title, color, icon, userName, numberOfParticipants, deleteInvite, confirmInvite }: HabitInviteProps) {
     const { colorScheme } = useColorScheme();
-    const deleteInvite = () => {
-        // delete the invite
-        console.log("Invite deleted");
-    };
-    const confirmInvite = () => {
-        // confirm the invite
-        console.log("Invite confirmed");
-    }
     return (
         // wanna remove the my-2 later, for some reason i cant use "gap" in ./HabitInviteList.tsx 
         // gonna look into it later
@@ -55,7 +49,7 @@ export default function HabitInvite({ title, color, icon, inviterUserName, numbe
                         color: colorScheme === "dark"
                             ? colors.stone[400]
                             : colors.habitColors[color].text,
-                    }}>Invited by {inviterUserName}</Text>
+                    }}>Invited by {userName}</Text>
             </View>
             <View className="ml-auto flex flex-row bg-transparent">
                 <Pressable className="border px-2.5 py-1.5 rounded-xl flex justify-center"

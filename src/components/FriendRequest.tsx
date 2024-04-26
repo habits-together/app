@@ -8,36 +8,30 @@ import colors from "../constants/colors";
 
 
 export type FriendRequestProps = {
-    inviterDisplayName: string;
-    inviterUserName: string;
+    displayName: string;
+    userName: string;
     profilePic: React.JSX.Element;
+    deleteInvite: () => void;
+    confirmInvite: () => void;
 };
 
 // fetch all invites a user has received
-export default function FriendRequest({ inviterDisplayName, profilePic, inviterUserName }: FriendRequestProps) {
+export default function FriendRequest({ displayName, profilePic, userName, deleteInvite, confirmInvite }: FriendRequestProps) {
     const { colorScheme } = useColorScheme();
-    const deleteInvite = () => {
-        // delete the invite
-        console.log("Invite deleted");
-    };
-    const confirmInvite = () => {
-        // confirm the invite
-        console.log("Invite confirmed");
-    }
     return (
         <View className="flex flex-row grow-0 items-center rounded-3xl px-0 py-2"
         >
             <View className="flex flex-row">
                 {profilePic}
                 <View className="ml-2 flex flex-col">
-                    <Text className="text-lg font-semibold">{inviterDisplayName}</Text>
+                    <Text className="text-lg font-semibold">{displayName}</Text>
                     <Text className="font-semibold"
                         style={{
                             color: colorScheme === "dark"
                                 ? colors.stone[500]
                                 : colors.stone[300],
                         }}
-                    >{inviterUserName}</Text>
+                    >{userName}</Text>
                 </View>
             </View>
             <View className="ml-auto flex flex-row">

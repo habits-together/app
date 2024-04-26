@@ -23,8 +23,8 @@ export default function FriendList() {
     const profilePicComponent2 = <ProfilePicture picUrl={profilePic2.imgurl} />
     return (
         <View className="flex flex-col">
-            <FriendCard inviterDisplayName="Someone else" inviterUserName="some1else" profilePic={profilePicComponent1} commonHabits={mockHabitData} />
-            <FriendCard inviterDisplayName="Eduardo" inviterUserName="eduardo_012003" profilePic={profilePicComponent2} commonHabits={[]} />
+            <FriendCard displayName="Someone else" userName="some1else" profilePic={profilePicComponent1} commonHabits={mockHabitData} />
+            <FriendCard displayName="Eduardo" userName="eduardo_012003" profilePic={profilePicComponent2} commonHabits={[]} />
         </View>
     );
 }

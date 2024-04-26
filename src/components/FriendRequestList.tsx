@@ -3,28 +3,48 @@ import FriendRequest from "@/src/components/FriendRequest";
 import { useEffect, useState } from "react";
 import { fetchSingleUserThumbnail } from "../lib/getRandomProfilePics";
 import ProfilePicture from "./ProfilePicture";
-import { ProfilePic } from "./HabitCard";
 
+interface FriendRequestData {
+    displayName: string;
+    userName: string;
+    profilePicUrl: string;
+}
 
-// fetch all freind requests a user has received
 export default function FriendRequestList() {
-    const [profilePic1, setProfilePic1] = useState<ProfilePic>({hasCompleted: false, imgurl: ""});
-    const [profilePic2, setProfilePic2] = useState<ProfilePic>({hasCompleted: false, imgurl: ""});
+    const [friendRequests, setFriendRequests] = useState<FriendRequestData[]>([]);
+
     useEffect(() => {
         const fetchPics = async () => {
             const pic1 = await fetchSingleUserThumbnail();
             const pic2 = await fetchSingleUserThumbnail();
-            setProfilePic1(pic1);
-            setProfilePic2(pic2);
+            setFriendRequests([
+                { displayName: "Someone else", userName: "some1else", profilePicUrl: pic1.imgurl },
+                { displayName: "Eduardo", userName: "eduardo_012003", profilePicUrl: pic2.imgurl }
+            ]);
         };
         fetchPics();
     }, []);
-    const profilePicComponent1 = <ProfilePicture picUrl={profilePic1.imgurl} />
-    const profilePicComponent2 = <ProfilePicture picUrl={profilePic2.imgurl} />
+
+    const deleteInvite = () => {
+        console.log("Invite deleted");
+    };
+
+    const confirmInvite = () => {
+        console.log("Invite confirmed");
+    };
+
     return (
         <View className="flex flex-col">
-            <FriendRequest inviterDisplayName="Someone else" inviterUserName="some1else" profilePic={profilePicComponent1} />
-            <FriendRequest inviterDisplayName="Eduardo" inviterUserName="eduardo_012003" profilePic={profilePicComponent2} />
+            {friendRequests.map((request, index) => (
+                <FriendRequest
+                    key={index}
+                    displayName={request.displayName}
+                    userName={request.userName}
+                    profilePic={<ProfilePicture picUrl={request.profilePicUrl} />}
+                    deleteInvite={deleteInvite}
+                    confirmInvite={confirmInvite}
+                />
+            ))}
         </View>
     );
 }
