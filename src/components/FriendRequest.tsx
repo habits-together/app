@@ -29,7 +29,7 @@ export default function FriendRequest({ inviterDisplayName, profilePic, inviterU
         >
             <View className="flex flex-row">
                 {profilePic}
-                <View className="ml-2 flex flex-col bg-transparent">
+                <View className="ml-2 flex flex-col">
                     <Text className="text-lg font-semibold">{inviterDisplayName}</Text>
                     <Text className="font-semibold"
                         style={{
@@ -40,7 +40,7 @@ export default function FriendRequest({ inviterDisplayName, profilePic, inviterU
                     >{inviterUserName}</Text>
                 </View>
             </View>
-            <View className="ml-auto flex flex-row bg-transparent">
+            <View className="ml-auto flex flex-row">
                 <Pressable className="border px-2.5 py-1.5 rounded-xl flex justify-center"
                     style={
                         {

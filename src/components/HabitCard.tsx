@@ -89,20 +89,22 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
             </Text>
           </View>
           {displayType === "habit-tab" && (
-            <DotsMenu
-              options={[
-                {
-                  label: "Edit",
-                  color: colors.habitColors.purple.text,
-                  action: () => alert(`Edit`),
-                },
-                {
-                  label: "Delete",
-                  color: colors.black,
-                  action: () => alert(`Delete`),
-                },
-              ]}
-            />
+            <View className="pr-1">
+              <DotsMenu
+                options={[
+                  {
+                    label: "Edit",
+                    color: colors.habitColors[color].text,
+                    action: () => alert(`Edit`),
+                  },
+                  {
+                    label: "Delete",
+                    color: colors.black,
+                    action: () => alert(`Delete`),
+                  },
+                ]}
+              />
+            </View>
           )}
         </View>
       )}
