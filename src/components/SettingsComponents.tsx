@@ -13,7 +13,8 @@ import Icon from "@/src/components/Icon";
 
 export function SettingsContainer({ children }: { children: React.ReactNode }) {
   return (
-    <ScrollView className="flex-1 bg-stone-50 p-4 dark:bg-stone-base">
+    <ScrollView className="flex-1 bg-stone-50 p-4 dark:bg-stone-base"
+    contentContainerStyle={{ paddingBottom: 10 }}>
       {children}
     </ScrollView>
   );

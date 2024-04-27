@@ -9,6 +9,11 @@ import DotsMenu from "./DotsMenu";
 import Icon from "./Icon";
 import ProfilePicture from "./ProfilePicture";
 
+export type ProfilePic = {
+  imgurl: string;
+  hasCompleted: boolean;
+};
+
 const WeekDays = ["M", "T", "W", "T", "F", "S", "S"];
 
 export type HabitCardProps = {
@@ -18,10 +23,6 @@ export type HabitCardProps = {
   displayType: "habit-tab" | "view-habit-page" | "friend's-habit";
 };
 
-export type ProfilePic = {
-  imgurl: string;
-  hasCompleted: boolean;
-};
 
 export type HabitCompletionValue = "completed" | "missed" | "not-applicable";
 
@@ -88,20 +89,22 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
             </Text>
           </View>
           {displayType === "habit-tab" && (
-            <DotsMenu
-              options={[
-                {
-                  label: "Edit",
-                  color: colors.habitColors.purple.text,
-                  action: () => alert(`Edit`),
-                },
-                {
-                  label: "Delete",
-                  color: colors.black,
-                  action: () => alert(`Delete`),
-                },
-              ]}
-            />
+            <View className="">
+              <DotsMenu
+                options={[
+                  {
+                    label: "Edit",
+                    color: colors.habitColors[color].text,
+                    action: () => alert(`Edit`),
+                  },
+                  {
+                    label: "Delete",
+                    color: colors.black,
+                    action: () => alert(`Delete`),
+                  },
+                ]}
+              />
+            </View>
           )}
         </View>
       )}
@@ -246,7 +249,7 @@ function FriendProfilePictures({
           </View>
         )}
         {profilePicsData.slice(0, 5).map((data, index) => (
-          <View className="-mr-3 h-12 w-12 rounded-full" key={data.imgurl}>
+          <View className="-mr-3 h-12 w-12 rounded-full" key={data.imgurl + index}>
             {data.hasCompleted && (
               <>
                 <View className="absolute -right-[4px] -top-[3px] z-10">

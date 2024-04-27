@@ -1,6 +1,5 @@
-import colors from "@/src/constants/colors";
 import { IconDots } from "@tabler/icons-react-native";
-import { TouchableOpacity, Text } from "react-native";
+import { Text } from "react-native";
 import Icon from "./Icon";
 import {
   Menu,
@@ -8,7 +7,6 @@ import {
   MenuOption,
   MenuTrigger,
 } from "react-native-popup-menu";
-import { IconCheck } from "@tabler/icons-react-native";
 import { View } from "./Themed";
 
 type Option = {
