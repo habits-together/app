@@ -1,14 +1,24 @@
 import { Text, View } from "@/src/components/Themed";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
-import { TextInput, TouchableOpacity } from "react-native";
+import { Image, TextInput, TouchableOpacity } from "react-native";
 import DefaultColors from "@/src/constants/DefaultColors";
 import { useColorScheme } from "nativewind";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { IconCirclePlus } from "@tabler/icons-react-native";
+import Icon from "@/src/components/Icon";
+import { fetchSingleUserThumbnail } from "@/src/lib/getRandomProfilePics";
 
 export default function Createprofile() {
   const { colorScheme } = useColorScheme();
   const [displayName, setDisplayName] = useState("");
   const [username, setUsername] = useState("");
+  const [pfp, setPfp] = useState();
+
+  useEffect(() => {
+    fetchSingleUserThumbnail().then(user => {
+      setPfp(user.imgurl);
+    });
+  }, []);
 
   return (
     <View className="flex-1 flex flex-col justify-between items-center pt-40 pb-20">
@@ -19,6 +29,15 @@ export default function Createprofile() {
           {/* Profile Picture */}
           <View className="flex flex-col gap-y-1">
             <Text className="text-xs font-bold">Profile picture</Text>
+            <TouchableOpacity className="relative self-center"
+              onPress={() => {
+                // Logic for picking picture
+              }}>
+              {pfp && <Image className="h-24 w-24 rounded-3xl overflow-visible" source={{ uri: pfp }} />}
+              <View className="absolute -bottom-2 -right-2 rounded-full">
+                <Icon icon={IconCirclePlus} size={36}/>
+              </View>
+            </TouchableOpacity>
           </View>
           {/* Display Name */}
           <View className="flex flex-col gap-y-1">
