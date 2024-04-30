@@ -1,26 +1,26 @@
 import { View } from "@/src/components/Themed";
 import HabitInvite from "@/src/components/HabitInvite";
-import { IconMusic, IconMoodTongue } from "@tabler/icons-react-native";
 import colors from "../constants/colors";
+import mocInvites from "../lib/mockHabitData";
+import { useState } from "react";
+import { HabitInviteData } from "../lib/mockHabitData";
+
 
 // fetch all invites a user has received
 export default function HabitInviteList() {
-    const invites = [
-        { title: "Play Guitar", color: "purple", icon: IconMusic, numberOfParticipants: 3, userName: "blaze_kush" },
-        { title: "Yum Yum", color: "red", icon: IconMoodTongue, numberOfParticipants: 10, userName: "kush_blaze" }
-    ];
-
-    const deleteInvite = () => {
-        // delete the invite
+    const [invites, setInvites] = useState<HabitInviteData[]>(mocInvites);
+    const deleteInvite = (id: number) => { // Function now takes an ID
         console.log("Invite deleted");
+        setInvites(prevInvites => prevInvites.filter(invite => invite.id !== id));
     };
-    const confirmInvite = () => {
+    const confirmInvite = (id: number) => {
         // confirm the invite
         console.log("Invite confirmed");
+        setInvites(prevInvites => prevInvites.filter(invite => invite.id !== id));
     }
     return (
         <View className="flex flex-col my-1">
-           {invites.map((invite, index) => (
+            {invites.map((invite, index) => (
                 <HabitInvite
                     key={index}
                     title={invite.title}
@@ -28,8 +28,8 @@ export default function HabitInviteList() {
                     icon={invite.icon}
                     numberOfParticipants={invite.numberOfParticipants}
                     userName={invite.userName}
-                    confirmInvite={confirmInvite}
-                    deleteInvite={deleteInvite}
+                    confirmInvite={() => confirmInvite(invite.id)}
+                    deleteInvite={() => deleteInvite(invite.id)}
                 />
             ))}
 

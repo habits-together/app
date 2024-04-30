@@ -6,6 +6,7 @@ import Icon from "./Icon";
 import { Pressable } from "react-native";
 
 export type HabitInviteProps = {
+    // id: number;
     title: string;
     color: keyof typeof colors.habitColors;
     icon: TablerIcon;
