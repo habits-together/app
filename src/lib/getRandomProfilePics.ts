@@ -23,4 +23,21 @@ async function fetchUserThumbnails(amount: number) {
   }
 }
 
+export async function fetchSingleUserThumbnail() {
+  try {
+    const response = await fetch("https://randomuser.me/api/");
+    if (!response.ok) {
+      throw new Error(`API call failed: ${response.status}`);
+    }
+    const data = await response.json();
+    return {
+      imgurl: data.results[0].picture.thumbnail,
+      hasCompleted: Math.random() > 0.4,
+    };
+  } catch (error) {
+    console.error("Failed to fetch user thumbnail:", error);
+    return { imgurl: "", hasCompleted: false }; // Returns a default empty state if fetch fails
+  }
+}
+
 export const profilePicsDataPromise = (amount: number) => fetchUserThumbnails(amount);
