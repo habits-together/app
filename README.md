@@ -13,7 +13,7 @@ npm install
 npm start
 ```
 
-Install the Expo Go app on your phone, then scan the QR code that shows up in the terminal. 
+Install the Expo Go app on your phone, then scan the QR code that shows up in the terminal.
 
 More information about Expo Go: https://docs.expo.dev/get-started/expo-go/
 

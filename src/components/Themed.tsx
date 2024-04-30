@@ -7,7 +7,7 @@ import {
   Text as DefaultText,
   View as DefaultView,
   ScrollView as DefaultScrollView,
-  SafeAreaView as DefaultSafeAreaView
+  SafeAreaView as DefaultSafeAreaView,
 } from "react-native";
 import Colors from "@/src/constants/DefaultColors";
 import { useColorScheme } from "nativewind";

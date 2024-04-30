@@ -1,7 +1,13 @@
 import { HabitCompletionValue } from "@/src/components/HabitCard";
 import colors from "@/src/constants/colors";
 import { Icon as TablerIcon } from "@tabler/icons-react-native";
-import { IconBook, IconBed, IconBarbell, IconMusic, IconMoodTongue } from "@tabler/icons-react-native";
+import {
+  IconBook,
+  IconBed,
+  IconBarbell,
+  IconMusic,
+  IconMoodTongue,
+} from "@tabler/icons-react-native";
 import { HabitInviteProps } from "../components/HabitInvite";
 
 export type Habit = {
@@ -63,8 +69,22 @@ export type HabitInviteData = {
 };
 
 const mocInvites: HabitInviteData[] = [
-  { id: 1, title: "Play Guitar", color: "purple", icon: IconMusic, numberOfParticipants: 3, userName: "blaze_kush" },
-  { id: 2, title: "Yum Yum", color: "red", icon: IconMoodTongue, numberOfParticipants: 10, userName: "kush_blaze" }
+  {
+    id: 1,
+    title: "Play Guitar",
+    color: "purple",
+    icon: IconMusic,
+    numberOfParticipants: 3,
+    userName: "blaze_kush",
+  },
+  {
+    id: 2,
+    title: "Yum Yum",
+    color: "red",
+    icon: IconMoodTongue,
+    numberOfParticipants: 10,
+    userName: "kush_blaze",
+  },
 ];
 
-export default mocInvites; 
+export default mocInvites;
