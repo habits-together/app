@@ -25,25 +25,11 @@ export default function FriendRequest({ displayName, profilePic, userName, delet
                 {profilePic}
                 <View className="ml-2 flex flex-col">
                     <Text className="text-lg font-semibold">{displayName}</Text>
-                    <Text className="font-semibold"
-                        style={{
-                            color: colorScheme === "dark"
-                                ? colors.stone[500]
-                                : colors.stone[300],
-                        }}
-                    >{userName}</Text>
+                    <Text className="font-semibold text-stone-400">{userName}</Text>
                 </View>
             </View>
-            <View className="ml-auto flex flex-row">
-                <Pressable className="border px-2.5 py-1.5 rounded-xl flex justify-center"
-                    style={
-                        {
-                            backgroundColor: colorScheme === "dark" ? "transparent" : colors.white,
-                            borderColor: colorScheme === "dark"
-                                ? colors.stone[300]
-                                : colors.stone[400],
-                        }
-                    }>
+            <View className="ml-auto flex flex-row pr-3">
+                <Pressable className="flex justify-center rounded-xl border border-stone-400 bg-white px-2.5 py-1.5 dark:bg-transparent">
                     <Text className="text-white font-semibold"
                         style={
                             {

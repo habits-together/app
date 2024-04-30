@@ -59,7 +59,7 @@ export default function FriendCard({ displayName, userName, profilePic, commonHa
 function CommonHabits({ commonHabits }: { commonHabits: Habit[] }) {
     const { colorScheme } = useColorScheme();
     return (
-        <View className="flex flex-row mt-1">
+        <View className="flex flex-row flex-wrap mt-1">
             {commonHabits.slice(0, 2).map((habit) => (
                 <HabitTag key={habit.id} habit={habit} />
             ))

@@ -9,13 +9,14 @@ import { HabitInviteData } from "../lib/mockHabitData";
 // fetch all invites a user has received
 export default function HabitInviteList() {
     const [invites, setInvites] = useState<HabitInviteData[]>(mocInvites);
-    const deleteInvite = (id: number) => { // Function now takes an ID
+    const deleteInvite = (id: number) => {
         console.log("Invite deleted");
+        // delete in db
         setInvites(prevInvites => prevInvites.filter(invite => invite.id !== id));
     };
     const confirmInvite = (id: number) => {
-        // confirm the invite
         console.log("Invite confirmed");
+        // confirm in db
         setInvites(prevInvites => prevInvites.filter(invite => invite.id !== id));
     }
     return (

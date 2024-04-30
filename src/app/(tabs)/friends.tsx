@@ -9,13 +9,13 @@ export default function FriendsTab() {
     <ScrollView className="flex-1 p-4"
       contentContainerStyle={{ paddingBottom: 100 }}
       >
-      <Text className="text-2xl font-bold">New friend requests</Text>
+      <Text className="text-xl font-bold">New friend requests</Text>
       <FriendRequestList />
 
-      <Text className="text-2xl font-bold">New habit invite</Text>
+      <Text className="text-xl font-bold">New habit invite</Text>
       <HabitInviteList />
 
-      <Text className="text-2xl font-bold">My friends</Text>
+      <Text className="text-xl font-bold">My friends</Text>
       <FriendSearchBar />
       <FriendList />
 

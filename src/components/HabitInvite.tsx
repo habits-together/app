@@ -39,7 +39,7 @@ export default function HabitInvite({ title, color, icon, userName, numberOfPart
             </View>
             <View className="flex flex-col bg-transparent">
                 <View className="flex flex-row justify-between bg-transparent">
-                    <Text className="text-lg font-semibold">{title}</Text>
+                    <Text className="text-lg font-bold">{title}</Text>
                     <View className="flex flex-row items-center bg-transparent">
                         <Icon icon={IconUsers} size={17} strokeWidth={2.5} />
                         <Text className="pl-0.5 text-base font-extrabold">{numberOfParticipants}</Text>
@@ -53,15 +53,7 @@ export default function HabitInvite({ title, color, icon, userName, numberOfPart
                     }}>Invited by {userName}</Text>
             </View>
             <View className="ml-auto flex flex-row bg-transparent">
-                <Pressable className="border px-2.5 py-1.5 rounded-xl flex justify-center"
-                    style={
-                        {
-                            backgroundColor: colorScheme === "dark" ? "transparent" : colors.white,
-                            borderColor: colorScheme === "dark"
-                                ? colors.stone[300]
-                                : colors.stone[400],
-                        }
-                    }>
+                <Pressable className="flex justify-center rounded-xl border border-stone-400 bg-white px-2.5 py-1.5 dark:bg-transparent">
                     <Text className="text-white font-semibold"
                         style={
                             {
