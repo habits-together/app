@@ -1,6 +1,5 @@
 async function fetchUserThumbnails(amount: number) {
   try {
-    // Request 10 results from the API
     const response = await fetch("https://randomuser.me/api/?results=".concat(amount.toString(10)));
     if (!response.ok) {
       throw new Error(`API call failed: ${response.status}`);
