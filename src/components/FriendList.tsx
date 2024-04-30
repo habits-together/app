@@ -1,10 +1,10 @@
 import { View } from "@/src/components/Themed";
 import FriendCard, { FriendCardProps } from "@/src/components/FriendCard";
-import ProfilePicture from "./ProfilePicture";
 import { fetchSingleUserThumbnail } from "../lib/getRandomProfilePics";
 import { useEffect, useState } from "react";
 import { ProfilePic } from "./HabitCard";
 import { mockHabitData } from "@/src/lib/mockHabitData";
+import SmallProfilePicture from "./ProfilePicture";
 
 
 export default function FriendList() {
@@ -19,8 +19,8 @@ export default function FriendList() {
         };
         fetchPics();
     }, []);
-    const profilePicComponent1 = <ProfilePicture picUrl={profilePic1.imgurl} />
-    const profilePicComponent2 = <ProfilePicture picUrl={profilePic2.imgurl} />
+    const profilePicComponent1 = <SmallProfilePicture picUrl={profilePic1.imgurl} />
+    const profilePicComponent2 = <SmallProfilePicture picUrl={profilePic2.imgurl} />
     return (
         <View className="flex flex-col">
             <FriendCard displayName="Someone else" userName="some1else" profilePic={profilePicComponent1} commonHabits={mockHabitData} />

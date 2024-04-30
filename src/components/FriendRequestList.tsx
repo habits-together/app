@@ -2,7 +2,7 @@ import { View } from "@/src/components/Themed";
 import FriendRequest from "@/src/components/FriendRequest";
 import { useEffect, useState } from "react";
 import { fetchSingleUserThumbnail } from "../lib/getRandomProfilePics";
-import ProfilePicture from "./ProfilePicture";
+import SmallProfilePicture from "./ProfilePicture";
 
 interface FriendRequestData {
     displayName: string;
@@ -40,7 +40,7 @@ export default function FriendRequestList() {
                     key={index}
                     displayName={request.displayName}
                     userName={request.userName}
-                    profilePic={<ProfilePicture picUrl={request.profilePicUrl} />}
+                    profilePic={<SmallProfilePicture picUrl={request.profilePicUrl} />}
                     deleteInvite={deleteInvite}
                     confirmInvite={confirmInvite}
                 />
