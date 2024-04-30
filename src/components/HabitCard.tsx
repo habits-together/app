@@ -31,7 +31,7 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
   const [activityData, setActivityData] = useState<HabitCompletionValue[]>([]);
   const [indexOftoday, setIndexOftoday] = useState<number>(0);
   useEffect(() => {
-    profilePicsDataPromise.then(setProfilePicsData);
+    profilePicsDataPromise(10).then(setProfilePicsData);
     const [arrray, index] = getMockCompletionsData();
     setActivityData(arrray);
     setIndexOftoday(index);
@@ -269,7 +269,7 @@ function FriendProfilePictures({
                 </View>
               </>
             )}
-            <ProfilePicture picUrl={data.imgurl} />
+            <ProfilePicture picUrl={data.imgurl} displayType="habit-card" />
           </View>
         ))}
       </View>
