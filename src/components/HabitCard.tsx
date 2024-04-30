@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import DotsMenu from "./DotsMenu";
 import Icon from "./Icon";
-import ProfilePicture from "./ProfilePicture";
+import SmallProfilePicture from "./ProfilePicture";
 
 export type ProfilePic = {
   imgurl: string;
@@ -272,7 +272,7 @@ function FriendProfilePictures({
                 </View>
               </>
             )}
-            <ProfilePicture picUrl={data.imgurl} displayType="habit-card" />
+            <SmallProfilePicture picUrl={data.imgurl} />
           </View>
         ))}
       </View>
