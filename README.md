@@ -29,6 +29,12 @@ npx expo start --clear
 
 This syncs the installed packages with `package.json` to remove any problematic packages that might be breaking something, and makes sure all required packages are installed. Running expo start with the clear flag clears expo's cache.
 
+To run prettier
+```
+npx prettier --write .
+```
+
+
 ## Contribution
 
 Currently our team has 11 people, including a few who are working specifically on the business/marketing side!
