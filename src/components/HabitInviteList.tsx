@@ -1,4 +1,4 @@
-import { View } from "@/src/components/Themed";
+import { View, Text } from "@/src/components/Themed";
 import HabitInvite from "@/src/components/HabitInvite";
 import colors from "../constants/colors";
 import mocInvites from "../lib/mockHabitData";
@@ -24,6 +24,12 @@ export default function HabitInviteList() {
   };
   return (
     <View className="my-1 flex flex-col">
+      {invites.length === 1 && (
+        <Text className="text-xl font-bold">New habit invite</Text>
+      )}
+      {invites.length > 1 && (
+        <Text className="text-xl font-bold">New habit invites</Text>
+      )}
       {invites.map((invite, index) => (
         <HabitInvite
           key={index}

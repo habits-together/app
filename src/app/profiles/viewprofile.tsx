@@ -4,7 +4,7 @@ import { IconBook } from "@tabler/icons-react-native";
 import { Link, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Pressable } from "react-native";
-import ProfilePicture, { BigProfilePicture } from "../../components/ProfilePicture";
+import { BigProfilePicture } from "../../components/ProfilePicture";
 import { profilePicsDataPromise } from "../../lib/getRandomProfilePics";
 
 const habits = [

@@ -1,8 +1,7 @@
-import { View } from "@/src/components/Themed";
-import FriendCard, { FriendCardProps } from "@/src/components/FriendCard";
+import { View, Text } from "@/src/components/Themed";
+import FriendCard from "@/src/components/FriendCard";
 import { fetchSingleUserThumbnail } from "../lib/getRandomProfilePics";
 import { useEffect, useState } from "react";
-import { ProfilePic } from "./HabitCard";
 import { mockHabitData } from "@/src/lib/mockHabitData";
 import SmallProfilePicture from "./ProfilePicture";
 
@@ -47,6 +46,12 @@ export default function FriendList() {
 
   return (
     <View className="flex flex-col">
+      {friends.length === 1 && (
+        <Text className="text-xl font-bold">My friend</Text>
+      )}
+      {friends.length > 1 && (
+        <Text className="text-xl font-bold">My friends</Text>
+      )}
       {friends.map((friend, index) => (
         <FriendCard
           key={index}
