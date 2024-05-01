@@ -2,27 +2,30 @@ import { View, Text } from "@/src/components/Themed";
 import FriendCard from "@/src/components/FriendCard";
 import { fetchSingleUserThumbnail } from "../lib/getRandomProfilePics";
 import { useEffect, useState } from "react";
-import { mockHabitData } from "@/src/lib/mockHabitData";
+import { Habit, mockHabitData } from "@/src/lib/mockHabitData";
 import SmallProfilePicture from "./ProfilePicture";
 
 // GPT COOKED FOR THIS ONE 🔥
 
 interface FriendData {
+  id: number;
   displayName: string;
   userName: string;
   profilePicUrl: string;
-  commonHabits: any[]; // change this later
+  commonHabits: Habit[];
 }
 
 export default function FriendList() {
   const [friends, setFriends] = useState<FriendData[]>([
     {
+      id: 1,
       displayName: "Someone else",
       userName: "some1else",
       profilePicUrl: "",
       commonHabits: mockHabitData,
     },
     {
+      id: 2,
       displayName: "Eduardo",
       userName: "eduardo_012003",
       profilePicUrl: "",
@@ -52,9 +55,9 @@ export default function FriendList() {
       {friends.length > 1 && (
         <Text className="text-xl font-bold">My friends</Text>
       )}
-      {friends.map((friend, index) => (
+      {friends.map((friend) => (
         <FriendCard
-          key={index}
+          key={friend.id}
           displayName={friend.displayName}
           userName={friend.userName}
           profilePic={<SmallProfilePicture picUrl={friend.profilePicUrl} />}
