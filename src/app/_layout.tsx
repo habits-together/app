@@ -68,9 +68,10 @@ function RootLayoutNav() {
             options={viewHabitOptions(colorScheme)}
           />
           <Stack.Screen
-            name="profile"
+            name="modals"
             options={{
               presentation: "modal",
+              animation: "slide_from_bottom",
             }}
           />
         </Stack>
