@@ -2,7 +2,7 @@ import FriendList from "@/src/components/FriendList";
 import FriendRequestList from "@/src/components/FriendRequestList";
 import FriendSearchBar from "@/src/components/FriendSearchBar";
 import HabitInviteList from "@/src/components/HabitInviteList";
-import { Text, ScrollView } from "@/src/components/Themed";
+import { ScrollView, Text } from "@/src/components/Themed";
 
 export default function FriendsTab() {
   return (

@@ -1,10 +1,10 @@
 import { View } from "@/src/components/Themed";
 import FriendCard, { FriendCardProps } from "@/src/components/FriendCard";
-import ProfilePicture from "./ProfilePicture";
 import { fetchSingleUserThumbnail } from "../lib/getRandomProfilePics";
 import { useEffect, useState } from "react";
 import { ProfilePic } from "./HabitCard";
 import { mockHabitData } from "@/src/lib/mockHabitData";
+import SmallProfilePicture from "./ProfilePicture";
 
 // GPT COOKED FOR THIS ONE 🔥
 
@@ -52,7 +52,7 @@ export default function FriendList() {
           key={index}
           displayName={friend.displayName}
           userName={friend.userName}
-          profilePic={<ProfilePicture picUrl={friend.profilePicUrl} />}
+          profilePic={<SmallProfilePicture picUrl={friend.profilePicUrl} />}
           commonHabits={friend.commonHabits}
         />
       ))}

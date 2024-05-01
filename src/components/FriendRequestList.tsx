@@ -2,7 +2,7 @@ import { View } from "@/src/components/Themed";
 import FriendRequest from "@/src/components/FriendRequest";
 import { useEffect, useState } from "react";
 import { fetchSingleUserThumbnail } from "../lib/getRandomProfilePics";
-import ProfilePicture from "./ProfilePicture";
+import SmallProfilePicture from "./ProfilePicture";
 
 interface FriendRequestData {
   displayName: string;
@@ -36,23 +36,22 @@ export default function FriendRequestList() {
   const deleteInvite = () => {
     console.log("Invite deleted");
   };
-
   const confirmInvite = () => {
     console.log("Invite confirmed");
   };
 
-  return (
-    <View className="flex flex-col">
-      {friendRequests.map((request, index) => (
-        <FriendRequest
-          key={index}
-          displayName={request.displayName}
-          userName={request.userName}
-          profilePic={<ProfilePicture picUrl={request.profilePicUrl} />}
-          deleteInvite={deleteInvite}
-          confirmInvite={confirmInvite}
-        />
-      ))}
-    </View>
-  );
+    return (
+        <View className="flex flex-col">
+            {friendRequests.map((request, index) => (
+                <FriendRequest
+                    key={index}
+                    displayName={request.displayName}
+                    userName={request.userName}
+                    profilePic={<SmallProfilePicture picUrl={request.profilePicUrl} />}
+                    deleteInvite={deleteInvite}
+                    confirmInvite={confirmInvite}
+                />
+            ))}
+        </View>
+    );
 }

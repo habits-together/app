@@ -6,6 +6,8 @@ import { Habit } from "../lib/mockHabitData";
 import DotsMenu from "./DotsMenu";
 import Icon from "./Icon";
 import { IconPlus } from "@tabler/icons-react-native";
+import { Link } from "expo-router";
+import { Pressable } from "react-native";
 
 export type FriendCardProps = {
   displayName: string;
@@ -23,45 +25,54 @@ export default function FriendCard({
   const { colorScheme } = useColorScheme();
 
   return (
-    <View
-      className="my-1 flex grow-0 flex-row items-center rounded-3xl border px-2 py-2"
-      style={{
-        borderColor:
-          colorScheme === "dark" ? colors.stone[400] : colors.stone[200],
+    <Link
+      push
+      href={{
+        pathname: "/profiles/viewprofile",
+        params: { userName: userName, displayName: displayName },
       }}
+      asChild
     >
-      <View className="flex flex-col">
-        <View className="flex flex-row">
-          {profilePic}
-          <View className="ml-2 flex flex-col">
-            <Text className="text-lg font-semibold">{displayName}</Text>
-            <Text
-              className="font-semibold"
-              style={{
-                color:
-                  colorScheme === "dark"
-                    ? colors.stone[500]
-                    : colors.stone[300],
-              }}
-            >
-              {userName}
-            </Text>
+      <Pressable
+        className="my-1 flex grow-0 flex-row items-center rounded-3xl border px-2 py-2"
+        style={{
+          borderColor:
+            colorScheme === "dark" ? colors.stone[400] : colors.stone[200],
+        }}
+      >
+        <View className="flex flex-col">
+          <View className="flex flex-row">
+            {profilePic}
+            <View className="ml-2 flex flex-col">
+              <Text className="text-lg font-semibold">{displayName}</Text>
+              <Text
+                className="font-semibold"
+                style={{
+                  color:
+                    colorScheme === "dark"
+                      ? colors.stone[500]
+                      : colors.stone[300],
+                }}
+              >
+                {userName}
+              </Text>
+            </View>
           </View>
+          <CommonHabits commonHabits={commonHabits} />
         </View>
-        <CommonHabits commonHabits={commonHabits} />
-      </View>
-      <View className="ml-auto -translate-y-7 bg-transparent">
-        <DotsMenu
-          options={[
-            {
-              label: "Remove Friend",
-              color: colors.black,
-              action: () => alert(`Remove Friend`),
-            },
-          ]}
-        />
-      </View>
-    </View>
+        <View className="ml-auto -translate-y-7 bg-transparent">
+          <DotsMenu
+            options={[
+              {
+                label: "Remove Friend",
+                color: colors.black,
+                action: () => alert(`Remove Friend`),
+              },
+            ]}
+          />
+        </View>
+      </Pressable>
+    </Link>
   );
 }
 
