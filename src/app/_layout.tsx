@@ -71,6 +71,7 @@ function RootLayoutNav() {
             name="modals"
             options={{
               presentation: "modal",
+              animation: "slide_from_bottom",
             }}
           />
         </Stack>
