@@ -8,7 +8,7 @@ import HeaderBackButton from "./HeaderBackButton";
 import Icon from "./Icon";
 import { Text, View } from "./Themed";
 
-function sharedOptions(colorScheme: string) {
+function sharedOptions(colorScheme: string): NativeStackNavigationOptions {
   return {
     headerShown: true,
     headerShadowVisible: false,
@@ -16,6 +16,7 @@ function sharedOptions(colorScheme: string) {
       backgroundColor:
         colorScheme === "dark" ? colors.stone.base : colors.white,
     },
+    headerBackVisible: false,
   };
 }
 

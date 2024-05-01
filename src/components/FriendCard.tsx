@@ -28,7 +28,7 @@ export default function FriendCard({
     <Link
       push
       href={{
-        pathname: "/profiles/viewprofile",
+        pathname: "/modals/viewprofile",
         params: { userName: userName, displayName: displayName },
       }}
       asChild

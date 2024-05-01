@@ -68,7 +68,7 @@ function RootLayoutNav() {
             options={viewHabitOptions(colorScheme)}
           />
           <Stack.Screen
-            name="profile"
+            name="modals"
             options={{
               presentation: "modal",
             }}

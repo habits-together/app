@@ -54,7 +54,7 @@ export default function Profile() {
               <Link
                 push
                 href={{
-                  pathname: "/profiles/viewhabit",
+                  pathname: "/modals/viewhabit",
                   params: { id: habit.id },
                 }}
                 asChild
