@@ -6,7 +6,6 @@ import { Habit, mockHabitData } from "@/src/lib/mockHabitData";
 import SmallProfilePicture from "./ProfilePicture";
 
 // GPT COOKED FOR THIS ONE 🔥
-
 interface FriendData {
   id: number;
   displayName: string;

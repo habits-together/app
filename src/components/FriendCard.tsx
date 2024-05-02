@@ -80,36 +80,9 @@ function CommonHabits({ commonHabits }: { commonHabits: Habit[] }) {
   const { colorScheme } = useColorScheme();
   return (
     <View className="mt-1 flex flex-row flex-wrap">
-      {commonHabits.slice(0, 2).map((habit) => (
+      {commonHabits.map((habit) => (
         <HabitTag key={habit.id} habit={habit} />
       ))}
-      {commonHabits.length >= 2 && (
-        <View
-          className="mx-0.5 mt-1 flex flex-row items-center justify-center rounded-3xl px-2 py-1"
-          style={{
-            backgroundColor:
-              colorScheme === "dark" ? colors.stone.light : colors.stone[100],
-          }}
-        >
-          <Icon
-            icon={IconPlus}
-            size={10}
-            strokeWidth={3}
-            darkColor={colors.stone[400]}
-            lightColor={colors.stone[800]}
-          />
-          <Text
-            numberOfLines={1}
-            className="text-xs font-bold"
-            style={{
-              color:
-                colorScheme === "dark" ? colors.stone[400] : colors.stone[800],
-            }}
-          >
-            {commonHabits.length - 2}
-          </Text>
-        </View>
-      )}
 
       {commonHabits.length == 0 && (
         <View
