@@ -66,7 +66,7 @@ export type FriendRequestData = {
   profilePicUrl: string;
 };
 
-export async function getMockFriendInites() {
+export async function getMockFriendInvites() {
   const pic1 = await fetchSingleUserThumbnail();
   const pic2 = await fetchSingleUserThumbnail();
 

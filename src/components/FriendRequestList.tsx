@@ -1,7 +1,7 @@
 import FriendRequest from "@/src/components/FriendRequest";
 import { Text, View } from "@/src/components/Themed";
 import { useEffect, useState } from "react";
-import { FriendRequestData, getMockFriendInites } from "../lib/mockHabitData";
+import { FriendRequestData, getMockFriendInvites } from "../lib/mockData";
 import SmallProfilePicture from "./ProfilePicture";
 
 export default function FriendRequestList() {
@@ -10,7 +10,7 @@ export default function FriendRequestList() {
   useEffect(() => {
     const fetchFriendRequests = async () => {
       // we would fetch the list from the db and set it here
-      const friendRequests = await getMockFriendInites();
+      const friendRequests = await getMockFriendInvites();
       setRequests(friendRequests);
     };
     fetchFriendRequests();

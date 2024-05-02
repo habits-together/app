@@ -2,7 +2,7 @@ import { View, Text } from "@/src/components/Themed";
 import HabitInvite from "@/src/components/HabitInvite";
 import colors from "../constants/colors";
 import { useEffect, useState } from "react";
-import { getMockHabitInvites, HabitInviteData } from "../lib/mockHabitData";
+import { getMockHabitInvites, HabitInviteData } from "../lib/mockData";
 
 // fetch all invites a user has received
 export default function HabitInviteList() {

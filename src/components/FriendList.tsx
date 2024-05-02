@@ -2,7 +2,7 @@ import { View, Text } from "@/src/components/Themed";
 import FriendCard from "@/src/components/FriendCard";
 import { fetchSingleUserThumbnail } from "../lib/getRandomProfilePics";
 import { useEffect, useState } from "react";
-import { Habit, mockHabitData } from "@/src/lib/mockHabitData";
+import { Habit, mockHabitData } from "@/src/lib/mockData";
 import SmallProfilePicture from "./ProfilePicture";
 
 // GPT COOKED FOR THIS ONE 🔥

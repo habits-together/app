@@ -4,7 +4,7 @@ import { useColorScheme } from "nativewind";
 import React from "react";
 import { Pressable } from "react-native";
 import colors from "../constants/colors";
-import { Habit } from "../lib/mockHabitData";
+import { Habit } from "../lib/mockData";
 import DotsMenu from "./DotsMenu";
 import Icon from "./Icon";
 

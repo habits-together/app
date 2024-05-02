@@ -1,6 +1,6 @@
 import colors from "@/src/constants/colors";
 import { profilePicsDataPromise } from "@/src/lib/getRandomProfilePics";
-import { getMockCompletionsData } from "@/src/lib/mockHabitData";
+import { getMockCompletionsData } from "@/src/lib/mockData";
 import { IconCheck, Icon as TablerIcon } from "@tabler/icons-react-native";
 import { useColorScheme } from "nativewind";
 import React, { useEffect, useState } from "react";
