@@ -35,7 +35,7 @@ export default function FriendCard({
           {profilePic}
           <View className="ml-2 flex flex-1 flex-col">
             <Text className="text-base font-semibold">{displayName}</Text>
-            <Text className="font-semibold text-stone-400">{userName}</Text>
+            <Text className="font-semibold text-stone-400 text-xs">{userName}</Text>
           </View>
           <View className="self-start">
             <DotsMenu
