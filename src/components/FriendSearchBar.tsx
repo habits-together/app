@@ -21,7 +21,7 @@ export default function FriendSearchBar() {
         />
       </View>
       <TextInput
-        className="rounded-xl border-1 p-2.5 pl-10"
+        className="border-1 rounded-xl p-2.5 pl-10"
         style={{
           height: 40,
           color: colorScheme === "dark" ? colors.stone[200] : colors.stone[600],
