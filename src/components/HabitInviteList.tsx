@@ -1,13 +1,22 @@
 import { View, Text } from "@/src/components/Themed";
 import HabitInvite from "@/src/components/HabitInvite";
 import colors from "../constants/colors";
-import mocInvites from "../lib/mockHabitData";
-import { useState } from "react";
-import { HabitInviteData } from "../lib/mockHabitData";
+import { useEffect, useState } from "react";
+import { getMockHabitInvites, HabitInviteData } from "../lib/mockHabitData";
 
 // fetch all invites a user has received
 export default function HabitInviteList() {
-  const [invites, setInvites] = useState<HabitInviteData[]>(mocInvites);
+  const [invites, setInvites] = useState<HabitInviteData[]>([]);
+
+  useEffect(() => {
+    const fetchHabitInvites = async () => {
+      // we would fetch the list from the db and set it here
+      const habitInvites = await getMockHabitInvites();
+      setInvites(habitInvites);
+    };
+    fetchHabitInvites();
+  }, []);
+
   const deleteInvite = (id: number) => {
     console.log("Invite deleted");
     // delete in db
@@ -22,14 +31,15 @@ export default function HabitInviteList() {
       prevInvites.filter((invite) => invite.id !== id),
     );
   };
+
+  if (invites.length === 0) {
+    return <></>;
+  }
   return (
     <View className="my-1 flex flex-col">
-      {invites.length === 1 && (
-        <Text className="text-xl font-bold">New habit invite</Text>
-      )}
-      {invites.length > 1 && (
-        <Text className="text-xl font-bold">New habit invites</Text>
-      )}
+      <Text className="text-xl font-bold">
+        New habit invite{invites.length > 1 && "s"}
+      </Text>
       {invites.map((invite, index) => (
         <HabitInvite
           key={index}

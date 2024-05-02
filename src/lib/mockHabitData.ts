@@ -1,14 +1,14 @@
 import { HabitCompletionValue } from "@/src/components/HabitCard";
 import colors from "@/src/constants/colors";
-import { Icon as TablerIcon } from "@tabler/icons-react-native";
 import {
-  IconBook,
-  IconBed,
   IconBarbell,
-  IconMusic,
+  IconBed,
+  IconBook,
   IconMoodTongue,
+  IconMusic,
+  Icon as TablerIcon,
 } from "@tabler/icons-react-native";
-import { HabitInviteProps } from "../components/HabitInvite";
+import { fetchSingleUserThumbnail } from "./getRandomProfilePics";
 
 export type Habit = {
   title: string;
@@ -59,6 +59,35 @@ export const mockHabitData: Habit[] = [
   },
 ];
 
+export type FriendRequestData = {
+  id: number;
+  displayName: string;
+  userName: string;
+  profilePicUrl: string;
+};
+
+export async function getMockFriendInites() {
+  const pic1 = await fetchSingleUserThumbnail();
+  const pic2 = await fetchSingleUserThumbnail();
+
+  const mockFriendInvites: FriendRequestData[] = [
+    {
+      id: 1,
+      displayName: "Someone else",
+      userName: "some1else",
+      profilePicUrl: pic1.imgurl,
+    },
+    {
+      id: 2,
+      displayName: "Eduardo",
+      userName: "eduardo_012003",
+      profilePicUrl: pic2.imgurl,
+    },
+  ];
+
+  return mockFriendInvites;
+}
+
 export type HabitInviteData = {
   id: number; // unique id for each invite
   title: string;
@@ -68,23 +97,24 @@ export type HabitInviteData = {
   userName: string;
 };
 
-const mocInvites: HabitInviteData[] = [
-  {
-    id: 1,
-    title: "Play Guitar",
-    color: "purple",
-    icon: IconMusic,
-    numberOfParticipants: 3,
-    userName: "blaze_kush",
-  },
-  {
-    id: 2,
-    title: "Yum Yum",
-    color: "red",
-    icon: IconMoodTongue,
-    numberOfParticipants: 10,
-    userName: "kush_blaze",
-  },
-];
-
-export default mocInvites;
+export async function getMockHabitInvites() {
+  const mockHabitInvites: HabitInviteData[] = [
+    {
+      id: 1,
+      title: "Play Guitar",
+      color: "purple",
+      icon: IconMusic,
+      numberOfParticipants: 3,
+      userName: "blaze_kush",
+    },
+    {
+      id: 2,
+      title: "Yum Yum",
+      color: "red",
+      icon: IconMoodTongue,
+      numberOfParticipants: 10,
+      userName: "kush_blaze",
+    },
+  ];
+  return mockHabitInvites;
+}
