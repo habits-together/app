@@ -18,21 +18,14 @@ export default function ConfirmAndDeleteButtons({
     <View className="flex flex-row bg-transparent">
       <Pressable className="flex justify-center rounded-xl border border-stone-300 bg-white px-2.5 py-1.5 dark:bg-transparent">
         <Text
-          className="font-semibold text-white"
-          style={{
-            color: colorScheme === "dark" ? colors.stone[100] : colors.black,
-          }}
+          className="font-semibold text-black dark:text-stone-100"
           onPress={confirmInvite}
         >
           Confirm
         </Text>
       </Pressable>
       <Pressable
-        className="ml-1 flex justify-center rounded-xl border border-stone-300 px-1.5 py-1"
-        style={{
-          backgroundColor:
-            colorScheme === "dark" ? "transparent" : colors.white,
-        }}
+        className="ml-1 flex justify-center rounded-xl border border-stone-300 bg-white px-1.5 py-1 dark:bg-transparent"
         onPress={deleteInvite}
       >
         <Icon
