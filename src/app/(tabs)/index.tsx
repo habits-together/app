@@ -2,11 +2,12 @@ import { ScrollView } from "@/src/components/Themed";
 import { HabitCard } from "@/src/components/HabitCard";
 import { Link } from "expo-router";
 import { Pressable } from "react-native";
-import { mockHabitData } from "@/src/lib/mockHabitData";
+import { mockHabitData } from "@/src/lib/mockData";
 
 export default function HabitsTab() {
   return (
-    <ScrollView className="flex-1 gap-6 p-4"
+    <ScrollView
+      className="flex-1 gap-6 p-4"
       contentContainerStyle={{ paddingBottom: 100 }}
     >
       {mockHabitData.map((habit) => {

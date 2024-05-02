@@ -10,7 +10,7 @@ import { viewHabitOptions } from "../components/HeaderOptions";
 
 export {
   // Catch any errors thrown by the Layout component.
-  ErrorBoundary
+  ErrorBoundary,
 } from "expo-router";
 
 export const unstable_settings = {

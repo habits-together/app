@@ -1,6 +1,6 @@
 import colors from "@/src/constants/colors";
 import { profilePicsDataPromise } from "@/src/lib/getRandomProfilePics";
-import { getMockCompletionsData } from "@/src/lib/mockHabitData";
+import { getMockCompletionsData } from "@/src/lib/mockData";
 import { IconCheck, Icon as TablerIcon } from "@tabler/icons-react-native";
 import { useColorScheme } from "nativewind";
 import React, { useEffect, useState } from "react";
@@ -22,7 +22,6 @@ export type HabitCardProps = {
   icon: TablerIcon;
   displayType: "habit-tab" | "view-habit-page" | "friend's-habit";
 };
-
 
 export type HabitCompletionValue = "completed" | "missed" | "not-applicable";
 
@@ -249,7 +248,10 @@ function FriendProfilePictures({
           </View>
         )}
         {profilePicsData.slice(0, 5).map((data, index) => (
-          <View className="-mr-3 h-12 w-12 rounded-full" key={data.imgurl + index}>
+          <View
+            className="-mr-3 h-12 w-12 rounded-full"
+            key={data.imgurl + index}
+          >
             {data.hasCompleted && (
               <>
                 <View className="absolute -right-[4px] -top-[3px] z-10">
