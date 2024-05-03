@@ -8,6 +8,7 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
+    "prettier": "prettier --write .",
     "prettier:format": "prettier --write \"**/*.{ts,tsx,js,md,mdx,css,yaml}\"",
     "prettier:check:ci": "prettier --check \"**/*.{ts,tsx,js,md,mdx,css,yaml}\""
   },
@@ -55,7 +56,7 @@
     "@types/react-test-renderer": "^18.0.7",
     "jest": "^29.2.1",
     "jest-expo": "~50.0.4",
-    "prettier": "3.2.5",
+    "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.14",
     "react-test-renderer": "18.2.0",
     "tailwindcss": "^3.3.2",
