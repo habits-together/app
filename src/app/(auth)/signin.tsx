@@ -18,6 +18,7 @@ import { Link } from "expo-router";
 import Icon from "@/src/components/Icon";
 import { SlidingDot } from "react-native-animated-pagination-dots";
 import { useRef } from "react";
+import Logo from "@/assets/images/Logo.svg";
 
 // // Import the functions you need from the SDKs you need
 // import { initializeApp } from "firebase/app";
@@ -43,6 +44,21 @@ import { useRef } from "react";
 
 export default function Signin() {
   const { colorScheme } = useColorScheme();
+  const { width } = Dimensions.get("window");
+
+  function TutorialItem({ item }: { item: { pageNum: string; text: string } }) {
+    return (
+      <View
+        className="m-0 items-center justify-center p-0"
+        style={{
+          width: width,
+        }}
+      >
+        <Icon icon={IconPhotoScan} size={270} strokeWidth={0.8} />
+        <Text className="px-2 text-center text-3xl font-bold">{item.text}</Text>
+      </View>
+    );
+  }
 
   const tutorialData = [
     { pageNum: "1", text: "Create habits and keep track of completions" },
@@ -55,10 +71,11 @@ export default function Signin() {
     <View className="flex-1 items-center pt-14">
       <View className="w-11/12 flex-row items-center justify-between pb-5">
         <View className="flex-row items-center">
-          <Image
+          {/* <Image
             className="h-6 w-6 rounded-[20px]"
-            source={require("../../../assets/images/Logo.png")}
-          />
+            source={require("../../../assets/images/Logo.svg")}
+          /> */}
+          <Logo height={24} width={24} />
           <Text className="ml-2 text-2xl font-bold">Habit Together</Text>
         </View>
         <Pressable className="rounded-2xl bg-stone-200 px-4 py-1 dark:border-2 dark:border-stone-300 dark:bg-stone-800">
@@ -113,23 +130,16 @@ export default function Signin() {
 
       {Platform.OS === "ios" && (
         <>
-          <Pressable className="mt-2 flex w-11/12 flex-row items-center justify-center rounded-xl border-2 p-2 dark:border-stone-300">
-            <IconBrandAppleFilled
-              fill={colorScheme === "dark" ? colors.white : colors.black}
-            />
-            <Text className="ml-2 text-lg font-semibold">
-              Continue with Apple
-            </Text>
-          </Pressable>
-          <Pressable className="mt-2 flex w-11/12 flex-row items-center justify-center rounded-xl border-2 p-2 dark:border-stone-300">
-            <Image
-              className="h-5 w-5 rounded-[20px]"
-              source={require("../../../assets/images/google.png")}
-            />
-            <Text className="ml-2 text-lg font-semibold">
-              Continue with Google
-            </Text>
-          </Pressable>
+          <AuthButton
+            icon={<IconBrandAppleFilled fill={colorScheme === "dark" ? colors.white : colors.black} />}
+            text="Continue with Apple"
+            onPress={() => { }}
+          />
+          <AuthButton
+            icon={<Image className="h-5 w-5 rounded-[20px]" source={require("../../../assets/images/google.png")} />}
+            text="Continue with Google"
+            onPress={() => { }}
+          />
           <Pressable className="mt-2">
             <Text className="text-base font-semibold">
               Sign up or log in with Email
@@ -139,43 +149,31 @@ export default function Signin() {
       )}
       {Platform.OS === "android" && (
         <>
-          <Pressable className="mt-2 flex w-11/12 flex-row items-center justify-center rounded-xl border-2 p-2 dark:border-stone-300">
-            <Image
-              className="h-5 w-5 rounded-[20px]"
-              source={require("../../../assets/images/google.png")}
-            />
-            <Text className="ml-2 text-lg font-semibold">
-              Continue with Google
-            </Text>
-          </Pressable>
-          <Pressable className="mt-2 flex w-11/12 flex-row items-center justify-center rounded-xl border-2 p-2 dark:border-stone-300">
-            <Icon
-              icon={IconMail}
-              lightColor={colors.black}
-              darkColor={colors.white}
-              strokeWidth={2.2}
-            />
-            <Text className="ml-2 text-lg font-semibold">
-              Continue with Email
-            </Text>
-          </Pressable>
-        </>
+        <AuthButton
+          icon={<Image className="h-5 w-5 rounded-[20px]" source={require("../../../assets/images/google.png")} />}
+          text="Continue with Google"
+          onPress={() => { }}
+        />
+        <AuthButton
+          icon={<Icon icon={IconMail} lightColor={colors.black} darkColor={colors.white} strokeWidth={2.2} />}
+          text="Continue with Email"
+          onPress={() => { }}
+        />
+      </>
       )}
     </View>
   );
 }
 
-function TutorialItem({ item }: { item: { pageNum: string; text: string } }) {
-  const { width } = Dimensions.get("window");
+
+function AuthButton({ icon, text, onPress }: { icon: any; text: string; onPress: any }) {
   return (
-    <View
-      className="m-0 items-center justify-center p-0"
-      style={{
-        width: width,
-      }}
+    <Pressable
+      className="mt-2 flex w-11/12 flex-row items-center justify-center rounded-xl border-2 p-2 dark:border-stone-300"
+      onPress={onPress}
     >
-      <Icon icon={IconPhotoScan} size={270} strokeWidth={0.8} />
-      <Text className="px-2 text-center text-3xl font-bold">{item.text}</Text>
-    </View>
+      {icon}
+      <Text className="ml-2 text-lg font-semibold">{text}</Text>
+    </Pressable>
   );
 }
