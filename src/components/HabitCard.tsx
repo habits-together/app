@@ -23,7 +23,6 @@ export type HabitCardProps = {
   displayType: "habit-tab" | "view-habit-page" | "friend's-habit";
 };
 
-
 export type HabitCompletionValue = "completed" | "missed" | "not-applicable";
 
 export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
@@ -249,7 +248,10 @@ function FriendProfilePictures({
           </View>
         )}
         {profilePicsData.slice(0, 5).map((data, index) => (
-          <View className="-mr-3 h-12 w-12 rounded-full" key={data.imgurl + index}>
+          <View
+            className="-mr-3 h-12 w-12 rounded-full"
+            key={data.imgurl + index}
+          >
             {data.hasCompleted && (
               <>
                 <View className="absolute -right-[4px] -top-[3px] z-10">

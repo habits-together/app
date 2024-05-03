@@ -6,7 +6,8 @@ import { mockHabitData } from "@/src/lib/mockHabitData";
 
 export default function HabitsTab() {
   return (
-    <ScrollView className="flex-1 gap-6 p-4"
+    <ScrollView
+      className="flex-1 gap-6 p-4"
       contentContainerStyle={{ paddingBottom: 100 }}
     >
       {mockHabitData.map((habit) => {

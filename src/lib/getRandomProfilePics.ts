@@ -40,5 +40,4 @@ export async function fetchSingleUserThumbnail() {
   }
 }
 
-
 export const profilePicsDataPromise = fetchUserThumbnails();

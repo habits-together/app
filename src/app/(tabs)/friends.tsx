@@ -15,8 +15,8 @@ export default function FriendsTab() {
       <Text className="text-2xl font-bold">New habit invite</Text>
       <HabitInviteList />
 
-      <Text className="text-2xl font-bold">My friends</Text>
-      <FriendSearchBar />
+            <Text className="text-2xl font-bold">My friends</Text>
+                      <FriendSearchBar />
       <FriendList />
 
     </ScrollView>
