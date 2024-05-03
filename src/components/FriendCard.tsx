@@ -1,11 +1,12 @@
-import { View, Text } from "@/src/components/Themed";
-import React from "react";
+import { Text, View } from "@/src/components/Themed";
+import { Link } from "expo-router";
 import { useColorScheme } from "nativewind";
+import React from "react";
+import { Pressable } from "react-native";
 import colors from "../constants/colors";
-import { Habit } from "../lib/mockHabitData";
+import { Habit } from "../lib/mockData";
 import DotsMenu from "./DotsMenu";
 import Icon from "./Icon";
-import { IconPlus } from "@tabler/icons-react-native";
 
 export type FriendCardProps = {
   displayName: string;
@@ -20,85 +21,49 @@ export default function FriendCard({
   profilePic,
   commonHabits,
 }: FriendCardProps) {
-  const { colorScheme } = useColorScheme();
-
   return (
-    <View
-      className="my-1 flex grow-0 flex-row items-center rounded-3xl border px-2 py-2"
-      style={{
-        borderColor:
-          colorScheme === "dark" ? colors.stone[400] : colors.stone[200],
+    <Link
+      push
+      href={{
+        pathname: "/modals/viewprofile",
+        params: { userName: userName, displayName: displayName },
       }}
+      asChild
     >
-      <View className="flex flex-col">
-        <View className="flex flex-row">
+      <Pressable className="my-1 flex grow-0 flex-col rounded-3xl border border-stone-300 p-2">
+        <View className="flex flex-row items-center">
           {profilePic}
-          <View className="ml-2 flex flex-col">
-            <Text className="text-lg font-semibold">{displayName}</Text>
-            <Text
-              className="font-semibold"
-              style={{
-                color:
-                  colorScheme === "dark"
-                    ? colors.stone[500]
-                    : colors.stone[300],
-              }}
-            >
+          <View className="ml-2 flex flex-1 flex-col">
+            <Text className="text-base font-semibold">{displayName}</Text>
+            <Text className="text-xs font-semibold text-stone-400">
               {userName}
             </Text>
           </View>
+          <View className="self-start">
+            <DotsMenu
+              options={[
+                {
+                  label: "Remove Friend",
+                  color: colors.black,
+                  action: () => alert(`Remove Friend`),
+                },
+              ]}
+            />
+          </View>
         </View>
         <CommonHabits commonHabits={commonHabits} />
-      </View>
-      <View className="ml-auto -translate-y-7 bg-transparent">
-        <DotsMenu
-          options={[
-            {
-              label: "Remove Friend",
-              color: colors.black,
-              action: () => alert(`Remove Friend`),
-            },
-          ]}
-        />
-      </View>
-    </View>
+      </Pressable>
+    </Link>
   );
 }
 
 function CommonHabits({ commonHabits }: { commonHabits: Habit[] }) {
   const { colorScheme } = useColorScheme();
   return (
-    <View className="mt-1 flex flex-row">
-      {commonHabits.slice(0, 2).map((habit) => (
+    <View className="mt-1 flex flex-row flex-wrap">
+      {commonHabits.map((habit) => (
         <HabitTag key={habit.id} habit={habit} />
       ))}
-      {commonHabits.length >= 2 && (
-        <View
-          className="mx-0.5 mt-1 flex flex-row items-center justify-center rounded-3xl px-2 py-1"
-          style={{
-            backgroundColor:
-              colorScheme === "dark" ? colors.stone.light : colors.stone[100],
-          }}
-        >
-          <Icon
-            icon={IconPlus}
-            size={10}
-            strokeWidth={3}
-            darkColor={colors.stone[400]}
-            lightColor={colors.stone[800]}
-          />
-          <Text
-            numberOfLines={1}
-            className="text-xs font-bold"
-            style={{
-              color:
-                colorScheme === "dark" ? colors.stone[400] : colors.stone[800],
-            }}
-          >
-            {commonHabits.length - 2}
-          </Text>
-        </View>
-      )}
 
       {commonHabits.length == 0 && (
         <View

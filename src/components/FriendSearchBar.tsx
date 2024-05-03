@@ -10,8 +10,8 @@ export default function FriendSearchBar() {
   const [text, onChangeText] = useState("");
   const { colorScheme } = useColorScheme();
   return (
-    <SafeAreaView className="relative">
-      <View className="absolute left-5 top-5">
+    <SafeAreaView className="my-1">
+      <View className="absolute left-2 top-2">
         <Icon
           icon={IconSearch}
           size={24}
@@ -21,7 +21,7 @@ export default function FriendSearchBar() {
         />
       </View>
       <TextInput
-        className="m-3 h-10 rounded-xl border-2 p-2.5 pl-10"
+        className="border-1 rounded-xl p-2.5 pl-10"
         style={{
           height: 40,
           color: colorScheme === "dark" ? colors.stone[200] : colors.stone[600],

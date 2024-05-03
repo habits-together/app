@@ -2,7 +2,7 @@ import { ScrollView } from "@/src/components/Themed";
 import { HabitCard } from "@/src/components/HabitCard";
 import { Link } from "expo-router";
 import { Pressable } from "react-native";
-import { mockHabitData } from "@/src/lib/mockHabitData";
+import { mockHabitData } from "@/src/lib/mockData";
 
 export default function HabitsTab() {
   return (

@@ -1,7 +1,8 @@
-async function fetchUserThumbnails() {
+async function fetchUserThumbnails(amount: number) {
   try {
-    // Request 10 results from the API
-    const response = await fetch("https://randomuser.me/api/?results=10");
+    const response = await fetch(
+      "https://randomuser.me/api/?results=".concat(amount.toString(10)),
+    );
     if (!response.ok) {
       throw new Error(`API call failed: ${response.status}`);
     }
@@ -40,4 +41,5 @@ export async function fetchSingleUserThumbnail() {
   }
 }
 
-export const profilePicsDataPromise = fetchUserThumbnails();
+export const profilePicsDataPromise = (amount: number) =>
+  fetchUserThumbnails(amount);

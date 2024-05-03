@@ -1,13 +1,13 @@
 import colors from "@/src/constants/colors";
 import { profilePicsDataPromise } from "@/src/lib/getRandomProfilePics";
-import { getMockCompletionsData } from "@/src/lib/mockHabitData";
+import { getMockCompletionsData } from "@/src/lib/mockData";
 import { IconCheck, Icon as TablerIcon } from "@tabler/icons-react-native";
 import { useColorScheme } from "nativewind";
 import React, { useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import DotsMenu from "./DotsMenu";
 import Icon from "./Icon";
-import ProfilePicture from "./ProfilePicture";
+import SmallProfilePicture from "./ProfilePicture";
 
 export type ProfilePic = {
   imgurl: string;
@@ -31,7 +31,7 @@ export function HabitCard({ title, color, icon, displayType }: HabitCardProps) {
   const [activityData, setActivityData] = useState<HabitCompletionValue[]>([]);
   const [indexOftoday, setIndexOftoday] = useState<number>(0);
   useEffect(() => {
-    profilePicsDataPromise.then(setProfilePicsData);
+    profilePicsDataPromise(10).then(setProfilePicsData);
     const [arrray, index] = getMockCompletionsData();
     setActivityData(arrray);
     setIndexOftoday(index);
@@ -274,7 +274,7 @@ function FriendProfilePictures({
                 </View>
               </>
             )}
-            <ProfilePicture picUrl={data.imgurl} />
+            <SmallProfilePicture picUrl={data.imgurl} />
           </View>
         ))}
       </View>
