@@ -19,6 +19,7 @@ import Icon from "@/src/components/Icon";
 import { SlidingDot } from "react-native-animated-pagination-dots";
 import { useRef } from "react";
 import Logo from "@/assets/images/Logo.svg";
+import { Icon as TablerIcon } from "@tabler/icons-react-native";
 
 // // Import the functions you need from the SDKs you need
 // import { initializeApp } from "firebase/app";
@@ -131,7 +132,7 @@ export default function Signin() {
       {Platform.OS === "ios" && (
         <>
           <AuthButton
-            icon={<IconBrandAppleFilled fill={colorScheme === "dark" ? colors.white : colors.black} />}
+            icon={<IconBrandAppleFilled fill={colorScheme === "dark" ? colors.white : colors.black} color={colorScheme === "dark" ? colors.white : colors.black} strokeWidth={0} size={24} />}
             text="Continue with Apple"
             onPress={() => { }}
           />
@@ -165,8 +166,14 @@ export default function Signin() {
   );
 }
 
+interface AuthButtonProps {
+  icon: JSX.Element;
+  text: string;
+  onPress: () => void;
+}
 
-function AuthButton({ icon, text, onPress }: { icon: any; text: string; onPress: any }) {
+
+function AuthButton({ icon, text, onPress }: AuthButtonProps) {
   return (
     <Pressable
       className="mt-2 flex w-11/12 flex-row items-center justify-center rounded-xl border-2 p-2 dark:border-stone-300"
