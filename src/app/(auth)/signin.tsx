@@ -1,8 +1,13 @@
-import React, { useState } from "react";
-import { Alert, StyleSheet, View, AppState } from "react-native";
-import { Button, Input } from "react-native-elements";
-import { router } from "expo-router";
-import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
+import Icon from "@/src/components/Icon";
+import { Pressable, Image } from "react-native";
+import { Text, View, ScrollView } from "@/src/components/Themed";
+import {
+  IconBrandGoogle,
+  IconBrandAppleFilled
+} from "@tabler/icons-react-native";
+import { colors } from "react-native-elements";
+import { useColorScheme } from "nativewind";
+import { Link } from "expo-router";
 
 // // Import the functions you need from the SDKs you need
 // import { initializeApp } from "firebase/app";
@@ -27,74 +32,63 @@ import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 // const analytics = getAnalytics(app);
 
 export default function Signin() {
-  // in the future we want to only have sign in with Google & Apple
-  // but for now we will have email sign in for testing
-  const [email, setEmail] = useState("test@gmail.com");
-  const [password, setPassword] = useState("password");
-  const [loading, setLoading] = useState(false);
-
-  async function signInWithEmail() {
-    setLoading(true);
-
-    // see if the account exists
-
-    setLoading(false);
-
-    // they previously created an account and are logging in
-    if (true) {
-      resetNavigationStack("/");
-    }
-    // they are creating an account for the first time
-    else {
-      router.push("/createprofile");
-    }
-  }
+  const { colorScheme } = useColorScheme();
 
   return (
-    <View style={styles.container}>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Input
-          label="Email"
-          leftIcon={{ type: "font-awesome", name: "envelope" }}
-          onChangeText={(text) => setEmail(text)}
-          value={email}
-          // placeholder="test@gmail.com"
-          autoCapitalize={"none"}
-        />
+    <View className="flex-1 pt-20 items-center">
+      <View className="flex-row items-center justify-between w-10/12">
+        <View className="flex-row items-center">
+          <Image
+            className="h-6 w-6 rounded-[20px]"
+            source={require("../../../assets/images/Logo.png")} />
+          <Text className="text-2xl font-bold ml-1">Habit Together</Text>
+        </View>
+        <Pressable className="bg-stone-200 rounded-2xl py-1 px-4">
+          <Text className="font-semibold text-base">Skip</Text>
+        </Pressable>
       </View>
-      <View style={styles.verticallySpaced}>
-        <Input
-          label="Password"
-          leftIcon={{ type: "font-awesome", name: "lock" }}
-          onChangeText={(text) => setPassword(text)}
-          value={password}
-          secureTextEntry={true}
-          // placeholder="password"
-          autoCapitalize={"none"}
-        />
-      </View>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button
-          title="Sign in"
-          disabled={loading}
-          onPress={() => signInWithEmail()}
-        />
-      </View>
+ 
+      <ScrollView
+        horizontal={true}
+        pagingEnabled={true}
+        nestedScrollEnabled={true}
+        decelerationRate={0}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        snapToAlignment={"center"}
+        disableIntervalMomentum={true}
+        className="w-full flex-grow mt-4"
+      >
+        <View className="w-full items-center justify-center">
+          <Text>Create habits and keep track of completions</Text>
+          {/* You can add more content or images here */}
+        </View>
+        <View className="w-full items-center justify-center">
+          <Text>Share your progress with friends</Text>
+          {/* More content or images */}
+        </View>
+        <View className="w-full items-center justify-center">
+          <Text>Gain insights from your activity patterns</Text>
+          {/* Additional content or images */}
+        </View>
+      </ScrollView>
+
+      <Text className="text-center w-2/3 text-xs my-2 text-stone-400">By continuing, I agree to the {"\n"}
+        <Link href="/"><Text className="underline text-xs text-stone-400">Terms & Conditions</Text></Link> and <Link href="/"><Text className="underline text-xs text-stone-400">Privacy Policy</Text></Link></Text>
+
+      <Pressable className="flex flex-row w-10/12 justify-center items-center border-2 dark:border-stone-300 p-2 mt-2 rounded-xl">
+        <IconBrandAppleFilled fill={colorScheme === "dark" ? colors.white : colors.black} />
+        <Text className="font-semibold text-lg ml-2">Continue with Apple</Text>
+      </Pressable>
+      <Pressable className="flex flex-row w-10/12 justify-center items-center border-2 dark:border-stone-300 p-2 mt-2 rounded-xl">
+        <Image
+          className="h-5 w-5 rounded-[20px]"
+          source={require("../../../assets/images/google.png")} />
+        <Text className="font-semibold text-lg ml-2">Continue with Google</Text>
+      </Pressable>
+      <Pressable className="mt-1">
+        <Text className="font-semibold text-base">Sign up or log in with Email</Text>
+      </Pressable>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 40,
-    padding: 12,
-  },
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: "stretch",
-  },
-  mt20: {
-    marginTop: 20,
-  },
-});
