@@ -8,7 +8,8 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
-    "prettier": "prettier --write ."
+    "prettier:format": "prettier --write .",
+    "prettier:check:ci": "prettier --check \"**/*.{ts,tsx,js,md,mdx,css,yaml}\""
   },
   "jest": {
     "preset": "jest-expo",
