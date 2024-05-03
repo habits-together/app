@@ -1,9 +1,16 @@
-import { Pressable, Image, FlatList, Dimensions, Animated, Platform } from "react-native";
+import {
+  Pressable,
+  Image,
+  FlatList,
+  Dimensions,
+  Animated,
+  Platform,
+} from "react-native";
 import { Text, View } from "@/src/components/Themed";
 import {
   IconPhotoScan,
   IconBrandAppleFilled,
-  IconMail
+  IconMail,
 } from "@tabler/icons-react-native";
 import { colors } from "react-native-elements";
 import { useColorScheme } from "nativewind";
@@ -11,7 +18,6 @@ import { Link } from "expo-router";
 import Icon from "@/src/components/Icon";
 import { SlidingDot } from "react-native-animated-pagination-dots";
 import { useRef } from "react";
-
 
 // // Import the functions you need from the SDKs you need
 // import { initializeApp } from "firebase/app";
@@ -39,23 +45,24 @@ export default function Signin() {
   const { colorScheme } = useColorScheme();
 
   const tutorialData = [
-    { pageNum: '1', text: 'Create habits and keep track of completions' },
-    { pageNum: '2', text: 'Add friends and do habits together' },
-    { pageNum: '3', text: 'Help each other reach your goals' },
+    { pageNum: "1", text: "Create habits and keep track of completions" },
+    { pageNum: "2", text: "Add friends and do habits together" },
+    { pageNum: "3", text: "Help each other reach your goals" },
   ];
   const scrollX = useRef<Animated.Value>(new Animated.Value(0)).current;
 
   return (
-    <View className="flex-1 pt-14 items-center">
-      <View className="flex-row items-center justify-between w-11/12 pb-5">
+    <View className="flex-1 items-center pt-14">
+      <View className="w-11/12 flex-row items-center justify-between pb-5">
         <View className="flex-row items-center">
           <Image
             className="h-6 w-6 rounded-[20px]"
-            source={require("../../../assets/images/Logo.png")} />
-          <Text className="text-2xl font-bold ml-2">Habit Together</Text>
+            source={require("../../../assets/images/Logo.png")}
+          />
+          <Text className="ml-2 text-2xl font-bold">Habit Together</Text>
         </View>
-        <Pressable className="bg-stone-200 dark:bg-stone-800 dark:border-2 dark:border-stone-300 rounded-2xl py-1 px-4">
-          <Text className="font-semibold text-base">Skip</Text>
+        <Pressable className="rounded-2xl bg-stone-200 px-4 py-1 dark:border-2 dark:border-stone-300 dark:bg-stone-800">
+          <Text className="text-base font-semibold">Skip</Text>
         </Pressable>
       </View>
 
@@ -65,62 +72,92 @@ export default function Signin() {
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
-        keyExtractor={item => item.pageNum}
+        keyExtractor={(item) => item.pageNum}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { x: scrollX } } }],
           {
             useNativeDriver: false,
-          }
+          },
         )}
-        className="grow-0 mb-14"
+        className="mb-14 grow-0"
       />
 
       <SlidingDot
         data={tutorialData}
         scrollX={scrollX}
         dotSize={10}
-        containerStyle={{ position: 'relative' }}
-        dotStyle={{ backgroundColor: colorScheme === "dark" ? colors.white : colors.black }}
+        containerStyle={{ position: "relative" }}
+        dotStyle={{
+          backgroundColor: colorScheme === "dark" ? colors.white : colors.black,
+        }}
         marginHorizontal={10}
-        slidingIndicatorStyle={{ backgroundColor: colorScheme === "dark" ? colors.white : colors.black }}
+        slidingIndicatorStyle={{
+          backgroundColor: colorScheme === "dark" ? colors.white : colors.black,
+        }}
       />
 
-      <Text className="text-center w-2/3 text-xs mb-3 text-stone-400">By continuing, I agree to the {"\n"}
-        <Link href="/"><Text className="underline text-xs text-stone-400">Terms & Conditions</Text></Link> and <Link href="/"><Text className="underline text-xs text-stone-400">Privacy Policy</Text></Link></Text>
+      <Text className="mb-3 w-2/3 text-center text-xs text-stone-400">
+        By continuing, I agree to the {"\n"}
+        <Link href="/">
+          <Text className="text-xs text-stone-400 underline">
+            Terms & Conditions
+          </Text>
+        </Link>{" "}
+        and{" "}
+        <Link href="/">
+          <Text className="text-xs text-stone-400 underline">
+            Privacy Policy
+          </Text>
+        </Link>
+      </Text>
 
       {Platform.OS === "ios" && (
         <>
-          <Pressable className="flex flex-row w-11/12 justify-center items-center border-2 dark:border-stone-300 p-2 mt-2 rounded-xl">
-            <IconBrandAppleFilled fill={colorScheme === "dark" ? colors.white : colors.black} />
-            <Text className="font-semibold text-lg ml-2">Continue with Apple</Text>
+          <Pressable className="mt-2 flex w-11/12 flex-row items-center justify-center rounded-xl border-2 p-2 dark:border-stone-300">
+            <IconBrandAppleFilled
+              fill={colorScheme === "dark" ? colors.white : colors.black}
+            />
+            <Text className="ml-2 text-lg font-semibold">
+              Continue with Apple
+            </Text>
           </Pressable>
-          <Pressable className="flex flex-row w-11/12 justify-center items-center border-2 dark:border-stone-300 p-2 mt-2 rounded-xl">
+          <Pressable className="mt-2 flex w-11/12 flex-row items-center justify-center rounded-xl border-2 p-2 dark:border-stone-300">
             <Image
               className="h-5 w-5 rounded-[20px]"
-              source={require("../../../assets/images/google.png")} />
-            <Text className="font-semibold text-lg ml-2">Continue with Google</Text>
+              source={require("../../../assets/images/google.png")}
+            />
+            <Text className="ml-2 text-lg font-semibold">
+              Continue with Google
+            </Text>
           </Pressable>
           <Pressable className="mt-2">
-            <Text className="font-semibold text-base">Sign up or log in with Email</Text>
+            <Text className="text-base font-semibold">
+              Sign up or log in with Email
+            </Text>
           </Pressable>
         </>
       )}
       {Platform.OS === "android" && (
         <>
-          <Pressable className="flex flex-row w-11/12 justify-center items-center border-2 dark:border-stone-300 p-2 mt-2 rounded-xl">
+          <Pressable className="mt-2 flex w-11/12 flex-row items-center justify-center rounded-xl border-2 p-2 dark:border-stone-300">
             <Image
               className="h-5 w-5 rounded-[20px]"
-              source={require("../../../assets/images/google.png")} />
-            <Text className="font-semibold text-lg ml-2">Continue with Google</Text>
+              source={require("../../../assets/images/google.png")}
+            />
+            <Text className="ml-2 text-lg font-semibold">
+              Continue with Google
+            </Text>
           </Pressable>
-          <Pressable className="flex flex-row w-11/12 justify-center items-center border-2 dark:border-stone-300 p-2 mt-2 rounded-xl">
+          <Pressable className="mt-2 flex w-11/12 flex-row items-center justify-center rounded-xl border-2 p-2 dark:border-stone-300">
             <Icon
               icon={IconMail}
               lightColor={colors.black}
               darkColor={colors.white}
               strokeWidth={2.2}
             />
-            <Text className="font-semibold text-lg ml-2">Continue with Email</Text>
+            <Text className="ml-2 text-lg font-semibold">
+              Continue with Email
+            </Text>
           </Pressable>
         </>
       )}
@@ -128,21 +165,17 @@ export default function Signin() {
   );
 }
 
-function TutorialItem({ item }: { item: { pageNum: string, text: string } }) {
-  const { width } = Dimensions.get('window');
+function TutorialItem({ item }: { item: { pageNum: string; text: string } }) {
+  const { width } = Dimensions.get("window");
   return (
-    <View className="items-center justify-center p-0 m-0"
-      style={
-        {
-          width: width,
-        }
-      }>
-      <Icon
-        icon={IconPhotoScan}
-        size={270}
-        strokeWidth={0.8}
-      />
-      <Text className="text-center font-bold text-3xl px-2">{item.text}</Text>
+    <View
+      className="m-0 items-center justify-center p-0"
+      style={{
+        width: width,
+      }}
+    >
+      <Icon icon={IconPhotoScan} size={270} strokeWidth={0.8} />
+      <Text className="px-2 text-center text-3xl font-bold">{item.text}</Text>
     </View>
   );
 }
