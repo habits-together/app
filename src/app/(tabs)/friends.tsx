@@ -9,11 +9,10 @@ export default function FriendsTab() {
       className="flex-1 p-4"
       contentContainerStyle={{ paddingBottom: 100 }}
     >
-      <FriendRequestList
-       />
-          <HabitInviteList />
+      <FriendRequestList />
+      <HabitInviteList />
 
-        <FriendList />
+      <FriendList />
     </ScrollView>
   );
 }
