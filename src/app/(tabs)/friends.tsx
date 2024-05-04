@@ -10,8 +10,7 @@ export default function FriendsTab() {
       contentContainerStyle={{ paddingBottom: 100 }}
     >
       <FriendRequestList />
-      <HabitInviteList />
-
+        <HabitInviteList />
       <FriendList />
     </ScrollView>
   );
