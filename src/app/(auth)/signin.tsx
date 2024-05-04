@@ -43,7 +43,6 @@ import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 // const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
 
-
 export default function Signin() {
   const { colorScheme } = useColorScheme();
   const { width } = Dimensions.get("window");
@@ -87,7 +86,7 @@ export default function Signin() {
 
   return (
     <View className="flex-1 items-center pt-14">
-      <View className="w-full px-4 flex-row items-center justify-between pb-5">
+      <View className="w-full flex-row items-center justify-between px-4 pb-5">
         <View className="flex-row items-center">
           {/* <Image
             className="h-6 w-6 rounded-[20px]"
@@ -96,13 +95,15 @@ export default function Signin() {
           <Logo height={24} width={24} />
           <Text className="ml-2 text-2xl font-bold">Habits Together</Text>
         </View>
-        <Pressable className="rounded-2xl bg-stone-200 dark:bg-stone-700 px-4 py-1"
-          onPress={continueAsGuest}>
+        <Pressable
+          className="rounded-2xl bg-stone-200 px-4 py-1 dark:bg-stone-700"
+          onPress={continueAsGuest}
+        >
           <Text className="text-base font-semibold">Skip</Text>
         </Pressable>
       </View>
 
-      <View className="flex-1 w-full flex justify-center items-center pb-3">
+      <View className="flex w-full flex-1 items-center justify-center pb-3">
         <FlatList
           data={tutorialData}
           renderItem={({ item }) => TutorialItem({ item })}
@@ -125,11 +126,13 @@ export default function Signin() {
           dotSize={10}
           containerStyle={{ position: "relative" }}
           dotStyle={{
-            backgroundColor: colorScheme === "dark" ? colors.white : colors.black,
+            backgroundColor:
+              colorScheme === "dark" ? colors.white : colors.black,
           }}
           marginHorizontal={10}
           slidingIndicatorStyle={{
-            backgroundColor: colorScheme === "dark" ? colors.white : colors.black,
+            backgroundColor:
+              colorScheme === "dark" ? colors.white : colors.black,
           }}
         />
 
@@ -148,13 +151,12 @@ export default function Signin() {
           </Link>
         </Text>
 
-        <View className="w-full flex justify-center items-center px-4">
+        <View className="flex w-full items-center justify-center px-4">
           {Platform.OS === "ios" && (
             <>
               <AppleButton />
               <GoogleButton />
-              <Pressable className="mt-2"
-              onPress={signInWithEmail}>
+              <Pressable className="mt-2" onPress={signInWithEmail}>
                 <Text className="text-base font-semibold">
                   Sign up or log in with Email
                 </Text>
@@ -175,36 +177,53 @@ export default function Signin() {
   function GoogleButton() {
     return (
       <Pressable
-        className="h-14 mt-2 flex w-full flex-row items-center justify-center rounded-xl border-2 p-2 dark:bg-white"
+        className="mt-2 flex h-14 w-full flex-row items-center justify-center rounded-xl border-2 p-2 dark:bg-white"
         onPress={signInWithGoogle}
       >
-        <Image className="h-5 w-5 rounded-[20px]" source={require("../../../assets/images/google.png")} />
-        <Text className="ml-2 text-lg font-semibold text-black">Continue with Google</Text>
+        <Image
+          className="h-5 w-5 rounded-[20px]"
+          source={require("../../../assets/images/google.png")}
+        />
+        <Text className="ml-2 text-lg font-semibold text-black">
+          Continue with Google
+        </Text>
       </Pressable>
-    )
+    );
   }
 
   function AppleButton() {
     return (
       <Pressable
-        className="h-14 mt-2 flex w-full flex-row items-center justify-center rounded-xl border-2 p-2 dark:bg-white"
+        className="mt-2 flex h-14 w-full flex-row items-center justify-center rounded-xl border-2 p-2 dark:bg-white"
         onPress={signInWithApple}
       >
-        <Image className="h-5 w-5 rounded-[20px]" source={require("../../../assets/images/apple.png")} />
-        <Text className="ml-2 text-lg font-semibold text-black">Continue with Apple</Text>
+        <Image
+          className="h-5 w-5 rounded-[20px]"
+          source={require("../../../assets/images/apple.png")}
+        />
+        <Text className="ml-2 text-lg font-semibold text-black">
+          Continue with Apple
+        </Text>
       </Pressable>
-    )
+    );
   }
 
   function EmailButton() {
     return (
       <Pressable
-        className="h-14 mt-2 flex w-full  flex-row items-center justify-center rounded-xl border-2 p-2 dark:bg-white"
+        className="mt-2 flex h-14 w-full  flex-row items-center justify-center rounded-xl border-2 p-2 dark:bg-white"
         onPress={signInWithEmail}
       >
-        <Icon icon={IconMail} lightColor={colors.black} darkColor={colors.black} strokeWidth={2.2} />
-        <Text className="ml-2 text-lg font-semibold text-black">Continue with Email</Text>
+        <Icon
+          icon={IconMail}
+          lightColor={colors.black}
+          darkColor={colors.black}
+          strokeWidth={2.2}
+        />
+        <Text className="ml-2 text-lg font-semibold text-black">
+          Continue with Email
+        </Text>
       </Pressable>
-    )
+    );
   }
 }
