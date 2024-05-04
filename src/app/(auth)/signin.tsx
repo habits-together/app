@@ -60,6 +60,9 @@ export default function Signin() {
   async function signInWithEmail() {
     resetNavigationStack("/");
   }
+  async function continueAsGuest() {
+    resetNavigationStack("/");
+  }
 
   function TutorialItem({ item }: { item: { pageNum: string; text: string } }) {
     return (
@@ -78,7 +81,7 @@ export default function Signin() {
   const tutorialData = [
     { pageNum: "1", text: "Create habits and keep track of completions" },
     { pageNum: "2", text: "Add friends and do habits together" },
-    { pageNum: "3", text: "Help each other reach your goals" },
+    { pageNum: "3", text: "Put interactive widgets on your home screen" },
   ];
   const scrollX = useRef<Animated.Value>(new Animated.Value(0)).current;
 
@@ -91,9 +94,10 @@ export default function Signin() {
             source={require("../../../assets/images/Logo.svg")}
           /> */}
           <Logo height={24} width={24} />
-          <Text className="ml-2 text-2xl font-bold">Habit Together</Text>
+          <Text className="ml-2 text-2xl font-bold">Habits Together</Text>
         </View>
-        <Pressable className="rounded-2xl bg-stone-200 px-4 py-1 dark:border-2 dark:border-stone-300 dark:bg-stone-800">
+        <Pressable className="rounded-2xl bg-stone-200 px-4 py-1 dark:border-2 dark:border-stone-300 dark:bg-stone-800"
+          onPress={continueAsGuest}>
           <Text className="text-base font-semibold">Skip</Text>
         </Pressable>
       </View>
@@ -111,7 +115,7 @@ export default function Signin() {
             useNativeDriver: false,
           },
         )}
-        className="mb-14 grow-0"
+        className="mb-14 grow-0 mt-4"
       />
 
       <SlidingDot
