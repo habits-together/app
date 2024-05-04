@@ -149,18 +149,19 @@ export default function Signin() {
         </Text>
 
         <View className="w-full flex justify-center items-center px-4">
-          {Platform.OS === "android" && (
+          {Platform.OS === "ios" && (
             <>
               <AppleButton />
               <GoogleButton />
-              <Pressable className="mt-2">
+              <Pressable className="mt-2"
+              onPress={signInWithEmail}>
                 <Text className="text-base font-semibold">
                   Sign up or log in with Email
                 </Text>
               </Pressable>
             </>
           )}
-          {Platform.OS === "ios" && (
+          {Platform.OS === "android" && (
             <>
               <GoogleButton />
               <EmailButton />
