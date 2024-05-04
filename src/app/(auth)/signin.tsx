@@ -96,75 +96,77 @@ export default function Signin() {
           <Logo height={24} width={24} />
           <Text className="ml-2 text-2xl font-bold">Habits Together</Text>
         </View>
-        <Pressable className="rounded-2xl bg-stone-200 dark:bg-white px-4 py-1"
+        <Pressable className="rounded-2xl bg-stone-200 dark:bg-stone-700 px-4 py-1"
           onPress={continueAsGuest}>
-          <Text className="text-base font-semibold text-black">Skip</Text>
+          <Text className="text-base font-semibold">Skip</Text>
         </Pressable>
       </View>
 
-      <FlatList
-        data={tutorialData}
-        renderItem={({ item }) => TutorialItem({ item })}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        keyExtractor={(item) => item.pageNum}
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-          {
-            useNativeDriver: false,
-          },
-        )}
-        className="mb-14 grow-0 mt-4"
-      />
+      <View className="flex-1 w-full flex justify-center items-center pb-3">
+        <FlatList
+          data={tutorialData}
+          renderItem={({ item }) => TutorialItem({ item })}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(item) => item.pageNum}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+            {
+              useNativeDriver: false,
+            },
+          )}
+          className="mb-14 grow-0"
+        />
 
-      <SlidingDot
-        data={tutorialData}
-        scrollX={scrollX}
-        dotSize={10}
-        containerStyle={{ position: "relative" }}
-        dotStyle={{
-          backgroundColor: colorScheme === "dark" ? colors.white : colors.black,
-        }}
-        marginHorizontal={10}
-        slidingIndicatorStyle={{
-          backgroundColor: colorScheme === "dark" ? colors.white : colors.black,
-        }}
-      />
+        <SlidingDot
+          data={tutorialData}
+          scrollX={scrollX}
+          dotSize={10}
+          containerStyle={{ position: "relative" }}
+          dotStyle={{
+            backgroundColor: colorScheme === "dark" ? colors.white : colors.black,
+          }}
+          marginHorizontal={10}
+          slidingIndicatorStyle={{
+            backgroundColor: colorScheme === "dark" ? colors.white : colors.black,
+          }}
+        />
 
-      <Text className="mb-3 w-2/3 text-center text-xs text-stone-400">
-        By continuing, I agree to the {"\n"}
-        <Link href="/">
-          <Text className="text-xs text-stone-400 underline">
-            Terms & Conditions
-          </Text>
-        </Link>{" "}
-        and{" "}
-        <Link href="/">
-          <Text className="text-xs text-stone-400 underline">
-            Privacy Policy
-          </Text>
-        </Link>
-      </Text>
+        <Text className="mb-3 w-2/3 text-center text-xs text-stone-400">
+          By continuing, I agree to the {"\n"}
+          <Link href="/">
+            <Text className="text-xs text-stone-400 underline">
+              Terms & Conditions
+            </Text>
+          </Link>{" "}
+          and{" "}
+          <Link href="/">
+            <Text className="text-xs text-stone-400 underline">
+              Privacy Policy
+            </Text>
+          </Link>
+        </Text>
 
-      <View className="w-full flex justify-center items-center px-4">
-        {Platform.OS === "ios" && (
-          <>
-            <AppleButton />
-            <GoogleButton />
-            <Pressable className="mt-2">
-              <Text className="text-base font-semibold">
-                Sign up or log in with Email
-              </Text>
-            </Pressable>
-          </>
-        )}
-        {Platform.OS === "android" && (
-          <>
-            <GoogleButton />
-            <EmailButton />
-          </>
-        )}
+        <View className="w-full flex justify-center items-center px-4">
+          {Platform.OS === "android" && (
+            <>
+              <AppleButton />
+              <GoogleButton />
+              <Pressable className="mt-2">
+                <Text className="text-base font-semibold">
+                  Sign up or log in with Email
+                </Text>
+              </Pressable>
+            </>
+          )}
+          {Platform.OS === "ios" && (
+            <>
+              <GoogleButton />
+              <EmailButton />
+            </>
+          )}
+        </View>
       </View>
     </View>
   );
