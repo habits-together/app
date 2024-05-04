@@ -96,9 +96,9 @@ export default function Signin() {
           <Logo height={24} width={24} />
           <Text className="ml-2 text-2xl font-bold">Habits Together</Text>
         </View>
-        <Pressable className="rounded-2xl bg-stone-200 px-4 py-1 dark:border-2 dark:border-stone-300 dark:bg-stone-800"
+        <Pressable className="rounded-2xl bg-stone-200 dark:bg-white px-4 py-1"
           onPress={continueAsGuest}>
-          <Text className="text-base font-semibold">Skip</Text>
+          <Text className="text-base font-semibold text-black">Skip</Text>
         </Pressable>
       </View>
 
