@@ -24,7 +24,6 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: foreground,
         // Disable the static render of the header on web
         // to prevent a hydration error in React Navigation v6.
         headerShown: useClientOnlyValue(false, true),
@@ -33,11 +32,12 @@ export default function TabLayout() {
         },
         headerTitleAlign: "left",
         headerTitleStyle: {
-          fontSize: 32,
+          fontSize: 30,
           fontWeight: "700",
           color: foreground,
         },
         headerShadowVisible: false,
+        tabBarActiveTintColor: foreground,
         tabBarStyle: {
           backgroundColor: tabBackGround,
           height: Platform.select({ ios: 90, android: 75 }),
