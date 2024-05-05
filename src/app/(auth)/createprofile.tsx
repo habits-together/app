@@ -44,7 +44,7 @@ export default function Createprofile() {
           <View className="mt-5 flex flex-col">
             <Text className="text-base font-semibold">Display name</Text>
             <TextInput
-              className="h-10 rounded-lg border border-stone-300 px-3 mt-1"
+              className="mt-1 h-10 rounded-lg border border-stone-300 px-3"
               style={{
                 borderColor: DefaultColors[colorScheme].tint,
                 color: DefaultColors[colorScheme].text,
@@ -59,7 +59,7 @@ export default function Createprofile() {
           <View className="mt-5 flex flex-col">
             <Text className="text-base font-semibold">Unique username</Text>
             <TextInput
-              className="h-10 rounded-lg border border-stone-300 px-3 mt-1"
+              className="mt-1 h-10 rounded-lg border border-stone-300 px-3"
               style={{
                 borderColor: DefaultColors[colorScheme].tint,
                 color: DefaultColors[colorScheme].text,
