@@ -3,7 +3,7 @@ import colors from "./colors";
 export default {
   light: {
     text: colors.black,
-    placeholder: colors.stone["700"],
+    placeholder: colors.stone["400"],
     background: colors.white,
     tint: colors.stone.base,
     tabIconDefault: colors.stone["300"],
