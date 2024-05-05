@@ -8,6 +8,7 @@ import {
   IconSend,
   IconSparkles,
   IconSun,
+  IconUserPlus,
 } from "@tabler/icons-react-native";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { router } from "expo-router";
@@ -86,6 +87,13 @@ export default function Settings() {
             title: "Go to sign in",
             onPress: () => {
               resetNavigationStack("/(auth)/signin");
+            },
+          },
+          {
+            icon: <Icon icon={IconUserPlus} />,
+            title: "Create account",
+            onPress: () => {
+              resetNavigationStack("/(auth)/createprofile");
             },
           },
         ]}
