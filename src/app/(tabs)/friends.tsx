@@ -3,6 +3,7 @@ import FriendRequestList from "@/src/components/FriendRequestList";
 import HabitInviteList from "@/src/components/HabitInviteList";
 import { ScrollView } from "@/src/components/Themed";
 
+
 export default function FriendsTab() {
   return (
     <ScrollView

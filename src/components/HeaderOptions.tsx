@@ -89,3 +89,19 @@ export function viewProfileOptions(
     ...sharedOptions(colorScheme),
   };
 }
+
+export function inviteFriendsOptions(
+  colorScheme: string,
+): NativeStackNavigationOptions {
+  return {
+    presentation: "modal",
+    headerLeft: () => <HeaderBackButton chevronDirection="down" />,
+    headerTitle: () => (
+      <Text className="text-base font-semibold text-black dark:text-white">
+        Invite friends
+      </Text>
+    ),
+    headerTitleAlign: "center",
+    ...sharedOptions(colorScheme),
+  };
+}

@@ -118,3 +118,33 @@ export async function getMockHabitInvites() {
   ];
   return mockHabitInvites;
 }
+
+
+export interface FriendData {
+  id: number;
+  displayName: string;
+  userName: string;
+  profilePicUrl: string;
+  commonHabits: Habit[];
+}
+
+
+export async function getMockFriends() {
+  const mockFriends: FriendData[] = [
+    {
+      id: 1,
+      displayName: "Someone else",
+      userName: "some1else",
+      profilePicUrl: "",
+      commonHabits: mockHabitData,
+    },
+    {
+      id: 2,
+      displayName: "Eduardo",
+      userName: "eduardo_012003",
+      profilePicUrl: "",
+      commonHabits: [],
+    },
+  ];
+  return mockFriends;
+}

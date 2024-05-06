@@ -9,9 +9,10 @@ import {
   IconTrash,
   IconUserPlus,
 } from "@tabler/icons-react-native";
-import { useLocalSearchParams } from "expo-router";
+import { Link, useLocalSearchParams } from "expo-router";
 import Icon from "@/src/components/Icon";
 import IconButton from "@/src/components/IconButton";
+import { Pressable } from "react-native";
 
 const habits = [
   {
@@ -54,8 +55,12 @@ export default function ViewHabitComponent() {
 
         {/* Edit/Delete Buttons */}
         <View className="flex flex-row" style={{ gap: 10 }}>
-          <IconButton icon={IconEdit} text="Edit habit" />
-          <IconButton icon={IconTrash} text="Delete habit" />
+          <Pressable className="flex-1">
+            <IconButton icon={IconEdit} text="Edit habit" />
+          </Pressable>
+          <Pressable className="flex-1">
+            <IconButton icon={IconTrash} text="Delete habit" />
+          </Pressable>
         </View>
 
         {/* Heatmap */}
@@ -70,8 +75,12 @@ export default function ViewHabitComponent() {
 
         {/* Full/Edit Heatmap Buttons */}
         <View className="flex flex-row" style={{ gap: 10 }}>
-          <IconButton icon={IconHistory} text="Full history" />
-          <IconButton icon={IconCalendarMonth} text="Edit dates" />
+          <Pressable className="flex-1">
+            <IconButton icon={IconHistory} text="Full history" />
+          </Pressable>
+          <Pressable className="flex-1">
+            <IconButton icon={IconCalendarMonth} text="Edit dates" />
+          </Pressable>
         </View>
       </View>
 
@@ -85,8 +94,20 @@ export default function ViewHabitComponent() {
 
       {/* Invite/Share Buttons*/}
       <View className="flex flex-row" style={{ gap: 10 }}>
-        <IconButton icon={IconUserPlus} text="Invite friends" />
-        <IconButton icon={IconShare2} text="Share link" />
+        <Link
+          push
+          href={{
+            pathname: "/modals/invitefriends",
+          }}
+          asChild
+        >
+          <Pressable className="flex-1">
+            <IconButton icon={IconUserPlus} text="Invite friends" />
+          </Pressable>
+        </Link>
+        <Pressable className="flex-1">
+          <IconButton icon={IconShare2} text="Share link" />
+        </Pressable>
       </View>
     </View>
   );
