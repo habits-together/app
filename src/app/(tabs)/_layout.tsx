@@ -61,7 +61,7 @@ export default function TabLayout() {
               text="New Habit"
               icon={IconPlus}
               onPress={() => {
-                router.push('/habits/createhabit');
+                router.push("/habits/createhabit");
               }}
             />
           ),

@@ -14,15 +14,17 @@ export default function HabitIcons() {
   const { icon, setIcon } = useContext(IconContext);
 
   return (
-    <View className="flex-1 flex flex-col pt-12 px-5 gap-y-5">
+    <View className="flex flex-1 flex-col gap-y-5 px-5 pt-12">
       {/* Header */}
-      <View className="relative flex flex-row justify-center items-center">
-        <TouchableOpacity className="absolute -left-1 px-2 py-1 flex flex-row items-center justify-center"
+      <View className="relative flex flex-row items-center justify-center">
+        <TouchableOpacity
+          className="absolute -left-1 flex flex-row items-center justify-center px-2 py-1"
           onPress={() => {
             router.back();
-          }}>
+          }}
+        >
           <Icon icon={IconChevronLeft} size={20} />
-          <Text className="font-semibold text-base ml-1">Back</Text>
+          <Text className="ml-1 text-base font-semibold">Back</Text>
         </TouchableOpacity>
         <Text className="text-base font-semibold">Select Icon</Text>
       </View>
@@ -42,7 +44,9 @@ export default function HabitIcons() {
         <Text className="text-base font-semibold">Social & Family</Text>
       </View>
       <View>
-        <Text className="text-base font-semibold">Mindfullness & Spirituality</Text>
+        <Text className="text-base font-semibold">
+          Mindfullness & Spirituality
+        </Text>
       </View>
       <View>
         <Text className="text-base font-semibold">Financial</Text>
