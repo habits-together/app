@@ -74,7 +74,7 @@ function InviteButton() {
   }
   return (
     <Pressable
-      className="flex flex-row items-center justify-center rounded-full border border-stone-300 py-1.5 px-3 mt-1"
+      className="flex flex-row items-center justify-center rounded-full border border-stone-300 py-1 px-3 mt-1 mr-1"
       android_ripple={{ color: colors.stone["300"], radius: 55 }}
       onPress={InviteFriends}
     >
