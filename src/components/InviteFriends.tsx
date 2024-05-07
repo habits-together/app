@@ -8,7 +8,7 @@ import { fetchSingleUserThumbnail } from "../lib/getRandomProfilePics";
 import FriendSearchBar from "./FriendSearchBar";
 import { Pressable } from "react-native";
 import Icon from "./Icon";
-import { IconLink } from "@tabler/icons-react-native";
+import { IconShare2 } from "@tabler/icons-react-native";
 import colors from "../constants/colors";
 
 export default function InviteFriends() {
@@ -55,10 +55,10 @@ export default function InviteFriends() {
 
 function ShareInviteLink() {
   return (
-    <Pressable className="mt-2 w-auto flex-row items-center justify-center border rounded-xl p-2.5 border-stone-300"
+    <Pressable className="h-10 mt-2 w-auto flex-row items-center justify-center border rounded-xl border-stone-300"
       android_ripple={{ color: colors.stone["300"], radius: 200 }}
     >
-      <Icon icon={IconLink} size={17} strokeWidth={3} />
+      <Icon icon={IconShare2} size={17} strokeWidth={3} />
       <Text className="ml-2 font-semibold text-base">Share Invite Link</Text>
     </Pressable>
   )
