@@ -1,4 +1,3 @@
-
 import { Text, View } from "@/src/components/Themed";
 import { FriendData, getMockFriends } from "@/src/lib/mockData";
 import { useEffect, useState } from "react";
@@ -52,14 +51,14 @@ export default function InviteFriends() {
   );
 }
 
-
 function ShareInviteLink() {
   return (
-    <Pressable className="h-10 mt-2 w-auto flex-row items-center justify-center border rounded-xl border-stone-300"
+    <Pressable
+      className="mt-2 h-10 w-auto flex-row items-center justify-center rounded-xl border border-stone-300"
       android_ripple={{ color: colors.stone["300"], radius: 200 }}
     >
       <Icon icon={IconShare2} size={17} strokeWidth={3} />
-      <Text className="ml-2 font-semibold text-base">Share Invite Link</Text>
+      <Text className="ml-2 text-base font-semibold">Share Invite Link</Text>
     </Pressable>
-  )
+  );
 }
