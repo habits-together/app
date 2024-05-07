@@ -7,12 +7,14 @@ import colors from "../constants/colors";
 import { Habit } from "../lib/mockData";
 import DotsMenu from "./DotsMenu";
 import Icon from "./Icon";
+import { IconPlus } from "@tabler/icons-react-native";
 
 export type FriendCardProps = {
   displayName: string;
   userName: string;
   profilePic: JSX.Element;
   commonHabits: Habit[];
+  displayType?: "normal" | "invite";
 };
 
 export default function FriendCard({
@@ -20,6 +22,7 @@ export default function FriendCard({
   userName,
   profilePic,
   commonHabits,
+  displayType = "normal",
 }: FriendCardProps) {
   return (
     <Link
@@ -39,23 +42,48 @@ export default function FriendCard({
               {userName}
             </Text>
           </View>
-          <View className="self-start">
-            <DotsMenu
-              options={[
-                {
-                  label: "Remove Friend",
-                  color: colors.black,
-                  action: () => alert(`Remove Friend`),
-                },
-              ]}
-            />
-          </View>
+          {displayType === "normal" && (
+            <View className="self-start">
+              <DotsMenu
+                options={[
+                  {
+                    label: "Remove Friend",
+                    color: colors.black,
+                    action: () => alert(`Remove Friend`),
+                  },
+                ]}
+              />
+            </View>
+          )}
+          {displayType === "invite" && (
+            <View className="self-start">
+              <InviteButton />
+            </View>
+          )}
         </View>
         <CommonHabits commonHabits={commonHabits} />
       </Pressable>
     </Link>
   );
 }
+
+function InviteButton() {
+  const InviteFriends = () => {
+    // TODO: Implement invite friends
+    alert("Invite friends");
+  }
+  return (
+    <Pressable
+      className="flex flex-row items-center justify-center rounded-full border border-stone-300 py-1.5 px-3 mt-1"
+      android_ripple={{ color: colors.stone["300"], radius: 55 }}
+      onPress={InviteFriends}
+    >
+      <Icon icon={IconPlus} size={16} strokeWidth={2.5} />
+      <Text className="ml-1 text-xs font-semibold">Invite</Text>
+    </Pressable>
+  );
+}
+
 
 function CommonHabits({ commonHabits }: { commonHabits: Habit[] }) {
   const { colorScheme } = useColorScheme();

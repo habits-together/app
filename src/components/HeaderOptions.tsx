@@ -1,5 +1,5 @@
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
-import { IconEdit } from "@tabler/icons-react-native";
+import { IconEdit, IconCheck } from "@tabler/icons-react-native";
 import { useGlobalSearchParams } from "expo-router";
 import { Pressable } from "react-native";
 import colors from "../constants/colors";
@@ -7,6 +7,7 @@ import DotsMenu from "./DotsMenu";
 import HeaderBackButton from "./HeaderBackButton";
 import Icon from "./Icon";
 import { Text, View } from "./Themed";
+import RoundedButton from "./RoundedButton";
 
 function sharedOptions(colorScheme: string): NativeStackNavigationOptions {
   return {
@@ -100,6 +101,16 @@ export function inviteFriendsOptions(
       <Text className="text-base font-semibold text-black dark:text-white">
         Invite friends
       </Text>
+    ),
+    headerRight: () => (
+      <RoundedButton
+        text="Done"
+        icon={IconCheck}
+        strokeWidth={4}
+        onPress={() => {
+          alert("Done");
+        }}
+      />
     ),
     headerTitleAlign: "center",
     ...sharedOptions(colorScheme),

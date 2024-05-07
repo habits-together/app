@@ -6,7 +6,7 @@ import { useColorScheme } from "nativewind";
 import { IconSearch } from "@tabler/icons-react-native";
 import Icon from "./Icon";
 
-export default function FriendSearchBar() {
+export default function FriendSearchBar({ placeholder }: { placeholder: string }) {
   const [text, onChangeText] = useState("");
   const { colorScheme } = useColorScheme();
   return (
@@ -21,7 +21,7 @@ export default function FriendSearchBar() {
         />
       </View>
       <TextInput
-        className="border-1 rounded-xl p-2.5 pl-10"
+        className="border rounded-xl p-2.5 pl-10"
         style={{
           height: 40,
           color: colorScheme === "dark" ? colors.stone[200] : colors.stone[600],
@@ -37,7 +37,7 @@ export default function FriendSearchBar() {
         }
         onChangeText={onChangeText}
         value={text}
-        placeholder="Search your friends list..."
+        placeholder={placeholder}
         keyboardType="default"
       />
     </SafeAreaView>

@@ -5,6 +5,11 @@ import { useEffect, useState } from "react";
 import FriendCard from "./FriendCard";
 import SmallProfilePicture from "./ProfilePicture";
 import { fetchSingleUserThumbnail } from "../lib/getRandomProfilePics";
+import FriendSearchBar from "./FriendSearchBar";
+import { Pressable } from "react-native";
+import Icon from "./Icon";
+import { IconLink } from "@tabler/icons-react-native";
+import colors from "../constants/colors";
 
 export default function InviteFriends() {
   const [friends, setFriends] = useState<FriendData[]>([]);
@@ -24,12 +29,14 @@ export default function InviteFriends() {
     fetchFriends();
   }, []);
   return (
-    <View className="flex-1 p-4" style={{ gap: 0 }}>
+    <View className="flex-1 p-4">
+      <FriendSearchBar placeholder="Search for someone..." />
+      <ShareInviteLink />
       {friends.length === 1 && (
         <Text className="text-xl font-bold">My friend</Text>
       )}
       {friends.length > 1 && (
-        <Text className="text-xl font-bold">My friends</Text>
+        <Text className="mt-4 text-xl font-bold">My friends</Text>
       )}
       {friends.map((friend) => (
         <FriendCard
@@ -38,9 +45,21 @@ export default function InviteFriends() {
           userName={friend.userName}
           profilePic={<SmallProfilePicture picUrl={friend.profilePicUrl} />}
           commonHabits={friend.commonHabits}
+          displayType="invite"
         />
       ))}
     </View>
   );
 }
 
+
+function ShareInviteLink() {
+  return (
+    <Pressable className="mt-2 w-auto flex-row items-center justify-center border rounded-xl p-2.5 border-stone-300"
+      android_ripple={{ color: colors.stone["300"], radius: 200 }}
+    >
+      <Icon icon={IconLink} size={17} strokeWidth={3} />
+      <Text className="ml-2 font-semibold text-base">Share Invite Link</Text>
+    </Pressable>
+  )
+}
