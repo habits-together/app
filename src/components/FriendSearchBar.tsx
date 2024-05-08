@@ -6,11 +6,15 @@ import { useColorScheme } from "nativewind";
 import { IconSearch } from "@tabler/icons-react-native";
 import Icon from "./Icon";
 
-export default function FriendSearchBar({ placeholder }: { placeholder: string }) {
+export default function FriendSearchBar({
+  placeholder,
+}: {
+  placeholder: string;
+}) {
   const [text, onChangeText] = useState("");
   const { colorScheme } = useColorScheme();
   return (
-    <SafeAreaView className="h-10 my-1">
+    <SafeAreaView className="my-1 h-10">
       <View className="absolute left-2 top-2">
         <Icon
           icon={IconSearch}
@@ -21,7 +25,7 @@ export default function FriendSearchBar({ placeholder }: { placeholder: string }
         />
       </View>
       <TextInput
-        className="border rounded-xl pl-10 border-stone-300"
+        className="rounded-xl border border-stone-300 pl-10"
         style={{
           height: 40,
           color: colorScheme === "dark" ? colors.stone[200] : colors.stone[600],
@@ -30,9 +34,7 @@ export default function FriendSearchBar({ placeholder }: { placeholder: string }
         cursorColor={
           colorScheme === "dark" ? colors.stone[200] : colors.stone[600]
         }
-        placeholderTextColor={
-          colors.stone[300]
-        }
+        placeholderTextColor={colors.stone[300]}
         onChangeText={onChangeText}
         value={text}
         placeholder={placeholder}

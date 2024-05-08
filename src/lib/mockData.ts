@@ -119,7 +119,6 @@ export async function getMockHabitInvites() {
   return mockHabitInvites;
 }
 
-
 export interface FriendData {
   id: number;
   displayName: string;
@@ -127,7 +126,6 @@ export interface FriendData {
   profilePicUrl: string;
   commonHabits: Habit[];
 }
-
 
 export async function getMockFriends() {
   const mockFriends: FriendData[] = [

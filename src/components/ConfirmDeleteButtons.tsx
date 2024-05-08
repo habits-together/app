@@ -16,13 +16,12 @@ export default function ConfirmAndDeleteButtons({
 
   return (
     <View className="flex flex-row bg-transparent">
-      <Pressable className="flex justify-center rounded-xl border border-stone-300 bg-white px-2.5 py-1.5 dark:bg-transparent"
+      <Pressable
+        className="flex justify-center rounded-xl border border-stone-300 bg-white px-2.5 py-1.5 dark:bg-transparent"
         android_ripple={{ color: colors.stone["300"], radius: 200 }}
         onPress={confirmInvite}
       >
-        <Text
-          className="font-semibold text-black dark:text-stone-100"
-        >
+        <Text className="font-semibold text-black dark:text-stone-100">
           Confirm
         </Text>
       </Pressable>

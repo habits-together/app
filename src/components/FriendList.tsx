@@ -25,7 +25,6 @@ export default function FriendList() {
     fetchFriends();
   }, []);
 
-
   return (
     <View className="flex flex-col">
       {friends.length === 1 && (

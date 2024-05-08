@@ -85,7 +85,7 @@ export default function FriendCard({
 function InviteButton({ inviteFunc }: { inviteFunc: () => void }) {
   return (
     <Pressable
-      className="flex flex-row items-center justify-center rounded-full border border-stone-300 py-1 px-3 mt-1 mr-1"
+      className="mr-1 mt-1 flex flex-row items-center justify-center rounded-full border border-stone-300 px-3 py-1"
       android_ripple={{ color: colors.stone["300"], radius: 55 }}
       onPress={inviteFunc}
     >
@@ -94,7 +94,6 @@ function InviteButton({ inviteFunc }: { inviteFunc: () => void }) {
     </Pressable>
   );
 }
-
 
 function CommonHabits({ commonHabits }: { commonHabits: Habit[] }) {
   const { colorScheme } = useColorScheme();

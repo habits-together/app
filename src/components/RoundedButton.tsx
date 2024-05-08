@@ -17,7 +17,7 @@ export default function RoundedButton({
 }) {
   return (
     <Pressable
-      className="w-auto flex-row items-center justify-center rounded-full border border-stone-300 py-1.5 px-3"
+      className="w-auto flex-row items-center justify-center rounded-full border border-stone-300 px-3 py-1.5"
       android_ripple={{ color: colors.stone["300"], radius: 55 }}
       onPress={onPress}
     >
