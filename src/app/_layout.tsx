@@ -6,7 +6,11 @@ import * as SplashScreen from "expo-splash-screen";
 import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
 import { MenuProvider } from "react-native-popup-menu";
-import { editProfileOptions, viewHabitOptions, viewProfileOptions } from "../components/HeaderOptions";
+import {
+  editProfileOptions,
+  viewHabitOptions,
+  viewProfileOptions,
+} from "../components/HeaderOptions";
 
 export {
   // Catch any errors thrown by the Layout component.

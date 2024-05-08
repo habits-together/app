@@ -3,7 +3,12 @@ import { Text, View } from "@/src/components/Themed";
 import DefaultColors from "@/src/constants/DefaultColors";
 import { fetchSingleUserThumbnail } from "@/src/lib/getRandomProfilePics";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
-import { IconTrash, IconCirclePlus, IconX, IconCheck } from "@tabler/icons-react-native";
+import {
+  IconTrash,
+  IconCirclePlus,
+  IconX,
+  IconCheck,
+} from "@tabler/icons-react-native";
 import { useColorScheme } from "nativewind";
 import { useEffect, useState } from "react";
 import { Pressable, StatusBar } from "react-native";
@@ -122,7 +127,9 @@ export default function Createprofile() {
           className="mt-10 h-12 flex-row items-center justify-center rounded-lg border-2 border-[#FF0000]"
         >
           <Icon lightColor="#FF0000" darkColor="#FF0000" icon={IconTrash} />
-          <Text className="ml-2 text-lg font-semibold text-[#FF0000]">Delete account</Text>
+          <Text className="ml-2 text-lg font-semibold text-[#FF0000]">
+            Delete account
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
