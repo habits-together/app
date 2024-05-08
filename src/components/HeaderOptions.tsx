@@ -128,7 +128,7 @@ export function editProfileOptions(
         text="Cancel"
         icon={IconX}
         onPress={() => {
-          alert("Add friends");
+          router.replace("/(tabs)/settings");
         }}
       />
     ),
@@ -142,7 +142,7 @@ export function editProfileOptions(
         text="Done"
         icon={IconCheck}
         onPress={() => {
-          alert("Add friends");
+          alert("Done");
         }}
       />
     ),
