@@ -1,6 +1,7 @@
 import {
   viewHabitOptions,
   viewProfileOptions,
+  inviteFriendsOptions,
 } from "@/src/components/HeaderOptions";
 import { Stack } from "expo-router";
 import { useColorScheme } from "nativewind";
@@ -22,6 +23,10 @@ export default function SettingsLayout() {
         <Stack.Screen
           name="viewhabit"
           options={viewHabitOptions(colorScheme)}
+        />
+        <Stack.Screen
+          name="invitefriends"
+          options={inviteFriendsOptions(colorScheme)}
         />
       </Stack>
     </MenuProvider>

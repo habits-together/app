@@ -2,48 +2,27 @@ import { View, Text } from "@/src/components/Themed";
 import FriendCard from "@/src/components/FriendCard";
 import { fetchSingleUserThumbnail } from "../lib/getRandomProfilePics";
 import { useEffect, useState } from "react";
-import { Habit, mockHabitData } from "@/src/lib/mockData";
 import SmallProfilePicture from "./ProfilePicture";
-
-// GPT COOKED FOR THIS ONE 🔥
-interface FriendData {
-  id: number;
-  displayName: string;
-  userName: string;
-  profilePicUrl: string;
-  commonHabits: Habit[];
-}
+import { FriendData, getMockFriends } from "@/src/lib/mockData";
 
 export default function FriendList() {
-  const [friends, setFriends] = useState<FriendData[]>([
-    {
-      id: 1,
-      displayName: "Someone else",
-      userName: "some1else",
-      profilePicUrl: "",
-      commonHabits: mockHabitData,
-    },
-    {
-      id: 2,
-      displayName: "Eduardo",
-      userName: "eduardo_012003",
-      profilePicUrl: "",
-      commonHabits: [],
-    },
-  ]);
+  const [friends, setFriends] = useState<FriendData[]>([]);
 
   useEffect(() => {
-    const fetchPics = async () => {
+    const fetchFriends = async () => {
+      const data = await getMockFriends();
+      setFriends(data);
       const pics = await Promise.all(
-        friends.map(() => fetchSingleUserThumbnail()),
+        data.map(() => fetchSingleUserThumbnail()),
       );
-      const updatedFriends = friends.map((friend, index) => ({
+      const updatedFriends = data.map((friend, index) => ({
         ...friend,
         profilePicUrl: pics[index].imgurl,
       }));
       setFriends(updatedFriends);
     };
-    fetchPics();
+
+    fetchFriends();
   }, []);
 
   return (

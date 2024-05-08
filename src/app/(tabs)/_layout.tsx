@@ -1,5 +1,6 @@
 import Icon from "@/src/components/Icon";
-import RoundedHeaderButton from "@/src/components/RoundedHeaderButton";
+import RoundedButton from "@/src/components/RoundedButton";
+import { View } from "@/src/components/Themed";
 import { useClientOnlyValue } from "@/src/components/useClientOnlyValue";
 import colors from "@/src/constants/colors";
 import {
@@ -57,13 +58,15 @@ export default function TabLayout() {
         options={{
           title: "Habits",
           headerRight: () => (
-            <RoundedHeaderButton
-              text="New Habit"
-              icon={IconPlus}
-              onPress={() => {
-                alert("New Habit");
-              }}
-            />
+            <View className="mr-4">
+              <RoundedButton
+                text="New Habit"
+                icon={IconPlus}
+                onPress={() => {
+                  alert("New Habit");
+                }}
+              />
+            </View>
           ),
           tabBarIcon: ({ color }) => (
             <Icon
@@ -80,13 +83,15 @@ export default function TabLayout() {
         options={{
           title: "Friends",
           headerRight: () => (
-            <RoundedHeaderButton
-              text="Add friends"
-              icon={IconUserPlus}
-              onPress={() => {
-                alert("Add friends");
-              }}
-            />
+            <View className="mr-4">
+              <RoundedButton
+                text="Add friends"
+                icon={IconUserPlus}
+                onPress={() => {
+                  alert("Add friends");
+                }}
+              />
+            </View>
           ),
           tabBarIcon: ({ color }) => (
             <Icon
