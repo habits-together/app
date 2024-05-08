@@ -29,7 +29,7 @@ export default function FriendCard({
     // TODO: Implement invite friends
     setInviteSent(true);
     // alert("Invite friends");
-  }
+  };
   return (
     <Link
       push
@@ -61,20 +61,17 @@ export default function FriendCard({
               />
             </View>
           )}
-          {displayType === "invite" && (
-            inviteSent ? (
-              <View className="self-start flex-row items-center pr-5 pt-2">
+          {displayType === "invite" &&
+            (inviteSent ? (
+              <View className="flex-row items-center self-start pr-5 pt-2">
                 <Icon icon={IconCheck} size={16} strokeWidth={3} />
-                <Text className="ml-1 text-xs font-semibold">
-                  Sent
-                </Text>
+                <Text className="ml-1 text-xs font-semibold">Sent</Text>
               </View>
             ) : (
               <View className="self-start">
                 <InviteButton inviteFunc={InviteFriends} />
               </View>
-            )
-          )}
+            ))}
         </View>
         <CommonHabits commonHabits={commonHabits} />
       </Pressable>
