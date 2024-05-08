@@ -6,7 +6,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
 import { MenuProvider } from "react-native-popup-menu";
-import { viewHabitOptions } from "../components/HeaderOptions";
+import { editProfileOptions, viewHabitOptions, viewProfileOptions } from "../components/HeaderOptions";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -62,6 +62,10 @@ function RootLayoutNav() {
           <Stack.Screen
             name="(auth)/createprofile"
             options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="(auth)/editprofile"
+            options={editProfileOptions(colorScheme)}
           />
           <Stack.Screen
             name="viewhabit"

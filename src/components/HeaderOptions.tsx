@@ -1,5 +1,5 @@
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
-import { IconEdit, IconCheck } from "@tabler/icons-react-native";
+import { IconCheck, IconEdit, IconX } from "@tabler/icons-react-native";
 import { router, useGlobalSearchParams } from "expo-router";
 import { Pressable } from "react-native";
 import colors from "../constants/colors";
@@ -109,6 +109,40 @@ export function inviteFriendsOptions(
         strokeWidth={4}
         onPress={() => {
           router.back();
+        }}
+      />
+    ),
+    headerTitleAlign: "center",
+    ...sharedOptions(colorScheme),
+  };
+}
+
+export function editProfileOptions(
+  colorScheme: string,
+): NativeStackNavigationOptions {
+  const { userName } = useGlobalSearchParams<{ userName: string }>();
+
+  return {
+    headerLeft: () => (
+      <RoundedButton
+        text="Cancel"
+        icon={IconX}
+        onPress={() => {
+          alert("Add friends");
+        }}
+      />
+    ),
+    headerTitle: () => (
+      <Text className="text-base font-semibold text-black dark:text-white">
+        myUsername
+      </Text>
+    ),
+    headerRight: () => (
+      <RoundedButton
+        text="Done"
+        icon={IconCheck}
+        onPress={() => {
+          alert("Add friends");
         }}
       />
     ),
