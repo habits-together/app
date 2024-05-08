@@ -1,6 +1,6 @@
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import { IconEdit, IconCheck } from "@tabler/icons-react-native";
-import { useGlobalSearchParams } from "expo-router";
+import { router, useGlobalSearchParams } from "expo-router";
 import { Pressable } from "react-native";
 import colors from "../constants/colors";
 import DotsMenu from "./DotsMenu";
@@ -108,7 +108,7 @@ export function inviteFriendsOptions(
         icon={IconCheck}
         strokeWidth={4}
         onPress={() => {
-          alert("Done");
+          router.back();
         }}
       />
     ),

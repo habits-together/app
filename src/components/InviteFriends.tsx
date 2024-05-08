@@ -32,12 +32,7 @@ export default function InviteFriends() {
     <View className="flex-1 p-4">
       <FriendSearchBar placeholder="Search for someone..." />
       <ShareInviteLink />
-      {friends.length === 1 && (
-        <Text className="text-xl font-bold">My friend</Text>
-      )}
-      {friends.length > 1 && (
-        <Text className="mt-4 text-xl font-bold">My friends</Text>
-      )}
+      <Text className="mt-4 text-xl font-bold">My friends</Text>
       {friends.map((friend) => (
         <FriendCard
           key={friend.id}

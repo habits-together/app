@@ -1,13 +1,13 @@
 import { Text, View } from "@/src/components/Themed";
 import { Link } from "expo-router";
 import { useColorScheme } from "nativewind";
-import React from "react";
+import React, { useState } from "react";
 import { Pressable } from "react-native";
 import colors from "../constants/colors";
 import { Habit } from "../lib/mockData";
 import DotsMenu from "./DotsMenu";
 import Icon from "./Icon";
-import { IconPlus } from "@tabler/icons-react-native";
+import { IconCheck, IconPlus } from "@tabler/icons-react-native";
 
 export type FriendCardProps = {
   displayName: string;
@@ -24,6 +24,12 @@ export default function FriendCard({
   commonHabits,
   displayType = "normal",
 }: FriendCardProps) {
+  const [inviteSent, setInviteSent] = useState(false);
+  const InviteFriends = () => {
+    // TODO: Implement invite friends
+    setInviteSent(true);
+    // alert("Invite friends");
+  }
   return (
     <Link
       push
@@ -56,9 +62,18 @@ export default function FriendCard({
             </View>
           )}
           {displayType === "invite" && (
-            <View className="self-start">
-              <InviteButton />
-            </View>
+            inviteSent ? (
+              <View className="self-start flex-row items-center pr-5 pt-2">
+                <Icon icon={IconCheck} size={16} strokeWidth={3} />
+                <Text className="ml-1 text-xs font-semibold">
+                  Sent
+                </Text>
+              </View>
+            ) : (
+              <View className="self-start">
+                <InviteButton inviteFunc={InviteFriends} />
+              </View>
+            )
           )}
         </View>
         <CommonHabits commonHabits={commonHabits} />
@@ -67,16 +82,12 @@ export default function FriendCard({
   );
 }
 
-function InviteButton() {
-  const InviteFriends = () => {
-    // TODO: Implement invite friends
-    alert("Invite friends");
-  }
+function InviteButton({ inviteFunc }: { inviteFunc: () => void }) {
   return (
     <Pressable
       className="flex flex-row items-center justify-center rounded-full border border-stone-300 py-1 px-3 mt-1 mr-1"
       android_ripple={{ color: colors.stone["300"], radius: 55 }}
-      onPress={InviteFriends}
+      onPress={inviteFunc}
     >
       <Icon icon={IconPlus} size={16} strokeWidth={2.5} />
       <Text className="ml-1 text-xs font-semibold">Invite</Text>
