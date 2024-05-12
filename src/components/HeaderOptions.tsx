@@ -117,7 +117,6 @@ export function inviteFriendsOptions(
   };
 }
 
-
 export function emailSignUpOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
@@ -126,7 +125,7 @@ export function emailSignUpOptions(
     // make header center
     headerTitleAlign: "center",
     headerTitle: () => (
-      <Text className="text-base text-center font-semibold text-black dark:text-white">
+      <Text className="text-center text-base font-semibold text-black dark:text-white">
         Sign Up
       </Text>
     ),
@@ -143,7 +142,7 @@ export function emailLoginOptions(
     // make header center
     headerTitleAlign: "center",
     headerTitle: () => (
-      <Text className="text-base text-center font-semibold text-black dark:text-white">
+      <Text className="text-center text-base font-semibold text-black dark:text-white">
         Login
       </Text>
     ),
@@ -160,7 +159,7 @@ export function forgotPasswordOptions(
     // make header center
     headerTitleAlign: "center",
     headerTitle: () => (
-      <Text className="text-base text-center font-semibold text-black dark:text-white">
+      <Text className="text-center text-base font-semibold text-black dark:text-white">
         Password reset
       </Text>
     ),

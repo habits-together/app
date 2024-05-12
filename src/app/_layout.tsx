@@ -6,7 +6,12 @@ import * as SplashScreen from "expo-splash-screen";
 import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
 import { MenuProvider } from "react-native-popup-menu";
-import { viewHabitOptions, emailSignUpOptions, emailLoginOptions, forgotPasswordOptions } from "../components/HeaderOptions";
+import {
+  viewHabitOptions,
+  emailSignUpOptions,
+  emailLoginOptions,
+  forgotPasswordOptions,
+} from "../components/HeaderOptions";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -59,13 +64,16 @@ function RootLayoutNav() {
         >
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="(auth)/signin" />
-          <Stack.Screen name="(auth)/emailSignUp"
+          <Stack.Screen
+            name="(auth)/emailSignUp"
             options={emailSignUpOptions(colorScheme)}
           />
-          <Stack.Screen name="(auth)/emailLogin"
+          <Stack.Screen
+            name="(auth)/emailLogin"
             options={emailLoginOptions(colorScheme)}
           />
-          <Stack.Screen name="(auth)/forgotpassword"
+          <Stack.Screen
+            name="(auth)/forgotpassword"
             options={forgotPasswordOptions(colorScheme)}
           />
           <Stack.Screen
