@@ -57,7 +57,7 @@ export default function Signin() {
     resetNavigationStack("/");
   }
   async function signInWithEmail() {
-    resetNavigationStack("/");
+    resetNavigationStack("/(auth)/emailSignUp");
   }
   async function continueAsGuest() {
     resetNavigationStack("/");
@@ -158,7 +158,7 @@ export default function Signin() {
               <GoogleButton />
               <Pressable className="mt-2" onPress={signInWithEmail}>
                 <Text className="text-base font-semibold">
-                  Sign up or log in with Email
+                  Continue with Email
                 </Text>
               </Pressable>
             </>
@@ -184,7 +184,7 @@ export default function Signin() {
           className="h-5 w-5 rounded-[20px]"
           source={require("../../../assets/images/google.png")}
         />
-        <Text className="ml-2 text-lg font-semibold text-black">
+        <Text className="ml-2 text-xl font-semibold text-black">
           Continue with Google
         </Text>
       </Pressable>
@@ -201,7 +201,7 @@ export default function Signin() {
           className="h-5 w-5 rounded-[20px]"
           source={require("../../../assets/images/apple.png")}
         />
-        <Text className="ml-2 text-lg font-semibold text-black">
+        <Text className="ml-2 text-xl font-semibold text-black">
           Continue with Apple
         </Text>
       </Pressable>
@@ -220,7 +220,7 @@ export default function Signin() {
           darkColor={colors.black}
           strokeWidth={2.2}
         />
-        <Text className="ml-2 text-lg font-semibold text-black">
+        <Text className="ml-2 text-xl font-semibold text-black">
           Continue with Email
         </Text>
       </Pressable>
