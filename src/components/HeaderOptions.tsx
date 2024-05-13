@@ -128,13 +128,13 @@ export function editProfileOptions(
         text="Cancel"
         icon={IconX}
         onPress={() => {
-          router.replace("/(tabs)/settings");
+          router.back();
         }}
       />
     ),
     headerTitle: () => (
       <Text className="text-base font-semibold text-black dark:text-white">
-        myUsername
+        { userName }
       </Text>
     ),
     headerRight: () => (
@@ -142,7 +142,7 @@ export function editProfileOptions(
         text="Done"
         icon={IconCheck}
         onPress={() => {
-          alert("Done");
+          router.back();
         }}
       />
     ),
