@@ -11,7 +11,7 @@ import {
   viewHabitOptions,
   viewProfileOptions,
 } from "../components/HeaderOptions";
-import 'react-native-reanimated'
+import "react-native-reanimated";
 
 export {
   // Catch any errors thrown by the Layout component.

@@ -134,7 +134,7 @@ export function editProfileOptions(
     ),
     headerTitle: () => (
       <Text className="text-base font-semibold text-black dark:text-white">
-        { userName }
+        {userName}
       </Text>
     ),
     headerRight: () => (

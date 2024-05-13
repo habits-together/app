@@ -8,11 +8,7 @@ import { IconCheck } from "@tabler/icons-react-native";
 import { useColorScheme } from "nativewind";
 import { useEffect, useState } from "react";
 import { StatusBar } from "react-native";
-import {
-  Platform,
-  SafeAreaView,
-  TouchableOpacity,
-} from "react-native";
+import { Platform, SafeAreaView, TouchableOpacity } from "react-native";
 
 export default function Createprofile() {
   const { colorScheme } = useColorScheme();
@@ -30,7 +26,7 @@ export default function Createprofile() {
       {/* Form */}
       <View className="flex w-screen flex-col px-5">
         <Text className="text-3xl font-bold">Create profile</Text>
-        <ProfileCreationBoxes editPage={false}/>
+        <ProfileCreationBoxes editPage={false} />
         {/* Complete profile */}
         <TouchableOpacity
           onPress={() => resetNavigationStack("/")}

@@ -2,18 +2,16 @@ import Icon from "@/src/components/Icon";
 import { Text, View } from "@/src/components/Themed";
 import DefaultColors from "@/src/constants/DefaultColors";
 import { fetchSingleUserThumbnail } from "@/src/lib/getRandomProfilePics";
-import {
-  IconCirclePlus,
-} from "@tabler/icons-react-native";
+import { IconCirclePlus } from "@tabler/icons-react-native";
 import { useColorScheme } from "nativewind";
 import { useEffect, useState } from "react";
-import {
-  Image,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import { Image, TextInput, TouchableOpacity } from "react-native";
 
-export default function ProfileCreationBoxes({ editPage }: { editPage: boolean }) {
+export default function ProfileCreationBoxes({
+  editPage,
+}: {
+  editPage: boolean;
+}) {
   const { colorScheme } = useColorScheme();
   const [displayName, setDisplayName] = useState("");
   const [username, setUsername] = useState("");
