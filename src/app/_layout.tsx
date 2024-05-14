@@ -6,6 +6,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
 import { MenuProvider } from "react-native-popup-menu";
+import "react-native-reanimated";
 import {
   viewHabitOptions,
   emailSignUpOptions,

@@ -1,18 +1,15 @@
 import Icon from "@/src/components/Icon";
-import ProfileCreationBoxes from "@/src/components/PfpNameUsernameBoxes";
 import { Text, View } from "@/src/components/Themed";
-import DefaultColors from "@/src/constants/DefaultColors";
 import { fetchSingleUserThumbnail } from "@/src/lib/getRandomProfilePics";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
-import { IconCheck } from "@tabler/icons-react-native";
+import { IconTrash } from "@tabler/icons-react-native";
 import { useColorScheme } from "nativewind";
 import { useEffect, useState } from "react";
 import { StatusBar } from "react-native";
 import { Platform, SafeAreaView, TouchableOpacity } from "react-native";
+import ProfileCreationBoxes from "@/src/components/PfpNameUsernameBoxes";
 
-export default function createprofile() {
-  const { colorScheme } = useColorScheme();
-
+export default function editprofile() {
   return (
     <SafeAreaView
       className={`flex flex-1 flex-col items-center bg-white dark:bg-stone-800`}
@@ -25,18 +22,16 @@ export default function createprofile() {
     >
       {/* Form */}
       <View className="flex w-screen flex-col px-5">
-        <Text className="text-3xl font-bold">Create profile</Text>
-        <ProfileCreationBoxes editPage={false} />
-        {/* Complete profile */}
+        <ProfileCreationBoxes editPage={true} />
+        {/* Delete Account */}
         <TouchableOpacity
           onPress={() => resetNavigationStack("/")}
-          className="mt-10 h-16 flex-row items-center justify-center rounded-lg border-2"
-          style={{
-            borderColor: DefaultColors[colorScheme].tint,
-          }}
+          className="mt-10 h-12 flex-row items-center justify-center rounded-lg border-2 border-[#FF0000]"
         >
-          <Icon icon={IconCheck} />
-          <Text className="ml-2 text-lg font-bold">Complete profile</Text>
+          <Icon lightColor="#FF0000" darkColor="#FF0000" icon={IconTrash} />
+          <Text className="ml-2 text-lg font-semibold text-[#FF0000]">
+            Delete account
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
