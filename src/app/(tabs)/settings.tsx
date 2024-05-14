@@ -96,6 +96,13 @@ export default function Settings() {
               resetNavigationStack("/(auth)/createprofile");
             },
           },
+          {
+            icon: <Icon icon={IconUserPlus} />,
+            title: "Edit profile",
+            onPress: () => {
+              router.push("/modals/editprofile");
+            },
+          },
         ]}
       />
     </SettingsContainer>
