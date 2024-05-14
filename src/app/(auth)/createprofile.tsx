@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { StatusBar } from "react-native";
 import { Platform, SafeAreaView, TouchableOpacity } from "react-native";
 
-export default function Createprofile() {
+export default function createprofile() {
   const { colorScheme } = useColorScheme();
 
   return (

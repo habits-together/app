@@ -9,7 +9,7 @@ import { StatusBar } from "react-native";
 import { Platform, SafeAreaView, TouchableOpacity } from "react-native";
 import ProfileCreationBoxes from "@/src/components/PfpNameUsernameBoxes";
 
-export default function Createprofile() {
+export default function editprofile() {
   return (
     <SafeAreaView
       className={`flex flex-1 flex-col items-center bg-white dark:bg-stone-800`}
