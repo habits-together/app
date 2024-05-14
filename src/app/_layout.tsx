@@ -65,11 +65,11 @@ function RootLayoutNav() {
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="(auth)/signin" />
           <Stack.Screen
-            name="(auth)/emailSignUp"
+            name="(auth)/emailsignup"
             options={emailSignUpOptions(colorScheme)}
           />
           <Stack.Screen
-            name="(auth)/emailLogin"
+            name="(auth)/emaillogin"
             options={emailLoginOptions(colorScheme)}
           />
           <Stack.Screen

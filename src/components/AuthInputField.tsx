@@ -3,7 +3,7 @@ import { View, Text } from "./Themed";
 import colors from "../constants/colors";
 import { useColorScheme } from "nativewind";
 
-export default function AuthInputFienld({
+export default function AuthInputField({
   text,
   isPass,
 }: {

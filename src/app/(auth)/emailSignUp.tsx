@@ -1,16 +1,16 @@
 import { Text, View } from "@/src/components/Themed";
 import { Link } from "expo-router";
 import AuthButton from "@/src/components/AuthButton";
-import AuthInputFienld from "@/src/components/AuthInputFienld";
+import AuthInputField from "@/src/components/AuthInputField";
 
-export default function EmailSignUp() {
+export default function emailsignup() {
   const SignUp = () => {
     console.log("Sign Up");
   };
   return (
     <View className="flex-1 items-center px-3 pt-5">
-      <AuthInputFienld text="Email" isPass={false} />
-      <AuthInputFienld text="Password" isPass={true} />
+      <AuthInputField text="Email" isPass={false} />
+      <AuthInputField text="Password" isPass={true} />
       <Text className="mb-5 w-2/3 text-center text-xs text-stone-400">
         By continuing, I agree to the {"\n"}
         <Link href="/">

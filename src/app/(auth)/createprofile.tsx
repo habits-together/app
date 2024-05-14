@@ -15,7 +15,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-export default function CreateProfile() {
+export default function createprofile() {
   const { colorScheme } = useColorScheme();
   const [displayName, setDisplayName] = useState("");
   const [username, setUsername] = useState("");
