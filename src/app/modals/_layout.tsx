@@ -30,9 +30,9 @@ export default function SettingsLayout() {
           options={inviteFriendsOptions(colorScheme)}
         />
         <Stack.Screen
-            name="editprofile"
-            options={editProfileOptions(colorScheme)}
-          />
+          name="editprofile"
+          options={editProfileOptions(colorScheme)}
+        />
       </Stack>
     </MenuProvider>
   );
