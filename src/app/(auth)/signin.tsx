@@ -57,7 +57,7 @@ export default function Signin() {
     resetNavigationStack("/");
   }
   async function signInWithEmail() {
-    resetNavigationStack("/(auth)/emailSignUp");
+    router.push("/(auth)/emailsignup");
   }
   async function continueAsGuest() {
     resetNavigationStack("/");
