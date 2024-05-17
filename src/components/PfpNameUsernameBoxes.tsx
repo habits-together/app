@@ -55,7 +55,9 @@ export default function ProfileCreationBoxes({
           placeholderTextColor={DefaultColors[colorScheme].placeholder}
           value={displayName}
           onChangeText={(text) => setDisplayName(text)}
-          onSubmitEditing={() => { refUsernameInput.current?.focus(); }}
+          onSubmitEditing={() => {
+            refUsernameInput.current?.focus();
+          }}
         ></TextInput>
       </View>
       {/* Username */}
@@ -70,7 +72,9 @@ export default function ProfileCreationBoxes({
           ref={refUsernameInput}
           value={username}
           onChangeText={(text) => setUsername(text)}
-          onSubmitEditing={() => { refEmailInput.current?.focus(); }}
+          onSubmitEditing={() => {
+            refEmailInput.current?.focus();
+          }}
         ></TextInput>
       </View>
       {/* Email */}
