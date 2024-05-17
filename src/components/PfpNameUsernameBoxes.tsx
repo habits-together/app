@@ -4,7 +4,7 @@ import DefaultColors from "@/src/constants/DefaultColors";
 import { fetchSingleUserThumbnail } from "@/src/lib/getRandomProfilePics";
 import { IconCirclePlus } from "@tabler/icons-react-native";
 import { useColorScheme } from "nativewind";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Image, TextInput, TouchableOpacity } from "react-native";
 
 export default function ProfileCreationBoxes({
@@ -17,6 +17,8 @@ export default function ProfileCreationBoxes({
   const [username, setUsername] = useState("");
   const [pfp, setPfp] = useState();
   const [email, setEmail] = useState("");
+  const refUsernameInput = useRef<TextInput>(null);
+  const refEmailInput = useRef<TextInput>(null);
 
   useEffect(() => {
     fetchSingleUserThumbnail().then((user) => {
@@ -53,6 +55,7 @@ export default function ProfileCreationBoxes({
           placeholderTextColor={DefaultColors[colorScheme].placeholder}
           value={displayName}
           onChangeText={(text) => setDisplayName(text)}
+          onSubmitEditing={() => { refUsernameInput.current?.focus(); }}
         ></TextInput>
       </View>
       {/* Username */}
@@ -64,8 +67,10 @@ export default function ProfileCreationBoxes({
             borderColor: DefaultColors[colorScheme].tint,
             color: DefaultColors[colorScheme].text,
           }}
+          ref={refUsernameInput}
           value={username}
           onChangeText={(text) => setUsername(text)}
+          onSubmitEditing={() => { refEmailInput.current?.focus(); }}
         ></TextInput>
       </View>
       {/* Email */}
@@ -78,6 +83,7 @@ export default function ProfileCreationBoxes({
               borderColor: DefaultColors[colorScheme].tint,
               color: DefaultColors[colorScheme].text,
             }}
+            ref={refEmailInput}
             value={email}
             onChangeText={(text) => setEmail(text)}
           ></TextInput>
