@@ -2,7 +2,8 @@ import FriendRequest from "@/src/components/FriendRequest";
 import { Text, View } from "@/src/components/Themed";
 import { useEffect, useState } from "react";
 import { FriendRequestData, getMockFriendInvites } from "../lib/mockData";
-import SmallProfilePicture from "./ProfilePicture";
+import { NotifProfilePicture } from "./ProfilePicture";
+import Divider from "@/src/components/Divider";
 
 export default function FriendRequestList() {
   const [requests, setRequests] = useState<FriendRequestData[]>([]);
@@ -32,18 +33,22 @@ export default function FriendRequestList() {
   }
   return (
     <View className="flex flex-col">
-      <Text className="text-xl font-bold">
-        New friend request{requests.length > 1 && "s"}
-      </Text>
       {requests.map((request, index) => (
-        <FriendRequest
-          key={index}
-          displayName={request.displayName}
-          userName={request.userName}
-          profilePic={<SmallProfilePicture picUrl={request.profilePicUrl} />}
-          deleteInvite={() => deleteInvite(request.id)}
-          confirmInvite={() => confirmInvite(request.id)}
-        />
+        <View>
+          <View className="px-4">
+            <FriendRequest
+              key={index}
+              displayName={request.displayName}
+              mutualCount={request.mutualCount}
+              profilePic={<NotifProfilePicture picUrl={request.profilePicUrl} />}
+              deleteInvite={() => deleteInvite(request.id)}
+              confirmInvite={() => confirmInvite(request.id)}
+            />
+          </View>
+          <View className="mt-2.5">
+            <Divider/>
+          </View>
+        </View>
       ))}
     </View>
   );

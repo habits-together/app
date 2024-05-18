@@ -4,6 +4,7 @@ import {
   IconBarbell,
   IconBed,
   IconBook,
+  IconCode,
   IconMoodTongue,
   IconMusic,
   Icon as TablerIcon,
@@ -62,7 +63,7 @@ export const mockHabitData: Habit[] = [
 export type FriendRequestData = {
   id: number;
   displayName: string;
-  userName: string;
+  mutualCount: number;
   profilePicUrl: string;
 };
 
@@ -74,13 +75,13 @@ export async function getMockFriendInvites() {
     {
       id: 1,
       displayName: "Someone else",
-      userName: "some1else",
+      mutualCount: 3,
       profilePicUrl: pic1.imgurl,
     },
     {
       id: 2,
       displayName: "Eduardo",
-      userName: "eduardo_012003",
+      mutualCount: 5,
       profilePicUrl: pic2.imgurl,
     },
   ];
@@ -94,10 +95,14 @@ export type HabitInviteData = {
   color: keyof typeof colors.habitColors;
   icon: TablerIcon;
   numberOfParticipants: number;
-  userName: string;
+  displayName: string;
+  profilePicUrl: string;
 };
 
 export async function getMockHabitInvites() {
+  const pic1 = await fetchSingleUserThumbnail();
+  const pic2 = await fetchSingleUserThumbnail();
+
   const mockHabitInvites: HabitInviteData[] = [
     {
       id: 1,
@@ -105,7 +110,8 @@ export async function getMockHabitInvites() {
       color: "purple",
       icon: IconMusic,
       numberOfParticipants: 3,
-      userName: "blaze_kush",
+      displayName: "Kush Blaze",
+      profilePicUrl: pic1.imgurl,
     },
     {
       id: 2,
@@ -113,10 +119,48 @@ export async function getMockHabitInvites() {
       color: "red",
       icon: IconMoodTongue,
       numberOfParticipants: 10,
-      userName: "kush_blaze",
+      displayName: "Blaze Kush",
+      profilePicUrl: pic2.imgurl,
     },
   ];
   return mockHabitInvites;
+}
+
+export type HabitReminderData = {
+  id: number; // unique id for each reminder
+  title: string;
+  color: keyof typeof colors.habitColors;
+  icon: TablerIcon;
+  timeSent: number; // this will be hours stored as a number, can be changed to proper time after we decide on the format in the db
+  displayName: string;
+  profilePicUrl: string;
+};
+
+export async function getMockReminderInvites() {
+  const pic1 = await fetchSingleUserThumbnail();
+  const pic2 = await fetchSingleUserThumbnail();
+
+  const mockReminderInvites: HabitReminderData[] = [
+    {
+      id: 1,
+      title: "Work on Habit",
+      color: "purple",
+      icon: IconCode,
+      timeSent: 4,
+      displayName: "Guy One",
+      profilePicUrl: pic1.imgurl,
+    },
+    {
+      id: 2,
+      title: "Yum Yum",
+      color: "red",
+      icon: IconMoodTongue,
+      timeSent: 12,
+      displayName: "Dude Two",
+      profilePicUrl: pic2.imgurl,
+    },
+  ];
+  return mockReminderInvites;
 }
 
 export interface FriendData {

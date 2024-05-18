@@ -3,6 +3,8 @@ import HabitInvite from "@/src/components/HabitInvite";
 import colors from "../constants/colors";
 import { useEffect, useState } from "react";
 import { getMockHabitInvites, HabitInviteData } from "../lib/mockData";
+import { NotifProfilePicture } from "./ProfilePicture";
+import Divider from "./Divider";
 
 // fetch all invites a user has received
 export default function HabitInviteList() {
@@ -36,21 +38,26 @@ export default function HabitInviteList() {
     return <></>;
   }
   return (
-    <View className="my-1 flex flex-col">
-      <Text className="text-xl font-bold">
-        New habit invite{invites.length > 1 && "s"}
-      </Text>
+    <View className="flex flex-col">
       {invites.map((invite, index) => (
-        <HabitInvite
-          key={index}
-          title={invite.title}
-          color={invite.color as keyof typeof colors.habitColors}
-          icon={invite.icon}
-          numberOfParticipants={invite.numberOfParticipants}
-          userName={invite.userName}
-          confirmInvite={() => confirmInvite(invite.id)}
-          deleteInvite={() => deleteInvite(invite.id)}
-        />
+        <View>
+          <View className="px-4">
+            <HabitInvite
+              key={index}
+              title={invite.title}
+              color={invite.color as keyof typeof colors.habitColors}
+              icon={invite.icon}
+              numberOfParticipants={invite.numberOfParticipants}
+              displayName={invite.displayName}
+              profilePic={<NotifProfilePicture picUrl={invite.profilePicUrl} />}
+              confirmInvite={() => confirmInvite(invite.id)}
+              deleteInvite={() => deleteInvite(invite.id)}
+            />
+          </View>
+          <View className="mt-2.5">
+            <Divider/>
+          </View>
+        </View>
       ))}
     </View>
   );
