@@ -10,8 +10,7 @@ export default function AuthInputField({
   text: string;
   isPass: boolean;
 }) {
-  const { colorScheme, setColorScheme } = useColorScheme();
-  setColorScheme("dark");
+  const { colorScheme } = useColorScheme();
   return (
     <View className="flex w-full items-center pb-5">
       <View className="mb-1 self-start">
