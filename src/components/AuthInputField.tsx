@@ -25,8 +25,7 @@ export default function AuthInputField({
           colorScheme === "dark" ? colors.stone[200] : colors.stone[600]
         }
         style={{
-          color:
-            colorScheme === "dark" ? colors.white : colors.black,
+          color: colorScheme === "dark" ? colors.white : colors.black,
         }}
       />
     </View>

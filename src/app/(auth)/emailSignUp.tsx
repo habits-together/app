@@ -28,8 +28,7 @@ export default function emailsignup() {
       <AuthButton text="Sign Up" onPress={SignUp} />
       <Link href="/(auth)/emaillogin">
         <Text className="mt-2 text-base font-semibold">
-          Already have an account?{" "}
-          <Text className="underline">Login</Text>
+          Already have an account? <Text className="underline">Login</Text>
         </Text>
       </Link>
     </View>
