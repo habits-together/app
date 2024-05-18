@@ -2,10 +2,11 @@ import { Text, View } from "@/src/components/Themed";
 import { Link } from "expo-router";
 import AuthButton from "@/src/components/AuthButton";
 import AuthInputField from "@/src/components/AuthInputField";
+import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 
 export default function emaillogin() {
   const Login = () => {
-    console.log("Login");
+    resetNavigationStack("/");
   };
   return (
     <View className="flex-1 items-center px-3 pt-5">
