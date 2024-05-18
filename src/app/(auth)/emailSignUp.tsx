@@ -26,11 +26,13 @@ export default function emailsignup() {
         </Link>
       </Text>
       <AuthButton text="Sign Up" onPress={SignUp} />
-      <Link href="/(auth)/emaillogin">
-        <Text className="mt-2 text-base font-semibold">
-          Already have an account? <Text className="underline">Login</Text>
-        </Text>
-      </Link>
+      <View className="mt-2">
+        <Link href="/(auth)/emaillogin">
+          <Text className="text-base font-semibold">
+            Already have an account? <Text className="underline">Login</Text>
+          </Text>
+        </Link>
+      </View>
     </View>
   );
 }
