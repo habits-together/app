@@ -108,17 +108,6 @@ export default function TabLayout() {
         name="notifications"
         options={{
           title: "Notifications",
-          // headerRight: () => (
-          //   <View className="mr-4">
-          //     <RoundedButton
-          //       text="Add friends"
-          //       icon={IconUserPlus}
-          //       onPress={() => {
-          //         alert("Add friends");
-          //       }}
-          //     />
-          //   </View>
-          // ),
           tabBarIcon: ({ color }) => (
             <Icon
               icon={IconBell}
