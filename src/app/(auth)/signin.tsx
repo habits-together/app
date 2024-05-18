@@ -173,7 +173,7 @@ export default function Signin() {
   function GoogleButton() {
     return (
       <Pressable
-        className="mt-2 flex h-14 w-full flex-row items-center justify-center rounded-xl border-2 p-2 dark:bg-white dark:border-0"
+        className="mt-2 flex h-14 w-full flex-row items-center justify-center rounded-xl border-2 p-2 dark:border-0 dark:bg-white"
         onPress={signInWithGoogle}
       >
         <Image
@@ -190,7 +190,7 @@ export default function Signin() {
   function AppleButton() {
     return (
       <Pressable
-        className="mt-2 flex h-14 w-full flex-row items-center justify-center rounded-xl border-2 p-2 dark:bg-white dark:border-0"
+        className="mt-2 flex h-14 w-full flex-row items-center justify-center rounded-xl border-2 p-2 dark:border-0 dark:bg-white"
         onPress={signInWithApple}
       >
         <Image
@@ -207,7 +207,7 @@ export default function Signin() {
   function EmailButton() {
     return (
       <Pressable
-        className="mt-2 flex h-14 w-full  flex-row items-center justify-center rounded-xl border-2 p-2 dark:bg-white dark:border-0"
+        className="mt-2 flex h-14 w-full  flex-row items-center justify-center rounded-xl border-2 p-2 dark:border-0 dark:bg-white"
         onPress={signInWithEmail}
       >
         <Icon
