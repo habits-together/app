@@ -10,7 +10,7 @@ export default function AuthButton({
 }) {
   return (
     <Pressable
-      className="flex h-14 w-full flex-row items-center justify-center rounded-xl border-2 p-2 dark:bg-white"
+      className="flex h-14 w-full flex-row items-center justify-center rounded-xl border-2 p-2 dark:bg-white dark:border-0"
       onPress={onPress}
     >
       <Text className="ml-2 text-xl font-semibold text-black">{text}</Text>

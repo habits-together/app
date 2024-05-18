@@ -9,7 +9,6 @@ import {
 import { Text, View } from "@/src/components/Themed";
 import {
   IconPhotoScan,
-  IconBrandAppleFilled,
   IconMail,
 } from "@tabler/icons-react-native";
 import { colors } from "react-native-elements";
@@ -57,7 +56,7 @@ export default function Signin() {
     resetNavigationStack("/");
   }
   async function signInWithEmail() {
-    router.push("/(auth)/emailsignup");
+    router.push("/(auth)/emailSignUp");
   }
   async function continueAsGuest() {
     resetNavigationStack("/");
