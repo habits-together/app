@@ -7,10 +7,7 @@ import {
   Platform,
 } from "react-native";
 import { Text, View } from "@/src/components/Themed";
-import {
-  IconPhotoScan,
-  IconMail,
-} from "@tabler/icons-react-native";
+import { IconPhotoScan, IconMail } from "@tabler/icons-react-native";
 import { colors } from "react-native-elements";
 import { useColorScheme } from "nativewind";
 import { Link, router } from "expo-router";
