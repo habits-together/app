@@ -43,12 +43,14 @@ export default function HabitReminderList() {
               icon={reminder.icon}
               timeSent={reminder.timeSent}
               displayName={reminder.displayName}
-              profilePic={<NotifProfilePicture picUrl={reminder.profilePicUrl} />}
+              profilePic={
+                <NotifProfilePicture picUrl={reminder.profilePicUrl} />
+              }
               deleteInvite={() => deleteReminder(reminder.id)}
             />
           </View>
           <View className="mt-2.5">
-            <Divider/>
+            <Divider />
           </View>
         </View>
       ))}

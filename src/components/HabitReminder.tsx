@@ -29,13 +29,12 @@ export default function HabitReminder({
   const { colorScheme } = useColorScheme();
 
   return (
-    <View
-      className="flex grow-0 flex-row items-center rounded-3xl px-0 py-2 mt-2">
-      <View className="flex flex-row items-top">
+    <View className="mt-2 flex grow-0 flex-row items-center rounded-3xl px-0 py-2">
+      <View className="items-top flex flex-row">
         <View>
           {profilePic}
           <View
-            className="absolute -right-[8px] -bottom-[-22px] h-9 w-9 rounded-full "
+            className="absolute -bottom-[-22px] -right-[8px] h-9 w-9 rounded-full "
             style={{
               backgroundColor: colors.habitColors[color].base,
             }}
@@ -50,7 +49,7 @@ export default function HabitReminder({
             </View>
           </View>
         </View>
-        <View className="ml-3.5 flex flex-col shrink">
+        <View className="ml-3.5 flex shrink flex-col">
           <Text className="flex-row">
             <Text className="text-base font-semibold">{displayName}</Text>
             <Text className="text-base"> nudged you to complete </Text>
@@ -60,11 +59,11 @@ export default function HabitReminder({
             {timeSent}h
           </Text>
           <Pressable
-            className="flex justify-center rounded-xl border border-stone-300 bg-white py-1.5 dark:bg-transparent mt-2"
+            className="mt-2 flex justify-center rounded-xl border border-stone-300 bg-white py-1.5 dark:bg-transparent"
             onPress={deleteInvite}
             android_ripple={{ color: colors.stone["300"], radius: 200 }}
           >
-            <Text className="font-semibold text-black dark:text-stone-100 grow text-center">
+            <Text className="grow text-center font-semibold text-black dark:text-stone-100">
               Dismiss
             </Text>
           </Pressable>

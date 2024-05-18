@@ -30,13 +30,12 @@ export default function HabitInvite({
   const { colorScheme } = useColorScheme();
 
   return (
-    <View
-      className="flex grow-0 flex-row items-center rounded-3xl px-0 py-2 mt-2">
-      <View className="flex flex-row items-top">
+    <View className="mt-2 flex grow-0 flex-row items-center rounded-3xl px-0 py-2">
+      <View className="items-top flex flex-row">
         <View>
           {profilePic}
           <View
-            className="absolute -right-[8px] -bottom-[-22px] h-9 w-9 rounded-full "
+            className="absolute -bottom-[-22px] -right-[8px] h-9 w-9 rounded-full "
             style={{
               backgroundColor: colors.habitColors[color].base,
             }}
@@ -51,7 +50,7 @@ export default function HabitInvite({
             </View>
           </View>
         </View>
-        <View className="ml-3.5 flex flex-col shrink">
+        <View className="ml-3.5 flex shrink flex-col">
           <Text className="flex-row">
             <Text className="text-base font-semibold">{displayName}</Text>
             <Text className="text-base"> invited you to join </Text>

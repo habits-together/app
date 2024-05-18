@@ -40,13 +40,15 @@ export default function FriendRequestList() {
               key={index}
               displayName={request.displayName}
               mutualCount={request.mutualCount}
-              profilePic={<NotifProfilePicture picUrl={request.profilePicUrl} />}
+              profilePic={
+                <NotifProfilePicture picUrl={request.profilePicUrl} />
+              }
               deleteInvite={() => deleteInvite(request.id)}
               confirmInvite={() => confirmInvite(request.id)}
             />
           </View>
           <View className="mt-2.5">
-            <Divider/>
+            <Divider />
           </View>
         </View>
       ))}

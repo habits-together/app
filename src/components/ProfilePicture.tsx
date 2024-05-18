@@ -16,7 +16,7 @@ export default function SmallProfilePicture({ picUrl }: { picUrl: string }) {
 export function NotifProfilePicture({ picUrl }: { picUrl: string }) {
   return (
     <Image
-      className="w-[72px] h-[72px] rounded-full bg-stone-200"
+      className="h-[72px] w-[72px] rounded-full bg-stone-200"
       source={
         picUrl
           ? { uri: picUrl }

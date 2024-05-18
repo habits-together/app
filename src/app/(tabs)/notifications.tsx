@@ -11,7 +11,7 @@ export default function FriendsTab() {
     <ScrollView
       className="flex-1"
       contentContainerStyle={{ paddingBottom: 100 }}
-    > 
+    >
       <Divider />
       <FriendRequestList />
       <HabitInviteList />

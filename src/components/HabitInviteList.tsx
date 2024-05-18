@@ -55,7 +55,7 @@ export default function HabitInviteList() {
             />
           </View>
           <View className="mt-2.5">
-            <Divider/>
+            <Divider />
           </View>
         </View>
       ))}

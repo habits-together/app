@@ -1,4 +1,3 @@
-
 import { useColorScheme } from "nativewind";
 import { Pressable } from "react-native";
 import { Text, View } from "./Themed";
