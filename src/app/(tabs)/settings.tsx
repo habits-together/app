@@ -86,7 +86,8 @@ export default function Settings() {
             icon: <Icon icon={IconKey} />,
             title: "Go to sign in",
             onPress: () => {
-              resetNavigationStack("/(auth)/signin");
+              // resetNavigationStack("/(auth)/signin");
+              router.push("/(auth)/signin");
             },
           },
           {

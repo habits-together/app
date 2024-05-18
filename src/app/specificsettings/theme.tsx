@@ -9,7 +9,7 @@ import {
 import { useColorScheme } from "nativewind";
 
 export default function Theme() {
-  const { colorScheme, setColorScheme } = useColorScheme();
+  const { setColorScheme } = useColorScheme();
 
   return (
     <SettingsContainer>

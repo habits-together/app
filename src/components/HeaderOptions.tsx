@@ -117,6 +117,57 @@ export function inviteFriendsOptions(
   };
 }
 
+export function emailSignUpOptions(
+  colorScheme: string,
+): NativeStackNavigationOptions {
+  return {
+    headerShown: true,
+    // make header center
+    headerTitleAlign: "center",
+    headerTitle: () => (
+      <Text className="text-center text-base font-semibold text-black dark:text-white">
+        Sign Up
+      </Text>
+    ),
+    headerLeft: () => <HeaderBackButton showText={true} />,
+    ...sharedOptions(colorScheme),
+  };
+}
+
+export function emailLoginOptions(
+  colorScheme: string,
+): NativeStackNavigationOptions {
+  return {
+    headerShown: true,
+    // make header center
+    headerTitleAlign: "center",
+    headerTitle: () => (
+      <Text className="text-center text-base font-semibold text-black dark:text-white">
+        Login
+      </Text>
+    ),
+    headerLeft: () => <HeaderBackButton showText={true} />,
+    ...sharedOptions(colorScheme),
+  };
+}
+
+export function forgotPasswordOptions(
+  colorScheme: string,
+): NativeStackNavigationOptions {
+  return {
+    headerShown: true,
+    // make header center
+    headerTitleAlign: "center",
+    headerTitle: () => (
+      <Text className="text-center text-base font-semibold text-black dark:text-white">
+        Password reset
+      </Text>
+    ),
+    headerLeft: () => <HeaderBackButton showText={true} />,
+    ...sharedOptions(colorScheme),
+  };
+}
+
 export function editProfileOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
