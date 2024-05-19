@@ -2,8 +2,8 @@ import { HabitCompletionValue } from "@/src/components/HabitCard";
 import colors from "@/src/constants/colors";
 import {
   IconBarbell,
-  IconBed,
   IconBook,
+  IconBottle,
   IconMoodTongue,
   IconMusic,
   Icon as TablerIcon,
@@ -45,36 +45,36 @@ export function getMockCompletionsData() {
 
 export const mockHabitData: Habit[] = [
   {
-    title: "Workout for 1 hour",
-    icon: IconBarbell,
-    color: "red",
-    id: 3,
-    description: "",
-    goal: {
-      period: "daily",
-      completionsPerPeriod: 1,
-    },
-  },
-  {
     title: "Read for 15 minutes",
     icon: IconBook,
-    color: "green",
+    color: "orange",
     id: 1,
-    description: "",
+    description: "Let's expand our mind capacity",
     goal: {
       period: "daily",
       completionsPerPeriod: 1,
     },
   },
   {
-    title: "Get 8 hours of sleep",
-    icon: IconBed,
-    color: "violet",
+    title: "Work out",
+    icon: IconBarbell,
+    color: "green",
     id: 2,
-    description: "",
+    description: "Working out is better together",
+    goal: {
+      period: "weekly",
+      completionsPerPeriod: 3,
+    },
+  },
+  {
+    title: "Drink water",
+    icon: IconBottle,
+    color: "violet",
+    id: 3,
+    description: "Stay hydrated",
     goal: {
       period: "daily",
-      completionsPerPeriod: 1,
+      completionsPerPeriod: 5,
     },
   },
 ];
@@ -166,3 +166,137 @@ export async function getMockFriends() {
   ];
   return mockFriends;
 }
+
+export const mockHabitFriendData = [
+  { id: 1, friendIds: [1, 2, 3, 4] },
+  { id: 2, friendIds: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20] },
+  { id: 3, friendIds: [21, 22] },
+];
+
+export type Completion = {
+  numberOfCompletions: number;
+  dayOfTheWeek: string;
+  dayOfTheMonth: number;
+};
+export const mockHabitWeekData = [
+  {
+    id: 1,
+    completions: [
+      {
+        numberOfCompletions: 0,
+        dayOfTheWeek: "Fri",
+        dayOfTheMonth: 19,
+      },
+      {
+        numberOfCompletions: 1,
+        dayOfTheWeek: "Sat",
+        dayOfTheMonth: 20,
+      },
+      {
+        numberOfCompletions: 0,
+        dayOfTheWeek: "Sun",
+        dayOfTheMonth: 21,
+      },
+      {
+        numberOfCompletions: 1,
+        dayOfTheWeek: "Mon",
+        dayOfTheMonth: 22,
+      },
+      {
+        numberOfCompletions: 1,
+        dayOfTheWeek: "Tue",
+        dayOfTheMonth: 23,
+      },
+      {
+        numberOfCompletions: 0,
+        dayOfTheWeek: "Wed",
+        dayOfTheMonth: 24,
+      },
+      {
+        numberOfCompletions: 1,
+        dayOfTheWeek: "Thu",
+        dayOfTheMonth: 25,
+      },
+    ],
+  },
+  {
+    id: 2,
+    completions: [
+      {
+        numberOfCompletions: 0,
+        dayOfTheWeek: "Fri",
+        dayOfTheMonth: 19,
+      },
+      {
+        numberOfCompletions: 1,
+        dayOfTheWeek: "Sat",
+        dayOfTheMonth: 20,
+      },
+      {
+        numberOfCompletions: 0,
+        dayOfTheWeek: "Sun",
+        dayOfTheMonth: 21,
+      },
+      {
+        numberOfCompletions: 1,
+        dayOfTheWeek: "Mon",
+        dayOfTheMonth: 22,
+      },
+      {
+        numberOfCompletions: 1,
+        dayOfTheWeek: "Tue",
+        dayOfTheMonth: 23,
+      },
+      {
+        numberOfCompletions: 0,
+        dayOfTheWeek: "Wed",
+        dayOfTheMonth: 24,
+      },
+      {
+        numberOfCompletions: 1,
+        dayOfTheWeek: "Thu",
+        dayOfTheMonth: 25,
+      },
+    ],
+  },
+  {
+    id: 3,
+    completions: [
+      {
+        numberOfCompletions: 1,
+        dayOfTheWeek: "Fri",
+        dayOfTheMonth: 19,
+      },
+      {
+        numberOfCompletions: 2,
+        dayOfTheWeek: "Sat",
+        dayOfTheMonth: 20,
+      },
+      {
+        numberOfCompletions: 0,
+        dayOfTheWeek: "Sun",
+        dayOfTheMonth: 21,
+      },
+      {
+        numberOfCompletions: 5,
+        dayOfTheWeek: "Mon",
+        dayOfTheMonth: 22,
+      },
+      {
+        numberOfCompletions: 4,
+        dayOfTheWeek: "Tue",
+        dayOfTheMonth: 23,
+      },
+      {
+        numberOfCompletions: 0,
+        dayOfTheWeek: "Wed",
+        dayOfTheMonth: 24,
+      },
+      {
+        numberOfCompletions: 4,
+        dayOfTheWeek: "Thu",
+        dayOfTheMonth: 25,
+      },
+    ],
+  },
+];

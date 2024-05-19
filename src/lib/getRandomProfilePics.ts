@@ -1,6 +1,6 @@
-export function getLocalRandomProfilePics(amount: number) {
+export function getLocalRandomProfilePics(indexes: number[]) {
   // get pfp from assets/images/mock-pfps 
-  return Array.from({ length: amount }, (_, index) => {
+  return Array.from(indexes, (index) => {
     return {
       imgurl: localMockPfps[index % localMockPfps.length],
       hasCompleted: Math.random() > 0.4 ? true : false,

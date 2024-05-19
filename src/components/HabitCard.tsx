@@ -1,5 +1,10 @@
 import colors from "@/src/constants/colors";
-import { Habit } from "@/src/lib/mockData";
+import {
+  Completion,
+  Habit,
+  mockHabitFriendData,
+  mockHabitWeekData,
+} from "@/src/lib/mockData";
 import { IconCheck } from "@tabler/icons-react-native";
 import { Link } from "expo-router";
 import { useColorScheme } from "nativewind";
@@ -31,6 +36,9 @@ export type HabitCompletionValue = "completed" | "missed" | "not-applicable";
 
 export function HabitCard({ habit, displayType, currentPage }: HabitCardProps) {
   const { colorScheme } = useColorScheme();
+  const completionData = mockHabitWeekData.filter(
+    (data) => data.id === habit.id,
+  )[0];
 
   // useEffect(() => {
   //   profilePicsDataPromise(10).then(setProfilePicsData);
@@ -94,7 +102,10 @@ export function HabitCard({ habit, displayType, currentPage }: HabitCardProps) {
               displayType={displayType}
             />
             <View className="h-[10px]" />
-            <HabitCardCompletionsWeeklyView habit={habit} />
+            <HabitCardCompletionsWeeklyView
+              habit={habit}
+              completionData={completionData.completions}
+            />
           </>
         )}
         {displayType === "monthly-view" && (
@@ -229,18 +240,20 @@ function FriendProfilePictures({
   habit: Habit;
 }) {
   const { colorScheme } = useColorScheme();
+
+  // it would be good to figure out how to do this responsively based on screen width
   const maxPfps = displayType === "weekly-view" ? 6 : 4;
 
   const [mockPfps, setMockPfps] = useState<
     { imgurl: string; hasCompleted: boolean }[]
   >([]);
   const [numPfpsToDisplay, setNumPfpsToDisplay] = useState<number>(maxPfps);
-  // const [pfpsTruncated, setPfpsTruncated] = useState(false);
 
   useEffect(() => {
-    let pfps = getLocalRandomProfilePics(8);
-    // if (pfps.length)
-    setMockPfps(pfps);
+    const mockFriendIds = mockHabitFriendData.filter(
+      (data) => data.id === habit.id,
+    )[0];
+    setMockPfps(getLocalRandomProfilePics(mockFriendIds.friendIds));
   }, []);
 
   useEffect(() => {
@@ -330,61 +343,28 @@ function FriendCompletedBadge({
   );
 }
 
-function HabitCardCompletionsWeeklyView({ habit }: { habit: Habit }) {
-  // const completions = [true, false, true, false, true, false, true];
-  // const pastSevenDays = ["Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu"];
-
-  const completions = [
-    {
-      completed: true,
-      dayOfTheWeek: "Fri",
-      dayOfTheMonth: 19,
-    },
-    {
-      completed: false,
-      dayOfTheWeek: "Sat",
-      dayOfTheMonth: 20,
-    },
-    {
-      completed: true,
-      dayOfTheWeek: "Sun",
-      dayOfTheMonth: 21,
-    },
-    {
-      completed: true,
-      dayOfTheWeek: "Mon",
-      dayOfTheMonth: 22,
-    },
-    {
-      completed: false,
-      dayOfTheWeek: "Tue",
-      dayOfTheMonth: 23,
-    },
-    {
-      completed: false,
-      dayOfTheWeek: "Wed",
-      dayOfTheMonth: 24,
-    },
-    {
-      completed: true,
-      dayOfTheWeek: "Thu",
-      dayOfTheMonth: 25,
-    },
-  ];
-
+function HabitCardCompletionsWeeklyView({
+  habit,
+  completionData,
+}: {
+  habit: Habit;
+  completionData: Completion[];
+}) {
   return (
     <View className="flex w-full flex-1 flex-row items-end justify-between">
-      {completions.slice(0, 6).map((dayData, index) => (
+      {completionData.slice(0, 6).map((completion, index) => (
         <HabitCardWeeklyViewCompletionSquare
           key={index}
-          completed={dayData.completed}
+          numberOfCompletions={completion.numberOfCompletions}
+          targetNumberOfCompletions={habit.goal.completionsPerPeriod}
           color={habit.color}
-          dayOfTheMonth={dayData.dayOfTheMonth}
-          dayOfTheWeek={dayData.dayOfTheWeek}
+          dayOfTheMonth={completion.dayOfTheMonth}
+          dayOfTheWeek={completion.dayOfTheWeek}
         />
       ))}
       <HabitCompletionButton
         color={habit.color}
+        targetNumberOfCompletions={habit.goal.completionsPerPeriod}
         // dayOfTheMonth={completions[6].dayOfTheMonth}
         // dayOfTheWeek={completions[6].dayOfTheWeek}
       />
@@ -393,12 +373,14 @@ function HabitCardCompletionsWeeklyView({ habit }: { habit: Habit }) {
 }
 
 function HabitCardWeeklyViewCompletionSquare({
-  completed,
+  numberOfCompletions,
+  targetNumberOfCompletions,
   color,
   dayOfTheMonth,
   dayOfTheWeek,
 }: {
-  completed: boolean;
+  numberOfCompletions: number;
+  targetNumberOfCompletions: number;
   color: keyof typeof colors.habitColors;
   dayOfTheMonth: number;
   dayOfTheWeek: string;
@@ -408,26 +390,18 @@ function HabitCardWeeklyViewCompletionSquare({
   return (
     <View className="flex flex-col items-center gap-1">
       <View
-        className="flex h-8 w-8 items-center justify-center rounded"
+        className="relative flex h-8 w-8 overflow-hidden rounded"
         style={{
-          backgroundColor: completed
-            ? colors.habitColors[color].base
-            : colorScheme === "dark"
+          backgroundColor:
+            colorScheme === "dark"
               ? colors.stone.faded
               : colors.habitColors[color].faded,
         }}
       >
-        {completed && (
-          <Icon
-            icon={IconCheck}
-            size={20}
-            strokeWidth={4}
-            lightColor={colors.white}
-          />
-        )}
-        {!completed && (
+        {/* day of the month text */}
+        {numberOfCompletions === 0 && (
           <Text
-            className="text-xs font-semibold"
+            className="mx-auto my-auto text-xs font-semibold"
             style={{
               color:
                 colorScheme === "dark"
@@ -437,6 +411,27 @@ function HabitCardWeeklyViewCompletionSquare({
           >
             {dayOfTheMonth}
           </Text>
+        )}
+        {/* base color fill (can be partial for multiple-times-per-day habit) */}
+        {numberOfCompletions > 0 && (
+          <View
+            className="absolute bottom-0 w-full"
+            style={{
+              backgroundColor: colors.habitColors[color].base,
+              height: (numberOfCompletions / targetNumberOfCompletions) * 32,
+            }}
+          ></View>
+        )}
+        {/* check mark */}
+        {numberOfCompletions === targetNumberOfCompletions && (
+          <View className="mx-auto my-auto">
+            <Icon
+              icon={IconCheck}
+              size={20}
+              strokeWidth={4}
+              lightColor={colors.white}
+            />
+          </View>
         )}
       </View>
       <Text
@@ -460,40 +455,54 @@ function HabitCardCompletionsMonthlyView({}) {
 
 function HabitCompletionButton({
   color,
+  targetNumberOfCompletions,
 }: {
   color: keyof typeof colors.habitColors;
+  targetNumberOfCompletions: number;
 }) {
   const { colorScheme } = useColorScheme();
-  const [completed, setCompleted] = useState(false);
+  const [numberOfCompletions, setNumberOfCompletions] = useState(0);
 
   useEffect(() => {
     const updateInFirebase = async () => {
       // update the data in firebase here (current day compleation status)
     };
     updateInFirebase();
-  }, [completed]);
+  }, [numberOfCompletions]);
+
+  function handleCompletionButtonPress() {
+    setNumberOfCompletions((prev) =>
+      prev !== targetNumberOfCompletions ? prev + 1 : 0,
+    );
+  }
 
   return (
     <View className="flex flex-col items-center gap-1">
       <Pressable
-        onPress={() => setCompleted(!completed)}
-        className="flex h-12 w-12 items-center justify-center rounded-full"
+        onPress={handleCompletionButtonPress}
+        className="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-full"
         style={{
-          backgroundColor: completed
-            ? colors.habitColors[color].base
-            : colorScheme === "dark"
+          backgroundColor:
+            colorScheme === "dark"
               ? colors.stone.faded
               : colors.habitColors[color].faded,
         }}
       >
+        <View
+          className="absolute bottom-0 w-full"
+          style={{
+            backgroundColor: colors.habitColors[color].base,
+            height: (numberOfCompletions / targetNumberOfCompletions) * 48,
+          }}
+        />
         <Icon
           icon={IconCheck}
           size={28}
           strokeWidth={4}
           lightColor={
-            completed ? colors.white : colors.habitColors[color].light
+            numberOfCompletions === targetNumberOfCompletions ? colors.white : colors.habitColors[color].light
           }
-          darkColor={completed ? colors.white : colors.stone.light}
+          darkColor={numberOfCompletions === targetNumberOfCompletions ? colors.white : colors.stone.light}
         />
       </Pressable>
       <Text
