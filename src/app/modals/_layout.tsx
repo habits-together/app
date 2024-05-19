@@ -16,7 +16,11 @@ export default function SettingsLayout() {
     // need another menu provider since this is a modal
     // https://github.com/instea/react-native-popup-menu/blob/master/doc/api.md#menuprovider
     <MenuProvider skipInstanceCheck>
-      <Stack>
+      <Stack
+        screenOptions={{
+          animation: "ios",
+        }}
+      >
         <Stack.Screen
           name="viewprofile"
           options={viewProfileOptions(colorScheme)}
