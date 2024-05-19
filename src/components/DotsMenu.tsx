@@ -9,7 +9,7 @@ import {
 } from "react-native-popup-menu";
 import { View } from "./Themed";
 
-type Option = {
+export type Option = {
   label: string;
   color: string;
   action: () => void;

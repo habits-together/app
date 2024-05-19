@@ -13,23 +13,13 @@ import { Link, useLocalSearchParams } from "expo-router";
 import Icon from "@/src/components/Icon";
 import IconButton from "@/src/components/IconButton";
 import { Pressable } from "react-native";
-
-const habits = [
-  {
-    title: "Read for 15 minutes",
-    description: "Read for at least 15 minutes every day",
-    icon: IconBook,
-    color: "fuchsia",
-    participants: [1, 2], // should be user objects
-    id: 1,
-  },
-];
+import { mockHabitData } from "../lib/mockData";
 
 export default function ViewHabitComponent() {
   const params = useLocalSearchParams();
   const { id } = params;
   // in the future, get habit based off id
-  const habit = habits[0];
+  const habit = mockHabitData[0];
 
   return (
     <View className="flex-1 p-4" style={{ gap: 40 }}>
@@ -64,12 +54,11 @@ export default function ViewHabitComponent() {
         </View>
 
         {/* Heatmap */}
-        <View>
+        <View className="">
           <HabitCard
-            title={habit.title}
-            color={"fuchsia"}
-            icon={habit.icon}
-            displayType="view-habit-page"
+            habit={habit}
+            displayType="weekly-view"
+            currentPage="habit-tab"
           />
         </View>
 
@@ -87,7 +76,7 @@ export default function ViewHabitComponent() {
       {/* Participants */}
       <View className="flex-column flex" style={{ gap: 20 }}>
         <Text className="mb-1 text-xl font-bold text-black dark:text-white">
-          Participants ({habit.participants.length})
+          Participants (3)
         </Text>
         {/* add participant cards */}
       </View>

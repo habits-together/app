@@ -65,7 +65,7 @@ export default function Profile() {
                     title={habit.title}
                     color={"fuchsia"}
                     icon={habit.icon}
-                    displayType="friend's-habit"
+                    currentPage="friend's-habit"
                   />
                 </Pressable>
               </Link>

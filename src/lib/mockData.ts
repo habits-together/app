@@ -11,10 +11,15 @@ import {
 import { fetchSingleUserThumbnail } from "./getRandomProfilePics";
 
 export type Habit = {
+  id: number;
   title: string;
+  description: string;
   color: keyof typeof colors.habitColors;
   icon: TablerIcon;
-  id: number;
+  goal: {
+    period: "daily" | "weekly";
+    completionsPerPeriod: number;
+  };
 };
 
 export function getMockCompletionsData() {
@@ -44,18 +49,33 @@ export const mockHabitData: Habit[] = [
     icon: IconBarbell,
     color: "red",
     id: 3,
+    description: "",
+    goal: {
+      period: "daily",
+      completionsPerPeriod: 1,
+    },
   },
   {
     title: "Read for 15 minutes",
     icon: IconBook,
     color: "green",
     id: 1,
+    description: "",
+    goal: {
+      period: "daily",
+      completionsPerPeriod: 1,
+    },
   },
   {
     title: "Get 8 hours of sleep",
     icon: IconBed,
     color: "violet",
     id: 2,
+    description: "",
+    goal: {
+      period: "daily",
+      completionsPerPeriod: 1,
+    },
   },
 ];
 
