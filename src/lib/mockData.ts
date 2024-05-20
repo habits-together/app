@@ -67,7 +67,7 @@ export const mockHabitData: Habit[] = [
     description: "Working out is better together",
     goal: {
       period: "weekly",
-      completionsPerPeriod: 3,
+      completionsPerPeriod: 4,
     },
   },
   {
