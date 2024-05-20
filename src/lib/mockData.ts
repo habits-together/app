@@ -1,4 +1,3 @@
-import { HabitCompletionValue } from "@/src/components/HabitCard";
 import colors from "@/src/constants/colors";
 import {
   IconBarbell,
@@ -9,6 +8,7 @@ import {
   Icon as TablerIcon,
 } from "@tabler/icons-react-native";
 import { fetchSingleUserThumbnail } from "./getRandomProfilePics";
+import { HabitDisplayType } from "../components/HabitCard";
 
 export type HabitGoalPeriod = "daily" | "weekly";
 export type Habit = {
@@ -23,25 +23,28 @@ export type Habit = {
   };
 };
 
-export function getMockCompletionsData() {
-  function getNumberOfDaysInLastWeek() {
-    const currDay = new Date().getDay();
-    return currDay === 0 ? 7 : currDay;
+export function getNumberOfDaysInLastWeek() {
+  const currDay = new Date().getDay();
+  return currDay === 0 ? 7 : currDay;
+}
+
+export function getMockHabitMonthData(
+  numberOfDays: number,
+  targetNumberOfCompletionsPerDay: number,
+) {
+  const activityData: HabitCompletion[] = new Array(numberOfDays);
+  for (let i = 0; i < numberOfDays; i++) {
+    let numCompletions = Math.floor(
+      Math.random() * (targetNumberOfCompletionsPerDay + 1),
+    );
+    activityData[i] = {
+      numberOfCompletions: numCompletions,
+      dayOfTheWeek: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][i % 7],
+      dayOfTheMonth: 1 + (i % 31),
+    };
   }
-  const daysInLastWeek = getNumberOfDaysInLastWeek();
-  const activityData: HabitCompletionValue[] = new Array(56); // (3*2) weeks * 7 days + 7 days of last week = 49 days
-  for (let i = 0; i < 49 + daysInLastWeek; i++) {
-    Math.floor(Math.random() * 2)
-      ? (activityData[i] = "completed")
-      : (activityData[i] = "missed");
-  }
-  for (let i = 49 + daysInLastWeek; i < activityData.length; i++) {
-    activityData[i] = "not-applicable";
-  }
-  let indexOftoday = 49 + daysInLastWeek - 1;
-  // make sure last day is always missed
-  activityData[indexOftoday] = "missed";
-  return [activityData, indexOftoday] as const;
+
+  return activityData;
 }
 
 export const mockHabitData: Habit[] = [
@@ -174,7 +177,7 @@ export const mockHabitFriendData = [
   { id: 3, friendIds: [21, 22] },
 ];
 
-export type Completion = {
+export type HabitCompletion = {
   numberOfCompletions: number;
   dayOfTheWeek: string;
   dayOfTheMonth: number;
@@ -301,3 +304,20 @@ export const mockHabitWeekData = [
     ],
   },
 ];
+
+export function getMockHabitData(
+  displayType: HabitDisplayType,
+  habitId: number,
+  targetNumberOfCompletionsPerDay: number,
+) {
+  switch (displayType) {
+    case "weekly-view":
+      return mockHabitWeekData.filter((data) => data.id === habitId)[0]
+        .completions;
+    case "monthly-view":
+      return getMockHabitMonthData(
+        12 * 7 + getNumberOfDaysInLastWeek(),
+        targetNumberOfCompletionsPerDay,
+      );
+  }
+}
