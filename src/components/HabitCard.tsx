@@ -5,7 +5,7 @@ import {
   HabitGoalPeriod,
   mockHabitFriendData,
 } from "@/src/lib/mockData";
-import { IconCheck } from "@tabler/icons-react-native";
+import { IconActivity, IconCheck } from "@tabler/icons-react-native";
 import { Link } from "expo-router";
 import { useColorScheme } from "nativewind";
 import React, { useEffect, useState } from "react";
@@ -257,8 +257,10 @@ function FriendCompletedBadge({
   habit: Habit;
 }) {
   function getCompletedBadgeText() {
-    if (displayType === "weekly-view" && goalPeriod === "daily")
+    if (displayType === "weekly-view" && goalPeriod === "daily" && habit.goal.completionsPerPeriod === 1)
       return "Completed today";
+    if (displayType === "weekly-view" && goalPeriod === "daily" && habit.goal.completionsPerPeriod > 1)
+      return "Activity today";
     if (displayType === "weekly-view" && goalPeriod === "weekly")
       return "Completed this week";
     if (displayType === "monthly-view" && goalPeriod === "daily")
@@ -279,9 +281,13 @@ function FriendCompletedBadge({
       }}
     >
       <Icon
-        icon={IconCheck}
+        icon={
+          goalPeriod === "daily" && habit.goal.completionsPerPeriod > 1
+            ? IconActivity
+            : IconCheck
+        }
         size={12}
-        strokeWidth={4}
+        strokeWidth={3}
         lightColor={colors.habitColors[habit.color].base}
         darkColor={colors.habitColors[habit.color].base}
       />
