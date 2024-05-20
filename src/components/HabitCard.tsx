@@ -2,6 +2,7 @@ import colors from "@/src/constants/colors";
 import {
   Completion,
   Habit,
+  HabitGoalPeriod,
   mockHabitFriendData,
   mockHabitWeekData,
 } from "@/src/lib/mockData";
@@ -227,7 +228,7 @@ function HabitCardFriendCompletions({
       }}
     >
       <FriendProfilePictures displayType={displayType} habit={habit} />
-      <FriendCompletedBadge displayType={displayType} habit={habit} />
+      <FriendCompletedBadge displayType={displayType} goalPeriod={habit.goal.period} habit={habit} />
     </View>
   );
 }
@@ -310,11 +311,24 @@ function FriendProfilePictures({
 
 function FriendCompletedBadge({
   displayType,
+  goalPeriod,
   habit,
 }: {
   displayType: HabitDisplayType;
+  goalPeriod: HabitGoalPeriod,
   habit: Habit;
 }) {
+  function getCompletedBadgeText() {
+    if (displayType === "weekly-view" && goalPeriod === "daily")
+      return "Completed today";
+    if (displayType === "weekly-view" && goalPeriod === "weekly")
+      return "Completed this week";
+    if (displayType === "monthly-view" && goalPeriod === "daily")
+      return "Today"
+    if (displayType === "monthly-view" && goalPeriod === "weekly")
+      return "This week";
+  }
+
   return (
     <View
       className="flex h-5 flex-row items-center rounded-full border px-[10px] text-habitColors-red-base"
@@ -337,7 +351,7 @@ function FriendCompletedBadge({
         className="ml-[2px] text-xs font-semibold"
         style={{ color: colors.habitColors[habit.color].base }}
       >
-        Completed today
+        {getCompletedBadgeText()}
       </Text>
     </View>
   );
@@ -356,7 +370,7 @@ function HabitCardCompletionsWeeklyView({
         <HabitCardWeeklyViewCompletionSquare
           key={index}
           numberOfCompletions={completion.numberOfCompletions}
-          targetNumberOfCompletions={habit.goal.completionsPerPeriod}
+          targetNumberOfCompletions={habit.goal.period === "daily" ? habit.goal.completionsPerPeriod : 1}
           color={habit.color}
           dayOfTheMonth={completion.dayOfTheMonth}
           dayOfTheWeek={completion.dayOfTheWeek}
@@ -364,9 +378,7 @@ function HabitCardCompletionsWeeklyView({
       ))}
       <HabitCompletionButton
         color={habit.color}
-        targetNumberOfCompletions={habit.goal.completionsPerPeriod}
-        // dayOfTheMonth={completions[6].dayOfTheMonth}
-        // dayOfTheWeek={completions[6].dayOfTheWeek}
+        targetNumberOfCompletions={habit.goal.period === "daily" ? habit.goal.completionsPerPeriod : 1}
       />
     </View>
   );

@@ -10,6 +10,7 @@ import {
 } from "@tabler/icons-react-native";
 import { fetchSingleUserThumbnail } from "./getRandomProfilePics";
 
+export type HabitGoalPeriod = "daily" | "weekly";
 export type Habit = {
   id: number;
   title: string;
@@ -17,7 +18,7 @@ export type Habit = {
   color: keyof typeof colors.habitColors;
   icon: TablerIcon;
   goal: {
-    period: "daily" | "weekly";
+    period: HabitGoalPeriod;
     completionsPerPeriod: number;
   };
 };
