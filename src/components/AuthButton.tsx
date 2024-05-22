@@ -1,5 +1,5 @@
-import { Pressable } from "react-native";
 import { Text } from "@/src/components/Themed";
+import { Pressable } from "react-native";
 
 export default function AuthButton({
   text,

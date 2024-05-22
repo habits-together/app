@@ -1,9 +1,9 @@
-import { View, Text } from "@/src/components/Themed";
 import FriendCard from "@/src/components/FriendCard";
-import { fetchSingleUserThumbnail } from "../lib/getRandomProfilePics";
-import { useEffect, useState } from "react";
-import { MediumProfilePicture } from "./ProfilePicture";
+import { Text, View } from "@/src/components/Themed";
 import { FriendData, getMockFriends } from "@/src/lib/mockData";
+import { useEffect, useState } from "react";
+import { fetchSingleUserThumbnail } from "../lib/getRandomProfilePics";
+import { MediumProfilePicture } from "./ProfilePicture";
 
 export default function FriendList() {
   const [friends, setFriends] = useState<FriendData[]>([]);

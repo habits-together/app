@@ -1,9 +1,9 @@
 import { IconTrash } from "@tabler/icons-react-native";
 import { useColorScheme } from "nativewind";
 import { Pressable } from "react-native";
+import colors from "../constants/colors";
 import Icon from "./Icon";
 import { Text, View } from "./Themed";
-import colors from "../constants/colors";
 
 export default function ConfirmAndDeleteButtons({
   confirmInvite,

@@ -1,12 +1,12 @@
 import { IconDots } from "@tabler/icons-react-native";
 import { Text } from "react-native";
-import Icon from "./Icon";
 import {
   Menu,
-  MenuOptions,
   MenuOption,
+  MenuOptions,
   MenuTrigger,
 } from "react-native-popup-menu";
+import Icon from "./Icon";
 import { View } from "./Themed";
 
 export type Option = {

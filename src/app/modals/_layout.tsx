@@ -1,8 +1,8 @@
 import {
+  editProfileOptions,
+  inviteFriendsOptions,
   viewHabitOptions,
   viewProfileOptions,
-  inviteFriendsOptions,
-  editProfileOptions,
 } from "@/src/components/HeaderOptions";
 import { Stack } from "expo-router";
 import { useColorScheme } from "nativewind";

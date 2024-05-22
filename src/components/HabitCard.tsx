@@ -1,6 +1,5 @@
 import colors from "@/src/constants/colors";
 import {
-  getMockHabitData,
   getNumberOfDaysInLastWeek,
   Habit,
   HabitCompletion,
@@ -72,7 +71,7 @@ export function HabitCard({
             <View className="h-[10px]" />
             <HabitCardCompletionsWeeklyView
               habit={habit}
-              completionData={completionData.slice(completionData.length-6)}
+              completionData={completionData.slice(completionData.length - 6)}
               displayType={displayType}
               numberOfCompletionsToday={numberCompletionsToday}
               setNumberOfCompletionsToday={setNumberCompletionsToday}
@@ -177,7 +176,7 @@ function HabitCardFriendCompletions({
 }) {
   return (
     <View
-      className={`flex ${displayType === "weekly-view" ? "flex-row" : "flex-col-reverse w-full"} items-center rounded-[10px] border p-[5px]`}
+      className={`flex ${displayType === "weekly-view" ? "flex-row" : "w-full flex-col-reverse"} items-center rounded-[10px] border p-[5px]`}
       style={{
         borderColor: getTranslucentColor(
           colors.habitColors[habit.color].text,
@@ -532,7 +531,7 @@ function HabitCardCompletionsMonthlyView({
           completion={{
             numberOfCompletions: numberOfCompletionsToday,
             dayOfTheWeek: "Today",
-            dayOfTheMonth: (new Date().getDay()).toString(),
+            dayOfTheMonth: new Date().getDay().toString(),
           }}
           goalPeriod={goalPeriod}
           targetNumberOfCompletions={targetNumberOfCompletions}

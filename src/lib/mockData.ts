@@ -194,7 +194,7 @@ export function getMockHabitData(habitId: number) {
   if (!habit) {
     throw `Could not find habit with id ${habitId}`;
   }
-  
+
   const targetNumberOfCompletionsPerDay =
     habit.goal.period === "daily" ? habit.goal.completionsPerPeriod : 1;
 

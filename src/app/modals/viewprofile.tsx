@@ -50,7 +50,10 @@ export default function Profile() {
                 key={habit.id}
               >
                 <Pressable>
-                  <HabitCard habit={habit} completionData={getMockHabitData(habit.id)} />
+                  <HabitCard
+                    habit={habit}
+                    completionData={getMockHabitData(habit.id)}
+                  />
                 </Pressable>
               </Link>
             ))}

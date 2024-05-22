@@ -3,14 +3,14 @@
  * https://docs.expo.io/guides/color-schemes/
  */
 
-import {
-  Text as DefaultText,
-  View as DefaultView,
-  ScrollView as DefaultScrollView,
-  SafeAreaView as DefaultSafeAreaView,
-} from "react-native";
 import Colors from "@/src/constants/DefaultColors";
 import { useColorScheme } from "nativewind";
+import {
+  SafeAreaView as DefaultSafeAreaView,
+  ScrollView as DefaultScrollView,
+  Text as DefaultText,
+  View as DefaultView,
+} from "react-native";
 
 type ThemeProps = {
   lightColor?: string;

@@ -1,11 +1,11 @@
 export function getLocalRandomProfilePics(indexes: number[]) {
-  // get pfp from assets/images/mock-pfps 
+  // get pfp from assets/images/mock-pfps
   return Array.from(indexes, (index) => {
     return {
       imgurl: localMockPfps[index % localMockPfps.length],
       hasCompleted: Math.random() > 0.4 ? true : false,
     };
-  })
+  });
 }
 
 async function fetchUserThumbnails(amount: number) {
@@ -54,7 +54,6 @@ export async function fetchSingleUserThumbnail() {
 export const profilePicsDataPromise = (amount: number) =>
   fetchUserThumbnails(amount);
 
-
 export const localMockPfps = [
   require("../../assets/images/mock-pfps/image-1.png"),
   require("../../assets/images/mock-pfps/image-2.png"),
@@ -96,4 +95,4 @@ export const localMockPfps = [
   require("../../assets/images/mock-pfps/image-38.png"),
   require("../../assets/images/mock-pfps/image-39.png"),
   require("../../assets/images/mock-pfps/image-40.png"),
-]
+];
