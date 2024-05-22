@@ -177,7 +177,7 @@ function HabitCardFriendCompletions({
 }) {
   return (
     <View
-      className={`flex w-full ${displayType === "weekly-view" ? "flex-row" : "flex-col-reverse"} items-center rounded-[10px] border p-[5px]`}
+      className={`flex ${displayType === "weekly-view" ? "flex-row" : "flex-col-reverse w-full"} items-center rounded-[10px] border p-[5px]`}
       style={{
         borderColor: getTranslucentColor(
           colors.habitColors[habit.color].text,
