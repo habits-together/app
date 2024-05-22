@@ -7,8 +7,8 @@ import {
   IconMusic,
   Icon as TablerIcon,
 } from "@tabler/icons-react-native";
-import { fetchSingleUserThumbnail } from "./getRandomProfilePics";
 import { HabitDisplayType } from "../components/HabitCard";
+import { fetchSingleUserThumbnail } from "./getRandomProfilePics";
 
 export type HabitGoalPeriod = "daily" | "weekly";
 export type Habit = {
@@ -305,11 +305,15 @@ export const mockHabitWeekData = [
   },
 ];
 
-export function getMockHabitData(
-  displayType: HabitDisplayType,
-  habitId: number,
-  targetNumberOfCompletionsPerDay: number,
-) {
+export function getMockHabitData({
+  displayType,
+  habitId,
+  targetNumberOfCompletionsPerDay,
+}: {
+  displayType: HabitDisplayType;
+  habitId: number;
+  targetNumberOfCompletionsPerDay: number;
+}) {
   switch (displayType) {
     case "weekly-view":
       return mockHabitWeekData.filter((data) => data.id === habitId)[0]

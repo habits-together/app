@@ -16,13 +16,14 @@ export default function HabitsTab() {
             habit={habit}
             displayType={displayType}
             currentPage="habit-tab"
-            completionData={getMockHabitData(
-              displayType,
-              habit.id,
-              habit.goal.period === "daily"
-                ? habit.goal.completionsPerPeriod
-                : 1,
-            )}
+            completionData={getMockHabitData({
+              displayType: displayType,
+              habitId: habit.id,
+              targetNumberOfCompletionsPerDay:
+                habit.goal.period === "daily"
+                  ? habit.goal.completionsPerPeriod
+                  : 1,
+            })}
           />
         </View>
       ))}

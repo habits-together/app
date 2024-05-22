@@ -2,7 +2,7 @@ import { View, Text } from "@/src/components/Themed";
 import FriendCard from "@/src/components/FriendCard";
 import { fetchSingleUserThumbnail } from "../lib/getRandomProfilePics";
 import { useEffect, useState } from "react";
-import SmallProfilePicture from "./ProfilePicture";
+import { MediumProfilePicture } from "./ProfilePicture";
 import { FriendData, getMockFriends } from "@/src/lib/mockData";
 
 export default function FriendList() {
@@ -38,7 +38,7 @@ export default function FriendList() {
           key={friend.id}
           displayName={friend.displayName}
           userName={friend.userName}
-          profilePic={<SmallProfilePicture picUrl={friend.profilePicUrl} />}
+          profilePic={<MediumProfilePicture picUrl={friend.profilePicUrl} />}
           commonHabits={friend.commonHabits}
         />
       ))}

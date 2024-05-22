@@ -2,7 +2,7 @@ import FriendRequest from "@/src/components/FriendRequest";
 import { Text, View } from "@/src/components/Themed";
 import { useEffect, useState } from "react";
 import { FriendRequestData, getMockFriendInvites } from "../lib/mockData";
-import SmallProfilePicture from "./ProfilePicture";
+import { MediumProfilePicture } from "./ProfilePicture";
 
 export default function FriendRequestList() {
   const [requests, setRequests] = useState<FriendRequestData[]>([]);
@@ -40,7 +40,7 @@ export default function FriendRequestList() {
           key={index}
           displayName={request.displayName}
           userName={request.userName}
-          profilePic={<SmallProfilePicture picUrl={request.profilePicUrl} />}
+          profilePic={<MediumProfilePicture picUrl={request.profilePicUrl} />}
           deleteInvite={() => deleteInvite(request.id)}
           confirmInvite={() => confirmInvite(request.id)}
         />

@@ -2,7 +2,7 @@ import { Text, View } from "@/src/components/Themed";
 import { FriendData, getMockFriends } from "@/src/lib/mockData";
 import { useEffect, useState } from "react";
 import FriendCard from "./FriendCard";
-import SmallProfilePicture from "./ProfilePicture";
+import { MediumProfilePicture } from "./ProfilePicture";
 import { fetchSingleUserThumbnail } from "../lib/getRandomProfilePics";
 import FriendSearchBar from "./FriendSearchBar";
 import { Pressable } from "react-native";
@@ -37,7 +37,7 @@ export default function InviteFriends() {
           key={friend.id}
           displayName={friend.displayName}
           userName={friend.userName}
-          profilePic={<SmallProfilePicture picUrl={friend.profilePicUrl} />}
+          profilePic={<MediumProfilePicture picUrl={friend.profilePicUrl} />}
           commonHabits={friend.commonHabits}
           displayType="invite"
         />

@@ -1,5 +1,6 @@
 import colors from "@/src/constants/colors";
 import {
+  getNumberOfDaysInLastWeek,
   Habit,
   HabitCompletion,
   HabitGoalPeriod,
@@ -14,7 +15,7 @@ import { getLocalRandomProfilePics } from "../lib/getRandomProfilePics";
 import { getTranslucentColor } from "../lib/getTranslucentColor";
 import DotsMenu from "./DotsMenu";
 import Icon from "./Icon";
-import SmallProfilePicture from "./ProfilePicture";
+import { SmallProfilePicture} from "./ProfilePicture";
 
 export type ProfilePic = {
   imgurl: string;
@@ -443,6 +444,8 @@ function HabitCardCompletionsMonthlyView({
   color: keyof typeof colors.habitColors;
   numberOfCompletionsToday: number;
 }) {
+  const numberOfDaysInLastWeek = getNumberOfDaysInLastWeek();
+
   const numWeeks = Math.ceil(completionData.length / 7);
   const completionsByWeek = Array.from({ length: numWeeks }, (_, index) =>
     completionData.slice(index * 7, (index + 1) * 7),
@@ -495,7 +498,7 @@ function HabitCardCompletionsMonthlyView({
           />
         )}
         {completionsByWeek[numWeeks - 1]
-          .slice(0, 6)
+          .slice(0, numberOfDaysInLastWeek)
           .map((completion, dayIndex) => (
             <HabitCardMonthlyViewCompletionSquare
               key={7 * 7 + dayIndex}
@@ -574,15 +577,14 @@ function HabitCardMonthlyViewCompletionSquare({
             : colors.habitColors[color].faded,
       }}
     >
-      {
-        <View
-          className="absolute h-full w-full"
-          style={{
-            backgroundColor: colors.habitColors[color].base,
-            opacity: getHabitSquareOpacity(completion.numberOfCompletions),
-          }}
-        />
-      }
+      {/* base color fill (can be partially transparent for multiple-times-per-day habit) */}
+      <View
+        className="absolute h-full w-full"
+        style={{
+          backgroundColor: colors.habitColors[color].base,
+          opacity: getHabitSquareOpacity(completion.numberOfCompletions),
+        }}
+      />
     </View>
   );
 }

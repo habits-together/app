@@ -1,4 +1,4 @@
-import { HabitCard } from "@/src/components/HabitCard";
+import { HabitCard, HabitDisplayType } from "@/src/components/HabitCard";
 import { Text, View } from "@/src/components/Themed";
 import {
   IconBook,
@@ -13,13 +13,23 @@ import { Link, useLocalSearchParams } from "expo-router";
 import Icon from "@/src/components/Icon";
 import IconButton from "@/src/components/IconButton";
 import { Pressable } from "react-native";
-import { mockHabitData } from "../lib/mockData";
+import { getMockHabitData, mockHabitData } from "../lib/mockData";
+import { useState } from "react";
 
 export default function ViewHabitComponent() {
   const params = useLocalSearchParams();
   const { id } = params;
-  // in the future, get habit based off id
-  const habit = mockHabitData[0];
+  if (typeof id !== "string") {
+    throw new Error("Invalid habit id provided in URL params");
+  }
+  // get habit based on id
+  const habit = mockHabitData.find((habit) => habit.id === parseInt(id));
+  if (!habit) {
+    throw new Error(`Habit with id ${id} not found`);
+  }
+  // const habit = mockHabitData[0];
+
+  const [displayType, setDisplayType] = useState<HabitDisplayType>("weekly-view");
 
   return (
     <View className="flex-1 p-4" style={{ gap: 40 }}>
@@ -59,6 +69,14 @@ export default function ViewHabitComponent() {
             habit={habit}
             displayType="weekly-view"
             currentPage="habit-tab"
+            completionData={getMockHabitData({
+              displayType: displayType,
+              habitId: habit.id,
+              targetNumberOfCompletionsPerDay:
+                habit.goal.period === "daily"
+                  ? habit.goal.completionsPerPeriod
+                  : 1,
+            })}
           />
         </View>
 
