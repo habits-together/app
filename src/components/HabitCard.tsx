@@ -39,24 +39,6 @@ export function HabitCard({
   const [displayType, setDisplayType] =
     useState<HabitDisplayType>("weekly-view");
 
-  // workaround since right now week mock data and month mock data are different
-  const [mockCompletionData, setMockCompletionData] =
-    useState<HabitCompletion[]>(completionData);
-  useEffect(() => {
-    if (displayType === "monthly-view") {
-      setMockCompletionData(completionData);
-    } else {
-      setMockCompletionData(
-        getMockHabitData({
-          displayType: "weekly-view",
-          habitId: habit.id,
-          targetNumberOfCompletionsPerDay:
-            habit.goal.period === "daily" ? habit.goal.completionsPerPeriod : 1,
-        }),
-      );
-    }
-  });
-
   return (
     <Link
       push
@@ -90,7 +72,7 @@ export function HabitCard({
             <View className="h-[10px]" />
             <HabitCardCompletionsWeeklyView
               habit={habit}
-              completionData={mockCompletionData}
+              completionData={completionData.slice(completionData.length-6)}
               displayType={displayType}
               numberOfCompletionsToday={numberCompletionsToday}
               setNumberOfCompletionsToday={setNumberCompletionsToday}
@@ -102,7 +84,7 @@ export function HabitCard({
             <View className="h-[10px]" />
             <View className="flex w-full flex-1 flex-row">
               <HabitCardCompletionsMonthlyView
-                completionData={mockCompletionData}
+                completionData={completionData}
                 goalPeriod={habit.goal.period}
                 targetNumberOfCompletions={habit.goal.completionsPerPeriod}
                 color={habit.color}
@@ -402,7 +384,7 @@ function HabitCardWeeklyViewCompletionSquare({
   numberOfCompletions: number;
   targetNumberOfCompletions: number;
   color: keyof typeof colors.habitColors;
-  dayOfTheMonth: number;
+  dayOfTheMonth: string;
   dayOfTheWeek: string;
 }) {
   const { colorScheme } = useColorScheme();
@@ -549,8 +531,8 @@ function HabitCardCompletionsMonthlyView({
         <HabitCardMonthlyViewCompletionSquare
           completion={{
             numberOfCompletions: numberOfCompletionsToday,
-            dayOfTheMonth: new Date().getDay(),
             dayOfTheWeek: "Today",
+            dayOfTheMonth: (new Date().getDay()).toString(),
           }}
           goalPeriod={goalPeriod}
           targetNumberOfCompletions={targetNumberOfCompletions}

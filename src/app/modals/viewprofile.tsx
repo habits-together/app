@@ -1,22 +1,11 @@
 import { HabitCard } from "@/src/components/HabitCard";
 import { ScrollView, Text, View } from "@/src/components/Themed";
-import { IconBook } from "@tabler/icons-react-native";
+import { getMockHabitData, mockHabitData } from "@/src/lib/mockData";
 import { Link, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Pressable } from "react-native";
 import { BigProfilePicture } from "../../components/ProfilePicture";
 import { profilePicsDataPromise } from "../../lib/getRandomProfilePics";
-
-const habits = [
-  {
-    title: "Read for 15 minutes",
-    description: "Read for at least 15 minutes every day",
-    icon: IconBook,
-    color: "fuchsia",
-    participants: [1, 2], // should be user objects
-    id: 1,
-  },
-];
 
 export default function Profile() {
   const { displayName } = useLocalSearchParams<{ displayName: string }>();
@@ -50,7 +39,7 @@ export default function Profile() {
           {/* Habits */}
           <View className="space-y-4 pb-32 pt-4">
             <Text className="text-xl font-semibold">Habits Together</Text>
-            {habits.map((habit) => (
+            {mockHabitData.map((habit) => (
               <Link
                 push
                 href={{
@@ -61,12 +50,7 @@ export default function Profile() {
                 key={habit.id}
               >
                 <Pressable>
-                  <HabitCard
-                    title={habit.title}
-                    color={"fuchsia"}
-                    icon={habit.icon}
-                    currentPage="friend's-habit"
-                  />
+                  <HabitCard habit={habit} completionData={getMockHabitData(habit.id)} />
                 </Pressable>
               </Link>
             ))}

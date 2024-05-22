@@ -7,7 +7,7 @@ import {
   IconMusic,
   Icon as TablerIcon,
 } from "@tabler/icons-react-native";
-import { HabitDisplayType } from "../components/HabitCard";
+import { numWeeksToDisplayInMonthlyView } from "../constants/constants";
 import { fetchSingleUserThumbnail } from "./getRandomProfilePics";
 
 export type HabitGoalPeriod = "daily" | "weekly";
@@ -33,15 +33,20 @@ export function getMockHabitMonthData(
   targetNumberOfCompletionsPerDay: number,
 ) {
   const activityData: HabitCompletion[] = new Array(numberOfDays);
+
+  let date = new Date();
+  date.setDate(date.getDate() - numberOfDays);
+
   for (let i = 0; i < numberOfDays; i++) {
     let numCompletions = Math.floor(
       Math.random() * (targetNumberOfCompletionsPerDay + 1),
     );
     activityData[i] = {
       numberOfCompletions: numCompletions,
-      dayOfTheWeek: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][i % 7],
-      dayOfTheMonth: 1 + (i % 31),
+      dayOfTheWeek: date.toLocaleString("en-US", { weekday: "short" }),
+      dayOfTheMonth: date.getDate().toString(),
     };
+    date.setDate(date.getDate() + 1);
   }
 
   return activityData;
@@ -180,148 +185,21 @@ export const mockHabitFriendData = [
 export type HabitCompletion = {
   numberOfCompletions: number;
   dayOfTheWeek: string;
-  dayOfTheMonth: number;
+  dayOfTheMonth: string;
 };
-export const mockHabitWeekData = [
-  {
-    id: 1,
-    completions: [
-      {
-        numberOfCompletions: 0,
-        dayOfTheWeek: "Fri",
-        dayOfTheMonth: 19,
-      },
-      {
-        numberOfCompletions: 1,
-        dayOfTheWeek: "Sat",
-        dayOfTheMonth: 20,
-      },
-      {
-        numberOfCompletions: 0,
-        dayOfTheWeek: "Sun",
-        dayOfTheMonth: 21,
-      },
-      {
-        numberOfCompletions: 1,
-        dayOfTheWeek: "Mon",
-        dayOfTheMonth: 22,
-      },
-      {
-        numberOfCompletions: 1,
-        dayOfTheWeek: "Tue",
-        dayOfTheMonth: 23,
-      },
-      {
-        numberOfCompletions: 0,
-        dayOfTheWeek: "Wed",
-        dayOfTheMonth: 24,
-      },
-      {
-        numberOfCompletions: 1,
-        dayOfTheWeek: "Thu",
-        dayOfTheMonth: 25,
-      },
-    ],
-  },
-  {
-    id: 2,
-    completions: [
-      {
-        numberOfCompletions: 0,
-        dayOfTheWeek: "Fri",
-        dayOfTheMonth: 19,
-      },
-      {
-        numberOfCompletions: 1,
-        dayOfTheWeek: "Sat",
-        dayOfTheMonth: 20,
-      },
-      {
-        numberOfCompletions: 0,
-        dayOfTheWeek: "Sun",
-        dayOfTheMonth: 21,
-      },
-      {
-        numberOfCompletions: 1,
-        dayOfTheWeek: "Mon",
-        dayOfTheMonth: 22,
-      },
-      {
-        numberOfCompletions: 1,
-        dayOfTheWeek: "Tue",
-        dayOfTheMonth: 23,
-      },
-      {
-        numberOfCompletions: 0,
-        dayOfTheWeek: "Wed",
-        dayOfTheMonth: 24,
-      },
-      {
-        numberOfCompletions: 1,
-        dayOfTheWeek: "Thu",
-        dayOfTheMonth: 25,
-      },
-    ],
-  },
-  {
-    id: 3,
-    completions: [
-      {
-        numberOfCompletions: 1,
-        dayOfTheWeek: "Fri",
-        dayOfTheMonth: 19,
-      },
-      {
-        numberOfCompletions: 2,
-        dayOfTheWeek: "Sat",
-        dayOfTheMonth: 20,
-      },
-      {
-        numberOfCompletions: 0,
-        dayOfTheWeek: "Sun",
-        dayOfTheMonth: 21,
-      },
-      {
-        numberOfCompletions: 5,
-        dayOfTheWeek: "Mon",
-        dayOfTheMonth: 22,
-      },
-      {
-        numberOfCompletions: 4,
-        dayOfTheWeek: "Tue",
-        dayOfTheMonth: 23,
-      },
-      {
-        numberOfCompletions: 0,
-        dayOfTheWeek: "Wed",
-        dayOfTheMonth: 24,
-      },
-      {
-        numberOfCompletions: 4,
-        dayOfTheWeek: "Thu",
-        dayOfTheMonth: 25,
-      },
-    ],
-  },
-];
 
-export function getMockHabitData({
-  displayType,
-  habitId,
-  targetNumberOfCompletionsPerDay,
-}: {
-  displayType: HabitDisplayType;
-  habitId: number;
-  targetNumberOfCompletionsPerDay: number;
-}) {
-  switch (displayType) {
-    case "weekly-view":
-      return mockHabitWeekData.filter((data) => data.id === habitId)[0]
-        .completions;
-    case "monthly-view":
-      return getMockHabitMonthData(
-        12 * 7 + getNumberOfDaysInLastWeek(),
-        targetNumberOfCompletionsPerDay,
-      );
+export function getMockHabitData(habitId: number) {
+  const habit = mockHabitData.find((habit) => habit.id === habitId);
+
+  if (!habit) {
+    throw `Could not find habit with id ${habitId}`;
   }
+  
+  const targetNumberOfCompletionsPerDay =
+    habit.goal.period === "daily" ? habit.goal.completionsPerPeriod : 1;
+
+  return getMockHabitMonthData(
+    (numWeeksToDisplayInMonthlyView - 1) * 7 + getNumberOfDaysInLastWeek(),
+    targetNumberOfCompletionsPerDay,
+  );
 }

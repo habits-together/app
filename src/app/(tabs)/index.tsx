@@ -10,17 +10,7 @@ export default function HabitsTab() {
     >
       {mockHabitData.map((habit) => (
         <View key={habit.id} className="mb-5">
-          <HabitCard
-            habit={habit}
-            completionData={getMockHabitData({
-              displayType: "monthly-view",
-              habitId: habit.id,
-              targetNumberOfCompletionsPerDay:
-                habit.goal.period === "daily"
-                  ? habit.goal.completionsPerPeriod
-                  : 1,
-            })}
-          />
+          <HabitCard habit={habit} completionData={getMockHabitData(habit.id)} />
         </View>
       ))}
     </ScrollView>
