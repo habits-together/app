@@ -1,8 +1,8 @@
+import colors from "@/src/constants/colors";
 import { Icon as TablerIcon } from "@tabler/icons-react-native";
+import { useColorScheme } from "nativewind";
 import Icon from "./Icon";
 import { Text, View } from "./Themed";
-import colors from "@/src/constants/colors";
-import { useColorScheme } from "nativewind";
 
 interface IconButtonInterface {
   icon: TablerIcon;

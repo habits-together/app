@@ -1,7 +1,7 @@
-import { TextInput } from "react-native";
-import { View, Text } from "./Themed";
-import colors from "../constants/colors";
 import { useColorScheme } from "nativewind";
+import { TextInput } from "react-native";
+import colors from "../constants/colors";
+import { Text, View } from "./Themed";
 
 export default function AuthInputField({
   text,

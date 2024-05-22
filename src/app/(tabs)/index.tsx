@@ -1,37 +1,21 @@
-import { ScrollView } from "@/src/components/Themed";
 import { HabitCard } from "@/src/components/HabitCard";
-import { Link } from "expo-router";
-import { Pressable } from "react-native";
-import { mockHabitData } from "@/src/lib/mockData";
+import { ScrollView, View } from "@/src/components/Themed";
+import { getMockHabitData, mockHabitData } from "@/src/lib/mockData";
 
 export default function HabitsTab() {
   return (
     <ScrollView
-      className="flex-1 gap-6 p-4"
+      className="flex-1 px-4 pt-2"
       contentContainerStyle={{ paddingBottom: 100 }}
     >
-      {mockHabitData.map((habit) => {
-        return (
-          <Link
-            push
-            href={{
-              pathname: "/viewhabit",
-              params: { id: habit.id },
-            }}
-            asChild
-            key={habit.id}
-          >
-            <Pressable>
-              <HabitCard
-                title={habit.title}
-                color={habit.color}
-                icon={habit.icon}
-                displayType="habit-tab"
-              />
-            </Pressable>
-          </Link>
-        );
-      })}
+      {mockHabitData.map((habit) => (
+        <View key={habit.id} className="mb-5">
+          <HabitCard
+            habit={habit}
+            completionData={getMockHabitData(habit.id)}
+          />
+        </View>
+      ))}
     </ScrollView>
   );
 }

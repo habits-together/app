@@ -1,15 +1,15 @@
+import Divider from "@/src/components/Divider";
+import Icon from "@/src/components/Icon";
 import { Text, View } from "@/src/components/Themed";
-import { ScrollView, TouchableOpacity } from "react-native";
 import colors from "@/src/constants/colors";
 import {
   IconChevronRight,
   IconCircle,
   IconCircleCheck,
 } from "@tabler/icons-react-native";
-import Divider from "@/src/components/Divider";
-import { useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
-import Icon from "@/src/components/Icon";
+import { useEffect, useState } from "react";
+import { ScrollView, TouchableOpacity } from "react-native";
 
 export function SettingsContainer({ children }: { children: React.ReactNode }) {
   return (
