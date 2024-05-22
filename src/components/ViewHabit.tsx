@@ -1,7 +1,8 @@
-import { HabitCard, HabitDisplayType } from "@/src/components/HabitCard";
+import { HabitDisplayType } from "@/src/components/HabitCard";
+import Icon from "@/src/components/Icon";
+import IconButton from "@/src/components/IconButton";
 import { Text, View } from "@/src/components/Themed";
 import {
-  IconBook,
   IconCalendarMonth,
   IconEdit,
   IconHistory,
@@ -10,11 +11,9 @@ import {
   IconUserPlus,
 } from "@tabler/icons-react-native";
 import { Link, useLocalSearchParams } from "expo-router";
-import Icon from "@/src/components/Icon";
-import IconButton from "@/src/components/IconButton";
-import { Pressable } from "react-native";
-import { getMockHabitData, mockHabitData } from "../lib/mockData";
 import { useState } from "react";
+import { Pressable } from "react-native";
+import { mockHabitData } from "../lib/mockData";
 
 export default function ViewHabitComponent() {
   const params = useLocalSearchParams();
@@ -29,7 +28,8 @@ export default function ViewHabitComponent() {
   }
   // const habit = mockHabitData[0];
 
-  const [displayType, setDisplayType] = useState<HabitDisplayType>("weekly-view");
+  const [displayType, setDisplayType] =
+    useState<HabitDisplayType>("weekly-view");
 
   return (
     <View className="flex-1 p-4" style={{ gap: 40 }}>
@@ -65,9 +65,10 @@ export default function ViewHabitComponent() {
 
         {/* Heatmap */}
         <View className="">
-          <HabitCard
+          {/* <HabitCard
             habit={habit}
             displayType="weekly-view"
+            setHabitDisplayType={(_,) => {}}
             currentPage="habit-tab"
             completionData={getMockHabitData({
               displayType: displayType,
@@ -77,7 +78,7 @@ export default function ViewHabitComponent() {
                   ? habit.goal.completionsPerPeriod
                   : 1,
             })}
-          />
+          /> */}
         </View>
 
         {/* Full/Edit Heatmap Buttons */}

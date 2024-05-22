@@ -2,8 +2,6 @@ import { HabitCard } from "@/src/components/HabitCard";
 import { ScrollView, View } from "@/src/components/Themed";
 import { getMockHabitData, mockHabitData } from "@/src/lib/mockData";
 
-const displayType = "monthly-view";
-
 export default function HabitsTab() {
   return (
     <ScrollView
@@ -14,10 +12,8 @@ export default function HabitsTab() {
         <View key={habit.id} className="mb-5">
           <HabitCard
             habit={habit}
-            displayType={displayType}
-            currentPage="habit-tab"
             completionData={getMockHabitData({
-              displayType: displayType,
+              displayType: "monthly-view",
               habitId: habit.id,
               targetNumberOfCompletionsPerDay:
                 habit.goal.period === "daily"

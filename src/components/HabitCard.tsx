@@ -1,5 +1,6 @@
 import colors from "@/src/constants/colors";
 import {
+  getMockHabitData,
   getNumberOfDaysInLastWeek,
   Habit,
   HabitCompletion,
@@ -21,26 +22,40 @@ export type ProfilePic = {
   imgurl: string;
   hasCompleted: boolean;
 };
-
-export type HabitCardProps = {
-  habit: Habit;
-  displayType: HabitDisplayType;
-  currentPage: HabitDisplayPage;
-  completionData: HabitCompletion[];
-};
-
 export type HabitDisplayType = "weekly-view" | "monthly-view";
-export type HabitDisplayPage = "habit-tab" | "view-friend-profile";
 
 export function HabitCard({
   habit,
-  displayType,
-  currentPage,
   completionData,
-}: HabitCardProps) {
+}: {
+  habit: Habit;
+  completionData: HabitCompletion[];
+}) {
   const { colorScheme } = useColorScheme();
   const [numberCompletionsToday, setNumberCompletionsToday] =
     useState<number>(0);
+
+  // in the future want to save this in local storage too
+  const [displayType, setDisplayType] =
+    useState<HabitDisplayType>("weekly-view");
+
+  // workaround since right now week mock data and month mock data are different
+  const [mockCompletionData, setMockCompletionData] =
+    useState<HabitCompletion[]>(completionData);
+  useEffect(() => {
+    if (displayType === "monthly-view") {
+      setMockCompletionData(completionData);
+    } else {
+      setMockCompletionData(
+        getMockHabitData({
+          displayType: "weekly-view",
+          habitId: habit.id,
+          targetNumberOfCompletionsPerDay:
+            habit.goal.period === "daily" ? habit.goal.completionsPerPeriod : 1,
+        }),
+      );
+    }
+  });
 
   return (
     <Link
@@ -60,7 +75,11 @@ export function HabitCard({
               : colors.habitColors[habit.color].light,
         }}
       >
-        <HabitCardHeader habit={habit} />
+        <HabitCardHeader
+          habit={habit}
+          displayType={displayType}
+          setDisplayType={setDisplayType}
+        />
         {displayType === "weekly-view" && (
           <>
             <View className="h-[10px]" />
@@ -71,7 +90,7 @@ export function HabitCard({
             <View className="h-[10px]" />
             <HabitCardCompletionsWeeklyView
               habit={habit}
-              completionData={completionData}
+              completionData={mockCompletionData}
               displayType={displayType}
               numberOfCompletionsToday={numberCompletionsToday}
               setNumberOfCompletionsToday={setNumberCompletionsToday}
@@ -83,7 +102,7 @@ export function HabitCard({
             <View className="h-[10px]" />
             <View className="flex w-full flex-1 flex-row">
               <HabitCardCompletionsMonthlyView
-                completionData={completionData}
+                completionData={mockCompletionData}
                 goalPeriod={habit.goal.period}
                 targetNumberOfCompletions={habit.goal.completionsPerPeriod}
                 color={habit.color}
@@ -115,9 +134,17 @@ export function HabitCard({
   );
 }
 
-function HabitCardHeader({ habit }: { habit: Habit }) {
+function HabitCardHeader({
+  habit,
+  displayType,
+  setDisplayType,
+}: {
+  habit: Habit;
+  displayType: HabitDisplayType;
+  setDisplayType: React.Dispatch<React.SetStateAction<HabitDisplayType>>;
+}) {
   return (
-    <View className="-mb-[10px] flex-row items-center justify-between ml-1">
+    <View className="-mb-[10px] ml-1 flex-row items-center justify-between">
       <View className="mr-2 flex-1 flex-row items-center gap-1">
         <Icon icon={habit.icon} />
         <Text
@@ -131,6 +158,17 @@ function HabitCardHeader({ habit }: { habit: Habit }) {
       <View className="">
         <DotsMenu
           options={[
+            // change to other view
+            {
+              label: `Change to ${displayType === "weekly-view" ? "monthly" : "weekly"} view`,
+              color: colors.black,
+              action: () =>
+                setDisplayType(
+                  displayType === "weekly-view"
+                    ? "monthly-view"
+                    : "weekly-view",
+                ),
+            },
             {
               label: "Edit",
               color: colors.black,
