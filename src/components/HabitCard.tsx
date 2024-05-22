@@ -15,7 +15,7 @@ import { getLocalRandomProfilePics } from "../lib/getRandomProfilePics";
 import { getTranslucentColor } from "../lib/getTranslucentColor";
 import DotsMenu from "./DotsMenu";
 import Icon from "./Icon";
-import { SmallProfilePicture} from "./ProfilePicture";
+import { SmallProfilePicture } from "./ProfilePicture";
 
 export type ProfilePic = {
   imgurl: string;
@@ -52,7 +52,7 @@ export function HabitCard({
       asChild
     >
       <Pressable
-        className="flex h-[171px] flex-col items-start rounded-3xl px-3 pb-3"
+        className="flex h-[171px] flex-col items-start rounded-3xl px-3 pb-2"
         style={{
           backgroundColor:
             colorScheme === "dark"
@@ -117,7 +117,7 @@ export function HabitCard({
 
 function HabitCardHeader({ habit }: { habit: Habit }) {
   return (
-    <View className="-mb-[10px] flex-row items-center justify-between">
+    <View className="-mb-[10px] flex-row items-center justify-between ml-1">
       <View className="mr-2 flex-1 flex-row items-center gap-1">
         <Icon icon={habit.icon} />
         <Text
@@ -622,7 +622,7 @@ function HabitCompletionButton({
     <View className="flex flex-col items-center gap-1">
       <Pressable
         onPress={handleCompletionButtonPress}
-        className={`relative flex ${displayType === "monthly-view" ? "h-[40px] w-[40px]" : "h-[48px] w-[48px]"} items-center justify-center overflow-hidden rounded-full`}
+        className={`relative flex h-[48px] w-[48px] items-center justify-center overflow-hidden rounded-full`}
         style={{
           backgroundColor:
             colorScheme === "dark"
@@ -635,10 +635,8 @@ function HabitCompletionButton({
           className="absolute bottom-0 w-full"
           style={{
             backgroundColor: colors.habitColors[color].base,
-            height:
-              (numberOfCompletionsToday / targetNumberOfCompletions) *
-              // height of button
-              (displayType === "monthly-view" ? 40 : 48),
+            // constant is height of button
+            height: (numberOfCompletionsToday / targetNumberOfCompletions) * 48,
           }}
         />
         {/* check mark */}
