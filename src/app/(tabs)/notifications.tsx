@@ -1,21 +1,13 @@
-import FriendList from "@/src/components/FriendList";
-import FriendRequestList from "@/src/components/FriendRequestList";
-import HabitInviteList from "@/src/components/HabitInviteList";
 import { ScrollView } from "@/src/components/Themed";
-import Divider from "@/src/components/Divider";
-import { View } from "react-native";
-import HabitReminderList from "@/src/components/HabitReminderList";
+import NotificationList from "@/src/components/NotificationList";
 
-export default function FriendsTab() {
+export default function NotificationTab() {
   return (
     <ScrollView
       className="flex-1"
       contentContainerStyle={{ paddingBottom: 100 }}
     >
-      <Divider />
-      <FriendRequestList />
-      <HabitInviteList />
-      <HabitReminderList />
+    <NotificationList />
     </ScrollView>
   );
 }

@@ -5,6 +5,7 @@ import {
   IconBed,
   IconBook,
   IconCode,
+  IconExclamationCircle,
   IconMoodTongue,
   IconMusic,
   Icon as TablerIcon,
@@ -189,4 +190,102 @@ export async function getMockFriends() {
     },
   ];
   return mockFriends;
+}
+
+export type NotificationData = {
+  id: number; // unique id for each reminder
+  type: "friendRequest" | "habitInvite" | "habitReminder";
+  displayName: string;
+  mutualCount: number; // only for friend requests
+  profilePicUrl: string;
+  title: string;
+  color: keyof typeof colors.habitColors;
+  icon: TablerIcon;
+  numberOfParticipants: number; // only for habit invites
+  timeSent: number; // this will be hours stored as a number, can be changed to proper time after we decide on the format in the db
+};
+
+export async function getMockNotifications() {
+  const pic1 = await fetchSingleUserThumbnail();
+  const pic2 = await fetchSingleUserThumbnail();
+  const pic3 = await fetchSingleUserThumbnail();
+  const pic4 = await fetchSingleUserThumbnail();
+  const pic5 = await fetchSingleUserThumbnail();
+  const pic6 = await fetchSingleUserThumbnail();
+
+  const mockNotifications: NotificationData[] = [
+    {
+      id: 1,
+      type: "friendRequest",
+      displayName: "Someone else",
+      mutualCount: 3,
+      profilePicUrl: pic1.imgurl,
+      title: "",
+      color: "red",
+      icon: IconExclamationCircle,
+      numberOfParticipants: 0,
+      timeSent: 0,
+    },
+    {
+      id: 2,
+      type: "habitReminder",
+      displayName: "Guy One",
+      mutualCount: 0,
+      profilePicUrl: pic2.imgurl,
+      title: "Work on Habit",
+      color: "red",
+      icon: IconCode,
+      numberOfParticipants: 0,
+      timeSent: 0,
+    },
+    {
+      id: 3,
+      type: "habitInvite",
+      displayName: "Kush Blaze",
+      mutualCount: 0,
+      profilePicUrl: pic3.imgurl,
+      title: "Play Guitar",
+      color: "purple",
+      icon: IconMusic,
+      numberOfParticipants: 3,
+      timeSent: 0,
+    },
+    {
+      id: 4,
+      type: "friendRequest",
+      displayName: "Eduardo",
+      mutualCount: 5,
+      profilePicUrl: pic4.imgurl,
+      title: "",
+      color: "red",
+      icon: IconExclamationCircle,
+      numberOfParticipants: 0,
+      timeSent: 0,
+    },
+    {
+      id: 5,
+      type: "habitInvite",
+      displayName: "Blaze Kush",
+      mutualCount: 0,
+      profilePicUrl: pic5.imgurl,
+      title: "Yum Yum",
+      color: "red",
+      icon: IconMoodTongue,
+      numberOfParticipants: 10,
+      timeSent: 0,
+    },
+    {
+      id: 6,
+      type: "habitReminder",
+      displayName: "Dude Two",
+      mutualCount: 0,
+      profilePicUrl: pic6.imgurl,
+      title: "Yum Yum",
+      color: "red",
+      icon: IconMoodTongue,
+      numberOfParticipants: 0,
+      timeSent: 12,
+    },
+  ];
+  return mockNotifications;
 }
