@@ -1,18 +1,21 @@
 import colors from "@/src/constants/colors";
-import {
-  getNumberOfDaysInLastWeek,
-  Habit,
-  HabitCompletion,
-  HabitGoalPeriod,
-  mockHabitFriendData,
-} from "@/src/lib/mockData";
+import { getNumberOfDaysInLastWeek } from "@/src/lib/mockData";
 import { IconActivity, IconCheck } from "@tabler/icons-react-native";
 import { Link } from "expo-router";
+import { useAtom, useAtomValue } from "jotai";
 import { useColorScheme } from "nativewind";
 import React, { useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
+import {
+  habitColorAtom,
+  habitCompletionsAtomFamily,
+  habitDisplayTypeAtomFamily,
+  habitInfoAtomFamily,
+  habitParticipantsAtomFamily,
+} from "../atoms/atoms";
 import { getLocalRandomProfilePics } from "../lib/getRandomProfilePics";
 import { getTranslucentColor } from "../lib/getTranslucentColor";
+import { Habit, HabitCompletion, HabitGoalPeriod } from "../lib/types";
 import DotsMenu from "./DotsMenu";
 import Icon from "./Icon";
 import { SmallProfilePicture } from "./ProfilePicture";
@@ -23,27 +26,27 @@ export type ProfilePic = {
 };
 export type HabitDisplayType = "weekly-view" | "monthly-view";
 
-export function HabitCard({
-  habit,
-  completionData,
-}: {
-  habit: Habit;
-  completionData: HabitCompletion[];
-}) {
+export function HabitCard({ habitId }: { habitId: number }) {
   const { colorScheme } = useColorScheme();
   const [numberCompletionsToday, setNumberCompletionsToday] =
     useState<number>(0);
 
   // in the future want to save this in local storage too
-  const [displayType, setDisplayType] =
-    useState<HabitDisplayType>("weekly-view");
+  // const [displayType, setDisplayType] =
+  //   useState<HabitDisplayType>("weekly-view");
+  const [displayType, setDisplayType] = useAtom(
+    habitDisplayTypeAtomFamily(habitId),
+  );
+
+  const habitInfo = useAtomValue(habitInfoAtomFamily(habitId));
+  const completionData = useAtomValue(habitCompletionsAtomFamily(habitId));
 
   return (
     <Link
       push
       href={{
         pathname: "/viewhabit",
-        params: { id: habit.id },
+        params: { id: habitId },
       }}
       asChild
     >
@@ -53,26 +56,17 @@ export function HabitCard({
           backgroundColor:
             colorScheme === "dark"
               ? colors.stone.light
-              : colors.habitColors[habit.color].light,
+              : colors.habitColors[habitInfo.color].light,
         }}
       >
-        <HabitCardHeader
-          habit={habit}
-          displayType={displayType}
-          setDisplayType={setDisplayType}
-        />
+        <HabitCardHeader habitId={habitId} />
         {displayType === "weekly-view" && (
           <>
             <View className="h-[10px]" />
-            <HabitCardFriendCompletions
-              habit={habit}
-              displayType={displayType}
-            />
+            <HabitCardFriendCompletions habitId={habitId} />
             <View className="h-[10px]" />
             <HabitCardCompletionsWeeklyView
-              habit={habit}
-              completionData={completionData.slice(completionData.length - 6)}
-              displayType={displayType}
+              habitId={habitId}
               numberOfCompletionsToday={numberCompletionsToday}
               setNumberOfCompletionsToday={setNumberCompletionsToday}
             />
@@ -83,23 +77,22 @@ export function HabitCard({
             <View className="h-[10px]" />
             <View className="flex w-full flex-1 flex-row">
               <HabitCardCompletionsMonthlyView
-                completionData={completionData}
-                goalPeriod={habit.goal.period}
-                targetNumberOfCompletions={habit.goal.completionsPerPeriod}
-                color={habit.color}
+                habitId={habitId}
+                targetNumberOfCompletions={
+                  habitInfo.goal.period === "daily"
+                    ? habitInfo.goal.completionsPerPeriod
+                    : 1
+                }
                 numberOfCompletionsToday={numberCompletionsToday}
               />
               <View className="w-[10px]" />
               <View className="flex flex-1 flex-col items-end justify-between">
-                <HabitCardFriendCompletions
-                  habit={habit}
-                  displayType={displayType}
-                />
+                <HabitCardFriendCompletions habitId={habitId} />
                 <HabitCompletionButton
-                  color={habit.color}
+                  color={habitInfo.color}
                   targetNumberOfCompletions={
-                    habit.goal.period === "daily"
-                      ? habit.goal.completionsPerPeriod
+                    habitInfo.goal.period === "daily"
+                      ? habitInfo.goal.completionsPerPeriod
                       : 1
                   }
                   displayType={displayType}
@@ -115,15 +108,12 @@ export function HabitCard({
   );
 }
 
-function HabitCardHeader({
-  habit,
-  displayType,
-  setDisplayType,
-}: {
-  habit: Habit;
-  displayType: HabitDisplayType;
-  setDisplayType: React.Dispatch<React.SetStateAction<HabitDisplayType>>;
-}) {
+function HabitCardHeader({ habitId }: { habitId: number }) {
+  const habit = useAtomValue(habitInfoAtomFamily(habitId));
+  const [displayType, setDisplayType] = useAtom(
+    habitDisplayTypeAtomFamily(habitId),
+  );
+
   return (
     <View className="-mb-[10px] ml-1 flex-row items-center justify-between">
       <View className="mr-2 flex-1 flex-row items-center gap-1">
@@ -167,56 +157,47 @@ function HabitCardHeader({
   );
 }
 
-function HabitCardFriendCompletions({
-  displayType,
-  habit,
-}: {
-  displayType: HabitDisplayType;
-  habit: Habit;
-}) {
+function HabitCardFriendCompletions({ habitId }: { habitId: number }) {
+  const habitColor = useAtomValue(habitColorAtom(habitId));
+  const displayType = useAtomValue(habitDisplayTypeAtomFamily(habitId));
+
   return (
     <View
       className={`flex ${displayType === "weekly-view" ? "flex-row" : "w-full flex-col-reverse"} items-center rounded-[10px] border p-[5px]`}
       style={{
         borderColor: getTranslucentColor(
-          colors.habitColors[habit.color].text,
+          colors.habitColors[habitColor].text,
           0.5,
         ),
       }}
     >
-      <FriendProfilePictures displayType={displayType} habit={habit} />
+      <FriendProfilePictures habitId={habitId} />
       <View className="h-[5px] w-[5px]" />
-      <FriendCompletedBadge
-        displayType={displayType}
-        goalPeriod={habit.goal.period}
-        habit={habit}
-      />
+      <FriendCompletedBadge habitId={habitId} />
     </View>
   );
 }
 
-function FriendProfilePictures({
-  displayType,
-  habit,
-}: {
-  displayType: HabitDisplayType;
-  habit: Habit;
-}) {
+function FriendProfilePictures({ habitId }: { habitId: number }) {
   const { colorScheme } = useColorScheme();
+
+  const displayType = useAtomValue(habitDisplayTypeAtomFamily(habitId));
 
   // it would be good to figure out how to do this responsively based on screen width
   const maxPfps = displayType === "weekly-view" ? 6 : 4;
 
+  const habitParticipantIds = useAtomValue(
+    habitParticipantsAtomFamily(habitId),
+  );
   const [mockPfps, setMockPfps] = useState<
     { imgurl: string; hasCompleted: boolean }[]
   >([]);
   const [numPfpsToDisplay, setNumPfpsToDisplay] = useState<number>(maxPfps);
 
+  const habitColor = useAtomValue(habitColorAtom(habitId));
+
   useEffect(() => {
-    const mockFriendIds = mockHabitFriendData.filter(
-      (data) => data.id === habit.id,
-    )[0];
-    setMockPfps(getLocalRandomProfilePics(mockFriendIds.friendIds));
+    setMockPfps(getLocalRandomProfilePics(habitParticipantIds));
   }, []);
 
   useEffect(() => {
@@ -238,7 +219,7 @@ function FriendProfilePictures({
           backgroundColor:
             colorScheme === "dark"
               ? colors.stone.faded
-              : colors.habitColors[habit.color].faded,
+              : colors.habitColors[habitColor].faded,
         }}
       >
         <Text
@@ -247,7 +228,7 @@ function FriendProfilePictures({
             color:
               colorScheme === "dark"
                 ? colors.stone.text
-                : colors.habitColors[habit.color].text,
+                : colors.habitColors[habitColor].text,
           }}
         >
           +{mockPfps.length - maxPfps}
@@ -262,7 +243,7 @@ function FriendProfilePictures({
         <View
           key={data.imgurl + index}
           className="-mr-[7px] rounded-full border"
-          style={{ borderColor: colors.habitColors[habit.color].base }}
+          style={{ borderColor: colors.habitColors[habitColor].base }}
         >
           <SmallProfilePicture picUrl={data.imgurl} isLocalImage={true} />
         </View>
@@ -272,14 +253,14 @@ function FriendProfilePictures({
 }
 
 function FriendCompletedBadge({
-  displayType,
-  goalPeriod,
-  habit,
+  habitId,
 }: {
-  displayType: HabitDisplayType;
-  goalPeriod: HabitGoalPeriod;
-  habit: Habit;
+  habitId: number;
 }) {
+  const habit = useAtomValue(habitInfoAtomFamily(habitId));
+  const goalPeriod = habit.goal.period;
+  const displayType = useAtomValue(habitDisplayTypeAtomFamily(habitId));
+
   function getCompletedBadgeText() {
     if (
       displayType === "weekly-view" &&
@@ -334,18 +315,18 @@ function FriendCompletedBadge({
 }
 
 function HabitCardCompletionsWeeklyView({
-  habit,
-  completionData,
-  displayType,
+  habitId,
   numberOfCompletionsToday,
   setNumberOfCompletionsToday,
 }: {
-  habit: Habit;
-  completionData: HabitCompletion[];
-  displayType: HabitDisplayType;
+  habitId: number;
   numberOfCompletionsToday: number;
   setNumberOfCompletionsToday: React.Dispatch<React.SetStateAction<number>>;
 }) {
+  const habit = useAtomValue(habitInfoAtomFamily(habitId));
+  const completionData = useAtomValue(habitCompletionsAtomFamily(habitId));
+  const displayType = useAtomValue(habitDisplayTypeAtomFamily(habitId));
+
   return (
     <View className="flex w-full flex-1 flex-row items-end justify-between">
       {completionData.slice(0, 6).map((completion, index) => (
@@ -451,18 +432,19 @@ function HabitCardWeeklyViewCompletionSquare({
 }
 
 function HabitCardCompletionsMonthlyView({
-  completionData,
-  goalPeriod,
-  targetNumberOfCompletions,
-  color,
+  habitId,
   numberOfCompletionsToday,
+  targetNumberOfCompletions,
 }: {
-  completionData: HabitCompletion[];
-  goalPeriod: HabitGoalPeriod;
-  targetNumberOfCompletions: number;
-  color: keyof typeof colors.habitColors;
+  habitId: number;
   numberOfCompletionsToday: number;
+  targetNumberOfCompletions: number;
 }) {
+  const habit = useAtomValue(habitInfoAtomFamily(habitId));
+  const completionData = useAtomValue(habitCompletionsAtomFamily(habitId));
+  const goalPeriod = habit.goal.period;
+  const color = habit.color;
+
   const numberOfDaysInLastWeek = getNumberOfDaysInLastWeek();
 
   const numWeeks = Math.ceil(completionData.length / 7);

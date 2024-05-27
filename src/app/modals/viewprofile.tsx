@@ -1,6 +1,6 @@
 import { HabitCard } from "@/src/components/HabitCard";
 import { ScrollView, Text, View } from "@/src/components/Themed";
-import { getMockHabitData, mockHabitData } from "@/src/lib/mockData";
+import { getMockHabitCompletionData, mockHabitData } from "@/src/lib/mockData";
 import { Link, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Pressable } from "react-native";
@@ -51,8 +51,8 @@ export default function Profile() {
               >
                 <Pressable>
                   <HabitCard
-                    habit={habit}
-                    completionData={getMockHabitData(habit.id)}
+                    habitId={habit}
+                    completionData={getMockHabitCompletionData(habit.id)}
                   />
                 </Pressable>
               </Link>
