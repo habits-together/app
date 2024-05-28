@@ -25,6 +25,7 @@ export type HabitData = {
 }
 
 export type HabitGoalPeriod = "daily" | "weekly";
+export type HabitDisplayType = "weekly-view" | "monthly-view";
 
 export type Habit = {
   id: number;
@@ -46,6 +47,7 @@ export type HabitCompletion = {
   numberOfCompletions: number;
   dayOfTheWeek: string;
   dayOfTheMonth: string;
+  date: string;
 };
 
 export type HabitParticipants = {
@@ -68,6 +70,11 @@ export type FriendRequestData = {
   displayName: string;
   userName: string;
   profilePicUrl: string;
+};
+
+export type ProfilePic = {
+  imgurl: string;
+  hasCompleted: boolean;
 };
 
 // notifications

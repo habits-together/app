@@ -2,44 +2,36 @@ import colors from "@/src/constants/colors";
 import { getNumberOfDaysInLastWeek } from "@/src/lib/mockData";
 import { IconActivity, IconCheck } from "@tabler/icons-react-native";
 import { Link } from "expo-router";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useColorScheme } from "nativewind";
 import React, { useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import {
   habitColorAtom,
-  habitCompletionsAtomFamily,
-  habitDisplayTypeAtomFamily,
-  habitInfoAtomFamily,
-  habitParticipantsAtomFamily,
+  habitCompletionsAtom,
+  habitDisplayTypeAtom,
+  habitGoalAtom,
+  habitInfoAtom,
+  habitParticipantsAtom,
+  incrementNumberOfCompletionsTodayAtom,
+  numberOfCompletionsTodayAtom,
+  targetNumberOfCompletionsPerDayAtom,
+  targetNumberOfCompletionsPerWeekAtom,
 } from "../atoms/atoms";
 import { getLocalRandomProfilePics } from "../lib/getRandomProfilePics";
 import { getTranslucentColor } from "../lib/getTranslucentColor";
-import { Habit, HabitCompletion, HabitGoalPeriod } from "../lib/types";
+import { HabitCompletion } from "../lib/types";
 import DotsMenu from "./DotsMenu";
 import Icon from "./Icon";
 import { SmallProfilePicture } from "./ProfilePicture";
 
-export type ProfilePic = {
-  imgurl: string;
-  hasCompleted: boolean;
-};
-export type HabitDisplayType = "weekly-view" | "monthly-view";
-
 export function HabitCard({ habitId }: { habitId: number }) {
   const { colorScheme } = useColorScheme();
-  const [numberCompletionsToday, setNumberCompletionsToday] =
-    useState<number>(0);
-
-  // in the future want to save this in local storage too
-  // const [displayType, setDisplayType] =
-  //   useState<HabitDisplayType>("weekly-view");
-  const [displayType, setDisplayType] = useAtom(
-    habitDisplayTypeAtomFamily(habitId),
+  const displayType = useAtomValue(
+    habitDisplayTypeAtom(habitId),
   );
 
-  const habitInfo = useAtomValue(habitInfoAtomFamily(habitId));
-  const completionData = useAtomValue(habitCompletionsAtomFamily(habitId));
+  const habitInfo = useAtomValue(habitInfoAtom(habitId));
 
   return (
     <Link
@@ -65,40 +57,18 @@ export function HabitCard({ habitId }: { habitId: number }) {
             <View className="h-[10px]" />
             <HabitCardFriendCompletions habitId={habitId} />
             <View className="h-[10px]" />
-            <HabitCardCompletionsWeeklyView
-              habitId={habitId}
-              numberOfCompletionsToday={numberCompletionsToday}
-              setNumberOfCompletionsToday={setNumberCompletionsToday}
-            />
+            <HabitCardCompletionsWeeklyView habitId={habitId} />
           </>
         )}
         {displayType === "monthly-view" && (
           <>
             <View className="h-[10px]" />
             <View className="flex w-full flex-1 flex-row">
-              <HabitCardCompletionsMonthlyView
-                habitId={habitId}
-                targetNumberOfCompletions={
-                  habitInfo.goal.period === "daily"
-                    ? habitInfo.goal.completionsPerPeriod
-                    : 1
-                }
-                numberOfCompletionsToday={numberCompletionsToday}
-              />
+              <HabitCardCompletionsMonthlyView habitId={habitId} />
               <View className="w-[10px]" />
               <View className="flex flex-1 flex-col items-end justify-between">
                 <HabitCardFriendCompletions habitId={habitId} />
-                <HabitCompletionButton
-                  color={habitInfo.color}
-                  targetNumberOfCompletions={
-                    habitInfo.goal.period === "daily"
-                      ? habitInfo.goal.completionsPerPeriod
-                      : 1
-                  }
-                  displayType={displayType}
-                  numberOfCompletionsToday={numberCompletionsToday}
-                  setNumberOfCompletionsToday={setNumberCompletionsToday}
-                />
+                <HabitCompletionButton habitId={habitId} />
               </View>
             </View>
           </>
@@ -109,9 +79,9 @@ export function HabitCard({ habitId }: { habitId: number }) {
 }
 
 function HabitCardHeader({ habitId }: { habitId: number }) {
-  const habit = useAtomValue(habitInfoAtomFamily(habitId));
+  const habit = useAtomValue(habitInfoAtom(habitId));
   const [displayType, setDisplayType] = useAtom(
-    habitDisplayTypeAtomFamily(habitId),
+    habitDisplayTypeAtom(habitId),
   );
 
   return (
@@ -159,7 +129,7 @@ function HabitCardHeader({ habitId }: { habitId: number }) {
 
 function HabitCardFriendCompletions({ habitId }: { habitId: number }) {
   const habitColor = useAtomValue(habitColorAtom(habitId));
-  const displayType = useAtomValue(habitDisplayTypeAtomFamily(habitId));
+  const displayType = useAtomValue(habitDisplayTypeAtom(habitId));
 
   return (
     <View
@@ -181,13 +151,13 @@ function HabitCardFriendCompletions({ habitId }: { habitId: number }) {
 function FriendProfilePictures({ habitId }: { habitId: number }) {
   const { colorScheme } = useColorScheme();
 
-  const displayType = useAtomValue(habitDisplayTypeAtomFamily(habitId));
+  const displayType = useAtomValue(habitDisplayTypeAtom(habitId));
 
   // it would be good to figure out how to do this responsively based on screen width
   const maxPfps = displayType === "weekly-view" ? 6 : 4;
 
   const habitParticipantIds = useAtomValue(
-    habitParticipantsAtomFamily(habitId),
+    habitParticipantsAtom(habitId),
   );
   const [mockPfps, setMockPfps] = useState<
     { imgurl: string; hasCompleted: boolean }[]
@@ -252,14 +222,10 @@ function FriendProfilePictures({ habitId }: { habitId: number }) {
   );
 }
 
-function FriendCompletedBadge({
-  habitId,
-}: {
-  habitId: number;
-}) {
-  const habit = useAtomValue(habitInfoAtomFamily(habitId));
+function FriendCompletedBadge({ habitId }: { habitId: number }) {
+  const habit = useAtomValue(habitInfoAtom(habitId));
   const goalPeriod = habit.goal.period;
-  const displayType = useAtomValue(habitDisplayTypeAtomFamily(habitId));
+  const displayType = useAtomValue(habitDisplayTypeAtom(habitId));
 
   function getCompletedBadgeText() {
     if (
@@ -314,60 +280,38 @@ function FriendCompletedBadge({
   );
 }
 
-function HabitCardCompletionsWeeklyView({
-  habitId,
-  numberOfCompletionsToday,
-  setNumberOfCompletionsToday,
-}: {
-  habitId: number;
-  numberOfCompletionsToday: number;
-  setNumberOfCompletionsToday: React.Dispatch<React.SetStateAction<number>>;
-}) {
-  const habit = useAtomValue(habitInfoAtomFamily(habitId));
-  const completionData = useAtomValue(habitCompletionsAtomFamily(habitId));
-  const displayType = useAtomValue(habitDisplayTypeAtomFamily(habitId));
+function HabitCardCompletionsWeeklyView({ habitId }: { habitId: number }) {
+  const habit = useAtomValue(habitInfoAtom(habitId));
+  const completionData = useAtomValue(habitCompletionsAtom(habitId));
 
   return (
     <View className="flex w-full flex-1 flex-row items-end justify-between">
       {completionData.slice(0, 6).map((completion, index) => (
         <HabitCardWeeklyViewCompletionSquare
           key={index}
-          numberOfCompletions={completion.numberOfCompletions}
-          targetNumberOfCompletions={
-            habit.goal.period === "daily" ? habit.goal.completionsPerPeriod : 1
-          }
-          color={habit.color}
-          dayOfTheMonth={completion.dayOfTheMonth}
-          dayOfTheWeek={completion.dayOfTheWeek}
+          habitId={habitId}
+          completion={completion}
         />
       ))}
-      <HabitCompletionButton
-        color={habit.color}
-        targetNumberOfCompletions={
-          habit.goal.period === "daily" ? habit.goal.completionsPerPeriod : 1
-        }
-        displayType={displayType}
-        numberOfCompletionsToday={numberOfCompletionsToday}
-        setNumberOfCompletionsToday={setNumberOfCompletionsToday}
-      />
+      <HabitCompletionButton habitId={habitId} />
     </View>
   );
 }
 
 function HabitCardWeeklyViewCompletionSquare({
-  numberOfCompletions,
-  targetNumberOfCompletions,
-  color,
-  dayOfTheMonth,
-  dayOfTheWeek,
+  habitId,
+  completion,
 }: {
-  numberOfCompletions: number;
-  targetNumberOfCompletions: number;
-  color: keyof typeof colors.habitColors;
-  dayOfTheMonth: string;
-  dayOfTheWeek: string;
+  habitId: number;
+  completion: HabitCompletion;
 }) {
   const { colorScheme } = useColorScheme();
+
+  const color = useAtomValue(habitColorAtom(habitId));
+  const targetNumberOfCompletionsPerDay = useAtomValue(
+    targetNumberOfCompletionsPerDayAtom(habitId),
+  );
+  const { numberOfCompletions, dayOfTheMonth, dayOfTheWeek } = completion;
 
   return (
     <View className="flex flex-col items-center gap-1">
@@ -400,12 +344,13 @@ function HabitCardWeeklyViewCompletionSquare({
             className="absolute bottom-0 w-full"
             style={{
               backgroundColor: colors.habitColors[color].base,
-              height: (numberOfCompletions / targetNumberOfCompletions) * 32,
+              height:
+                (numberOfCompletions / targetNumberOfCompletionsPerDay) * 32,
             }}
           ></View>
         )}
         {/* check mark */}
-        {numberOfCompletions === targetNumberOfCompletions && (
+        {numberOfCompletions === targetNumberOfCompletionsPerDay && (
           <View className="mx-auto my-auto">
             <Icon
               icon={IconCheck}
@@ -431,93 +376,117 @@ function HabitCardWeeklyViewCompletionSquare({
   );
 }
 
-function HabitCardCompletionsMonthlyView({
-  habitId,
-  numberOfCompletionsToday,
-  targetNumberOfCompletions,
-}: {
-  habitId: number;
-  numberOfCompletionsToday: number;
-  targetNumberOfCompletions: number;
-}) {
-  const habit = useAtomValue(habitInfoAtomFamily(habitId));
-  const completionData = useAtomValue(habitCompletionsAtomFamily(habitId));
-  const goalPeriod = habit.goal.period;
-  const color = habit.color;
+function HabitCardCompletionsMonthlyView({ habitId }: { habitId: number }) {
+  const habit = useAtomValue(habitInfoAtom(habitId));
+  const completionData = useAtomValue(habitCompletionsAtom(habitId));
+  const numberOfCompletionsToday = useAtomValue(
+    numberOfCompletionsTodayAtom(habitId),
+  );
+  const targetNumberOfCompletionsPerWeek = useAtomValue(
+    targetNumberOfCompletionsPerWeekAtom(habitId),
+  );
 
   const numberOfDaysInLastWeek = getNumberOfDaysInLastWeek();
 
-  const numWeeks = Math.ceil(completionData.length / 7);
-  const completionsByWeek = Array.from({ length: numWeeks }, (_, index) =>
-    completionData.slice(index * 7, (index + 1) * 7),
-  );
-  const weekGoalsMet = completionsByWeek.map(
-    (week) =>
-      week.reduce(
+  // calculate how many weeks we need to display
+  const [numWeeks, setNumWeeks] = useState(0);
+  useEffect(() => {
+    setNumWeeks(Math.ceil(completionData.length / 7));
+  }, [completionData.length]);
+
+  // separate each week of completions into its own array
+  const [completionsByWeek, setCompletionsByWeek] = useState<
+    HabitCompletion[][]
+  >([]);
+  useEffect(() => {
+    if (completionData.length === 0) return;
+    setCompletionsByWeek(
+      Array.from({ length: numWeeks }, (_, index) =>
+        completionData.slice(index * 7, (index + 1) * 7),
+      ),
+    );
+  }, [numWeeks, completionData]);
+
+  // see if each week's goal is met
+  const [weekGoalsMet, setWeekGoalsMet] = useState<boolean[]>([]);
+  useEffect(() => {
+    if (completionsByWeek.length === 0) return;
+    const allExceptThisWeek = completionsByWeek.slice(0, -1).map(
+      (week) =>
+        // calculate sum
+        week.reduce(
+          (acc, completion) => acc + completion.numberOfCompletions,
+          0,
+        ) >= targetNumberOfCompletionsPerWeek,
+    );
+    // include today's completions
+    const thisWeek =
+      completionsByWeek[numWeeks - 1].reduce(
         (acc, completion) => acc + completion.numberOfCompletions,
         0,
-      ) >= targetNumberOfCompletions,
-  );
+      ) +
+        numberOfCompletionsToday >=
+      targetNumberOfCompletionsPerWeek;
 
-  useEffect(() => {
-    weekGoalsMet[numWeeks - 1] = false;
-  }, [numberOfCompletionsToday]);
+    setWeekGoalsMet([...allExceptThisWeek, thisWeek]);
+  }, [
+    completionsByWeek,
+    targetNumberOfCompletionsPerWeek,
+    numberOfCompletionsToday,
+  ]);
 
   return (
     <View
-      className={`flex flex-row ${goalPeriod === "weekly" && "-mt-[13px]"}`}
+      className={`flex flex-row ${habit.goal.period === "weekly" && "-mt-[13px]"}`}
     >
       {/* all columns except the last one */}
-      {completionsByWeek
-        .slice(0, completionsByWeek.length - 1)
-        .map((completions, index) => (
-          <View key={index} className="mr-[3px] flex flex-col">
-            {goalPeriod === "weekly" && (
-              <WeekGoalMetCheckmark
-                weekGoalMet={weekGoalsMet[index]}
-                color={color}
-              />
-            )}
-            {completions.map((completion, dayIndex) => (
-              <HabitCardMonthlyViewCompletionSquare
-                key={index * 7 + dayIndex}
-                completion={completion}
-                goalPeriod={goalPeriod}
-                targetNumberOfCompletions={targetNumberOfCompletions}
-                color={color}
-              />
-            ))}
-          </View>
-        ))}
+      {completionsByWeek.length > 0 &&
+        completionsByWeek
+          .slice(0, completionsByWeek.length - 1)
+          .map((completions, index) => (
+            <View key={index} className="mr-[3px] flex flex-col">
+              {habit.goal.period === "weekly" && (
+                <WeekGoalMetCheckmark
+                  habitId={habitId}
+                  weekGoalMet={weekGoalsMet[index]}
+                />
+              )}
+              {completions.map((completion, dayIndex) => (
+                <HabitCardMonthlyViewCompletionSquare
+                  key={index * 7 + dayIndex}
+                  habitId={habitId}
+                  completion={completion}
+                />
+              ))}
+            </View>
+          ))}
       {/* last column needs to be separate */}
       {/* because we need to pass numberOfCompletionsToday to today's square */}
       <View className="flex flex-col">
-        {goalPeriod === "weekly" && (
+        {habit.goal.period === "weekly" && (
           <WeekGoalMetCheckmark
-            weekGoalMet={weekGoalsMet[numWeeks - 1]}
-            color={color}
+            habitId={habitId}
+            weekGoalMet={weekGoalsMet[completionsByWeek.length - 1]}
           />
         )}
-        {completionsByWeek[numWeeks - 1]
-          .slice(0, numberOfDaysInLastWeek)
-          .map((completion, dayIndex) => (
-            <HabitCardMonthlyViewCompletionSquare
-              key={7 * 7 + dayIndex}
-              completion={completion}
-              goalPeriod={goalPeriod}
-              targetNumberOfCompletions={targetNumberOfCompletions}
-              color={color}
-            />
-          ))}
+        {completionsByWeek.length > 0 &&
+          completionsByWeek[numWeeks - 1]
+            .slice(0, numberOfDaysInLastWeek)
+            .map((completion, dayIndex) => (
+              <HabitCardMonthlyViewCompletionSquare
+                key={7 * 7 + dayIndex}
+                habitId={habitId}
+                completion={completion}
+              />
+            ))}
         <HabitCardMonthlyViewCompletionSquare
+          habitId={habitId}
           completion={{
             numberOfCompletions: numberOfCompletionsToday,
             dayOfTheWeek: "Today",
             dayOfTheMonth: new Date().getDay().toString(),
+            date: new Date().toISOString().split("T")[0],
           }}
-          goalPeriod={goalPeriod}
-          targetNumberOfCompletions={targetNumberOfCompletions}
-          color={color}
         />
       </View>
     </View>
@@ -525,12 +494,14 @@ function HabitCardCompletionsMonthlyView({
 }
 
 function WeekGoalMetCheckmark({
+  habitId,
   weekGoalMet,
-  color,
 }: {
+  habitId: number;
   weekGoalMet: boolean;
-  color: keyof typeof colors.habitColors;
 }) {
+  const color = useAtomValue(habitColorAtom(habitId));
+
   return (
     <View className="h-[13px] w-[13px]">
       {weekGoalMet && (
@@ -547,22 +518,24 @@ function WeekGoalMetCheckmark({
 }
 
 function HabitCardMonthlyViewCompletionSquare({
+  habitId,
   completion,
-  goalPeriod,
-  targetNumberOfCompletions,
-  color,
 }: {
+  habitId: number;
   completion: HabitCompletion;
-  goalPeriod: HabitGoalPeriod;
-  targetNumberOfCompletions: number;
-  color: keyof typeof colors.habitColors;
 }) {
   const { colorScheme } = useColorScheme();
+
+  const goalPeriod = useAtomValue(habitGoalAtom(habitId)).period;
+  const targetNumberOfCompletionsPerDay = useAtomValue(
+    targetNumberOfCompletionsPerDayAtom(habitId),
+  );
+  const color = useAtomValue(habitColorAtom(habitId));
 
   function getHabitSquareOpacity(numCompletions: number) {
     switch (goalPeriod) {
       case "daily":
-        return numCompletions / targetNumberOfCompletions;
+        return numCompletions / targetNumberOfCompletionsPerDay;
       case "weekly":
         return numCompletions;
     }
@@ -590,39 +563,27 @@ function HabitCardMonthlyViewCompletionSquare({
   );
 }
 
-function HabitCompletionButton({
-  color,
-  targetNumberOfCompletions,
-  displayType,
-  numberOfCompletionsToday,
-  setNumberOfCompletionsToday,
-}: {
-  color: keyof typeof colors.habitColors;
-  targetNumberOfCompletions: number;
-  displayType: HabitDisplayType;
-  numberOfCompletionsToday: number;
-  setNumberOfCompletionsToday: React.Dispatch<React.SetStateAction<number>>;
-}) {
+function HabitCompletionButton({ habitId }: { habitId: number }) {
   const { colorScheme } = useColorScheme();
-  // const [numberOfCompletions, setNumberOfCompletions] = useState(0);
 
-  useEffect(() => {
-    const updateInFirebase = async () => {
-      // update the data in firebase here (current day compleation status)
-    };
-    updateInFirebase();
-  }, [numberOfCompletionsToday]);
+  const color = useAtomValue(habitColorAtom(habitId));
 
-  function handleCompletionButtonPress() {
-    setNumberOfCompletionsToday((prev) =>
-      prev !== targetNumberOfCompletions ? prev + 1 : 0,
-    );
-  }
+  const numberOfCompletionsToday = useAtomValue(
+    numberOfCompletionsTodayAtom(habitId),
+  );
+  const incrementNumberOfCompletionsToday = useSetAtom(
+    incrementNumberOfCompletionsTodayAtom(habitId),
+  );
+  const targetNumberOfCompletionsPerDay = useAtomValue(
+    targetNumberOfCompletionsPerDayAtom(habitId),
+  );
+
+  const displayType = useAtomValue(habitDisplayTypeAtom(habitId));
 
   return (
     <View className="flex flex-col items-center gap-1">
       <Pressable
-        onPress={handleCompletionButtonPress}
+        onPress={incrementNumberOfCompletionsToday}
         className={`relative flex h-[48px] w-[48px] items-center justify-center overflow-hidden rounded-full`}
         style={{
           backgroundColor:
@@ -637,7 +598,8 @@ function HabitCompletionButton({
           style={{
             backgroundColor: colors.habitColors[color].base,
             // constant is height of button
-            height: (numberOfCompletionsToday / targetNumberOfCompletions) * 48,
+            height:
+              (numberOfCompletionsToday / targetNumberOfCompletionsPerDay) * 48,
           }}
         />
         {/* check mark */}
@@ -646,12 +608,12 @@ function HabitCompletionButton({
           size={28}
           strokeWidth={4}
           lightColor={
-            numberOfCompletionsToday === targetNumberOfCompletions
+            numberOfCompletionsToday === targetNumberOfCompletionsPerDay
               ? colors.white
               : colors.habitColors[color].light
           }
           darkColor={
-            numberOfCompletionsToday === targetNumberOfCompletions
+            numberOfCompletionsToday === targetNumberOfCompletionsPerDay
               ? colors.white
               : colors.stone.light
           }

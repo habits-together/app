@@ -41,6 +41,7 @@ export function getMockHabitMonthData(
       numberOfCompletions: numCompletions,
       dayOfTheWeek: date.toLocaleString("en-US", { weekday: "short" }),
       dayOfTheMonth: date.getDate().toString(),
+      date: date.toISOString().split('T')[0],
     };
     date.setDate(date.getDate() + 1);
   }
