@@ -1,8 +1,7 @@
-
 import { habitIdsAtom } from "@/src/atoms/atoms";
-import { HabitCard } from "@/src/components/HabitCard";
+import { HabitCard } from "@/src/components/habit-components/HabitCard";
 import { ScrollView, View } from "@/src/components/Themed";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
 
 export default function HabitsTab() {
   const habitIds = useAtomValue(habitIdsAtom);
