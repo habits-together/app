@@ -9,6 +9,9 @@ import {
 } from "../lib/mockData";
 import { Habit, HabitCompletion, HabitDisplayType } from "../lib/types";
 
+// using Jotai atoms: https://jotai.org/docs/introduction
+// we especially use the atomFamily atom: https://jotai.org/docs/utilities/family
+
 const storage = createJSONStorage(() => AsyncStorage);
 
 // HABITS -------------------------------------------------------------------------
