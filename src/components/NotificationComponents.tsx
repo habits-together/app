@@ -34,7 +34,7 @@ export function HabitReminder({
         <View>
           {profilePic}
           <View
-            className="absolute -bottom-[-22px] -right-[8px] h-9 w-9 rounded-full "
+            className="absolute -top-[-44px] -right-[8px] h-9 w-9 rounded-full "
             style={{
               backgroundColor: colors.habitColors[color].base,
             }}
@@ -103,7 +103,7 @@ export function HabitInvite({
         <View>
           {profilePic}
           <View
-            className="absolute -bottom-[-22px] -right-[8px] h-9 w-9 rounded-full "
+            className="absolute -top-[-44px] -right-[8px] h-9 w-9 rounded-full "
             style={{
               backgroundColor: colors.habitColors[color].base,
             }}

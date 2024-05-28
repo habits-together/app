@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { getMockNotifications, NotificationData } from "../lib/mockData";
 import { NotifProfilePicture } from "./ProfilePicture";
 import Divider from "./Divider";
-import { HabitReminder, HabitInvite, FriendRequest } from "./Notifications";
+import { HabitReminder, HabitInvite, FriendRequest } from "./NotificationComponents";
 
 // fetch all invites a user has received
 export default function NotificationList() {
@@ -48,12 +48,11 @@ export default function NotificationList() {
     <View>
       <Divider/>
       <View className="flex flex-col">
-        {notifications.map((notif, index) => (
-          <View>
+        {notifications.map((notif) => (
+          <View key={notif.id}>
             <View className="px-4">
               {(notif.type === "friendRequest") &&
                 <FriendRequest
-                key={index}
                 displayName={notif.displayName}
                 mutualCount={notif.mutualCount}
                 profilePic={
@@ -65,7 +64,6 @@ export default function NotificationList() {
               }
               {(notif.type === "habitInvite") &&
                 <HabitInvite
-                  key={index}
                   title={notif.title}
                   color={notif.color as keyof typeof colors.habitColors}
                   icon={notif.icon}
@@ -78,7 +76,6 @@ export default function NotificationList() {
               }
               {(notif.type === "habitReminder") &&
                 <HabitReminder
-                  key={index}
                   title={notif.title}
                   color={notif.color as keyof typeof colors.habitColors}
                   icon={notif.icon}
