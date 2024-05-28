@@ -22,7 +22,7 @@ export type HabitData = {
   habitInfo: Habit;
   habitCompletionData: HabitCompletion[];
   habitParticipants: number[];
-}
+};
 
 export type HabitGoalPeriod = "daily" | "weekly";
 export type HabitDisplayType = "weekly-view" | "monthly-view";

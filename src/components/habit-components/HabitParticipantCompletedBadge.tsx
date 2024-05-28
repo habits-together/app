@@ -1,4 +1,8 @@
-import { habitDisplayTypeAtom, habitGoalAtom, habitInfoAtom } from "@/src/atoms/atoms";
+import {
+  habitDisplayTypeAtom,
+  habitGoalAtom,
+  habitInfoAtom,
+} from "@/src/atoms/atoms";
 import colors from "@/src/constants/colors";
 import { getTranslucentColor } from "@/src/lib/getTranslucentColor";
 import { IconActivity, IconCheck } from "@tabler/icons-react-native";
