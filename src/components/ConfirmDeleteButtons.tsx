@@ -1,7 +1,7 @@
 import { useColorScheme } from "nativewind";
 import { Pressable } from "react-native";
-import { Text, View } from "./Themed";
 import colors from "../constants/colors";
+import { Text, View } from "./Themed";
 
 export default function ConfirmAndDeleteButtons({
   confirmInvite,

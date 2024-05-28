@@ -7,7 +7,12 @@ import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
 import { MenuProvider } from "react-native-popup-menu";
 import "react-native-reanimated";
-import { viewHabitOptions } from "../components/HeaderOptions";
+import {
+  emailLoginOptions,
+  emailSignUpOptions,
+  forgotPasswordOptions,
+  viewHabitOptions,
+} from "../components/HeaderOptions";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -60,6 +65,18 @@ function RootLayoutNav() {
         >
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="(auth)/signin" />
+          <Stack.Screen
+            name="(auth)/emailSignUp"
+            options={emailSignUpOptions(colorScheme)}
+          />
+          <Stack.Screen
+            name="(auth)/emaillogin"
+            options={emailLoginOptions(colorScheme)}
+          />
+          <Stack.Screen
+            name="(auth)/forgotpassword"
+            options={forgotPasswordOptions(colorScheme)}
+          />
           <Stack.Screen
             name="(auth)/createprofile"
             options={{ headerShown: false }}

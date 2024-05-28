@@ -1,12 +1,9 @@
-import { router, Stack } from "expo-router";
-import React from "react";
-import { TouchableOpacity } from "react-native";
-import { IconChevronLeft } from "@tabler/icons-react-native";
-import colors from "@/src/constants/colors";
-import Icon from "@/src/components/Icon";
-import { Text, View } from "react-native";
-import { useColorScheme } from "nativewind";
 import HeaderBackButton from "@/src/components/HeaderBackButton";
+import colors from "@/src/constants/colors";
+import { Stack } from "expo-router";
+import { useColorScheme } from "nativewind";
+import React from "react";
+import { Text } from "react-native";
 
 export default function SettingsLayout() {
   const { colorScheme } = useColorScheme();

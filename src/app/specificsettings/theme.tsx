@@ -1,15 +1,14 @@
-import { View } from "@/src/components/Themed";
-import { Appearance } from "react-native";
-import { IconBrightness, IconMoon, IconSun } from "@tabler/icons-react-native";
 import Icon from "@/src/components/Icon";
 import {
   SettingsChoice,
   SettingsContainer,
 } from "@/src/components/SettingsComponents";
+import { IconBrightness, IconMoon, IconSun } from "@tabler/icons-react-native";
 import { useColorScheme } from "nativewind";
+import { Appearance } from "react-native";
 
 export default function Theme() {
-  const { colorScheme, setColorScheme } = useColorScheme();
+  const { setColorScheme } = useColorScheme();
 
   return (
     <SettingsContainer>

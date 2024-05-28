@@ -6,8 +6,8 @@ import colors from "../constants/colors";
 import DotsMenu from "./DotsMenu";
 import HeaderBackButton from "./HeaderBackButton";
 import Icon from "./Icon";
-import { Text, View } from "./Themed";
 import RoundedButton from "./RoundedButton";
+import { Text, View } from "./Themed";
 
 function sharedOptions(colorScheme: string): NativeStackNavigationOptions {
   return {
@@ -113,6 +113,57 @@ export function inviteFriendsOptions(
       />
     ),
     headerTitleAlign: "center",
+    ...sharedOptions(colorScheme),
+  };
+}
+
+export function emailSignUpOptions(
+  colorScheme: string,
+): NativeStackNavigationOptions {
+  return {
+    headerShown: true,
+    // make header center
+    headerTitleAlign: "center",
+    headerTitle: () => (
+      <Text className="text-center text-base font-semibold text-black dark:text-white">
+        Sign Up
+      </Text>
+    ),
+    headerLeft: () => <HeaderBackButton showText={true} />,
+    ...sharedOptions(colorScheme),
+  };
+}
+
+export function emailLoginOptions(
+  colorScheme: string,
+): NativeStackNavigationOptions {
+  return {
+    headerShown: true,
+    // make header center
+    headerTitleAlign: "center",
+    headerTitle: () => (
+      <Text className="text-center text-base font-semibold text-black dark:text-white">
+        Login
+      </Text>
+    ),
+    headerLeft: () => <HeaderBackButton showText={true} />,
+    ...sharedOptions(colorScheme),
+  };
+}
+
+export function forgotPasswordOptions(
+  colorScheme: string,
+): NativeStackNavigationOptions {
+  return {
+    headerShown: true,
+    // make header center
+    headerTitleAlign: "center",
+    headerTitle: () => (
+      <Text className="text-center text-base font-semibold text-black dark:text-white">
+        Password reset
+      </Text>
+    ),
+    headerLeft: () => <HeaderBackButton showText={true} />,
     ...sharedOptions(colorScheme),
   };
 }

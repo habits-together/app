@@ -1,18 +1,20 @@
+import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import { initializeApp } from "firebase/app";
-// authentication
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { initializeAuth } from "firebase/auth";
-import { getReactNativePersistence } from "firebase/auth/react-native";
-// firestore
-import { getFirestore } from "firebase/firestore";
-// cloud storage
+import { getReactNativePersistence, initializeAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 
-import { firebaseConfig } from "../config";
+const firebaseConfig = {
+  apiKey: "AIzaSyDtBfjTfxG6KvP96yHH6qiJexeS-2-3rJA",
+  authDomain: "habits-together.firebaseapp.com",
+  projectId: "habits-together",
+  storageBucket: "habits-together.appspot.com",
+  messagingSenderId: "731859375504",
+  appId: "1:731859375504:web:80b078f13a31b5d897cf15",
+  measurementId: "G-46NX1BKJK8",
+};
 
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 export const auth = initializeAuth(app, {
-  persistence: getReactNativePersistence(AsyncStorage),
+  persistence: getReactNativePersistence(ReactNativeAsyncStorage),
 });
-export const firestore = getFirestore();
 export const storage = getStorage();

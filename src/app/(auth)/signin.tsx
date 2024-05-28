@@ -1,25 +1,21 @@
-import {
-  Pressable,
-  Image,
-  FlatList,
-  Dimensions,
-  Animated,
-  Platform,
-} from "react-native";
-import { Text, View } from "@/src/components/Themed";
-import {
-  IconPhotoScan,
-  IconBrandAppleFilled,
-  IconMail,
-} from "@tabler/icons-react-native";
-import { colors } from "react-native-elements";
-import { useColorScheme } from "nativewind";
-import { Link, router } from "expo-router";
-import Icon from "@/src/components/Icon";
-import { SlidingDot } from "react-native-animated-pagination-dots";
-import { useRef, useState } from "react";
 import Logo from "@/assets/images/Logo.svg";
+import Icon from "@/src/components/Icon";
+import { Text, View } from "@/src/components/Themed";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
+import { IconMail, IconPhotoScan } from "@tabler/icons-react-native";
+import { Link, router } from "expo-router";
+import { useColorScheme } from "nativewind";
+import { useRef, useState } from "react";
+import {
+  Animated,
+  Dimensions,
+  FlatList,
+  Image,
+  Platform,
+  Pressable,
+} from "react-native";
+import { SlidingDot } from "react-native-animated-pagination-dots";
+import { colors } from "react-native-elements";
 
 // // Import the functions you need from the SDKs you need
 // import { initializeApp } from "firebase/app";
@@ -57,7 +53,7 @@ export default function Signin() {
     resetNavigationStack("/");
   }
   async function signInWithEmail() {
-    resetNavigationStack("/");
+    router.push("/(auth)/emailSignUp");
   }
   async function continueAsGuest() {
     resetNavigationStack("/");
@@ -158,7 +154,7 @@ export default function Signin() {
               <GoogleButton />
               <Pressable className="mt-2" onPress={signInWithEmail}>
                 <Text className="text-base font-semibold">
-                  Sign up or log in with Email
+                  Continue with Email
                 </Text>
               </Pressable>
             </>
@@ -177,14 +173,14 @@ export default function Signin() {
   function GoogleButton() {
     return (
       <Pressable
-        className="mt-2 flex h-14 w-full flex-row items-center justify-center rounded-xl border-2 p-2 dark:bg-white"
+        className="mt-2 flex h-14 w-full flex-row items-center justify-center rounded-xl border-2 p-2 dark:border-0 dark:bg-white"
         onPress={signInWithGoogle}
       >
         <Image
           className="h-5 w-5 rounded-[20px]"
           source={require("../../../assets/images/google.png")}
         />
-        <Text className="ml-2 text-lg font-semibold text-black">
+        <Text className="ml-2 text-xl font-semibold text-black">
           Continue with Google
         </Text>
       </Pressable>
@@ -194,14 +190,14 @@ export default function Signin() {
   function AppleButton() {
     return (
       <Pressable
-        className="mt-2 flex h-14 w-full flex-row items-center justify-center rounded-xl border-2 p-2 dark:bg-white"
+        className="mt-2 flex h-14 w-full flex-row items-center justify-center rounded-xl border-2 p-2 dark:border-0 dark:bg-white"
         onPress={signInWithApple}
       >
         <Image
           className="h-5 w-5 rounded-[20px]"
           source={require("../../../assets/images/apple.png")}
         />
-        <Text className="ml-2 text-lg font-semibold text-black">
+        <Text className="ml-2 text-xl font-semibold text-black">
           Continue with Apple
         </Text>
       </Pressable>
@@ -211,7 +207,7 @@ export default function Signin() {
   function EmailButton() {
     return (
       <Pressable
-        className="mt-2 flex h-14 w-full  flex-row items-center justify-center rounded-xl border-2 p-2 dark:bg-white"
+        className="mt-2 flex h-14 w-full  flex-row items-center justify-center rounded-xl border-2 p-2 dark:border-0 dark:bg-white"
         onPress={signInWithEmail}
       >
         <Icon
@@ -220,7 +216,7 @@ export default function Signin() {
           darkColor={colors.black}
           strokeWidth={2.2}
         />
-        <Text className="ml-2 text-lg font-semibold text-black">
+        <Text className="ml-2 text-xl font-semibold text-black">
           Continue with Email
         </Text>
       </Pressable>

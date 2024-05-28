@@ -2,13 +2,15 @@ import Icon from "@/src/components/Icon";
 import ProfileCreationBoxes from "@/src/components/PfpNameUsernameBoxes";
 import { Text, View } from "@/src/components/Themed";
 import DefaultColors from "@/src/constants/DefaultColors";
-import { fetchSingleUserThumbnail } from "@/src/lib/getRandomProfilePics";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { IconCheck } from "@tabler/icons-react-native";
 import { useColorScheme } from "nativewind";
-import { useEffect, useState } from "react";
-import { StatusBar } from "react-native";
-import { Platform, SafeAreaView, TouchableOpacity } from "react-native";
+import {
+  Platform,
+  SafeAreaView,
+  StatusBar,
+  TouchableOpacity,
+} from "react-native";
 
 export default function createprofile() {
   const { colorScheme } = useColorScheme();
