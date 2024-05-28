@@ -1,4 +1,4 @@
-import { habitDisplayTypeAtom, habitInfoAtom } from "@/src/atoms/atoms";
+import { habitDisplayTypeAtom, habitGoalAtom, habitInfoAtom } from "@/src/atoms/atoms";
 import colors from "@/src/constants/colors";
 import { getTranslucentColor } from "@/src/lib/getTranslucentColor";
 import { IconActivity, IconCheck } from "@tabler/icons-react-native";
@@ -13,27 +13,27 @@ export default function HabitParticipantCompletedBadge({
   habitId: number;
 }) {
   const habit = useAtomValue(habitInfoAtom(habitId));
-  const goalPeriod = habit.goal.period;
+  const goal = useAtomValue(habitGoalAtom(habitId));
   const displayType = useAtomValue(habitDisplayTypeAtom(habitId));
 
   function getCompletedBadgeText() {
     if (
       displayType === "weekly-view" &&
-      goalPeriod === "daily" &&
+      goal.period === "daily" &&
       habit.goal.completionsPerPeriod === 1
     )
       return "Completed today";
     if (
       displayType === "weekly-view" &&
-      goalPeriod === "daily" &&
+      goal.period === "daily" &&
       habit.goal.completionsPerPeriod > 1
     )
       return "Activity today";
-    if (displayType === "weekly-view" && goalPeriod === "weekly")
+    if (displayType === "weekly-view" && goal.period === "weekly")
       return "Completed this week";
-    if (displayType === "monthly-view" && goalPeriod === "daily")
+    if (displayType === "monthly-view" && goal.period === "daily")
       return "Today";
-    if (displayType === "monthly-view" && goalPeriod === "weekly")
+    if (displayType === "monthly-view" && goal.period === "weekly")
       return "This week";
   }
 
@@ -50,7 +50,7 @@ export default function HabitParticipantCompletedBadge({
     >
       <Icon
         icon={
-          goalPeriod === "daily" && habit.goal.completionsPerPeriod > 1
+          goal.period === "daily" && habit.goal.completionsPerPeriod > 1
             ? IconActivity
             : IconCheck
         }
