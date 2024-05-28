@@ -1,10 +1,14 @@
-import { View, Text } from "@/src/components/Themed";
-import colors from "../constants/colors";
+import { Text, View } from "@/src/components/Themed";
 import { useEffect, useState } from "react";
-import { getMockNotifications, NotificationData } from "../lib/mockData";
-import { NotifProfilePicture } from "./ProfilePicture";
+import colors from "../constants/colors";
+import { NotificationData, getMockNotifications } from "../lib/mockData";
 import Divider from "./Divider";
-import { HabitReminder, HabitInvite, FriendRequest } from "./NotificationComponents";
+import {
+  FriendRequest,
+  HabitInvite,
+  HabitReminder,
+} from "./NotificationComponents";
+import { NotifProfilePicture } from "./ProfilePicture";
 
 // fetch all invites a user has received
 export default function NotificationList() {
@@ -40,41 +44,42 @@ export default function NotificationList() {
         <Text className="mt-8 text-center text-base font-medium text-stone-400">
           You’re all caught up 🎉
         </Text>
-
       </View>
     );
   }
   return (
     <View>
-      <Divider/>
+      <Divider />
       <View className="flex flex-col">
         {notifications.map((notif) => (
           <View key={notif.id}>
             <View className="px-4">
-              {(notif.type === "friendRequest") &&
+              {notif.type === "friendRequest" && (
                 <FriendRequest
-                displayName={notif.displayName}
-                mutualCount={notif.mutualCount}
-                profilePic={
-                  <NotifProfilePicture picUrl={notif.profilePicUrl} />
-                }
-                deleteInvite={() => confirmNotification(notif.id)}
-                confirmInvite={() => deleteNotification(notif.id)}
-              />
-              }
-              {(notif.type === "habitInvite") &&
+                  displayName={notif.displayName}
+                  mutualCount={notif.mutualCount}
+                  profilePic={
+                    <NotifProfilePicture picUrl={notif.profilePicUrl} />
+                  }
+                  deleteInvite={() => confirmNotification(notif.id)}
+                  confirmInvite={() => deleteNotification(notif.id)}
+                />
+              )}
+              {notif.type === "habitInvite" && (
                 <HabitInvite
                   title={notif.title}
                   color={notif.color as keyof typeof colors.habitColors}
                   icon={notif.icon}
                   numberOfParticipants={notif.numberOfParticipants}
                   displayName={notif.displayName}
-                  profilePic={<NotifProfilePicture picUrl={notif.profilePicUrl} />}
+                  profilePic={
+                    <NotifProfilePicture picUrl={notif.profilePicUrl} />
+                  }
                   confirmInvite={() => confirmNotification(notif.id)}
                   deleteInvite={() => deleteNotification(notif.id)}
                 />
-              }
-              {(notif.type === "habitReminder") &&
+              )}
+              {notif.type === "habitReminder" && (
                 <HabitReminder
                   title={notif.title}
                   color={notif.color as keyof typeof colors.habitColors}
@@ -86,7 +91,7 @@ export default function NotificationList() {
                   }
                   deleteInvite={() => deleteNotification(notif.id)}
                 />
-              }
+              )}
             </View>
             <View className="mt-2.5">
               <Divider />

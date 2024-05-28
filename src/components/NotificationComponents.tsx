@@ -1,10 +1,10 @@
-import { IconUsers, Icon as TablerIcon } from "@tabler/icons-react-native";
+import { Icon as TablerIcon } from "@tabler/icons-react-native";
 import { useColorScheme } from "nativewind";
+import { Pressable } from "react-native";
 import colors from "../constants/colors";
 import ConfirmAndDeleteButtons from "./ConfirmDeleteButtons";
 import Icon from "./Icon";
 import { Text, View } from "./Themed";
-import { Pressable } from "react-native";
 
 export type HabitReminderProps = {
   // id: number;
@@ -34,7 +34,7 @@ export function HabitReminder({
         <View>
           {profilePic}
           <View
-            className="absolute -top-[-44px] -right-[8px] h-9 w-9 rounded-full "
+            className="absolute -right-[8px] -top-[-44px] h-9 w-9 rounded-full "
             style={{
               backgroundColor: colors.habitColors[color].base,
             }}
@@ -103,7 +103,7 @@ export function HabitInvite({
         <View>
           {profilePic}
           <View
-            className="absolute -top-[-44px] -right-[8px] h-9 w-9 rounded-full "
+            className="absolute -right-[8px] -top-[-44px] h-9 w-9 rounded-full "
             style={{
               backgroundColor: colors.habitColors[color].base,
             }}
