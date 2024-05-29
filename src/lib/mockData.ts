@@ -11,13 +11,14 @@ import { numWeeksToDisplayInMonthlyView } from "../constants/constants";
 import { fetchSingleUserThumbnail } from "./getRandomProfilePics";
 import {
   AllHabitsDataType,
-  FriendData,
   FriendRequestData,
   Habit,
   HabitCompletion,
   HabitCompletions,
   HabitInviteData,
   HabitParticipants,
+  HabitReminderData,
+  NotificationData,
 } from "./types";
 
 export function getNumberOfDaysInLastWeek() {
@@ -138,16 +139,6 @@ export async function getMockHabitInvites() {
   return mockHabitInvites;
 }
 
-export type HabitReminderData = {
-  id: number; // unique id for each reminder
-  title: string;
-  color: keyof typeof colors.habitColors;
-  icon: TablerIcon;
-  timeSent: number; // this will be hours stored as a number, can be changed to proper time after we decide on the format in the db
-  displayName: string;
-  profilePicUrl: string;
-};
-
 export async function getMockReminderInvites() {
   const pic1 = await fetchSingleUserThumbnail();
   const pic2 = await fetchSingleUserThumbnail();
@@ -227,19 +218,6 @@ export function getMockHabitCompletionData(habitId: number) {
     targetNumberOfCompletionsPerDay,
   );
 }
-
-export type NotificationData = {
-  id: number; // unique id for each reminder
-  type: "friendRequest" | "habitInvite" | "habitReminder";
-  displayName: string;
-  mutualCount: number; // only for friend requests
-  profilePicUrl: string;
-  title: string;
-  color: keyof typeof colors.habitColors;
-  icon: TablerIcon;
-  numberOfParticipants: number; // only for habit invites
-  timeSent: number; // this will be hours stored as a number, can be changed to proper time after we decide on the format in the db
-};
 
 export async function getMockNotifications() {
   const pic1 = await fetchSingleUserThumbnail();

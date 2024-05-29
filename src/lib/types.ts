@@ -3,20 +3,6 @@ import { Icon as TablerIcon } from "@tabler/icons-react-native";
 
 // habits
 
-// export type HabitData = {
-//   id: number;
-//   title: string;
-//   description: string;
-//   color: keyof typeof colors.habitColors;
-//   icon: TablerIcon;
-//   goal: {
-//     period: HabitGoalPeriod;
-//     completionsPerPeriod: number;
-//   };
-//   completionData: HabitCompletion[];
-//   participants: number[];
-// };
-
 export type AllHabitsDataType = Record<number, HabitData>;
 export type HabitData = {
   habitInfo: Habit;
@@ -68,7 +54,7 @@ export type FriendData = {
 export type FriendRequestData = {
   id: number;
   displayName: string;
-  userName: string;
+  mutualCount: number;
   profilePicUrl: string;
 };
 
@@ -85,5 +71,29 @@ export type HabitInviteData = {
   color: keyof typeof colors.habitColors;
   icon: TablerIcon;
   numberOfParticipants: number;
-  userName: string;
+  displayName: string;
+  profilePicUrl: string;
+};
+
+export type NotificationData = {
+  id: number; // unique id for each reminder
+  type: "friendRequest" | "habitInvite" | "habitReminder";
+  displayName: string;
+  mutualCount: number; // only for friend requests
+  profilePicUrl: string;
+  title: string;
+  color: keyof typeof colors.habitColors;
+  icon: TablerIcon;
+  numberOfParticipants: number; // only for habit invites
+  timeSent: number; // this will be hours stored as a number, can be changed to proper time after we decide on the format in the db
+};
+
+export type HabitReminderData = {
+  id: number; // unique id for each reminder
+  title: string;
+  color: keyof typeof colors.habitColors;
+  icon: TablerIcon;
+  timeSent: number; // this will be hours stored as a number, can be changed to proper time after we decide on the format in the db
+  displayName: string;
+  profilePicUrl: string;
 };
