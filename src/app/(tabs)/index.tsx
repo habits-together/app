@@ -1,6 +1,6 @@
 import { habitIdAtom } from "@/src/atoms/atoms";
 import { HabitCard } from "@/src/components/habit-components/HabitCard";
-import { ScrollView, Text, View } from "@/src/components/Themed";
+import { ScrollView, View } from "@/src/components/Themed";
 import { useAtomValue } from "jotai";
 import { Suspense } from "react";
 
