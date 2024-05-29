@@ -24,29 +24,49 @@ export default function emailsignup() {
   }
 
   const SignUp = () => {
-
-    console.log("Sign Up");
-    console.log(data);
-  
-    // UNCOMMENT THE BELOW LINE TO ENABLE FIREBASE AUTHENTICATION
-    // createUserWithEmailAndPassword(auth, data.email, data.password);
-
-    // ADD TO DATABASE AFTER SIGN UP
-    // handleDatabaseSignUp();
+    console.log("Sign Up Attempted");
+    createUserWithEmailAndPassword(auth, data.email, data.password).then(
+      success => {
+        handleDatabaseSignUp();
+        resetNavigationStack("/");
+      },
+      err => {
+        switch(err.code) {
+          case 'auth/email-already-in-use':
+            console.log("Email already in use");  
+            return;
+          case 'auth/invalid-email':
+            console.log("Invalid email");
+            return;
+          case 'auth/weak-password':
+            console.log("Weak password");
+            return;
+          default:
+            console.log(`An error occurred. Please try again. ${err.code}`);
+            return;
+        }
+      });
   };
 
 
   const handleDatabaseSignUp = async () => {
     // BASE DATA
     const baseData = {
-
+      created_at: new Date(),
+      display_name: data.email,
+      friend_invites: [],
+      friend_request: [],
+      friends: [],
+      nudge_list: [],
+      picture: "",
+      username: data.email,
     }
     
     // PUSH TO FIREBASE
     if (auth.currentUser) {
-      const docRef = doc(firestore, "users", auth.currentUser.uid);
+      const docRef = doc(firestore, "accounts", auth.currentUser.uid);
       await setDoc(docRef, baseData);
-      console.log("Document written with ID: ", auth.currentUser.uid);
+      console.log("Added User Document written with ID: ", auth.currentUser.uid);
     }
     else {
       console.log("An error occurred. Please try again.");
