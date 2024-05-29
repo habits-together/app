@@ -1,7 +1,8 @@
 import FriendRequest from "@/src/components/FriendRequest";
 import { Text, View } from "@/src/components/Themed";
 import { useEffect, useState } from "react";
-import { FriendRequestData, getMockFriendInvites } from "../lib/mockData";
+import { getMockFriendInvites } from "../lib/mockData";
+import { FriendRequestData } from "../lib/types";
 import { MediumProfilePicture } from "./ProfilePicture";
 
 export default function FriendRequestList() {
