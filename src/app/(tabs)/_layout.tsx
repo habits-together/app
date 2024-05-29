@@ -4,6 +4,7 @@ import { View } from "@/src/components/Themed";
 import { useClientOnlyValue } from "@/src/components/useClientOnlyValue";
 import colors from "@/src/constants/colors";
 import {
+  IconBell,
   IconPlus,
   IconSettings,
   IconStack2,
@@ -96,6 +97,20 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <Icon
               icon={IconUsers}
+              lightColor={color}
+              darkColor={color}
+              strokeWidth={2.5}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="notifications"
+        options={{
+          title: "Notifications",
+          tabBarIcon: ({ color }) => (
+            <Icon
+              icon={IconBell}
               lightColor={color}
               darkColor={color}
               strokeWidth={2.5}

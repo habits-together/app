@@ -1,13 +1,13 @@
-import FriendList from "@/src/components/FriendList";
+import NotificationList from "@/src/components/NotificationList";
 import { ScrollView } from "@/src/components/Themed";
 
-export default function FriendsTab() {
+export default function NotificationTab() {
   return (
     <ScrollView
-      className="flex-1 p-4"
+      className="flex-1"
       contentContainerStyle={{ paddingBottom: 100 }}
     >
-      <FriendList />
+      <NotificationList />
     </ScrollView>
   );
 }

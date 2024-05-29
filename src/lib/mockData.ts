@@ -2,6 +2,8 @@ import {
   IconBarbell,
   IconBook,
   IconBottle,
+  IconCode,
+  IconExclamationCircle,
   IconMoodTongue,
   IconMusic,
 } from "@tabler/icons-react-native";
@@ -9,13 +11,14 @@ import { numWeeksToDisplayInMonthlyView } from "../constants/constants";
 import { fetchSingleUserThumbnail } from "./getRandomProfilePics";
 import {
   AllHabitsDataType,
-  FriendData,
   FriendRequestData,
   Habit,
   HabitCompletion,
   HabitCompletions,
   HabitInviteData,
   HabitParticipants,
+  HabitReminderData,
+  NotificationData,
 } from "./types";
 
 export function getNumberOfDaysInLastWeek() {
@@ -95,13 +98,13 @@ export async function getMockFriendInvites() {
     {
       id: 1,
       displayName: "Someone else",
-      userName: "some1else",
+      mutualCount: 3,
       profilePicUrl: pic1.imgurl,
     },
     {
       id: 2,
       displayName: "Eduardo",
-      userName: "eduardo_012003",
+      mutualCount: 5,
       profilePicUrl: pic2.imgurl,
     },
   ];
@@ -110,6 +113,9 @@ export async function getMockFriendInvites() {
 }
 
 export async function getMockHabitInvites() {
+  const pic1 = await fetchSingleUserThumbnail();
+  const pic2 = await fetchSingleUserThumbnail();
+
   const mockHabitInvites: HabitInviteData[] = [
     {
       id: 1,
@@ -117,7 +123,8 @@ export async function getMockHabitInvites() {
       color: "purple",
       icon: IconMusic,
       numberOfParticipants: 3,
-      userName: "blaze_kush",
+      displayName: "Kush Blaze",
+      profilePicUrl: pic1.imgurl,
     },
     {
       id: 2,
@@ -125,10 +132,46 @@ export async function getMockHabitInvites() {
       color: "red",
       icon: IconMoodTongue,
       numberOfParticipants: 10,
-      userName: "kush_blaze",
+      displayName: "Blaze Kush",
+      profilePicUrl: pic2.imgurl,
     },
   ];
   return mockHabitInvites;
+}
+
+export async function getMockReminderInvites() {
+  const pic1 = await fetchSingleUserThumbnail();
+  const pic2 = await fetchSingleUserThumbnail();
+
+  const mockReminderInvites: HabitReminderData[] = [
+    {
+      id: 1,
+      title: "Work on Habit",
+      color: "purple",
+      icon: IconCode,
+      timeSent: 4,
+      displayName: "Guy One",
+      profilePicUrl: pic1.imgurl,
+    },
+    {
+      id: 2,
+      title: "Yum Yum",
+      color: "red",
+      icon: IconMoodTongue,
+      timeSent: 12,
+      displayName: "Dude Two",
+      profilePicUrl: pic2.imgurl,
+    },
+  ];
+  return mockReminderInvites;
+}
+
+export interface FriendData {
+  id: number;
+  displayName: string;
+  userName: string;
+  profilePicUrl: string;
+  commonHabits: Habit[];
 }
 
 export async function getMockFriends() {
@@ -174,6 +217,91 @@ export function getMockHabitCompletionData(habitId: number) {
     (numWeeksToDisplayInMonthlyView - 1) * 7 + getNumberOfDaysInLastWeek(),
     targetNumberOfCompletionsPerDay,
   );
+}
+
+export async function getMockNotifications() {
+  const pic1 = await fetchSingleUserThumbnail();
+  const pic2 = await fetchSingleUserThumbnail();
+  const pic3 = await fetchSingleUserThumbnail();
+  const pic4 = await fetchSingleUserThumbnail();
+  const pic5 = await fetchSingleUserThumbnail();
+  const pic6 = await fetchSingleUserThumbnail();
+
+  const mockNotifications: NotificationData[] = [
+    {
+      id: 1,
+      type: "friendRequest",
+      displayName: "Someone else",
+      mutualCount: 3,
+      profilePicUrl: pic1.imgurl,
+      title: "",
+      color: "red",
+      icon: IconExclamationCircle,
+      numberOfParticipants: 0,
+      timeSent: 0,
+    },
+    {
+      id: 2,
+      type: "habitReminder",
+      displayName: "Guy One",
+      mutualCount: 0,
+      profilePicUrl: pic2.imgurl,
+      title: "Work on Habit",
+      color: "red",
+      icon: IconCode,
+      numberOfParticipants: 0,
+      timeSent: 0,
+    },
+    {
+      id: 3,
+      type: "habitInvite",
+      displayName: "Kush Blaze",
+      mutualCount: 0,
+      profilePicUrl: pic3.imgurl,
+      title: "Play Guitar",
+      color: "purple",
+      icon: IconMusic,
+      numberOfParticipants: 3,
+      timeSent: 0,
+    },
+    {
+      id: 4,
+      type: "friendRequest",
+      displayName: "Eduardo",
+      mutualCount: 5,
+      profilePicUrl: pic4.imgurl,
+      title: "",
+      color: "red",
+      icon: IconExclamationCircle,
+      numberOfParticipants: 0,
+      timeSent: 0,
+    },
+    {
+      id: 5,
+      type: "habitInvite",
+      displayName: "Blaze Kush",
+      mutualCount: 0,
+      profilePicUrl: pic5.imgurl,
+      title: "Yum Yum",
+      color: "red",
+      icon: IconMoodTongue,
+      numberOfParticipants: 10,
+      timeSent: 0,
+    },
+    {
+      id: 6,
+      type: "habitReminder",
+      displayName: "Dude Two",
+      mutualCount: 0,
+      profilePicUrl: pic6.imgurl,
+      title: "Yum Yum",
+      color: "red",
+      icon: IconMoodTongue,
+      numberOfParticipants: 0,
+      timeSent: 12,
+    },
+  ];
+  return mockNotifications;
 }
 
 export async function generateAllMockHabitCompletionData(): Promise<
