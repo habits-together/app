@@ -1,5 +1,5 @@
 import { getAllHabitData } from "../lib/mockData";
-import { Habit, HabitCompletion, HabitData } from "../lib/types";
+import { Habit, HabitCompletion } from "../lib/types";
 
 export async function fetchHabits() {
   // fetch all habit data from firebase
