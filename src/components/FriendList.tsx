@@ -1,8 +1,9 @@
 import FriendCard from "@/src/components/FriendCard";
 import { Text, View } from "@/src/components/Themed";
-import { FriendData, getMockFriends } from "@/src/lib/mockData";
+import { getMockFriends } from "@/src/lib/mockData";
 import { useEffect, useState } from "react";
 import { fetchSingleUserThumbnail } from "../lib/getRandomProfilePics";
+import { FriendData } from "../lib/types";
 import { MediumProfilePicture } from "./ProfilePicture";
 
 export default function FriendList() {

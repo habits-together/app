@@ -1,4 +1,3 @@
-import colors from "@/src/constants/colors";
 import {
   IconBarbell,
   IconBook,
@@ -7,23 +6,19 @@ import {
   IconExclamationCircle,
   IconMoodTongue,
   IconMusic,
-  Icon as TablerIcon,
 } from "@tabler/icons-react-native";
 import { numWeeksToDisplayInMonthlyView } from "../constants/constants";
 import { fetchSingleUserThumbnail } from "./getRandomProfilePics";
-
-export type HabitGoalPeriod = "daily" | "weekly";
-export type Habit = {
-  id: number;
-  title: string;
-  description: string;
-  color: keyof typeof colors.habitColors;
-  icon: TablerIcon;
-  goal: {
-    period: HabitGoalPeriod;
-    completionsPerPeriod: number;
-  };
-};
+import {
+  AllHabitsDataType,
+  FriendData,
+  FriendRequestData,
+  Habit,
+  HabitCompletion,
+  HabitCompletions,
+  HabitInviteData,
+  HabitParticipants,
+} from "./types";
 
 export function getNumberOfDaysInLastWeek() {
   const currDay = new Date().getDay();
@@ -47,6 +42,7 @@ export function getMockHabitMonthData(
       numberOfCompletions: numCompletions,
       dayOfTheWeek: date.toLocaleString("en-US", { weekday: "short" }),
       dayOfTheMonth: date.getDate().toString(),
+      date: date.toISOString().split("T")[0],
     };
     date.setDate(date.getDate() + 1);
   }
@@ -89,13 +85,9 @@ export const mockHabitData: Habit[] = [
     },
   },
 ];
-
-export type FriendRequestData = {
-  id: number;
-  displayName: string;
-  mutualCount: number;
-  profilePicUrl: string;
-};
+export async function getMockHabitData() {
+  return mockHabitData;
+}
 
 export async function getMockFriendInvites() {
   const pic1 = await fetchSingleUserThumbnail();
@@ -118,16 +110,6 @@ export async function getMockFriendInvites() {
 
   return mockFriendInvites;
 }
-
-export type HabitInviteData = {
-  id: number; // unique id for each invite
-  title: string;
-  color: keyof typeof colors.habitColors;
-  icon: TablerIcon;
-  numberOfParticipants: number;
-  displayName: string;
-  profilePicUrl: string;
-};
 
 export async function getMockHabitInvites() {
   const pic1 = await fetchSingleUserThumbnail();
@@ -221,19 +203,16 @@ export async function getMockFriends() {
   return mockFriends;
 }
 
-export const mockHabitFriendData = [
-  { id: 1, friendIds: [1, 2, 3, 4] },
-  { id: 2, friendIds: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20] },
-  { id: 3, friendIds: [21, 22] },
+export const mockHabitFriendData: HabitParticipants[] = [
+  { habitId: 1, participants: [1, 2, 3, 4] },
+  { habitId: 2, participants: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20] },
+  { habitId: 3, participants: [21, 22] },
 ];
+export async function getMockHabitParticipantData() {
+  return mockHabitFriendData;
+}
 
-export type HabitCompletion = {
-  numberOfCompletions: number;
-  dayOfTheWeek: string;
-  dayOfTheMonth: string;
-};
-
-export function getMockHabitData(habitId: number) {
+export function getMockHabitCompletionData(habitId: number) {
   const habit = mockHabitData.find((habit) => habit.id === habitId);
 
   if (!habit) {
@@ -345,4 +324,42 @@ export async function getMockNotifications() {
     },
   ];
   return mockNotifications;
+}
+
+export async function generateAllMockHabitCompletionData(): Promise<
+  HabitCompletions[]
+> {
+  return mockHabitData.map((habit) => {
+    return {
+      habitId: habit.id,
+      habitCompletionData: getMockHabitCompletionData(habit.id),
+    };
+  });
+}
+
+export async function getAllHabitData() {
+  const habits = await getMockHabitData();
+  const habitCompletions = await generateAllMockHabitCompletionData();
+  const habitParticipants = await getMockHabitParticipantData();
+  // zip the data together into an object of objects
+  // { habitId1: { habitData, habitCompletions, habitParticipants }, habitId2: ... }
+  const habitData = habits.reduce((acc, habit) => {
+    const habitCompletion = habitCompletions.find(
+      (hc) => hc.habitId === habit.id,
+    );
+    const habitParticipant = habitParticipants.find(
+      (hp) => hp.habitId === habit.id,
+    );
+    if (!habitCompletion || !habitParticipant) {
+      throw `Could not find completion or participant data for habit with id ${habit.id}`;
+    }
+    acc[habit.id] = {
+      habitInfo: habit,
+      habitCompletionData: habitCompletion.habitCompletionData,
+      habitParticipants: habitParticipant.participants,
+    };
+    return acc;
+  }, {} as AllHabitsDataType);
+
+  return habitData;
 }

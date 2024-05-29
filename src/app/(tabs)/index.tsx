@@ -1,20 +1,23 @@
-import { HabitCard } from "@/src/components/HabitCard";
+import { habitIdAtom } from "@/src/atoms/atoms";
+import { HabitCard } from "@/src/components/habit-components/HabitCard";
 import { ScrollView, View } from "@/src/components/Themed";
-import { getMockHabitData, mockHabitData } from "@/src/lib/mockData";
+import { useAtomValue } from "jotai";
+import { Suspense } from "react";
 
 export default function HabitsTab() {
+  const habitIds = useAtomValue(habitIdAtom);
+
   return (
     <ScrollView
       className="flex-1 px-4 pt-2"
       contentContainerStyle={{ paddingBottom: 100 }}
     >
-      {mockHabitData.map((habit) => (
-        <View key={habit.id} className="mb-5">
-          <HabitCard
-            habit={habit}
-            completionData={getMockHabitData(habit.id)}
-          />
-        </View>
+      {habitIds.map((id) => (
+        <Suspense key={id} fallback={<></>}>
+          <View className="mb-5">
+            <HabitCard habitId={id} />
+          </View>
+        </Suspense>
       ))}
     </ScrollView>
   );
