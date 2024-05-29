@@ -3,11 +3,17 @@ import { atom } from "jotai";
 import { atomFamily, atomWithStorage, createJSONStorage } from "jotai/utils";
 import { AsyncStorage as AsyncStorageType } from "jotai/vanilla/utils/atomWithStorage";
 import {
-  getMockHabitCompletionData,
-  mockHabitData,
-  mockHabitFriendData,
-} from "../lib/mockData";
-import { Habit, HabitCompletion, HabitDisplayType } from "../lib/types";
+  fetchHabits,
+  updateHabitCompletionsInDB,
+  updateHabitInfoInDB,
+  updateHabitParticipantsInDB,
+} from "../firebase/api";
+import {
+  AllHabitsDataType,
+  Habit,
+  HabitCompletion,
+  HabitDisplayType,
+} from "../lib/types";
 
 // using Jotai atoms: https://jotai.org/docs/introduction
 // we especially use the atomFamily atom: https://jotai.org/docs/utilities/family
@@ -15,12 +21,31 @@ import { Habit, HabitCompletion, HabitDisplayType } from "../lib/types";
 const storage = createJSONStorage(() => AsyncStorage);
 
 // HABITS -------------------------------------------------------------------------
-// ids of the habits the user is part of
-export const habitIdsAtom = atom(mockHabitData.map((habit) => habit.id));
+const habitsAtom = atom<AllHabitsDataType>([]);
+habitsAtom.onMount = (set) => {
+  fetchHabits().then(set);
+};
 
-// basic habit info
+// habit info
 export const habitInfoAtom = atomFamily((id: number) =>
-  atom<Habit>(mockHabitData.find((habit) => habit.id === id)!),
+  atom(
+    (get) => get(habitsAtom)[id].habitInfo,
+    (_get, set, newValue: Habit) => {
+      updateHabitInfoInDB(id, newValue);
+      set(habitsAtom, (prev) => {
+        return {
+          ...prev,
+          [id]: {
+            ...prev[id],
+            habitInfo: newValue,
+          },
+        };
+      });
+    },
+  ),
+);
+export const habitIdAtom = atom((get) =>
+  Object.keys(get(habitsAtom)).map(Number),
 );
 export const habitColorAtom = atomFamily((id: number) =>
   atom((get) => get(habitInfoAtom(id)).color),
@@ -45,19 +70,42 @@ export const targetNumberOfCompletionsPerWeekAtom = atomFamily((id: number) =>
 
 // habit completions
 export const habitCompletionsAtom = atomFamily((id: number) =>
-  atom<HabitCompletion[]>(getMockHabitCompletionData(id).slice(0, -1)),
+  atom(
+    (get) => get(habitsAtom)[id].habitCompletionData,
+    (_get, set, newValue: HabitCompletion[]) => {
+      set(habitsAtom, (prev) => {
+        updateHabitCompletionsInDB(id, newValue);
+        return {
+          ...prev,
+          [id]: {
+            ...prev[id],
+            habitCompletionData: newValue,
+          },
+        };
+      });
+    },
+  ),
 );
 const habitCompletionsTodayAtom = atomFamily((id: number) =>
-  atom<HabitCompletion>(getMockHabitCompletionData(id).reverse()[0]),
+  atom(
+    (get) => get(habitCompletionsAtom(id)).at(-1)!,
+    (get, set, newValue: HabitCompletion) => {
+      const prev = get(habitCompletionsAtom(id));
+      const newCompletionData = [...prev];
+      newCompletionData[newCompletionData.length - 1] = newValue;
+      set(habitCompletionsAtom(id), newCompletionData);
+    },
+  ),
 );
 export const numberOfCompletionsTodayAtom = atomFamily((id: number) =>
   atom(
     (get) => get(habitCompletionsTodayAtom(id)).numberOfCompletions,
     (get, set, newValue: number) => {
-      set(habitCompletionsTodayAtom(id), (prev) => ({
+      const prev = get(habitCompletionsTodayAtom(id));
+      set(habitCompletionsTodayAtom(id), {
         ...prev,
         numberOfCompletions: newValue,
-      }));
+      });
     },
   ),
 );
@@ -78,8 +126,20 @@ export const incrementNumberOfCompletionsTodayAtom = atomFamily((id: number) =>
 
 // habit participants
 export const habitParticipantsAtom = atomFamily((id: number) =>
-  atom<number[]>(
-    mockHabitFriendData.find((habit) => habit.habitId === id)!.participants,
+  atom(
+    (get) => get(habitsAtom)[id].habitParticipants,
+    (_get, set, newValue: number[]) => {
+      updateHabitParticipantsInDB(id, newValue);
+      set(habitsAtom, (prev) => {
+        return {
+          ...prev,
+          [id]: {
+            ...prev[id],
+            habitParticipants: newValue,
+          },
+        };
+      });
+    },
   ),
 );
 

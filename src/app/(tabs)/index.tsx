@@ -1,10 +1,11 @@
-import { habitIdsAtom } from "@/src/atoms/atoms";
+import { habitIdAtom } from "@/src/atoms/atoms";
 import { HabitCard } from "@/src/components/habit-components/HabitCard";
-import { ScrollView, View } from "@/src/components/Themed";
+import { ScrollView, Text, View } from "@/src/components/Themed";
 import { useAtomValue } from "jotai";
+import { Suspense } from "react";
 
 export default function HabitsTab() {
-  const habitIds = useAtomValue(habitIdsAtom);
+  const habitIds = useAtomValue(habitIdAtom);
 
   return (
     <ScrollView
@@ -12,9 +13,11 @@ export default function HabitsTab() {
       contentContainerStyle={{ paddingBottom: 100 }}
     >
       {habitIds.map((id) => (
-        <View key={id} className="mb-5">
-          <HabitCard habitId={id} />
-        </View>
+        <Suspense key={id} fallback={<></>}>
+          <View className="mb-5">
+            <HabitCard habitId={id} />
+          </View>
+        </Suspense>
       ))}
     </ScrollView>
   );

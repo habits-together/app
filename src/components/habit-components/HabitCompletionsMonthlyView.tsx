@@ -59,7 +59,7 @@ export default function HabitCompletionsMonthlyView({
           0,
         ) >= targetNumberOfCompletionsPerWeek,
     );
-    // include today's completions
+    // this one includes today's completions
     const thisWeek =
       completionsByWeek[numWeeks - 1].reduce(
         (acc, completion) => acc + completion.numberOfCompletions,
@@ -111,7 +111,7 @@ export default function HabitCompletionsMonthlyView({
         )}
         {completionsByWeek.length > 0 &&
           completionsByWeek[numWeeks - 1]
-            .slice(0, numberOfDaysInLastWeek)
+            .slice(0, numberOfDaysInLastWeek - 1)
             .map((completion, dayIndex) => (
               <MonthlyViewCompletionSquare
                 key={7 * 7 + dayIndex}

@@ -14,7 +14,6 @@ import {
   Habit,
   HabitCompletion,
   HabitCompletions,
-  HabitData,
   HabitInviteData,
   HabitParticipants,
 } from "./types";
@@ -41,7 +40,7 @@ export function getMockHabitMonthData(
       numberOfCompletions: numCompletions,
       dayOfTheWeek: date.toLocaleString("en-US", { weekday: "short" }),
       dayOfTheMonth: date.getDate().toString(),
-      date: date.toISOString().split('T')[0],
+      date: date.toISOString().split("T")[0],
     };
     date.setDate(date.getDate() + 1);
   }
@@ -187,7 +186,6 @@ export async function generateAllMockHabitCompletionData(): Promise<
     };
   });
 }
-
 
 export async function getAllHabitData() {
   const habits = await getMockHabitData();
