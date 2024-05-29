@@ -33,16 +33,16 @@ export default function emailsignup() {
       err => {
         switch(err.code) {
           case 'auth/email-already-in-use':
-            console.log("Email already in use");  
+            alert("Email already in use");  
             return;
           case 'auth/invalid-email':
-            console.log("Invalid email");
+            alert("Invalid email");
             return;
           case 'auth/weak-password':
-            console.log("Weak password");
+            alert("Weak password");
             return;
           default:
-            console.log(`An error occurred. Please try again. ${err.code}`);
+            alert(`An error occurred. Please try again. ${err.code}`);
             return;
         }
       });
@@ -68,7 +68,7 @@ export default function emailsignup() {
       await setDoc(docRef, baseData);
       console.log("Added User Document written with ID: ", auth.currentUser.uid);
     }
-    else {
+    else { //potential issue: if user gets created but DB write fails
       console.log("An error occurred. Please try again.");
     }
   }
