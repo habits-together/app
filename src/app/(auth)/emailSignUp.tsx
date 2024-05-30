@@ -82,7 +82,7 @@ export default function emailsignup() {
 
       // create habit completion collection
       const habitUserCompletionColRef = collection(docRef, "habits_subscribed_to_completions");
-      const id = "BASEHABIT-" + String(new Date().toLocaleDateString('en-CA').replace(/-/g, '')) //BASEHABIT-YYYYMMDD
+      const id = "BASEHABIT-" + String(new Date().toLocaleDateString('en-CA').replace(/\//g, '')) //BASEHABIT-YYYYMMDD
       const habitCompletetionDocRef = doc(habitUserCompletionColRef, id);
       await setDoc(habitCompletetionDocRef, dummyHabitData);
       
