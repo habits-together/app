@@ -6,7 +6,7 @@ import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import {auth,firestore} from "@/src/firebase/config";
 import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 
 export default function emailsignup() {
   
@@ -67,16 +67,35 @@ export default function emailsignup() {
       picture: "",
       friend_id: data.friend_id,
     }
+
+    const dummyHabitData = {
+      completion_date: new Date(),
+      habit_id: "BASEHABIT",
+      times_completed: 0,
+    }
     
     // PUSH TO FIREBASE
     if (auth.currentUser) {
+      // write regular user data doc
       const docRef = doc(firestore, "accounts", auth.currentUser.uid);
       await setDoc(docRef, baseData);
+
+      // create habit completion collection
+      const habitUserCompletionColRef = collection(docRef, "habits_subscribed_to_completions");
+      const id = "BASEHABIT-" + String(new Date().toLocaleDateString('en-CA').replace(/-/g, '')) //BASEHABIT-YYYYMMDD
+      const habitCompletetionDocRef = doc(habitUserCompletionColRef, id);
+      await setDoc(habitCompletetionDocRef, dummyHabitData);
+      
+
+
       console.log("Added User Document written with ID: ", auth.currentUser.uid);
     }
     else { //potential issue: if user gets created but DB write fails
       console.log("An error occurred. Please try again.");
     }
+
+    
+
   }
   return (
     <View className="flex-1 items-center px-3 pt-5">
