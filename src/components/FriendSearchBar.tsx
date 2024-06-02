@@ -1,9 +1,10 @@
 import { SafeAreaView, View } from "@/src/components/Themed";
 import colors from "@/src/constants/colors";
 import { IconSearch } from "@tabler/icons-react-native";
+import { useAtom } from "jotai";
 import { useColorScheme } from "nativewind";
-import { useState } from "react";
 import { TextInput } from "react-native";
+import { searchQueryAtom } from "../atoms/atoms";
 import Icon from "./Icon";
 
 export default function FriendSearchBar({
@@ -11,7 +12,7 @@ export default function FriendSearchBar({
 }: {
   placeholder: string;
 }) {
-  const [text, onChangeText] = useState("");
+  const [text, setText] = useAtom(searchQueryAtom);
   const { colorScheme } = useColorScheme();
   return (
     <SafeAreaView className="my-1 h-10">
@@ -35,7 +36,7 @@ export default function FriendSearchBar({
           colorScheme === "dark" ? colors.stone[200] : colors.stone[600]
         }
         placeholderTextColor={colors.stone[300]}
-        onChangeText={onChangeText}
+        onChangeText={setText}
         value={text}
         placeholder={placeholder}
         keyboardType="default"

@@ -11,7 +11,7 @@ import {
   IconUserPlus,
   IconUsers,
 } from "@tabler/icons-react-native";
-import { Tabs } from "expo-router";
+import { Tabs, router } from "expo-router";
 import { useColorScheme } from "nativewind";
 import React from "react";
 import { Platform } from "react-native";
@@ -89,7 +89,7 @@ export default function TabLayout() {
                 text="Add friends"
                 icon={IconUserPlus}
                 onPress={() => {
-                  alert("Add friends");
+                  router.push("/modals/addfriends");
                 }}
               />
             </View>

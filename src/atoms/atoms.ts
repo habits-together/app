@@ -152,3 +152,6 @@ export const habitDisplayTypeAtom = atomFamily((id: number) =>
     { getOnInit: true },
   ),
 );
+
+// -------------------------------------------------------------
+export const searchQueryAtom = atom("");
