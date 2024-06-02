@@ -155,3 +155,6 @@ export const habitDisplayTypeAtom = atomFamily((id: number) =>
 
 // -------------------------------------------------------------
 export const searchQueryAtom = atom("");
+searchQueryAtom.onMount = (set) => {
+  return () => set("");
+}
