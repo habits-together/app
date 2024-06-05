@@ -13,7 +13,6 @@ export default function emailsignup() {
   const [data,setData] = useState({
     email: '',
     password: '',
-    friend_id: ''
   });
   
   const handleEmailChange = (email: string) => {
@@ -22,10 +21,6 @@ export default function emailsignup() {
 
   const handlePasswordChange = (password: string) => {
     setData({...data,password: password});
-  }
-
-  const handleFriendIDChange = (friend_id: string) => {
-    setData({...data,friend_id: friend_id});
   }
 
 
@@ -65,7 +60,7 @@ export default function emailsignup() {
       friends: [],
       nudge_list: [],
       picture: "",
-      friend_id: data.friend_id,
+      friend_id: auth.currentUser?.email,
     }
 
     const dummyHabitData = {
@@ -101,7 +96,6 @@ export default function emailsignup() {
     <View className="flex-1 items-center px-3 pt-5">
       <AuthInputField text="Email" isPass={false} updateFunction={handleEmailChange}/>
       <AuthInputField text="Password" isPass={true} updateFunction={handlePasswordChange}/>
-      <AuthInputField text="Friend ID" isPass={false} updateFunction={handleFriendIDChange}/>
       <Text className="mb-5 w-2/3 text-center text-xs text-stone-400">
         By continuing, I agree to the {"\n"}
         <Link href="/">
