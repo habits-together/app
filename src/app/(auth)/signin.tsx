@@ -1,21 +1,21 @@
-import {
-  Pressable,
-  Image,
-  FlatList,
-  Dimensions,
-  Animated,
-  Platform,
-} from "react-native";
-import { Text, View } from "@/src/components/Themed";
-import { IconPhotoScan, IconMail } from "@tabler/icons-react-native";
-import { colors } from "react-native-elements";
-import { useColorScheme } from "nativewind";
-import { Link, router } from "expo-router";
-import Icon from "@/src/components/Icon";
-import { SlidingDot } from "react-native-animated-pagination-dots";
-import { useRef, useState } from "react";
 import Logo from "@/assets/images/Logo.svg";
+import Icon from "@/src/components/Icon";
+import { Text, View } from "@/src/components/Themed";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
+import { IconMail, IconPhotoScan } from "@tabler/icons-react-native";
+import { Link, router } from "expo-router";
+import { useColorScheme } from "nativewind";
+import { useRef, useState } from "react";
+import {
+  Animated,
+  Dimensions,
+  FlatList,
+  Image,
+  Platform,
+  Pressable,
+} from "react-native";
+import { SlidingDot } from "react-native-animated-pagination-dots";
+import { colors } from "react-native-elements";
 
 // // Import the functions you need from the SDKs you need
 // import { initializeApp } from "firebase/app";

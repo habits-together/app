@@ -1,37 +1,24 @@
-import { ScrollView } from "@/src/components/Themed";
-import { HabitCard } from "@/src/components/HabitCard";
-import { Link } from "expo-router";
-import { Pressable } from "react-native";
-import { mockHabitData } from "@/src/lib/mockData";
+import { habitIdAtom } from "@/src/atoms/atoms";
+import { HabitCard } from "@/src/components/habit-components/HabitCard";
+import { ScrollView, View } from "@/src/components/Themed";
+import { useAtomValue } from "jotai";
+import { Suspense } from "react";
 
 export default function HabitsTab() {
+  const habitIds = useAtomValue(habitIdAtom);
+
   return (
     <ScrollView
-      className="flex-1 gap-6 p-4"
+      className="flex-1 px-4 pt-2"
       contentContainerStyle={{ paddingBottom: 100 }}
     >
-      {mockHabitData.map((habit) => {
-        return (
-          <Link
-            push
-            href={{
-              pathname: "/viewhabit",
-              params: { id: habit.id },
-            }}
-            asChild
-            key={habit.id}
-          >
-            <Pressable>
-              <HabitCard
-                title={habit.title}
-                color={habit.color}
-                icon={habit.icon}
-                displayType="habit-tab"
-              />
-            </Pressable>
-          </Link>
-        );
-      })}
+      {habitIds.map((id) => (
+        <Suspense key={id} fallback={<></>}>
+          <View className="mb-5">
+            <HabitCard habitId={id} />
+          </View>
+        </Suspense>
+      ))}
     </ScrollView>
   );
 }

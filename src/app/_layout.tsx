@@ -8,10 +8,10 @@ import { useEffect } from "react";
 import { MenuProvider } from "react-native-popup-menu";
 import "react-native-reanimated";
 import {
-  viewHabitOptions,
-  emailSignUpOptions,
   emailLoginOptions,
+  emailSignUpOptions,
   forgotPasswordOptions,
+  viewHabitOptions,
 } from "../components/HeaderOptions";
 
 export {

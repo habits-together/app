@@ -1,10 +1,9 @@
-import { View } from "@/src/components/Themed";
 import Icon from "@/src/components/Icon";
-import { IconMoon, IconSun, IconTool } from "@tabler/icons-react-native";
 import {
   SettingsChoice,
   SettingsContainer,
 } from "@/src/components/SettingsComponents";
+import { IconMoon, IconSun, IconTool } from "@tabler/icons-react-native";
 
 export default function Widgetsettings() {
   return (

@@ -6,8 +6,8 @@ import colors from "../constants/colors";
 import DotsMenu from "./DotsMenu";
 import HeaderBackButton from "./HeaderBackButton";
 import Icon from "./Icon";
-import { Text, View } from "./Themed";
 import RoundedButton from "./RoundedButton";
+import { Text, View } from "./Themed";
 
 function sharedOptions(colorScheme: string): NativeStackNavigationOptions {
   return {

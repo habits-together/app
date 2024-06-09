@@ -1,8 +1,8 @@
-import { Text, View } from "@/src/components/Themed";
-import { Link } from "expo-router";
 import AuthButton from "@/src/components/AuthButton";
 import AuthInputField from "@/src/components/AuthInputField";
+import { Text, View } from "@/src/components/Themed";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
+import { Link } from "expo-router";
 import {auth,firestore} from "@/src/firebase/config";
 import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";

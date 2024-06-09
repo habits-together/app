@@ -1,14 +1,15 @@
 import { Text, View } from "@/src/components/Themed";
-import { FriendData, getMockFriends } from "@/src/lib/mockData";
-import { useEffect, useState } from "react";
-import FriendCard from "./FriendCard";
-import SmallProfilePicture from "./ProfilePicture";
-import { fetchSingleUserThumbnail } from "../lib/getRandomProfilePics";
-import FriendSearchBar from "./FriendSearchBar";
-import { Pressable } from "react-native";
-import Icon from "./Icon";
+import { getMockFriends } from "@/src/lib/mockData";
 import { IconShare2 } from "@tabler/icons-react-native";
+import { useEffect, useState } from "react";
+import { Pressable } from "react-native";
 import colors from "../constants/colors";
+import { fetchSingleUserThumbnail } from "../lib/getRandomProfilePics";
+import { FriendData } from "../lib/types";
+import FriendCard from "./FriendCard";
+import FriendSearchBar from "./FriendSearchBar";
+import Icon from "./Icon";
+import { MediumProfilePicture } from "./ProfilePicture";
 
 export default function InviteFriends() {
   const [friends, setFriends] = useState<FriendData[]>([]);
@@ -37,7 +38,7 @@ export default function InviteFriends() {
           key={friend.id}
           displayName={friend.displayName}
           userName={friend.userName}
-          profilePic={<SmallProfilePicture picUrl={friend.profilePicUrl} />}
+          profilePic={<MediumProfilePicture picUrl={friend.profilePicUrl} />}
           commonHabits={friend.commonHabits}
           displayType="invite"
         />

@@ -1,3 +1,9 @@
+import Icon from "@/src/components/Icon";
+import {
+  SettingsContainer,
+  SettingsList,
+} from "@/src/components/SettingsComponents";
+import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import {
   IconAward,
   IconCategory2,
@@ -10,13 +16,7 @@ import {
   IconSun,
   IconUserPlus,
 } from "@tabler/icons-react-native";
-import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { router } from "expo-router";
-import {
-  SettingsContainer,
-  SettingsList,
-} from "@/src/components/SettingsComponents";
-import Icon from "@/src/components/Icon";
 
 export default function Settings() {
   return (

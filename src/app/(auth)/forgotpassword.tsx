@@ -1,6 +1,6 @@
-import { Text, View } from "@/src/components/Themed";
 import AuthButton from "@/src/components/AuthButton";
 import AuthInputField from "@/src/components/AuthInputField";
+import { Text, View } from "@/src/components/Themed";
 
 export default function forgotpassword() {
   const resetPassword = () => {

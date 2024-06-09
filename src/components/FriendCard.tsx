@@ -1,13 +1,13 @@
 import { Text, View } from "@/src/components/Themed";
+import { IconCheck, IconPlus } from "@tabler/icons-react-native";
 import { Link } from "expo-router";
 import { useColorScheme } from "nativewind";
 import React, { useState } from "react";
 import { Pressable } from "react-native";
 import colors from "../constants/colors";
-import { Habit } from "../lib/mockData";
+import { Habit } from "../lib/types";
 import DotsMenu from "./DotsMenu";
 import Icon from "./Icon";
-import { IconCheck, IconPlus } from "@tabler/icons-react-native";
 
 export type FriendCardProps = {
   displayName: string;
