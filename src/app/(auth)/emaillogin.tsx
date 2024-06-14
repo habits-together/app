@@ -10,8 +10,8 @@ export default function emaillogin() {
   };
   return (
     <View className="flex-1 items-center px-3 pt-5">
-      <AuthInputField text="Email" isPass={false} />
-      <AuthInputField text="Password" isPass={true} />
+      <AuthInputField text="Email" isPass={false} updateFunction={() => {}} />
+      <AuthInputField text="Password" isPass={true} updateFunction={() => {}} />
       <Text className="mb-5 w-2/3 text-center">
         <Link href="/(auth)/forgotpassword">
           <Text className="text-xs text-stone-400 underline">
