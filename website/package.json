@@ -11,6 +11,7 @@
     "prettier:check:ci": "prettier --check \"**/*.{ts,tsx,js,md,mdx,css,yaml}\""
   },
   "dependencies": {
+    "firebase": "^10.12.2",
     "next": "14.2.4",
     "prettier": "^3.3.2",
     "prettier-plugin-organize-imports": "^3.2.4",
