@@ -4,7 +4,7 @@ import {
   getMockFriends,
   getMockNotifications,
 } from "../lib/mockData";
-import { Habit, HabitCompletion } from "../lib/types";
+import { FriendData, Habit, HabitCompletion } from "../lib/types";
 
 export async function fetchHabits() {
   // fetch all habit data from firebase
@@ -67,7 +67,11 @@ export async function fetchFriends() {
     ...friend,
     profilePicUrl: pics[index].imgurl,
   }));
-  return updatedFriends;
+  const friendIdtoDataMap: Record<number, FriendData> = {};
+  updatedFriends.forEach((friend) => {
+    friendIdtoDataMap[friend.id] = friend;
+  });
+  return friendIdtoDataMap;
 }
 
 export async function fetchNotifications() {
@@ -85,4 +89,20 @@ export async function acceptFriendRequestInDB(id: number) {
 
 export async function acceptHabitInviteInDB(id: number) {
   // accept habit invite in firebase
+}
+
+// friend search
+export async function searchForFriendsInDB(searchText: string) : Promise<number[]> {
+  // query database for usernames and emails including the searchText and return array of ids of the users that match
+  return [12, 45];  
+}
+
+export async function getMutualFriendsInDB(userId: number, friendId: number) {
+  // query database for mutual friends of userId and friendId and return array of ids of the mutual friends
+  return [12, 45];
+}
+
+export async function getCurrentUserIdFromDB() {
+  // query database for the current user's id and return it
+  return 0;
 }

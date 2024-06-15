@@ -10,6 +10,9 @@ import {
   fetchFriends,
   fetchHabits,
   fetchNotifications,
+  getCurrentUserIdFromDB,
+  getMutualFriendsInDB,
+  searchForFriendsInDB,
   updateHabitCompletionsInDB,
   updateHabitInfoInDB,
   updateHabitParticipantsInDB,
@@ -196,9 +199,9 @@ export const friendInfoAtom = atomFamily((id: number) =>
   atom((get) => get(friendsAtom)[id]),
 );
 
-export const friendIdsAtom = atom((get) =>
-  Object.keys(get(friendsAtom)).map(Number),
-);
+export const friendIdsAtom = atom((get) => {
+  return Object.keys(get(friendsAtom)).map(Number);
+});
 
 // NOTIFICATIONS
 const notificationsAtom = atom<UserNotificationsDataType>([]);
@@ -256,5 +259,36 @@ export const deleteNotificationAtom = atomFamily((id: number) =>
   ),
 );
 
+// friend search
+export const searchQueryAtom = atom(
+  "",
+  (_get, set, newValue: string) => {
+    set(searchQueryAtom, newValue);
+  },
+);
 
-export const searchQueryAtom = atom("");
+export const searchResultsAtom = atom(
+  async (get) => {
+    console.log("searching for friends");
+    return await searchForFriendsInDB(get(searchQueryAtom));
+  }
+);
+
+export const getMutualFriendsAtom = atomFamily((friendId: number) =>
+  atom(async (get) => {
+    try {
+      const uid = get(currentUserIdAttom);
+      const mutualList = await getMutualFriendsInDB(uid, friendId);
+      return mutualList;
+    } catch (error) {
+      console.error("Error fetching mutual friends:", error);
+      return [];
+    }
+  }),
+);
+
+export const currentUserIdAttom = atom(10);
+currentUserIdAttom.onMount = (set) => {
+  getCurrentUserIdFromDB().then(set);
+};
+// do an onmount to get this

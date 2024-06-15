@@ -9,6 +9,7 @@ import Icon from "./Icon";
 import RoundedButton from "./RoundedButton";
 import { Text, View } from "./Themed";
 
+
 function sharedOptions(colorScheme: string): NativeStackNavigationOptions {
   return {
     headerShown: true,

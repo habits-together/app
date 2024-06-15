@@ -12,8 +12,7 @@ export default function FriendSearchBar({
 }: {
   placeholder: string;
 }) {
-  // const [text, onChangeText] = useState("");
-  const [text, setText] = useAtom(searchQueryAtom);
+  const [searchText, setSearchText] = useAtom(searchQueryAtom);
   const { colorScheme } = useColorScheme();
   return (
     <SafeAreaView className="my-1 h-10">
@@ -37,8 +36,8 @@ export default function FriendSearchBar({
           colorScheme === "dark" ? colors.stone[200] : colors.stone[600]
         }
         placeholderTextColor={colors.stone[300]}
-        onChangeText={setText}
-        value={text}
+        onChangeText={setSearchText}
+        value={searchText}
         placeholder={placeholder}
         keyboardType="default"
       />

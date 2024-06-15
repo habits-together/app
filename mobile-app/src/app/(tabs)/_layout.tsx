@@ -89,7 +89,6 @@ export default function TabLayout() {
                 text="Add friends"
                 icon={IconUserPlus}
                 onPress={() => {
-                  alert("Add friends");
                   router.push("/modals/addfriends");
                 }}
               />
