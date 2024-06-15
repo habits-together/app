@@ -174,8 +174,7 @@ export const friendIdsAtom = atom((get) =>
   Object.keys(get(friendsAtom)).map(Number),
 );
 
-
-// NOTIFICATIONS 
+// NOTIFICATIONS
 const notificationsAtom = atom<UserNotificationsDataType>([]);
 notificationsAtom.onMount = (set) => {
   fetchNotifications().then(set);
@@ -202,8 +201,8 @@ export const acceptFriendRequestAtom = atomFamily((id: number) =>
         const { [id]: _, ...remaining } = prev;
         return remaining;
       });
-    }
-  )
+    },
+  ),
 );
 
 export const acceptHabitInviteAtom = atomFamily((id: number) =>
@@ -215,8 +214,8 @@ export const acceptHabitInviteAtom = atomFamily((id: number) =>
         const { [id]: _, ...remaining } = prev;
         return remaining;
       });
-    }
-  )
+    },
+  ),
 );
 
 export const deleteNotificationAtom = atomFamily((id: number) =>
@@ -228,6 +227,6 @@ export const deleteNotificationAtom = atomFamily((id: number) =>
         const { [id]: _, ...remaining } = prev;
         return remaining;
       });
-    }
-  )
+    },
+  ),
 );

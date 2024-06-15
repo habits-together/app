@@ -1,21 +1,22 @@
-import { Icon as TablerIcon } from "@tabler/icons-react-native";
+import { useAtom, useAtomValue } from "jotai";
 import { useColorScheme } from "nativewind";
 import { Pressable } from "react-native";
+import {
+  acceptFriendRequestAtom,
+  deleteNotificationAtom,
+  notificationInfoAtom,
+} from "../atoms/atoms";
 import colors from "../constants/colors";
 import ConfirmAndDeleteButtons from "./ConfirmDeleteButtons";
 import Icon from "./Icon";
-import { Text, View } from "./Themed";
-import { useAtom, useAtomValue } from "jotai";
-import { acceptFriendRequestAtom, deleteNotificationAtom, notificationInfoAtom } from "../atoms/atoms";
 import { NotifProfilePicture } from "./ProfilePicture";
+import { Text, View } from "./Themed";
 
 export type HabitReminderProps = {
   notifId: number;
 };
 
-export function HabitReminder({
-  notifId
-}: HabitReminderProps) {
+export function HabitReminder({ notifId }: HabitReminderProps) {
   const { colorScheme } = useColorScheme();
   const notifData = useAtomValue(notificationInfoAtom(notifId));
   const [, deleteNotif] = useAtom(deleteNotificationAtom(notifId));
@@ -43,7 +44,9 @@ export function HabitReminder({
         </View>
         <View className="ml-3.5 flex shrink flex-col">
           <Text className="flex-row">
-            <Text className="text-base font-semibold">{notifData.displayName}</Text>
+            <Text className="text-base font-semibold">
+              {notifData.displayName}
+            </Text>
             <Text className="text-base"> nudged you to complete </Text>
             <Text className="text-base font-semibold">{notifData.title}</Text>
           </Text>
@@ -69,9 +72,7 @@ export type HabitInviteProps = {
   notifId: number;
 };
 
-export function HabitInvite({
-  notifId
-}: HabitInviteProps) {
+export function HabitInvite({ notifId }: HabitInviteProps) {
   const { colorScheme } = useColorScheme();
   const notifData = useAtomValue(notificationInfoAtom(notifId));
   const [, deleteNotif] = useAtom(deleteNotificationAtom(notifId));
@@ -100,7 +101,9 @@ export function HabitInvite({
         </View>
         <View className="ml-3.5 flex shrink flex-col">
           <Text className="flex-row">
-            <Text className="text-base font-semibold">{notifData.displayName}</Text>
+            <Text className="text-base font-semibold">
+              {notifData.displayName}
+            </Text>
             <Text className="text-base"> invited you to join </Text>
             <Text className="text-base font-semibold">{notifData.title}</Text>
           </Text>
@@ -124,9 +127,7 @@ export type FriendRequestProps = {
 };
 
 // fetch all invites a user has received
-export function FriendRequest({
-  notifId
-}: FriendRequestProps) {
+export function FriendRequest({ notifId }: FriendRequestProps) {
   const notifData = useAtomValue(notificationInfoAtom(notifId));
   const [, deleteNotif] = useAtom(deleteNotificationAtom(notifId));
   const [, acceptRequest] = useAtom(acceptFriendRequestAtom(notifId));
@@ -136,7 +137,9 @@ export function FriendRequest({
         <NotifProfilePicture picUrl={notifData.profilePicUrl} />
         <View className="ml-3.5 flex shrink flex-col">
           <Text className="flex-row">
-            <Text className="text-base font-semibold">{notifData.displayName}</Text>
+            <Text className="text-base font-semibold">
+              {notifData.displayName}
+            </Text>
             <Text className="text-base"> sent you a friend request</Text>
           </Text>
           <Text className="text-xs font-semibold text-stone-400">
