@@ -3,8 +3,12 @@ import { atom } from "jotai";
 import { atomFamily, atomWithStorage, createJSONStorage } from "jotai/utils";
 import { AsyncStorage as AsyncStorageType } from "jotai/vanilla/utils/atomWithStorage";
 import {
+  acceptFriendRequestInDB,
+  acceptHabitInviteInDB,
+  deleteNotificationInDB,
   fetchFriends,
   fetchHabits,
+  fetchNotifications,
   updateHabitCompletionsInDB,
   updateHabitInfoInDB,
   updateHabitParticipantsInDB,
@@ -15,6 +19,7 @@ import {
   Habit,
   HabitCompletion,
   HabitDisplayType,
+  UserNotificationsDataType,
 } from "../lib/types";
 
 // using Jotai atoms: https://jotai.org/docs/introduction
@@ -161,10 +166,66 @@ friendsAtom.onMount = (set) => {
   fetchFriends().then(set);
 };
 
-export const freindInfoAtom = atomFamily((id: number) =>
+export const friendInfoAtom = atomFamily((id: number) =>
   atom((get) => get(friendsAtom)[id]),
 );
 
 export const friendIdsAtom = atom((get) =>
   Object.keys(get(friendsAtom)).map(Number),
+);
+
+// NOTIFICATIONS
+const notificationsAtom = atom<UserNotificationsDataType>([]);
+notificationsAtom.onMount = (set) => {
+  fetchNotifications().then(set);
+};
+
+export const notificationInfoAtom = atomFamily((id: number) =>
+  atom((get) => get(notificationsAtom)[id]),
+);
+export const notificationTypeAtom = atomFamily((id: number) =>
+  atom((get) => get(notificationInfoAtom(id)).type),
+);
+
+export const notificationIdsAtom = atom((get) =>
+  Object.keys(get(notificationsAtom)).map(Number),
+);
+
+export const acceptFriendRequestAtom = atomFamily((id: number) =>
+  atom(
+    (get) => get(notificationsAtom),
+    (_get, set) => {
+      acceptFriendRequestInDB(id);
+      set(notificationsAtom, (prev) => {
+        const { [id]: _, ...remaining } = prev;
+        return remaining;
+      });
+    },
+  ),
+);
+
+export const acceptHabitInviteAtom = atomFamily((id: number) =>
+  atom(
+    (get) => get(notificationsAtom),
+    (_get, set) => {
+      acceptHabitInviteInDB(id);
+      set(notificationsAtom, (prev) => {
+        const { [id]: _, ...remaining } = prev;
+        return remaining;
+      });
+    },
+  ),
+);
+
+export const deleteNotificationAtom = atomFamily((id: number) =>
+  atom(
+    (get) => get(notificationsAtom),
+    (_get, set) => {
+      deleteNotificationInDB(id);
+      set(notificationsAtom, (prev) => {
+        const { [id]: _, ...remaining } = prev;
+        return remaining;
+      });
+    },
+  ),
 );

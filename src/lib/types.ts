@@ -75,6 +75,8 @@ export type HabitInviteData = {
   profilePicUrl: string;
 };
 
+export type UserNotificationsDataType = Record<number, NotificationData>;
+
 export type NotificationData = {
   id: number; // unique id for each reminder
   type: "friendRequest" | "habitInvite" | "habitReminder";

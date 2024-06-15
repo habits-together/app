@@ -5,7 +5,7 @@ import { useAtomValue } from "jotai";
 import { useColorScheme } from "nativewind";
 import React, { useState } from "react";
 import { Pressable } from "react-native";
-import { freindInfoAtom } from "../atoms/atoms";
+import { friendInfoAtom } from "../atoms/atoms";
 import colors from "../constants/colors";
 import { Habit } from "../lib/types";
 import DotsMenu from "./DotsMenu";
@@ -22,7 +22,7 @@ export default function FriendCard({
   displayType = "normal",
 }: FriendCardProps) {
   const [inviteSent, setInviteSent] = useState(false);
-  const friendData = useAtomValue(freindInfoAtom(friendId));
+  const friendData = useAtomValue(friendInfoAtom(friendId));
   const InviteFriends = () => {
     // TODO: Implement invite friends
     setInviteSent(true);
