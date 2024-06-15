@@ -1,11 +1,15 @@
-export function getLocalRandomProfilePics(indexes: number[]) {
+export function getLocalRandomProfilePics(ids: number[]) {
   // get pfp from assets/images/mock-pfps
-  return Array.from(indexes, (index) => {
+  return Array.from(ids, (id) => {
     return {
-      imgurl: localMockPfps[index % localMockPfps.length],
+      imgurl: localMockPfps[id % localMockPfps.length],
       hasCompleted: Math.random() > 0.4 ? true : false,
     };
   });
+}
+export function getLocalRandomProfilePic(id: number) {
+  // get pfp from assets/images/mock-pfps
+  return localMockPfps[id % localMockPfps.length]
 }
 
 async function fetchUserThumbnails(amount: number) {

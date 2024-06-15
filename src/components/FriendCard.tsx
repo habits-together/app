@@ -5,7 +5,7 @@ import { useColorScheme } from "nativewind";
 import React, { useState } from "react";
 import { Pressable } from "react-native";
 import colors from "../constants/colors";
-import { Habit } from "../lib/types";
+import { HabitInfo } from "../lib/types";
 import DotsMenu from "./DotsMenu";
 import Icon from "./Icon";
 
@@ -13,7 +13,7 @@ export type FriendCardProps = {
   displayName: string;
   userName: string;
   profilePic: JSX.Element;
-  commonHabits: Habit[];
+  commonHabits: HabitInfo[];
   displayType?: "normal" | "invite";
 };
 
@@ -92,7 +92,7 @@ function InviteButton({ inviteFunc }: { inviteFunc: () => void }) {
   );
 }
 
-function CommonHabits({ commonHabits }: { commonHabits: Habit[] }) {
+function CommonHabits({ commonHabits }: { commonHabits: HabitInfo[] }) {
   const { colorScheme } = useColorScheme();
   return (
     <View className="mt-1 flex flex-row flex-wrap">
@@ -124,7 +124,7 @@ function CommonHabits({ commonHabits }: { commonHabits: Habit[] }) {
   );
 }
 
-function HabitTag({ habit }: { habit: Habit }) {
+function HabitTag({ habit }: { habit: HabitInfo }) {
   const { colorScheme } = useColorScheme();
   return (
     <View

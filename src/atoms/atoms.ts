@@ -10,9 +10,10 @@ import {
 } from "../firebase/api";
 import {
   AllHabitsDataType,
-  Habit,
   HabitCompletion,
   HabitDisplayType,
+  HabitInfo,
+  HabitParticipant,
 } from "../lib/types";
 
 // using Jotai atoms: https://jotai.org/docs/introduction
@@ -20,9 +21,18 @@ import {
 
 const storage = createJSONStorage(() => AsyncStorage);
 
+// USER ---------------------------------------------------------------------------
+export const userAtom = atom({
+  id: 7,
+  displayName: "John Doe",
+  username: "johndoe",
+  profilePicture: "https://randomuser.me/api/portraits/men/75.jpg",
+});
+
 // HABITS -------------------------------------------------------------------------
 const habitsAtom = atom<AllHabitsDataType>([]);
 habitsAtom.onMount = (set) => {
+  console.log("fetched all habit data");
   fetchHabits().then(set);
 };
 
@@ -30,7 +40,7 @@ habitsAtom.onMount = (set) => {
 export const habitInfoAtom = atomFamily((id: number) =>
   atom(
     (get) => get(habitsAtom)[id].habitInfo,
-    (_get, set, newValue: Habit) => {
+    (_get, set, newValue: HabitInfo) => {
       updateHabitInfoInDB(id, newValue);
       set(habitsAtom, (prev) => {
         return {
@@ -125,10 +135,27 @@ export const incrementNumberOfCompletionsTodayAtom = atomFamily((id: number) =>
 );
 
 // habit participants
+// export const habitInfoAtom = atomFamily((id: number) =>
+//   atom(
+//     (get) => get(habitsAtom)[id].habitInfo,
+//     (_get, set, newValue: HabitInfo) => {
+//       updateHabitInfoInDB(id, newValue);
+//       set(habitsAtom, (prev) => {
+//         return {
+//           ...prev,
+//           [id]: {
+//             ...prev[id],
+//             habitInfo: newValue,
+//           },
+//         };
+//       });
+//     },
+//   ),
+// );
 export const habitParticipantsAtom = atomFamily((id: number) =>
   atom(
     (get) => get(habitsAtom)[id].habitParticipants,
-    (_get, set, newValue: number[]) => {
+    (_get, set, newValue: HabitParticipant[]) => {
       updateHabitParticipantsInDB(id, newValue);
       set(habitsAtom, (prev) => {
         return {
@@ -142,6 +169,44 @@ export const habitParticipantsAtom = atomFamily((id: number) =>
     },
   ),
 );
+export const habitParticipantIdsAtom = atomFamily((habitId: number) =>
+  atom((get) => get(habitParticipantsAtom(habitId)).map((p) => p.id)),
+);
+export const habitParticipantAtom = atomFamily(
+  ({ habitId, participantId }: { habitId: number; participantId: number }) =>
+    atom((get) => {
+      const habitParticipants = get(habitParticipantsAtom(habitId));
+      const participant = habitParticipants.find(
+        (participant) => participant.id === participantId,
+      )!;
+      return participant;
+    }),
+  (a, b) => a.habitId === b.habitId && a.participantId === b.participantId,
+);
+export const allHabitParticipantCompletionsAtom = atomFamily(
+  (habitId: number) => {
+    const allParticipantCompletionsAtom = atom<{
+      [participantId: number]: HabitCompletion[];
+    }>({});
+
+    return allParticipantCompletionsAtom;
+  },
+);
+
+// export const habitParticipantCompletionsAtom = atomFamily(
+//   ({ habitId, participantId }: { habitId: number; participantId: number }) => {
+//     const completionsAtom = atom<HabitCompletion[]>([]);
+//     completionsAtom.onMount = (set) => {
+//       if (participantId === 1) {
+//         console.log("mounted")
+//       }
+//       const completions = getMockHabitCompletionData(habitId);
+//       set(completions);
+//     }
+//     return completionsAtom;
+//   },
+//   (a, b) => a.habitId === b.habitId && a.participantId === b.participantId,
+// );
 
 // whether we should display the habit in weekly or monthly view
 export const habitDisplayTypeAtom = atomFamily((id: number) =>

@@ -21,14 +21,21 @@ export function SmallProfilePicture({
   );
 }
 
-export function MediumProfilePicture({ picUrl }: { picUrl: string }) {
+export function MediumProfilePicture({   picUrl,
+  isLocalImage = false,
+}: {
+  picUrl: string;
+  isLocalImage?: boolean;
+}) {
   return (
     <Image
       className="h-12 w-12 rounded-full bg-stone-200"
       source={
-        picUrl
-          ? { uri: picUrl }
-          : require("../../assets/images/default_user.png")
+        isLocalImage
+          ? picUrl
+          : picUrl
+            ? { uri: picUrl }
+            : require("../../assets/images/default_user.png")
       }
     />
   );

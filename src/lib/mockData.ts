@@ -12,11 +12,10 @@ import { fetchSingleUserThumbnail } from "./getRandomProfilePics";
 import {
   AllHabitsDataType,
   FriendRequestData,
-  Habit,
   HabitCompletion,
   HabitCompletions,
+  HabitInfo,
   HabitInviteData,
-  HabitParticipants,
   HabitReminderData,
   NotificationData,
 } from "./types";
@@ -51,7 +50,7 @@ export function getMockHabitMonthData(
   return activityData;
 }
 
-export const mockHabitData: Habit[] = [
+export const mockHabitData: HabitInfo[] = [
   {
     title: "Read for 15 minutes",
     icon: IconBook,
@@ -171,7 +170,7 @@ export interface FriendData {
   displayName: string;
   userName: string;
   profilePicUrl: string;
-  commonHabits: Habit[];
+  commonHabits: HabitInfo[];
 }
 
 export async function getMockFriends() {
@@ -194,13 +193,131 @@ export async function getMockFriends() {
   return mockFriends;
 }
 
-export const mockHabitFriendData: HabitParticipants[] = [
-  { habitId: 1, participants: [1, 2, 3, 4] },
-  { habitId: 2, participants: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20] },
-  { habitId: 3, participants: [21, 22] },
-];
+// export const mockHabitFriendData: HabitParticipant[] = [
+//   { habitId: 1, participants: [1, 2, 3, 4] },
+//   { habitId: 2, participants: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20] },
+//   { habitId: 3, participants: [21, 22] },
+// ];
+const mockHabitParticipantData = {
+  1: [
+    {
+      id: 1,
+      displayName: "Someone else",
+      username: "some1else",
+      profilePicUrl: "",
+    },
+    {
+      id: 2,
+      displayName: "Eduardo",
+      username: "eduardo_012003",
+      profilePicUrl: "",
+    },
+    {
+      id: 3,
+      displayName: "Kush Blaze",
+      username: "kush_blaze",
+      profilePicUrl: "",
+    },
+    {
+      id: 4,
+      displayName: "Blaze Kush",
+      username: "blaze_kush",
+      profilePicUrl: "",
+    },
+  ],
+  2: [
+    {
+      id: 10,
+      displayName: "John Doe",
+      username: "john_doe",
+      profilePicUrl: "",
+    },
+    {
+      id: 11,
+      displayName: "Jane Doe",
+      username: "jane_doe",
+      profilePicUrl: "",
+    },
+    {
+      id: 12,
+      displayName: "John Smith",
+      username: "john_smith",
+      profilePicUrl: "",
+    },
+    {
+      id: 13,
+      displayName: "Jane Smith",
+      username: "jane_smith",
+      profilePicUrl: "",
+    },
+    {
+      id: 14,
+      displayName: "John Johnson",
+      username: "john_johnson",
+      profilePicUrl: "",
+    },
+    {
+      id: 15,
+      displayName: "Jane Johnson",
+      username: "jane_johnson",
+      profilePicUrl: "",
+    },
+    {
+      id: 16,
+      displayName: "John Brown",
+      username: "john_brown",
+      profilePicUrl: "",
+    },
+    {
+      id: 17,
+      displayName: "Jane Brown",
+      username: "jane_brown",
+      profilePicUrl: "",
+    },
+    {
+      id: 18,
+      displayName: "John White",
+      username: "john_white",
+      profilePicUrl: "",
+    },
+    {
+      id: 19,
+      displayName: "Jane White",
+      username: "jane_white",
+      profilePicUrl: "",
+    },
+    {
+      id: 20,
+      displayName: "John Black",
+      username: "john_black",
+      profilePicUrl: "",
+    },
+  ],
+  3: [
+    {
+      id: 21,
+      displayName: "John Red",
+      username: "john_red",
+      profilePicUrl: "",
+    },
+    {
+      id: 22,
+      displayName: "Jane Red",
+      username: "jane_red",
+      profilePicUrl: "",
+    },
+  ],
+};
 export async function getMockHabitParticipantData() {
-  return mockHabitFriendData;
+  return mockHabitData.map((habit) => {
+    return {
+      habitId: habit.id,
+      habitParticipantData:
+        mockHabitParticipantData[
+          habit.id as keyof typeof mockHabitParticipantData
+        ],
+    };
+  });
 }
 
 export function getMockHabitCompletionData(habitId: number) {
@@ -334,7 +451,7 @@ export async function getAllHabitData() {
     acc[habit.id] = {
       habitInfo: habit,
       habitCompletionData: habitCompletion.habitCompletionData,
-      habitParticipants: habitParticipant.participants,
+      habitParticipants: habitParticipant.habitParticipantData,
     };
     return acc;
   }, {} as AllHabitsDataType);

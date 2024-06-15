@@ -23,7 +23,7 @@ export default function ParticipantProfilePictures({
   // it would be good to figure out how to do this responsively based on screen width
   const maxPfps = displayType === "weekly-view" ? 6 : 4;
 
-  const habitParticipantIds = useAtomValue(habitParticipantsAtom(habitId));
+  const habitParticipants = useAtomValue(habitParticipantsAtom(habitId));
   const [mockPfps, setMockPfps] = useState<
     { imgurl: string; hasCompleted: boolean }[]
   >([]);
@@ -32,7 +32,7 @@ export default function ParticipantProfilePictures({
   const habitColor = useAtomValue(habitColorAtom(habitId));
 
   useEffect(() => {
-    setMockPfps(getLocalRandomProfilePics(habitParticipantIds));
+    setMockPfps(getLocalRandomProfilePics(habitParticipants.map((p) => p.id)));
   }, []);
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 import { getAllHabitData } from "../lib/mockData";
-import { Habit, HabitCompletion } from "../lib/types";
+import { HabitInfo, HabitCompletion, HabitParticipant } from "../lib/types";
 
 export async function fetchHabits() {
   // fetch all habit data from firebase
@@ -26,7 +26,7 @@ export async function fetchHabits() {
   return getAllHabitData();
 }
 
-export async function updateHabitInfoInDB(habitId: number, habitInfo: Habit) {
+export async function updateHabitInfoInDB(habitId: number, habitInfo: HabitInfo) {
   // update habit info in firebase
 }
 
@@ -45,7 +45,7 @@ export async function updateCompletionsTodayInDB(
 
 export async function updateHabitParticipantsInDB(
   habitId: number,
-  habitParticipants: number[],
+  habitParticipants: HabitParticipant[],
 ) {
   // update habit participants in firebase
 }
