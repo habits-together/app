@@ -5,7 +5,7 @@ import { auth, firestore } from "@/src/firebase/config";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { Link } from "expo-router";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { collection, doc, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 
 export default function emailsignup() {
@@ -53,36 +53,45 @@ export default function emailsignup() {
     const baseData = {
       created_at: new Date(),
       display_name: data.email,
-      friend_invites: [],
-      friend_request: [],
-      friends: [],
-      nudge_list: [],
       picture: "",
-      friend_id: auth.currentUser?.email,
+      username: auth.currentUser?.email,
+      habit_invites: [], // references habit_invites
+      friend_requests: [], // references friend_requests
     };
 
     const dummyHabitData = {
-      completion_date: new Date(),
-      habit_id: "BASEHABIT",
-      times_completed: 0,
+      habit_ref: doc(firestore, "habits", "BASEHABIT"),
+    };
+
+    const nudgeDummyData = {
+      habit_ref: doc(firestore, "habits", "BASEHABIT"),
+      friend_ref: doc(firestore, "users", "otheruser"),
+      sent_at: new Date(),
+    };
+
+    const friendDummyData = {
+      friend_ref: doc(firestore, "users", "otheruser"),
+      friends_since: new Date(),
     };
 
     // PUSH TO FIREBASE
     if (auth.currentUser) {
       // write regular user data doc
-      const docRef = doc(firestore, "accounts", auth.currentUser.uid);
-      await setDoc(docRef, baseData);
+      const accDocRef = doc(firestore, "users", auth.currentUser.uid);
+      await setDoc(accDocRef, baseData);
 
       // create habit completion collection
-      const habitUserCompletionColRef = collection(
-        docRef,
-        "habits_subscribed_to_completions",
-      );
-      const id =
-        "BASEHABIT-" +
-        String(new Date().toLocaleDateString("en-CA").replace(/\//g, "")); //BASEHABIT-YYYYMMDD
-      const habitCompletetionDocRef = doc(habitUserCompletionColRef, id);
-      await setDoc(habitCompletetionDocRef, dummyHabitData);
+      const habitUserCompletionColRef = collection(accDocRef, "habits");
+
+      await addDoc(habitUserCompletionColRef, dummyHabitData);
+
+      // create nudge collection
+      const nudgeColRef = collection(accDocRef, "nudges");
+      await addDoc(nudgeColRef, nudgeDummyData);
+
+      // create friends collection
+      const friendsColRef = collection(accDocRef, "friends");
+      await addDoc(friendsColRef, friendDummyData);
 
       console.log(
         "Added User Document written with ID: ",
