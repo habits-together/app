@@ -7,23 +7,34 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 
 export default function emaillogin() {
-  const [data,setData] = useState({email: "", password: ""})
+  const [data, setData] = useState({ email: "", password: "" });
   const handleEmailChange = (email: string) => {
-    setData({...data, email: email})
-  }
+    setData({ ...data, email: email });
+  };
   const handlePasswordChange = (password: string) => {
-    setData({...data, password: password})
-  }
+    setData({ ...data, password: password });
+  };
   const Login = () => {
     signInWithEmailAndPassword(getAuth(), data.email, data.password)
-      .then((userCredential) => {resetNavigationStack("/");})
-      .catch((err) => {console.log});
-    
+      .then((userCredential) => {
+        resetNavigationStack("/");
+      })
+      .catch((err) => {
+        console.log;
+      });
   };
   return (
     <View className="flex-1 items-center px-3 pt-5">
-      <AuthInputField text="Email" isPass={false} updateFunction={handleEmailChange} />
-      <AuthInputField text="Password" isPass={true} updateFunction={handlePasswordChange} />
+      <AuthInputField
+        text="Email"
+        isPass={false}
+        updateFunction={handleEmailChange}
+      />
+      <AuthInputField
+        text="Password"
+        isPass={true}
+        updateFunction={handlePasswordChange}
+      />
       <Text className="mb-5 w-2/3 text-center">
         <Link href="/(auth)/forgotpassword">
           <Text className="text-xs text-stone-400 underline">
