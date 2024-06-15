@@ -79,13 +79,13 @@ export default function emailsignup() {
     // PUSH TO FIREBASE
     if (auth.currentUser) {
       // write regular user data doc
-      const accDocRef = doc(firestore, "accounts", auth.currentUser.uid);
+      const accDocRef = doc(firestore, "users", auth.currentUser.uid);
       await setDoc(accDocRef, baseData);
 
       // create habit completion collection
       const habitUserCompletionColRef = collection(
         accDocRef,
-        "habits_subscribed_to_completions",
+        "habits",
       );
       const id =
         "BASEHABIT-" +
