@@ -35,10 +35,35 @@ export async function getNudges() {
   return results;
 }
 
-// TODO:
-// export async const getCommonHabits(){
 
-// }
+export async function getCommonHabits(uid_other: string) {
+  // get your own habits
+  const auth = getAuth();
+  const user = auth.currentUser;
+  if (user === null) {
+    console.error("No user logged in");
+    return [];
+  }
+
+  const usersRef = collection(firestore, "users");
+  const userDocRef = doc(usersRef, user.uid);
+  const userDocRefOther = doc(usersRef, uid_other);
+
+
+  const q = query(
+    collection(firestore, "habits"),
+    where("participants", "array-contains", userDocRef),
+    where("participants", "array-contains", userDocRefOther)
+  );
+
+  const docs = await getDocs(q);
+  let results: DocumentData[] = [];
+  docs.forEach((doc) => {
+    results.push(doc.data());
+  });
+
+  return results;
+}
 
 
 export async function getHabitCardData(
