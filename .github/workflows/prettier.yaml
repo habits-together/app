@@ -29,5 +29,9 @@ jobs:
         with:
           commit_message: Formatted with Prettier (GitHub Action)
           branch: ${{ github.head_ref }}
-      - name: Check formatting with Prettier
+      - name: Check mobile app formatting
+        working-directory: ./mobile-app
+        run: npm run prettier:check:ci
+      - name: Check website formatting
+        working-directory: ./website
         run: npm run prettier:check:ci

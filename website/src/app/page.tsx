@@ -27,6 +27,7 @@ export default function Home() {
             height={800}
             alt="Phone mockup"
             className="dark:hidden"
+            priority
           />
           <Image
             src="/phone-mockup-dark.png"
