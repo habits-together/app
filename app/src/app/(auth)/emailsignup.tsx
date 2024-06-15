@@ -82,7 +82,7 @@ export default function emailsignup() {
 
       // create habit completion collection
       const habitUserCompletionColRef = collection(accDocRef, "habits");
-      
+
       await addDoc(habitUserCompletionColRef, dummyHabitData);
 
       // create nudge collection

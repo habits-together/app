@@ -1,5 +1,9 @@
 import { fetchSingleUserThumbnail } from "../lib/getRandomProfilePics";
-import { getAllHabitData, getMockFriends } from "../lib/mockData";
+import {
+  getAllHabitData,
+  getMockFriends,
+  getMockNotifications,
+} from "../lib/mockData";
 import { Habit, HabitCompletion } from "../lib/types";
 
 export async function fetchHabits() {
@@ -51,7 +55,6 @@ export async function updateHabitParticipantsInDB(
   // update habit participants in firebase
 }
 
-// freind
 export async function fetchFriends() {
   // fetch all friend data from firebase
   const data = await getMockFriends();
@@ -61,4 +64,21 @@ export async function fetchFriends() {
     profilePicUrl: pics[index].imgurl,
   }));
   return updatedFriends;
+}
+
+export async function fetchNotifications() {
+  // fetch all notifications from firebase
+  return getMockNotifications();
+}
+
+export async function deleteNotificationInDB(id: number) {
+  // delete notification from firebase
+}
+
+export async function acceptFriendRequestInDB(id: number) {
+  // accept friend request in firebase
+}
+
+export async function acceptHabitInviteInDB(id: number) {
+  // accept habit invite in firebase
 }
