@@ -11,7 +11,7 @@ import {
   IconUserPlus,
   IconUsers,
 } from "@tabler/icons-react-native";
-import { Tabs } from "expo-router";
+import { Tabs, router } from "expo-router";
 import { useColorScheme } from "nativewind";
 import React from "react";
 import { Platform } from "react-native";
@@ -64,7 +64,7 @@ export default function TabLayout() {
                 text="New Habit"
                 icon={IconPlus}
                 onPress={() => {
-                  alert("New Habit");
+                  router.push("/habits/createhabit");
                 }}
               />
             </View>
