@@ -22,6 +22,7 @@ import {
 import { IconContext } from "./_layout";
 import { IconButton } from "./icon-button";
 import { icons } from "./icons";
+import RoundedButton from "@/src/components/RoundedButton";
 
 export default function Createhabit({ habitid }: { habitid: String }) {
   const { colorScheme } = useColorScheme();
@@ -38,6 +39,16 @@ export default function Createhabit({ habitid }: { habitid: String }) {
   const needsName = habitName === "";
   const canCreateHabit = !needsTag && !needsName;
 
+
+  // generate plural texts
+  const pluralize = (count: number, singularText: string, pluralText: string) => {
+    if (count === 1) {
+      return `${count} ${singularText}`;
+    } else {
+      return `${count} ${pluralText}`;
+    }
+  };
+
   useEffect(() => {
     if (habitid) {
       // Update icon, habitName, description, color, goalType, and completion
@@ -49,39 +60,37 @@ export default function Createhabit({ habitid }: { habitid: String }) {
     <View className="flex flex-1 flex-col gap-y-5 px-5 pt-11">
       {/* Header */}
       <View className="flex flex-row items-center justify-between">
-        <TouchableOpacity
-          className="flex w-28 flex-row items-center justify-center rounded-2xl border px-2 py-1"
-          style={{ borderColor }}
-          onPress={() => {
-            router.back();
-          }}
-        >
-          <Icon icon={IconX} size={20} />
-          <Text className="ml-1 text-base font-semibold">Cancel</Text>
-        </TouchableOpacity>
+        {
+          <RoundedButton
+            text="Cancel"
+            icon={IconX}
+            onPress={() => {
+              router.back();
+            }}
+          />
+        }
         <Text className="text-base font-semibold">
           {habitid ? "Edit" : "New"} habit
         </Text>
-        <TouchableOpacity
-          className="flex w-28 flex-row items-center justify-center rounded-2xl border px-2 py-1"
-          style={{ borderColor }}
-          onPress={() => {
-            if (canCreateHabit) {
-              setFailedRequirements(false);
-              alert("create/edit habit");
-            } else {
-              setFailedRequirements(true);
-              alert(
-                `can't create habit:\n${needsTag ? " - missing tag\n" : ""}${needsName ? " - missing name" : ""}`,
-              );
-            }
-          }}
-        >
-          <Icon icon={habitid ? IconCheck : IconArrowForwardUp} size={20} />
-          <Text className="ml-1 text-base font-semibold">
-            {habitid ? "Done" : "Next"}
-          </Text>
-        </TouchableOpacity>
+        {
+          <RoundedButton
+            text={habitid ? "Done" : "Next"}
+            icon={habitid ? IconCheck : IconArrowForwardUp}
+            onPress={() => {
+              if (canCreateHabit) {
+                setFailedRequirements(false);
+                alert("create/edit habit");
+              } else {
+                setFailedRequirements(true);
+                alert(
+                  `can't create habit:\n${
+                    needsTag ? " - missing tag\n" : ""
+                  }${needsName ? " - missing name" : ""}`,
+                );
+              }
+            }}
+          />
+        }
       </View>
 
       {/* Icon & Name */}
@@ -191,7 +200,7 @@ export default function Createhabit({ habitid }: { habitid: String }) {
               <MenuTrigger>
                 <View className="flex flex-row">
                   <Text className="text-base text-stone-400">
-                    {completion} completion
+                    {pluralize(completion, "completion", "completions")}
                   </Text>
                   <Icon
                     icon={IconSelector}
@@ -215,24 +224,4 @@ export default function Createhabit({ habitid }: { habitid: String }) {
     </View>
   );
 }
-
-const colorNames = [
-  "red",
-  "orange",
-  "amber",
-  "yellow",
-  "lime",
-  "green",
-  "emerald",
-  "teal",
-  "cyan",
-  "sky",
-  "blue",
-  "indigo",
-  "violet",
-  "purple",
-  "fuchsia",
-  "pink",
-  "rose",
-  "stone",
-];
+const colorNames = Object.keys(colors.habitColors) as (keyof typeof colors.habitColors)[];
