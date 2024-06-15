@@ -1,4 +1,5 @@
-import { getAllHabitData } from "../lib/mockData";
+import { fetchSingleUserThumbnail } from "../lib/getRandomProfilePics";
+import { getAllHabitData, getMockFriends } from "../lib/mockData";
 import { Habit, HabitCompletion } from "../lib/types";
 
 export async function fetchHabits() {
@@ -48,4 +49,16 @@ export async function updateHabitParticipantsInDB(
   habitParticipants: number[],
 ) {
   // update habit participants in firebase
+}
+
+// freind
+export async function fetchFriends() {
+  // fetch all friend data from firebase
+  const data = await getMockFriends();
+  const pics = await Promise.all(data.map(() => fetchSingleUserThumbnail()));
+  const updatedFriends = data.map((friend, index) => ({
+    ...friend,
+    profilePicUrl: pics[index].imgurl,
+  }));
+  return updatedFriends;
 }
