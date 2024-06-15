@@ -1,10 +1,11 @@
 import Image from "next/image";
+import Logo from "./logo";
 
 export default function Header() {
   return (
     <div className="left-0 top-0 z-10 flex w-full flex-col items-center gap-4 pt-4 md:absolute md:mx-10 md:mt-10 md:flex-row md:gap-0 md:pt-0">
       <div className="flex items-center gap-2 text-3xl font-bold">
-        <Image src="/logo.svg" alt="Logo" width={40} height={40} />
+        <Logo />
         <span className="text-black dark:text-white">Habits Together</span>
       </div>
 
