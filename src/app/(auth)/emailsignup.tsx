@@ -60,17 +60,17 @@ export default function emailsignup() {
     };
 
     const dummyHabitData = {
-      habit_ref: "BASEHABIT",
+      habit_ref: doc(firestore, "habits", "BASEHABIT"),
     };
 
     const nudgeDummyData = {
-      habit_ref: "habits/BASEHABIT",
-      friend_ref: "users/otheruser",
+      habit_ref: doc(firestore, "habits", "BASEHABIT"),
+      friend_ref: doc(firestore, "users", "otheruser"),
       sent_at: new Date(),
     };
 
     const friendDummyData = {
-      friend_ref: "users/otheruser",
+      friend_ref: doc(firestore, "users", "otheruser"),
       friends_since: new Date(),
     };
 
