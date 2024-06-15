@@ -81,17 +81,14 @@ export default function emailsignup() {
       await setDoc(accDocRef, baseData);
 
       // create habit completion collection
-      const habitUserCompletionColRef = collection(
-        accDocRef,
-        "habits",
-      );
+      const habitUserCompletionColRef = collection(accDocRef, "habits");
       // const id =
       //   "BASEHABIT-" +
       //   String(new Date().toLocaleDateString("en-CA").replace(/\//g, "")); //BASEHABIT-YYYYMMDD
       // const habitCompletetionDocRef = doc(habitUserCompletionColRef, id);
       // await setDoc(habitCompletetionDocRef, dummyHabitData);
       await addDoc(habitUserCompletionColRef, dummyHabitData);
-      
+
       // create nudge collection
       const nudgeColRef = collection(accDocRef, "nudges");
       await addDoc(nudgeColRef, nudgeDummyData);
