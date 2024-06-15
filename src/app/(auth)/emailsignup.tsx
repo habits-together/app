@@ -82,11 +82,7 @@ export default function emailsignup() {
 
       // create habit completion collection
       const habitUserCompletionColRef = collection(accDocRef, "habits");
-      // const id =
-      //   "BASEHABIT-" +
-      //   String(new Date().toLocaleDateString("en-CA").replace(/\//g, "")); //BASEHABIT-YYYYMMDD
-      // const habitCompletetionDocRef = doc(habitUserCompletionColRef, id);
-      // await setDoc(habitCompletetionDocRef, dummyHabitData);
+      
       await addDoc(habitUserCompletionColRef, dummyHabitData);
 
       // create nudge collection
