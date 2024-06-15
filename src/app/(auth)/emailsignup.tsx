@@ -5,7 +5,7 @@ import { auth, firestore } from "@/src/firebase/config";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { Link } from "expo-router";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 
 export default function emailsignup() {
@@ -66,14 +66,14 @@ export default function emailsignup() {
     };
 
     const nudgeDummyData = {
-      habit_ref : "habits/BASEHABIT",
-      friend_ref : "users/otheruser",
-      sent_at : new Date(),
+      habit_ref: "habits/BASEHABIT",
+      friend_ref: "users/otheruser",
+      sent_at: new Date(),
     };
 
     const friendDummyData = {
-      friend_ref : "users/otheruser",
-      friends_since : new Date(),
+      friend_ref: "users/otheruser",
+      friends_since: new Date(),
     };
 
     // PUSH TO FIREBASE
@@ -96,7 +96,7 @@ export default function emailsignup() {
       // create nudge collection
       const nudgeColRef = collection(accDocRef, "nudges");
       await addDoc(nudgeColRef, nudgeDummyData);
-      
+
       // create friends collection
       const friendsColRef = collection(accDocRef, "friends");
       await addDoc(friendsColRef, friendDummyData);
