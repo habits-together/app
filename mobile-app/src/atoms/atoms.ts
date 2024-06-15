@@ -260,19 +260,14 @@ export const deleteNotificationAtom = atomFamily((id: number) =>
 );
 
 // friend search
-export const searchQueryAtom = atom(
-  "",
-  (_get, set, newValue: string) => {
-    set(searchQueryAtom, newValue);
-  },
-);
+export const searchQueryAtom = atom("", (_get, set, newValue: string) => {
+  set(searchQueryAtom, newValue);
+});
 
-export const searchResultsAtom = atom(
-  async (get) => {
-    console.log("searching for friends");
-    return await searchForFriendsInDB(get(searchQueryAtom));
-  }
-);
+export const searchResultsAtom = atom(async (get) => {
+  console.log("searching for friends");
+  return await searchForFriendsInDB(get(searchQueryAtom));
+});
 
 export const getMutualFriendsAtom = atomFamily((friendId: number) =>
   atom(async (get) => {

@@ -1,10 +1,10 @@
 import { SafeAreaView, View } from "@/src/components/Themed";
 import colors from "@/src/constants/colors";
 import { IconSearch } from "@tabler/icons-react-native";
-import { useColorScheme } from "nativewind";
 import { useAtom } from "jotai";
-import { searchQueryAtom } from "../atoms/atoms";
+import { useColorScheme } from "nativewind";
 import { TextInput } from "react-native";
+import { searchQueryAtom } from "../atoms/atoms";
 import Icon from "./Icon";
 
 export default function FriendSearchBar({

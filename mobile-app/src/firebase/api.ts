@@ -92,9 +92,11 @@ export async function acceptHabitInviteInDB(id: number) {
 }
 
 // friend search
-export async function searchForFriendsInDB(searchText: string) : Promise<number[]> {
+export async function searchForFriendsInDB(
+  searchText: string,
+): Promise<number[]> {
   // query database for usernames and emails including the searchText and return array of ids of the users that match
-  return [12, 45];  
+  return [12, 45];
 }
 
 export async function getMutualFriendsInDB(userId: number, friendId: number) {
