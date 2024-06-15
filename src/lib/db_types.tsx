@@ -70,7 +70,8 @@ type dbT = {
   nudges: [
     nudge_id: {
       habit_ref: string; // references habits
-      friend_ref: string; // references users
+      sender_ref: string; // references users
+      receiver_ref: string, // references users
       sent_at: Date;
     },
   ];
