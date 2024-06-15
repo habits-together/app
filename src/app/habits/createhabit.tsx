@@ -79,6 +79,7 @@ export default function Createhabit({ habitid }: { habitid: String }) {
           <RoundedButton
             text={habitid ? "Done" : "Next"}
             icon={habitid ? IconCheck : IconArrowForwardUp}
+            isDisabled={!canCreateHabit}
             onPress={() => {
               if (canCreateHabit) {
                 setFailedRequirements(false);
@@ -86,8 +87,7 @@ export default function Createhabit({ habitid }: { habitid: String }) {
               } else {
                 setFailedRequirements(true);
                 alert(
-                  `can't create habit:\n${
-                    needsTag ? " - missing tag\n" : ""
+                  `can't create habit:\n${needsTag ? " - missing tag\n" : ""
                   }${needsName ? " - missing name" : ""}`,
                 );
               }
@@ -105,7 +105,6 @@ export default function Createhabit({ habitid }: { habitid: String }) {
             onPress={() => {
               router.push("/habits/habiticons");
             }}
-            required={needsTag && failedRequirements}
           />
           <TextInput
             className="ml-2 h-10 flex-1 rounded-lg border px-3"
@@ -113,10 +112,7 @@ export default function Createhabit({ habitid }: { habitid: String }) {
             style={{
               borderColor,
               color: DefaultColors[colorScheme].text,
-              backgroundColor:
-                needsName && failedRequirements
-                  ? colors.habitColors.red.base
-                  : colors.transparent,
+              backgroundColor: colors.transparent,
             }}
             placeholder="Ex. Workout"
             placeholderTextColor={DefaultColors[colorScheme].placeholder}
