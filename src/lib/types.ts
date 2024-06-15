@@ -42,7 +42,7 @@ export type HabitParticipants = {
 };
 
 // friends
-
+export type AllFriendsDataType = Record<number, FriendData>;
 export type FriendData = {
   id: number;
   displayName: string;

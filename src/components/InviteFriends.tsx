@@ -1,45 +1,24 @@
 import { Text, View } from "@/src/components/Themed";
-import { getMockFriends } from "@/src/lib/mockData";
 import { IconShare2 } from "@tabler/icons-react-native";
-import { useEffect, useState } from "react";
 import { Pressable } from "react-native";
 import colors from "../constants/colors";
-import { fetchSingleUserThumbnail } from "../lib/getRandomProfilePics";
-import { FriendData } from "../lib/types";
 import FriendCard from "./FriendCard";
 import FriendSearchBar from "./FriendSearchBar";
 import Icon from "./Icon";
-import { MediumProfilePicture } from "./ProfilePicture";
+import { useAtomValue } from "jotai";
+import { friendIdsAtom } from "../atoms/atoms";
 
 export default function InviteFriends() {
-  const [friends, setFriends] = useState<FriendData[]>([]);
-  useEffect(() => {
-    const fetchFriends = async () => {
-      const data = await getMockFriends();
-      setFriends(data);
-      const pics = await Promise.all(
-        data.map(() => fetchSingleUserThumbnail()),
-      );
-      const updatedFriends = data.map((friend, index) => ({
-        ...friend,
-        profilePicUrl: pics[index].imgurl,
-      }));
-      setFriends(updatedFriends);
-    };
-    fetchFriends();
-  }, []);
+  const friendIds = useAtomValue(friendIdsAtom);
   return (
     <View className="flex-1 p-4">
       <FriendSearchBar placeholder="Search for someone..." />
       <ShareInviteLink />
       <Text className="mt-4 text-xl font-bold">My friends</Text>
-      {friends.map((friend) => (
+      {friendIds.map((friendId) => (
         <FriendCard
-          key={friend.id}
-          displayName={friend.displayName}
-          userName={friend.userName}
-          profilePic={<MediumProfilePicture picUrl={friend.profilePicUrl} />}
-          commonHabits={friend.commonHabits}
+          key={friendId}
+          friendId={friendId}
           displayType="invite"
         />
       ))}
@@ -57,4 +36,4 @@ function ShareInviteLink() {
       <Text className="ml-2 text-base font-semibold">Share Invite Link</Text>
     </Pressable>
   );
-}
+}InviteFriends

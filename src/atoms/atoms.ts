@@ -7,8 +7,10 @@ import {
   updateHabitCompletionsInDB,
   updateHabitInfoInDB,
   updateHabitParticipantsInDB,
+  fetchFriends
 } from "../firebase/api";
 import {
+  AllFriendsDataType,
   AllHabitsDataType,
   Habit,
   HabitCompletion,
@@ -152,3 +154,20 @@ export const habitDisplayTypeAtom = atomFamily((id: number) =>
     { getOnInit: true },
   ),
 );
+
+
+// FRIENDS 
+export const friendsAtom = atom<AllFriendsDataType>([]);
+friendsAtom.onMount = (set) => {
+  fetchFriends().then(set);
+};
+
+export const freindInfoAtom = atomFamily((id: number) =>
+  atom((get) => get(friendsAtom)[id]),
+);
+
+export const friendIdsAtom = atom((get) =>
+  Object.keys(get(friendsAtom)).map(Number),
+);
+
+

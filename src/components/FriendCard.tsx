@@ -8,23 +8,22 @@ import colors from "../constants/colors";
 import { Habit } from "../lib/types";
 import DotsMenu from "./DotsMenu";
 import Icon from "./Icon";
+import { useAtomValue } from "jotai";
+import { freindInfoAtom } from "../atoms/atoms";
+import { MediumProfilePicture } from "./ProfilePicture";
+
 
 export type FriendCardProps = {
-  displayName: string;
-  userName: string;
-  profilePic: JSX.Element;
-  commonHabits: Habit[];
+  friendId: number;
   displayType?: "normal" | "invite";
 };
 
 export default function FriendCard({
-  displayName,
-  userName,
-  profilePic,
-  commonHabits,
+  friendId,
   displayType = "normal",
 }: FriendCardProps) {
   const [inviteSent, setInviteSent] = useState(false);
+  const friendData = useAtomValue(freindInfoAtom(friendId));
   const InviteFriends = () => {
     // TODO: Implement invite friends
     setInviteSent(true);
@@ -35,17 +34,17 @@ export default function FriendCard({
       push
       href={{
         pathname: "/modals/viewprofile",
-        params: { userName: userName, displayName: displayName },
+        params: { userName: friendData.userName, displayName: friendData.displayName },
       }}
       asChild
     >
       <Pressable className="my-1 flex grow-0 flex-col rounded-3xl border border-stone-300 p-2">
         <View className="flex flex-row items-center">
-          {profilePic}
+        <MediumProfilePicture picUrl={friendData.profilePicUrl} />
           <View className="ml-2 flex flex-1 flex-col">
-            <Text className="text-base font-semibold">{displayName}</Text>
+            <Text className="text-base font-semibold">{friendData.displayName}</Text>
             <Text className="text-xs font-semibold text-stone-400">
-              {userName}
+              {friendData.userName}
             </Text>
           </View>
           {displayType === "normal" && (
@@ -73,7 +72,7 @@ export default function FriendCard({
               </View>
             ))}
         </View>
-        <CommonHabits commonHabits={commonHabits} />
+        <CommonHabits commonHabits={friendData.commonHabits} />
       </Pressable>
     </Link>
   );
