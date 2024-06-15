@@ -6,6 +6,7 @@ import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { Link } from "expo-router";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import React from "react";
 import { useState } from "react";
 
 export default function emailsignup() {

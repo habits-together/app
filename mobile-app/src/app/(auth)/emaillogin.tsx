@@ -4,6 +4,7 @@ import { Text, View } from "@/src/components/Themed";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { Link } from "expo-router";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import React from "react";
 import { useState } from "react";
 
 export default function emaillogin() {
@@ -17,6 +18,7 @@ export default function emaillogin() {
   const Login = () => {
     signInWithEmailAndPassword(getAuth(), data.email, data.password)
       .then((userCredential) => {
+        console.log("User Logged In")
         resetNavigationStack("/");
       })
       .catch((err) => {

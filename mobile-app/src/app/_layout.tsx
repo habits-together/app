@@ -16,6 +16,7 @@ import {
   forgotPasswordOptions,
   viewHabitOptions,
 } from "../components/HeaderOptions";
+import React from "react";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -55,14 +56,15 @@ export default function RootLayout() {
 
   const fetchHabits = useSetAtom(fetchHabitsAtom);
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      console.log("User is signed in", user.uid);
-    } else {
-      console.log("No user is signed in");
-    }
-    fetchHabits();
-  });
+  // onAuthStateChanged(auth, (user) => {
+  //   if (user) {
+  //     console.log("User is signed in", user.uid);
+  //     fetchHabits();
+  //   } else {
+  //     console.log("No user is signed in");
+  //   }
+  //   fetchHabits();
+  // });
 
   return <RootLayoutNav />;
 }
