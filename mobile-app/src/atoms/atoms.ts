@@ -14,6 +14,7 @@ import {
   updateHabitInfoInDB,
   updateHabitParticipantsInDB,
 } from "../firebase/api";
+import { genMockHabitCompletionData } from "../lib/mockData";
 import {
   AllFriendsDataType,
   AllHabitsDataType,
@@ -22,8 +23,6 @@ import {
   HabitDisplayType,
   UserNotificationsDataType,
 } from "../lib/types";
-import { auth } from "../firebase/config";
-import { genMockHabitCompletionData, getMockHabitCompletionData } from "../lib/mockData";
 
 // using Jotai atoms: https://jotai.org/docs/introduction
 // we especially use the atomFamily atom: https://jotai.org/docs/utilities/family
@@ -38,27 +37,24 @@ habitsAtom.onMount = (set) => {
 
 // habit info
 export const habitInfoAtom = atomFamily((id: number) =>
-  atom(
-    (get) => get(habitsAtom)[id].habitInfo,
-
-  ),
+  atom((get) => get(habitsAtom)[id].habitInfo),
 );
 export const editHabitInfoAtom = atomFamily((id: number) =>
-  atom(null,
-    (_get, set, newValue: Habit) => {
-      updateHabitInfoInDB(id, newValue);
-      set(habitsAtom, (prev) => {
-        return {
-          ...prev,
-          [id]: {
-            ...prev[id],
-            habitInfo: newValue,
-          },
-        };
-      });
-    },)
+  atom(null, (_get, set, newValue: Habit) => {
+    updateHabitInfoInDB(id, newValue);
+    set(habitsAtom, (prev) => {
+      return {
+        ...prev,
+        [id]: {
+          ...prev[id],
+          habitInfo: newValue,
+        },
+      };
+    });
+  }),
 );
-export const createNewHabitAtom = atom(null,
+export const createNewHabitAtom = atom(
+  null,
   async (_get, set, newHabitInfo: Habit) => {
     const newId = await createNewHabitInDB(newHabitInfo);
     console.log("creating!");
@@ -69,13 +65,17 @@ export const createNewHabitAtom = atom(null,
         ...prev,
         [newId]: {
           habitInfo: { ...newHabitInfo, id: newId },
-          habitCompletionData: genMockHabitCompletionData(newHabitInfo.goal.period === "daily" ? newHabitInfo.goal.completionsPerPeriod : 1),
-          habitParticipants: [69] // This should be current user id, type should also be a string from auth.curentUser.uid
+          habitCompletionData: genMockHabitCompletionData(
+            newHabitInfo.goal.period === "daily"
+              ? newHabitInfo.goal.completionsPerPeriod
+              : 1,
+          ),
+          habitParticipants: [69], // This should be current user id, type should also be a string from auth.curentUser.uid
         },
       };
     });
-  },)
-
+  },
+);
 
 export const habitIdAtom = atom((get) =>
   Object.keys(get(habitsAtom)).map(Number),
@@ -255,4 +255,3 @@ export const deleteNotificationAtom = atomFamily((id: number) =>
     },
   ),
 );
-

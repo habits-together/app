@@ -31,7 +31,7 @@ export function IconButton({
         borderColor,
         backgroundColor: selected
           ? colors.habitColors.green.base
-          : colors.transparent
+          : colors.transparent,
       }}
       onPress={onPress}
     >
