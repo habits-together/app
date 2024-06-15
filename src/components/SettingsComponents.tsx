@@ -1,19 +1,22 @@
+import Divider from "@/src/components/Divider";
+import Icon from "@/src/components/Icon";
 import { Text, View } from "@/src/components/Themed";
-import { ScrollView, TouchableOpacity } from "react-native";
 import colors from "@/src/constants/colors";
 import {
   IconChevronRight,
   IconCircle,
   IconCircleCheck,
 } from "@tabler/icons-react-native";
-import Divider from "@/src/components/Divider";
-import { useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
-import Icon from "@/src/components/Icon";
+import { useEffect, useState } from "react";
+import { ScrollView, TouchableOpacity } from "react-native";
 
 export function SettingsContainer({ children }: { children: React.ReactNode }) {
   return (
-    <ScrollView className="flex-1 p-4 bg-stone-50 dark:bg-stone-base">
+    <ScrollView
+      className="flex-1 bg-stone-50 p-4 dark:bg-stone-base"
+      contentContainerStyle={{ paddingBottom: 10 }}
+    >
       {children}
     </ScrollView>
   );
@@ -109,12 +112,12 @@ function SettingsSection({
   return (
     <>
       {groupTitle && (
-        <Text className="text-sm text-stone-500 dark:text-stone-300 font-semibold ml-3 mb-2">
+        <Text className="mb-2 ml-3 text-sm font-semibold text-stone-500 dark:text-stone-300">
           {groupTitle}
         </Text>
       )}
       <View
-        className={`border border-grey-200 rounded-xl overflow-hidden mb-6`}
+        className={`mb-6 overflow-hidden rounded-xl border border-grey-200`}
       >
         {/* settings with Divider in between each one */}
         {settingComponents.map((setting, index) => (
@@ -137,7 +140,7 @@ function Setting({
   return (
     <TouchableOpacity
       onPress={onPress}
-      className="flex-row items-center p-4 bg-white dark:bg-grey-800"
+      className="flex-row items-center bg-white p-4 dark:bg-grey-800"
     >
       {icon}
       <Text

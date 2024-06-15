@@ -1,15 +1,20 @@
-import React from "react";
-import { Platform } from "react-native";
-import { Tabs } from "expo-router";
+import Icon from "@/src/components/Icon";
+import RoundedButton from "@/src/components/RoundedButton";
+import { View } from "@/src/components/Themed";
 import { useClientOnlyValue } from "@/src/components/useClientOnlyValue";
+import colors from "@/src/constants/colors";
 import {
+  IconBell,
+  IconPlus,
   IconSettings,
   IconStack2,
+  IconUserPlus,
   IconUsers,
 } from "@tabler/icons-react-native";
-import colors from "@/src/constants/colors";
-import Icon from "@/src/components/Icon";
+import { Tabs } from "expo-router";
 import { useColorScheme } from "nativewind";
+import React from "react";
+import { Platform } from "react-native";
 
 export default function TabLayout() {
   const { colorScheme } = useColorScheme();
@@ -21,7 +26,6 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: foreground,
         // Disable the static render of the header on web
         // to prevent a hydration error in React Navigation v6.
         headerShown: useClientOnlyValue(false, true),
@@ -30,11 +34,12 @@ export default function TabLayout() {
         },
         headerTitleAlign: "left",
         headerTitleStyle: {
-          fontSize: 32,
+          fontSize: 30,
           fontWeight: "700",
           color: foreground,
         },
         headerShadowVisible: false,
+        tabBarActiveTintColor: foreground,
         tabBarStyle: {
           backgroundColor: tabBackGround,
           height: Platform.select({ ios: 90, android: 75 }),
@@ -53,8 +58,24 @@ export default function TabLayout() {
         name="index"
         options={{
           title: "Habits",
+          headerRight: () => (
+            <View className="mr-4">
+              <RoundedButton
+                text="New Habit"
+                icon={IconPlus}
+                onPress={() => {
+                  alert("New Habit");
+                }}
+              />
+            </View>
+          ),
           tabBarIcon: ({ color }) => (
-            <Icon icon={IconStack2} lightColor={color} darkColor={color} strokeWidth={2.5} />
+            <Icon
+              icon={IconStack2}
+              lightColor={color}
+              darkColor={color}
+              strokeWidth={2.5}
+            />
           ),
         }}
       />
@@ -62,8 +83,38 @@ export default function TabLayout() {
         name="friends"
         options={{
           title: "Friends",
+          headerRight: () => (
+            <View className="mr-4">
+              <RoundedButton
+                text="Add friends"
+                icon={IconUserPlus}
+                onPress={() => {
+                  alert("Add friends");
+                }}
+              />
+            </View>
+          ),
           tabBarIcon: ({ color }) => (
-            <Icon icon={IconUsers} lightColor={color} darkColor={color} strokeWidth={2.5} />
+            <Icon
+              icon={IconUsers}
+              lightColor={color}
+              darkColor={color}
+              strokeWidth={2.5}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="notifications"
+        options={{
+          title: "Notifications",
+          tabBarIcon: ({ color }) => (
+            <Icon
+              icon={IconBell}
+              lightColor={color}
+              darkColor={color}
+              strokeWidth={2.5}
+            />
           ),
         }}
       />
@@ -72,7 +123,12 @@ export default function TabLayout() {
         options={{
           title: "Settings",
           tabBarIcon: ({ color }) => (
-            <Icon icon={IconSettings} lightColor={color} darkColor={color} strokeWidth={2.5} />
+            <Icon
+              icon={IconSettings}
+              lightColor={color}
+              darkColor={color}
+              strokeWidth={2.5}
+            />
           ),
           headerStyle: {
             backgroundColor:

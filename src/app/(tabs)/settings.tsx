@@ -1,3 +1,9 @@
+import Icon from "@/src/components/Icon";
+import {
+  SettingsContainer,
+  SettingsList,
+} from "@/src/components/SettingsComponents";
+import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import {
   IconAward,
   IconCategory2,
@@ -8,14 +14,9 @@ import {
   IconSend,
   IconSparkles,
   IconSun,
+  IconUserPlus,
 } from "@tabler/icons-react-native";
-import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { router } from "expo-router";
-import {
-  SettingsContainer,
-  SettingsList,
-} from "@/src/components/SettingsComponents";
-import Icon from "@/src/components/Icon";
 
 export default function Settings() {
   return (
@@ -85,7 +86,22 @@ export default function Settings() {
             icon: <Icon icon={IconKey} />,
             title: "Go to sign in",
             onPress: () => {
-              resetNavigationStack("/(auth)/signin");
+              // resetNavigationStack("/(auth)/signin");
+              router.push("/(auth)/signin");
+            },
+          },
+          {
+            icon: <Icon icon={IconUserPlus} />,
+            title: "Create account",
+            onPress: () => {
+              resetNavigationStack("/(auth)/createprofile");
+            },
+          },
+          {
+            icon: <Icon icon={IconUserPlus} />,
+            title: "Edit profile",
+            onPress: () => {
+              router.push("/modals/editprofile");
             },
           },
         ]}

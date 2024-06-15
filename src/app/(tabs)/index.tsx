@@ -1,42 +1,24 @@
-import { View } from '@/src/components/Themed';
-import { HabitCard } from '@/src/components/HabitCard';
-import { IconBook } from '@tabler/icons-react-native';
-import { Link } from 'expo-router';
-import { Pressable } from 'react-native';
-
-const habits = [
-  {
-    title: 'Read for 15 minutes',
-    icon: IconBook,
-    color: "fuchsia",
-    id: 1,
-  }
-];
+import { habitIdAtom } from "@/src/atoms/atoms";
+import { HabitCard } from "@/src/components/habit-components/HabitCard";
+import { ScrollView, View } from "@/src/components/Themed";
+import { useAtomValue } from "jotai";
+import { Suspense } from "react";
 
 export default function HabitsTab() {
+  const habitIds = useAtomValue(habitIdAtom);
+
   return (
-    <View className='flex-1 p-4'>
-      {habits.map(habit => {
-        return (
-          <Link
-            push
-            href={{
-              pathname: "/viewhabit",
-              params: { id: habit.id }
-            }}
-            asChild
-            key={habit.id}>
-            <Pressable>
-              <HabitCard
-                title={habit.title}
-                color="fuchsia"
-                icon={habit.icon}
-                displayType="habit-tab"
-              />
-            </Pressable>
-          </Link>
-        )
-      })}
-    </View >
+    <ScrollView
+      className="flex-1 px-4 pt-2"
+      contentContainerStyle={{ paddingBottom: 100 }}
+    >
+      {habitIds.map((id) => (
+        <Suspense key={id} fallback={<></>}>
+          <View className="mb-5">
+            <HabitCard habitId={id} />
+          </View>
+        </Suspense>
+      ))}
+    </ScrollView>
   );
 }

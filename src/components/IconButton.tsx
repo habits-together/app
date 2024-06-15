@@ -1,8 +1,8 @@
+import colors from "@/src/constants/colors";
 import { Icon as TablerIcon } from "@tabler/icons-react-native";
+import { useColorScheme } from "nativewind";
 import Icon from "./Icon";
 import { Text, View } from "./Themed";
-import colors from "@/src/constants/colors";
-import { useColorScheme } from "nativewind";
 
 interface IconButtonInterface {
   icon: TablerIcon;
@@ -14,7 +14,7 @@ export default function IconButton({ icon, text }: IconButtonInterface) {
 
   return (
     <View
-      className="flex-1 flex flex-row border border-1 rounded-2xl pb-2 pt-2 content-center justify-center"
+      className="border-1 flex flex-row content-center justify-center rounded-2xl border pb-2 pt-2"
       style={{
         borderColor:
           colorScheme === "dark" ? colors.stone.light : colors.stone[200],

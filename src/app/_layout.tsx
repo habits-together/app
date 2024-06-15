@@ -1,14 +1,22 @@
-import colors from "@/src/constants/colors";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
+import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
+import { MenuProvider } from "react-native-popup-menu";
+import "react-native-reanimated";
+import {
+  emailLoginOptions,
+  emailSignUpOptions,
+  forgotPasswordOptions,
+  viewHabitOptions,
+} from "../components/HeaderOptions";
 
 export {
   // Catch any errors thrown by the Layout component.
-  ErrorBoundary
+  ErrorBoundary,
 } from "expo-router";
 
 export const unstable_settings = {
@@ -44,22 +52,48 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
+  const { colorScheme } = useColorScheme();
+
   return (
-    <ThemeProvider value={DefaultTheme}>
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: colors.black },
-          animation: "ios",
-        }}
-      >
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="(auth)/signin" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="(auth)/createprofile"
-          options={{ headerShown: false }}
-        />
-      </Stack>
-    </ThemeProvider>
+    <MenuProvider>
+      <ThemeProvider value={DefaultTheme}>
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            animation: "ios",
+          }}
+        >
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="(auth)/signin" />
+          <Stack.Screen
+            name="(auth)/emailsignup"
+            options={emailSignUpOptions(colorScheme)}
+          />
+          <Stack.Screen
+            name="(auth)/emaillogin"
+            options={emailLoginOptions(colorScheme)}
+          />
+          <Stack.Screen
+            name="(auth)/forgotpassword"
+            options={forgotPasswordOptions(colorScheme)}
+          />
+          <Stack.Screen
+            name="(auth)/createprofile"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="viewhabit"
+            options={viewHabitOptions(colorScheme)}
+          />
+          <Stack.Screen
+            name="modals"
+            options={{
+              presentation: "modal",
+              animation: "slide_from_bottom",
+            }}
+          />
+        </Stack>
+      </ThemeProvider>
+    </MenuProvider>
   );
 }
