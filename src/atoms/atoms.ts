@@ -191,7 +191,6 @@ export const notificationIdsAtom = atom((get) =>
   Object.keys(get(notificationsAtom)).map(Number),
 );
 
-
 export const acceptFriendRequestAtom = atomFamily((id: number) =>
   atom(
     (get) => get(notificationsAtom),

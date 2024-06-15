@@ -1,9 +1,8 @@
-import { useColorScheme } from "nativewind";
 import { Pressable } from "react-native";
 import colors from "../constants/colors";
 import { Text, View } from "./Themed";
 
-type SetAtom<Args extends unknown[], Result> = (...args: Args) => Result
+type SetAtom<Args extends unknown[], Result> = (...args: Args) => Result;
 
 export default function ConfirmAndDeleteButtons({
   confirmInvite,
