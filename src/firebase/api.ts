@@ -42,7 +42,7 @@ export async function fetchHabits() {
     result.push(doc.data() as habitInfoT);
   });
 
-
+  console.log(result)
   return result;
 }
 
