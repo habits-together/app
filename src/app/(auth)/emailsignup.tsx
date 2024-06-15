@@ -55,14 +55,12 @@ export default function emailsignup() {
       display_name: data.email,
       picture: "",
       username: auth.currentUser?.email,
-      habit_invited: [],
-      friend_requests: [],
+      habit_invites: [], // references habit_invites
+      friend_requests: [], // references friend_requests
     };
 
     const dummyHabitData = {
-      completion_date: new Date(),
-      habit_id: "BASEHABIT",
-      times_completed: 0,
+      habit_ref: "BASEHABIT",
     };
 
     const nudgeDummyData = {
@@ -87,12 +85,13 @@ export default function emailsignup() {
         accDocRef,
         "habits",
       );
-      const id =
-        "BASEHABIT-" +
-        String(new Date().toLocaleDateString("en-CA").replace(/\//g, "")); //BASEHABIT-YYYYMMDD
-      const habitCompletetionDocRef = doc(habitUserCompletionColRef, id);
-      await setDoc(habitCompletetionDocRef, dummyHabitData);
-
+      // const id =
+      //   "BASEHABIT-" +
+      //   String(new Date().toLocaleDateString("en-CA").replace(/\//g, "")); //BASEHABIT-YYYYMMDD
+      // const habitCompletetionDocRef = doc(habitUserCompletionColRef, id);
+      // await setDoc(habitCompletetionDocRef, dummyHabitData);
+      await addDoc(habitUserCompletionColRef, dummyHabitData);
+      
       // create nudge collection
       const nudgeColRef = collection(accDocRef, "nudges");
       await addDoc(nudgeColRef, nudgeDummyData);
