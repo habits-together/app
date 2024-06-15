@@ -90,6 +90,7 @@ export default function TabLayout() {
                 icon={IconUserPlus}
                 onPress={() => {
                   alert("Add friends");
+                  router.push("/modals/addfriends");
                 }}
               />
             </View>

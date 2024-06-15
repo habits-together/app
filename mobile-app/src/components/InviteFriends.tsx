@@ -7,6 +7,7 @@ import colors from "../constants/colors";
 import FriendCard from "./FriendCard";
 import FriendSearchBar from "./FriendSearchBar";
 import Icon from "./Icon";
+import ShareInviteLink from "./ShareInviteLink";
 
 export default function InviteFriends() {
   const friendIds = useAtomValue(friendIdsAtom);
@@ -21,16 +22,3 @@ export default function InviteFriends() {
     </View>
   );
 }
-
-function ShareInviteLink() {
-  return (
-    <Pressable
-      className="mt-2 h-10 w-auto flex-row items-center justify-center rounded-xl border border-stone-300"
-      android_ripple={{ color: colors.stone["300"], radius: 200 }}
-    >
-      <Icon icon={IconShare2} size={17} strokeWidth={3} />
-      <Text className="ml-2 text-base font-semibold">Share Invite Link</Text>
-    </Pressable>
-  );
-}
-InviteFriends;

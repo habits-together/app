@@ -255,3 +255,6 @@ export const deleteNotificationAtom = atomFamily((id: number) =>
     },
   ),
 );
+
+
+export const searchQueryAtom = atom("");
