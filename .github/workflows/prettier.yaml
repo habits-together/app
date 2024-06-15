@@ -15,14 +15,13 @@ jobs:
         with:
           node-version: "16.x"
       - name: Format mobile app
+        working-directory: ./mobile-app
         run: |
-          cd mobile-app
           npm install -D
           npm run prettier:format
       - name: Format website
+        working-directory: ./website
         run: |
-          cd ..
-          cd website
           npm install -D
           npm run prettier:format
       - name: Commit changes
