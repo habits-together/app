@@ -195,7 +195,7 @@ export default function Createhabit({ habitid }: { habitid: String }) {
             className="flex flex-row justify-between p-2"
             style={{ backgroundColor: colors.transparent }}
           >
-            <Text className="text-base font-semibold">{goalType} goal</Text>
+            <Text className="text-base font-semibold"> Completions per {goalType === 'Daily' ? 'day' : 'week'}</Text>
             <Menu onSelect={(val) => setCompletion(val)}>
               <MenuTrigger>
                 <View className="flex flex-row">
