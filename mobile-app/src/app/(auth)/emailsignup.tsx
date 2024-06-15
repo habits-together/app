@@ -107,7 +107,7 @@ export default function emailsignup() {
     <View className="flex-1 items-center px-3 pt-5">
       <AuthInputField
         text="Email"
-        isPass={false}
+        isPass={false}  
         updateFunction={handleEmailChange}
       />
       <AuthInputField

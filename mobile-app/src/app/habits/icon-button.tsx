@@ -10,7 +10,6 @@ interface IconButtonProps {
   onPress: () => void;
   className?: string;
   selected?: boolean;
-  required?: boolean;
 }
 
 export function IconButton({
@@ -18,7 +17,6 @@ export function IconButton({
   onPress,
   className,
   selected,
-  required,
 }: IconButtonProps) {
   const { colorScheme } = useColorScheme();
   const borderColor = DefaultColors[colorScheme].tint;
@@ -33,9 +31,7 @@ export function IconButton({
         borderColor,
         backgroundColor: selected
           ? colors.habitColors.green.base
-          : required
-            ? colors.habitColors.red.base
-            : colors.transparent,
+          : colors.transparent,
       }}
       onPress={onPress}
     >

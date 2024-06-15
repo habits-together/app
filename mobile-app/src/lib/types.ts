@@ -7,7 +7,7 @@ export type AllHabitsDataType = Record<number, HabitData>;
 export type HabitData = {
   habitInfo: Habit;
   habitCompletionData: HabitCompletion[];
-  habitParticipants: number[];
+  habitParticipants: number[]; // Should be array of user ids, which are strings
 };
 
 export type HabitGoalPeriod = "daily" | "weekly";
@@ -18,7 +18,7 @@ export type Habit = {
   title: string;
   description: string;
   color: keyof typeof colors.habitColors;
-  icon: TablerIcon;
+  icon: string;
   goal: {
     period: HabitGoalPeriod;
     completionsPerPeriod: number;
