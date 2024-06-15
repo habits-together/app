@@ -51,6 +51,7 @@ export async function updateHabitParticipantsInDB(
   // update habit participants in firebase
 }
 
+
 export async function fetchFriends() {
   // fetch all friend data from firebase
   const data = await getMockFriends();

@@ -5,6 +5,7 @@ import { useAtomValue } from "jotai";
 import { useColorScheme } from "nativewind";
 import React, { useState } from "react";
 import { Pressable } from "react-native";
+import { freindInfoAtom } from "../atoms/atoms";
 import { friendInfoAtom } from "../atoms/atoms";
 import colors from "../constants/colors";
 import { Habit } from "../lib/types";
