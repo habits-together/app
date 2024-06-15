@@ -3,10 +3,13 @@ import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useSetAtom } from "jotai";
 import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
 import { MenuProvider } from "react-native-popup-menu";
 import "react-native-reanimated";
+import { fetchHabitsAtom } from "../atoms/atoms";
 import {
   emailLoginOptions,
   emailSignUpOptions,
@@ -47,6 +50,19 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
+
+  const auth = getAuth();
+
+  const fetchHabits = useSetAtom(fetchHabitsAtom);
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      console.log("User is signed in", user.uid);
+    } else {
+      console.log("No user is signed in");
+    }
+    fetchHabits();
+  });
 
   return <RootLayoutNav />;
 }

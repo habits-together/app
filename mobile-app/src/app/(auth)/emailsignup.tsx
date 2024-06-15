@@ -27,6 +27,7 @@ export default function emailsignup() {
     createUserWithEmailAndPassword(auth, data.email, data.password).then(
       (success) => {
         handleDatabaseSignUp();
+
         resetNavigationStack("/");
       },
       (err) => {

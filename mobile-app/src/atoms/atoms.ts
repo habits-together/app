@@ -229,3 +229,28 @@ export const deleteNotificationAtom = atomFamily((id: number) =>
     },
   ),
 );
+
+// export const habitInfoAtom = atomFamily((id: number) =>
+//   atom(
+//     (get) => get(habitsAtom)[id].habitInfo,
+//     (_get, set, newValue: Habit) => {
+//       updateHabitInfoInDB(id, newValue);
+//       set(habitsAtom, (prev) => {
+//         return {
+//           ...prev,
+//           [id]: {
+//             ...prev[id],
+//             habitInfo: newValue,
+//           },
+//         };
+//       });
+//     },
+//   ),
+// );
+import { userT } from "../lib/db_types";
+
+export const fetchHabitsAtom = atom(null, (get, set) => {
+  fetchHabits().then((habitData) => set(habitsAtom, habitData));
+});
+
+export const userAtom = atom<userT | null>(null);
