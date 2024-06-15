@@ -39,7 +39,7 @@ export function IconButton({
       }}
       onPress={onPress}
     >
-      <Icon icon={icon} size={20} />
+      <Icon icon={icon} size={24} />
     </TouchableOpacity>
   );
 }

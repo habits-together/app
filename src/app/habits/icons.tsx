@@ -18,6 +18,7 @@ import {
   IconLeaf,
   IconMusic,
   IconPeace,
+  IconPhotoScan,
   IconTag,
   IconUsersGroup,
   IconWallet,
@@ -26,7 +27,7 @@ import {
 
 export const icons: { [key: string]: Icon } = {
   // Default
-  default: IconTag,
+  default: IconPhotoScan,
   // Health & Fitness
   gym: IconBarbell,
   yoga: IconYoga,
