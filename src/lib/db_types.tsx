@@ -11,14 +11,10 @@ type dbT = {
       friend_requests: [
         friend_request_ref: string, // references friend_requests
       ];
-      // collections
       nudges: [
-        nudge_id: {
-          habit_ref: string; // references habits
-          friend_ref: string; // references users
-          sent_at: Date;
-        },
+        nudge_ref: string, // references nudges
       ];
+      // collections
       friends: [
         id: {
           friend_ref: string; // references users
@@ -64,7 +60,6 @@ type dbT = {
       sent_at: Date;
     },
   ];
-
   friend_requests: [
     request_id: {
       sender_ref: string; // references users
@@ -72,13 +67,20 @@ type dbT = {
       sent_at: Date;
     },
   ];
+  nudges: [
+    nudge_id: {
+      habit_ref: string; // references habits
+      friend_ref: string; // references users
+      sent_at: Date;
+    },
+  ];
 };
 
 export type userT = Omit<
   dbT["users"][0],
-  "nudges" | "friends" | "habits" | "habit_invites" | "friend_requests"
+  "friends" | "habits" | "habit_invites" | "friend_requests" | "nudges"
 >;
-export type nudgeT = dbT["users"][0]["nudges"][0];
+export type nudgeT = dbT["nudges"][0];
 export type habitInviteT = dbT["habit_invites"][0];
 export type friendRequestT = dbT["friend_requests"][0];
 
