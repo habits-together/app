@@ -14,8 +14,8 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: "16.x"
-      - name: Install dependencies
-        run: npm install -D
+      - name: Install prettier
+        run: npm install prettier prettier-plugin-organize-imports prettier-plugin-tailwindcss
       - name: Format with Prettier
         run: npm run prettier:format
       - name: Commit changes
