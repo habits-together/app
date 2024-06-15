@@ -14,10 +14,16 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: "16.x"
-      - name: Install prettier
-        run: npm install prettier prettier-plugin-organize-imports prettier-plugin-tailwindcss
-      - name: Format with Prettier
-        run: npm run prettier:format
+      - name: Format mobile app
+        run: |
+          cd mobile-app
+          npm install -D
+          npm run prettier:format
+      - name: Format website
+        run: |
+          cd ../website
+          npm install -D
+          npm run prettier:format
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
