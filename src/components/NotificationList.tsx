@@ -14,14 +14,14 @@ import { NotifProfilePicture } from "./ProfilePicture";
 export default function NotificationList() {
   const [notifications, setNotifications] = useState<NotificationData[]>([]);
 
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      // we would fetch the list from the db and set it here
-      const notifs = await getMockNotifications();
-      setNotifications(notifs);
-    };
-    fetchNotifications();
-  }, []);
+  // useEffect(() => {
+  //   const fetchNotifications = async () => {
+  //     // we would fetch the list from the db and set it here
+  //     const notifs = await getMockNotifications();
+  //     setNotifications(notifs);
+  //   };
+  //   fetchNotifications();
+  // }, []);
 
   const deleteNotification = (id: number) => {
     console.log("Notification deleted");
