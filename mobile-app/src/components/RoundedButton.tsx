@@ -23,9 +23,7 @@ export default function RoundedButton({
       android_ripple={{ color: colors.stone["300"], radius: 55 }}
       onPress={onPress}
       style={{
-        opacity: isDisabled
-          ? 0.5
-          : 1,
+        opacity: isDisabled ? 0.5 : 1,
       }}
       disabled={isDisabled}
     >
