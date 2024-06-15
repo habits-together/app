@@ -1,5 +1,4 @@
-import { HabitDisplayType } from "@/src/components/HabitCard";
-import Icon from "@/src/components/Icon";
+import { HabitIcon } from "@/src/components/Icon";
 import IconButton from "@/src/components/IconButton";
 import { Text, View } from "@/src/components/Themed";
 import {
@@ -10,10 +9,10 @@ import {
   IconTrash,
   IconUserPlus,
 } from "@tabler/icons-react-native";
-import { Link, useLocalSearchParams } from "expo-router";
-import { useState } from "react";
+import { Link, router, useLocalSearchParams } from "expo-router";
+import { useAtomValue } from "jotai";
 import { Pressable } from "react-native";
-import { mockHabitData } from "../lib/mockData";
+import { habitInfoAtom } from "../atoms/atoms";
 
 export default function ViewHabitComponent() {
   const params = useLocalSearchParams();
@@ -22,14 +21,10 @@ export default function ViewHabitComponent() {
     throw new Error("Invalid habit id provided in URL params");
   }
   // get habit based on id
-  const habit = mockHabitData.find((habit) => habit.id === parseInt(id));
+  const habit = useAtomValue(habitInfoAtom(parseInt(id)));
   if (!habit) {
     throw new Error(`Habit with id ${id} not found`);
   }
-  // const habit = mockHabitData[0];
-
-  const [displayType, setDisplayType] =
-    useState<HabitDisplayType>("weekly-view");
 
   return (
     <View className="flex-1 p-4" style={{ gap: 40 }}>
@@ -41,7 +36,7 @@ export default function ViewHabitComponent() {
               className="flex flex-1 flex-row items-center"
               style={{ gap: 10 }}
             >
-              <Icon size={32} icon={habit.icon} />
+              <HabitIcon size={32} icon={habit.icon} />
               <Text
                 numberOfLines={1}
                 className="mb-1 flex-1 text-xl font-bold text-black dark:text-white"
@@ -55,30 +50,20 @@ export default function ViewHabitComponent() {
 
         {/* Edit/Delete Buttons */}
         <View className="flex flex-row" style={{ gap: 10 }}>
-          <Pressable className="flex-1">
+          <Pressable
+            className="flex-1"
+            onPress={() => {
+              router.push({
+                pathname: "/habits/edithabit",
+                params: { habitidStr: id },
+              });
+            }}
+          >
             <IconButton icon={IconEdit} text="Edit habit" />
           </Pressable>
           <Pressable className="flex-1">
             <IconButton icon={IconTrash} text="Delete habit" />
           </Pressable>
-        </View>
-
-        {/* Heatmap */}
-        <View className="">
-          {/* <HabitCard
-            habit={habit}
-            displayType="weekly-view"
-            setHabitDisplayType={(_,) => {}}
-            currentPage="habit-tab"
-            completionData={getMockHabitData({
-              displayType: displayType,
-              habitId: habit.id,
-              targetNumberOfCompletionsPerDay:
-                habit.goal.period === "daily"
-                  ? habit.goal.completionsPerPeriod
-                  : 1,
-            })}
-          /> */}
         </View>
 
         {/* Full/Edit Heatmap Buttons */}

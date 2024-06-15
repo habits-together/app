@@ -1,34 +1,28 @@
+import { tempIconAtom } from "@/src/components/CreateOrEditHabit";
 import Icon from "@/src/components/Icon";
 import { Text, View } from "@/src/components/Themed";
-import DefaultColors from "@/src/constants/DefaultColors";
 import { IconChevronLeft } from "@tabler/icons-react-native";
 import { router } from "expo-router";
-import { useColorScheme } from "nativewind";
-import { useContext, useMemo } from "react";
+import { useAtom } from "jotai";
+import { useMemo } from "react";
 import { TouchableOpacity } from "react-native";
-import { IconContext } from "./_layout";
 import { IconButton } from "./icon-button";
-import { icons } from "./icons";
+import { iconStrNameToTablerIcon } from "./icons";
 
 type HabitIconsTuple = [string, string[]];
 
 export default function HabitIcons() {
-  const { colorScheme } = useColorScheme();
-  const borderColor = DefaultColors[colorScheme].tint;
-  const { icon, setIcon } = useContext(IconContext);
+  const [icon, setIcon] = useAtom(tempIconAtom);
 
   const habitIcons: HabitIconsTuple[] = useMemo(() => {
     return [
-      ["Health & Fitness", ["gym", "yoga", "healthyEating"]],
-      ["Productivity & Work", ["work", "timeManagement", "scheduling"]],
-      ["Personal Development", ["learning", "ideas", "careerAdvancement"]],
-      ["Leisure & Recreation", ["painting", "music", "photography"]],
-      ["Social & Family", ["socializing", "love", "familyTime"]],
-      [
-        "Mindfullness & Spirituality",
-        ["meditation", "religion", "spirituality"],
-      ],
-      ["Financial", ["saving", "spending", "investing"]],
+      ["Health & Fitness", ["barbell", "yoga", "leaf"]],
+      ["Productivity & Work", ["deviceLaptop", "clock", "calendar"]],
+      ["Personal Development", ["brain", "bulb", "ladder"]],
+      ["Leisure & Recreation", ["brush", "music", "camera"]],
+      ["Social & Family", ["usersGroup", "heart", "home"]],
+      ["Mindfullness & Spirituality", ["peace", "buildingChurch", "flower"]],
+      ["Financial", ["buildingBank", "wallet", "chartLine"]],
     ];
   }, []);
 
@@ -57,7 +51,7 @@ export default function HabitIcons() {
                 return (
                   <View className="mr-2 mt-2" key={key}>
                     <IconButton
-                      icon={icons[key]}
+                      icon={iconStrNameToTablerIcon(key)}
                       onPress={() => {
                         setIcon(key);
                         router.back();

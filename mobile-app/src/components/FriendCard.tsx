@@ -9,7 +9,7 @@ import { friendInfoAtom } from "../atoms/atoms";
 import colors from "../constants/colors";
 import { Habit } from "../lib/types";
 import DotsMenu from "./DotsMenu";
-import Icon from "./Icon";
+import Icon, { HabitIcon } from "./Icon";
 import { MediumProfilePicture } from "./ProfilePicture";
 
 export type FriendCardProps = {
@@ -143,7 +143,7 @@ function HabitTag({ habit }: { habit: Habit }) {
             : "transparent",
       }}
     >
-      <Icon
+      <HabitIcon
         icon={habit.icon}
         size={12}
         darkColor={colors.habitColors[habit.color].light}

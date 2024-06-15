@@ -5,6 +5,7 @@ import { AsyncStorage as AsyncStorageType } from "jotai/vanilla/utils/atomWithSt
 import {
   acceptFriendRequestInDB,
   acceptHabitInviteInDB,
+  createNewHabitInDB,
   deleteNotificationInDB,
   fetchFriends,
   fetchHabits,
@@ -13,6 +14,7 @@ import {
   updateHabitInfoInDB,
   updateHabitParticipantsInDB,
 } from "../firebase/api";
+import { genMockHabitCompletionData } from "../lib/mockData";
 import {
   AllFriendsDataType,
   AllHabitsDataType,
@@ -35,22 +37,46 @@ habitsAtom.onMount = (set) => {
 
 // habit info
 export const habitInfoAtom = atomFamily((id: number) =>
-  atom(
-    (get) => get(habitsAtom)[id].habitInfo,
-    (_get, set, newValue: Habit) => {
-      updateHabitInfoInDB(id, newValue);
-      set(habitsAtom, (prev) => {
-        return {
-          ...prev,
-          [id]: {
-            ...prev[id],
-            habitInfo: newValue,
-          },
-        };
-      });
-    },
-  ),
+  atom((get) => get(habitsAtom)[id].habitInfo),
 );
+export const editHabitInfoAtom = atomFamily((id: number) =>
+  atom(null, (_get, set, newValue: Habit) => {
+    updateHabitInfoInDB(id, newValue);
+    set(habitsAtom, (prev) => {
+      return {
+        ...prev,
+        [id]: {
+          ...prev[id],
+          habitInfo: newValue,
+        },
+      };
+    });
+  }),
+);
+export const createNewHabitAtom = atom(
+  null,
+  async (_get, set, newHabitInfo: Habit) => {
+    const newId = await createNewHabitInDB(newHabitInfo);
+    console.log("creating!");
+    let date = new Date();
+    date.setDate(date.getDate());
+    set(habitsAtom, (prev) => {
+      return {
+        ...prev,
+        [newId]: {
+          habitInfo: { ...newHabitInfo, id: newId },
+          habitCompletionData: genMockHabitCompletionData(
+            newHabitInfo.goal.period === "daily"
+              ? newHabitInfo.goal.completionsPerPeriod
+              : 1,
+          ),
+          habitParticipants: [69], // This should be current user id, type should also be a string from auth.curentUser.uid
+        },
+      };
+    });
+  },
+);
+
 export const habitIdAtom = atom((get) =>
   Object.keys(get(habitsAtom)).map(Number),
 );
