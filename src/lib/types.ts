@@ -42,7 +42,7 @@ export type HabitParticipants = {
 };
 
 // friends
-
+export type AllFriendsDataType = Record<number, FriendData>;
 export type FriendData = {
   id: number;
   displayName: string;
@@ -74,6 +74,8 @@ export type HabitInviteData = {
   displayName: string;
   profilePicUrl: string;
 };
+
+export type UserNotificationsDataType = Record<number, NotificationData>;
 
 export type NotificationData = {
   id: number; // unique id for each reminder

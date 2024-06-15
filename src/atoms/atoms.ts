@@ -1,18 +1,25 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { atom } from "jotai";
-import { atomFamily, atomWithStorage, createJSONStorage } from "jotai/utils";
+import { atomFamily, atomWithReducer, atomWithStorage, createJSONStorage } from "jotai/utils";
 import { AsyncStorage as AsyncStorageType } from "jotai/vanilla/utils/atomWithStorage";
 import {
+  acceptFriendRequestInDB,
+  acceptHabitInviteInDB,
+  deleteNotificationFromDB,
+  fetchFriends,
   fetchHabits,
+  fetchNotifications,
   updateHabitCompletionsInDB,
   updateHabitInfoInDB,
   updateHabitParticipantsInDB,
 } from "../firebase/api";
 import {
+  AllFriendsDataType,
   AllHabitsDataType,
   Habit,
   HabitCompletion,
   HabitDisplayType,
+  UserNotificationsDataType,
 } from "../lib/types";
 
 // using Jotai atoms: https://jotai.org/docs/introduction
@@ -153,6 +160,104 @@ export const habitDisplayTypeAtom = atomFamily((id: number) =>
   ),
 );
 
+// FRIENDS
+export const friendsAtom = atom<AllFriendsDataType>([]);
+friendsAtom.onMount = (set) => {
+  fetchFriends().then(set);
+};
+
+export const friendInfoAtom = atomFamily((id: number) =>
+  atom((get) => get(friendsAtom)[id]),
+);
+
+export const friendIdsAtom = atom((get) =>
+  Object.keys(get(friendsAtom)).map(Number),
+);
+
 
 // NOTIFICATIONS 
-const notificationsAtom = atom([]);
+const notificationsAtom = atom<UserNotificationsDataType>([]);
+notificationsAtom.onMount = (set) => {
+  fetchNotifications().then(set);
+};
+
+export const notificationInfoAtom = atomFamily((id: number) =>
+  atom((get) => get(notificationsAtom)[id]),
+);
+export const notificationTypeAtom = atomFamily((id: number) =>
+  atom((get) => get(notificationInfoAtom(id)).type),
+);
+
+export const notificationIdsAtom = atom((get) =>
+  Object.keys(get(notificationsAtom)).map(Number),
+);
+
+// export const notificationTypeAtom = atomFamily((id: number) => 
+//   atom((get) => get(notificationsAtom)[id].type),
+// );
+
+export const acceptFriendRequestAtom = atomFamily((id: number) =>
+  atom(
+    (get) => get(notificationsAtom),
+    (_get, set) => {
+      acceptFriendRequestInDB(id);
+      set(notificationsAtom, (prev) => {
+        const { [id]: _, ...remaining } = prev;
+        return remaining;
+      });
+    }
+  )
+);
+
+export const acceptHabitInviteAtom = atomFamily((id: number) =>
+  atom(
+    (get) => get(notificationsAtom),
+    (_get, set) => {
+      acceptHabitInviteInDB(id);
+      set(notificationsAtom, (prev) => {
+        const { [id]: _, ...remaining } = prev;
+        return remaining;
+      });
+    }
+  )
+);
+
+export const deleteNotificationAtom = atomFamily((id: number) =>
+  atom(
+    (get) => get(notificationsAtom),
+    (_get, set) => {
+      deleteNotificationFromDB(id);
+      set(notificationsAtom, (prev) => {
+        const { [id]: _, ...remaining } = prev;
+        return remaining;
+      });
+    }
+  )
+);
+
+// export const habitParticipantsAtom = atomFamily((id: number) =>
+//   atom(
+//     (get) => get(habitsAtom)[id].habitParticipants,
+//     (_get, set, newValue: number[]) => {
+//       updateHabitParticipantsInDB(id, newValue);
+//       set(habitsAtom, (prev) => {
+//         return {
+//           ...prev,
+//           [id]: {
+//             ...prev[id],
+//             habitParticipants: newValue,
+//           },
+//         };
+//       });
+//     },
+//   ),
+// );
+
+// const notifReducer = (prev, action) => {
+//   if (action.type === 'confirmInvite') return prev + 1
+//   if (action.type === 'acceptRequest') return prev - 1
+//   if (action.type === 'deleteNotification') return prev - 1
+//   throw new Error('unknown action type')
+// }
+
+// const countReducerAtom = atomWithReducer((get) => {get(notificationsAtom)}, countReducer)

@@ -7,8 +7,8 @@ export default function ConfirmAndDeleteButtons({
   confirmInvite,
   deleteInvite,
 }: {
-  confirmInvite: () => void;
-  deleteInvite: () => void;
+  confirmInvite: any;
+  deleteInvite: any;
 }) {
   const { colorScheme } = useColorScheme();
 

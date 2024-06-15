@@ -341,3 +341,5 @@ export async function getAllHabitData() {
 
   return habitData;
 }
+
+export { NotificationData };
