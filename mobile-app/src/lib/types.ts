@@ -5,7 +5,7 @@ import { Icon as TablerIcon } from "@tabler/icons-react-native";
 
 export type AllHabitsDataType = Record<number, HabitData>;
 export type HabitData = {
-  habitInfo: Habit;
+  habitInfo: HabitInfo;
   habitCompletionData: HabitCompletion[];
   habitParticipants: number[]; // Should be array of user ids, which are strings
 };
@@ -13,7 +13,7 @@ export type HabitData = {
 export type HabitGoalPeriod = "daily" | "weekly";
 export type HabitDisplayType = "weekly-view" | "monthly-view";
 
-export type Habit = {
+export type HabitInfo = {
   id: number;
   title: string;
   description: string;
@@ -48,7 +48,7 @@ export type FriendData = {
   displayName: string;
   userName: string;
   profilePicUrl: string;
-  commonHabits: Habit[];
+  commonHabits: HabitInfo[];
 };
 
 export type FriendRequestData = {

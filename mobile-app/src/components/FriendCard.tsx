@@ -7,7 +7,7 @@ import React, { useState } from "react";
 import { Pressable } from "react-native";
 import { friendInfoAtom } from "../atoms/atoms";
 import colors from "../constants/colors";
-import { Habit } from "../lib/types";
+import { HabitInfo } from "../lib/types";
 import DotsMenu from "./DotsMenu";
 import Icon, { HabitIcon } from "./Icon";
 import { MediumProfilePicture } from "./ProfilePicture";
@@ -95,7 +95,7 @@ function InviteButton({ inviteFunc }: { inviteFunc: () => void }) {
   );
 }
 
-function CommonHabits({ commonHabits }: { commonHabits: Habit[] }) {
+function CommonHabits({ commonHabits }: { commonHabits: HabitInfo[] }) {
   const { colorScheme } = useColorScheme();
   return (
     <View className="mt-1 flex flex-row flex-wrap">
@@ -127,7 +127,7 @@ function CommonHabits({ commonHabits }: { commonHabits: Habit[] }) {
   );
 }
 
-function HabitTag({ habit }: { habit: Habit }) {
+function HabitTag({ habit }: { habit: HabitInfo }) {
   const { colorScheme } = useColorScheme();
   return (
     <View

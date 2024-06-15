@@ -85,7 +85,8 @@ export type nudgeT = dbT["nudges"][0];
 export type habitInviteT = dbT["habit_invites"][0];
 export type friendRequestT = dbT["friend_requests"][0];
 
-export type habitInfoT = Omit<dbT["habits"][0], "participants">;
+export type habitT = dbT["habits"][0] & { id: string };
+export type habitInfoT = Omit<dbT["habits"][0], "participants" | "owner_id">;
 export type completionT = dbT["users"][0]["habits"][0]["completions"][0];
 export type habitCardDataT = {
   habit_info: habitInfoT;

@@ -5,7 +5,7 @@ import { Text, View } from "@/src/components/Themed";
 import DefaultColors from "@/src/constants/DefaultColors";
 import colors from "@/src/constants/colors";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
-import { Habit, HabitGoalPeriod } from "@/src/lib/types";
+import { HabitInfo, HabitGoalPeriod } from "@/src/lib/types";
 import {
   IconArrowForwardUp,
   IconCheck,
@@ -32,7 +32,7 @@ export const tempIconAtom = atom<string>("default");
 export default function CreateOrEditHabit({
   initialHabitInfoValues,
 }: {
-  initialHabitInfoValues: Habit;
+  initialHabitInfoValues: HabitInfo;
 }) {
   const { colorScheme } = useColorScheme();
   const borderColor = DefaultColors[colorScheme].tint;
@@ -96,7 +96,7 @@ export default function CreateOrEditHabit({
             icon={initialHabitInfoValues.id ? IconCheck : IconArrowForwardUp}
             isDisabled={!canCreateHabit}
             onPress={() => {
-              const habitInfo: Habit = {
+              const habitInfo: HabitInfo = {
                 id: initialHabitInfoValues.id,
                 title: habitName,
                 description: description,

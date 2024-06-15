@@ -13,6 +13,8 @@ import {
   forgotPasswordOptions,
   viewHabitOptions,
 } from "../components/HeaderOptions";
+import { uploadMockDataToFirebase } from "../lib/mockData";
+import { getAllMyHabits } from "../firebase/api";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -53,6 +55,10 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const { colorScheme } = useColorScheme();
+
+  // uploadMockDataToFirebase();
+  console.log(getAllMyHabits());
+  
 
   return (
     <MenuProvider>
