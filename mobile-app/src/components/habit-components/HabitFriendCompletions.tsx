@@ -1,6 +1,4 @@
-import { habitColorAtom, habitDisplayTypeAtom } from "@/src/atoms/atoms";
-import colors from "@/src/constants/colors";
-import { getTranslucentColor } from "@/src/lib/getTranslucentColor";
+import { habitDisplayTypeAtom } from "@/src/atoms/atoms";
 import { useAtomValue } from "jotai";
 import React from "react";
 import { View } from "react-native";

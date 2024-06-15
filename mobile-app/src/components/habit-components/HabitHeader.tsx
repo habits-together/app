@@ -1,18 +1,15 @@
-import { fetchHabitsAtom, habitDisplayTypeAtom, habitInfoAtom } from "@/src/atoms/atoms";
+import { habitDisplayTypeAtom, habitInfoAtom } from "@/src/atoms/atoms";
 import colors from "@/src/constants/colors";
 import { router } from "expo-router";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import React from "react";
 import { Text, View } from "react-native";
 import DotsMenu from "../DotsMenu";
 import { HabitIcon } from "../Icon";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export function HabitHeader({ habitId }: { habitId: number }) {
   const habit = useAtomValue(habitInfoAtom(habitId));
   const [displayType, setDisplayType] = useAtom(habitDisplayTypeAtom(habitId));
-  
-
 
   return (
     <View className="-mb-[10px] ml-1 flex-row items-center justify-between">

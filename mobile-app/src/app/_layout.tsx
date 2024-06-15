@@ -65,8 +65,6 @@ export default function RootLayout() {
     return null;
   }
 
-
-
   return <RootLayoutNav />;
 }
 
