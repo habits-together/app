@@ -44,8 +44,8 @@ export async function fetchHabits() {
   docs.forEach((doc) => {
     result.push(doc.data() as habitInfoT);
   });
-  console.log("fetchHabits")
-  console.log(result)
+  console.log("fetchHabits");
+  console.log(result);
   return result;
 }
 

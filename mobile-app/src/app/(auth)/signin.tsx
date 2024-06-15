@@ -5,8 +5,7 @@ import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { IconMail, IconPhotoScan } from "@tabler/icons-react-native";
 import { Link, router } from "expo-router";
 import { useColorScheme } from "nativewind";
-import React from "react";
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   Animated,
   Dimensions,

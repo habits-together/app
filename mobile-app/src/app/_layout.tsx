@@ -3,10 +3,10 @@ import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import { useSetAtom } from "jotai";
 import { useColorScheme } from "nativewind";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { MenuProvider } from "react-native-popup-menu";
 import "react-native-reanimated";
 import { fetchHabitsAtom } from "../atoms/atoms";
@@ -16,7 +16,6 @@ import {
   forgotPasswordOptions,
   viewHabitOptions,
 } from "../components/HeaderOptions";
-import React from "react";
 
 export {
   // Catch any errors thrown by the Layout component.
