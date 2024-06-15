@@ -1,12 +1,12 @@
 import { Text, View } from "@/src/components/Themed";
 import { IconShare2 } from "@tabler/icons-react-native";
+import { useAtomValue } from "jotai";
 import { Pressable } from "react-native";
+import { friendIdsAtom } from "../atoms/atoms";
 import colors from "../constants/colors";
 import FriendCard from "./FriendCard";
 import FriendSearchBar from "./FriendSearchBar";
 import Icon from "./Icon";
-import { useAtomValue } from "jotai";
-import { friendIdsAtom } from "../atoms/atoms";
 
 export default function InviteFriends() {
   const friendIds = useAtomValue(friendIdsAtom);
@@ -16,11 +16,7 @@ export default function InviteFriends() {
       <ShareInviteLink />
       <Text className="mt-4 text-xl font-bold">My friends</Text>
       {friendIds.map((friendId) => (
-        <FriendCard
-          key={friendId}
-          friendId={friendId}
-          displayType="invite"
-        />
+        <FriendCard key={friendId} friendId={friendId} displayType="invite" />
       ))}
     </View>
   );
@@ -36,4 +32,5 @@ function ShareInviteLink() {
       <Text className="ml-2 text-base font-semibold">Share Invite Link</Text>
     </Pressable>
   );
-}InviteFriends
+}
+InviteFriends;

@@ -14,10 +14,7 @@ export default function FriendList() {
         <Text className="text-xl font-bold">My friends</Text>
       )}
       {friendIds.map((friendId) => (
-        <FriendCard
-          key={friendId}
-          friendId={friendId}
-        />
+        <FriendCard key={friendId} friendId={friendId} />
       ))}
     </View>
   );

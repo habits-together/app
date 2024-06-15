@@ -1,17 +1,16 @@
 import { Text, View } from "@/src/components/Themed";
 import { IconCheck, IconPlus } from "@tabler/icons-react-native";
 import { Link } from "expo-router";
+import { useAtomValue } from "jotai";
 import { useColorScheme } from "nativewind";
 import React, { useState } from "react";
 import { Pressable } from "react-native";
+import { freindInfoAtom } from "../atoms/atoms";
 import colors from "../constants/colors";
 import { Habit } from "../lib/types";
 import DotsMenu from "./DotsMenu";
 import Icon from "./Icon";
-import { useAtomValue } from "jotai";
-import { freindInfoAtom } from "../atoms/atoms";
 import { MediumProfilePicture } from "./ProfilePicture";
-
 
 export type FriendCardProps = {
   friendId: number;
@@ -34,15 +33,20 @@ export default function FriendCard({
       push
       href={{
         pathname: "/modals/viewprofile",
-        params: { userName: friendData.userName, displayName: friendData.displayName },
+        params: {
+          userName: friendData.userName,
+          displayName: friendData.displayName,
+        },
       }}
       asChild
     >
       <Pressable className="my-1 flex grow-0 flex-col rounded-3xl border border-stone-300 p-2">
         <View className="flex flex-row items-center">
-        <MediumProfilePicture picUrl={friendData.profilePicUrl} />
+          <MediumProfilePicture picUrl={friendData.profilePicUrl} />
           <View className="ml-2 flex flex-1 flex-col">
-            <Text className="text-base font-semibold">{friendData.displayName}</Text>
+            <Text className="text-base font-semibold">
+              {friendData.displayName}
+            </Text>
             <Text className="text-xs font-semibold text-stone-400">
               {friendData.userName}
             </Text>
