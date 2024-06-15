@@ -21,7 +21,8 @@ jobs:
           npm run prettier:format
       - name: Format website
         run: |
-          cd ../website
+          cd ..
+          cd website
           npm install -D
           npm run prettier:format
       - name: Commit changes
