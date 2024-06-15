@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title:
-    "Habits Together - Mobile app where you can add friends add do habits together",
+    "Habits Together - Add friends add do habits together",
   description: "Sign up and we'll let you know when the app is ready!",
 };
 
