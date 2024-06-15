@@ -98,7 +98,7 @@ export default function Createhabit({ habitid }: { habitid: String }) {
 
       {/* Icon & Name */}
       <View className="flex flex-col">
-        <Text className="text-base font-semibold mb-1">Icon & Name</Text>
+        <Text className="mb-1 text-base font-semibold">Icon & Name</Text>
         <View className="flex flex-row">
           <IconButton
             icon={icons[icon]}
@@ -128,7 +128,9 @@ export default function Createhabit({ habitid }: { habitid: String }) {
 
       {/* Description */}
       <View className="flex flex-col">
-        <Text className="text-base font-semibold mb-1">Description (optional)</Text>
+        <Text className="mb-1 text-base font-semibold">
+          Description (optional)
+        </Text>
         <TextInput
           className="h-10 rounded-lg border px-3"
           style={{
@@ -143,7 +145,7 @@ export default function Createhabit({ habitid }: { habitid: String }) {
 
       {/* Colour */}
       <View className="flex flex-col">
-        <Text className="text-base font-semibold mb-1">Color</Text>
+        <Text className="mb-1 text-base font-semibold">Color</Text>
         <View className="flex flex-col">
           {[0, 1].map((i) => (
             <View className="flex max-w-full flex-row gap-x-2">
@@ -172,7 +174,7 @@ export default function Createhabit({ habitid }: { habitid: String }) {
 
       {/* Goal */}
       <View className="flex flex-col">
-        <Text className="text-base font-semibold mb-1">Goal</Text>
+        <Text className="mb-1 text-base font-semibold">Goal</Text>
         <View className="rounded-lg border" style={{ borderColor }}>
           <View
             className="flex flex-row justify-between p-2"

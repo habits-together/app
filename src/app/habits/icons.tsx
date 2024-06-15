@@ -19,7 +19,6 @@ import {
   IconMusic,
   IconPeace,
   IconPhotoScan,
-  IconTag,
   IconUsersGroup,
   IconWallet,
   IconYoga,
