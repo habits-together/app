@@ -1,5 +1,9 @@
 import { fetchSingleUserThumbnail } from "../lib/getRandomProfilePics";
-import { getAllHabitData, getMockNotifications, getMockFriends } from "../lib/mockData";
+import {
+  getAllHabitData,
+  getMockFriends,
+  getMockNotifications,
+} from "../lib/mockData";
 import { Habit, HabitCompletion } from "../lib/types";
 
 export async function fetchHabits() {
@@ -50,7 +54,6 @@ export async function updateHabitParticipantsInDB(
 ) {
   // update habit participants in firebase
 }
-
 
 export async function fetchFriends() {
   // fetch all friend data from firebase

@@ -1,16 +1,7 @@
 import { Text, View } from "@/src/components/Themed";
-import { useEffect, useState } from "react";
-import colors from "../constants/colors";
-import { NotificationData, getMockNotifications } from "../lib/mockData";
-import Divider from "./Divider";
-import {
-  FriendRequest,
-  HabitInvite,
-  HabitReminder,
-} from "./NotificationComponents";
-import { NotifProfilePicture } from "./ProfilePicture";
-import { notificationIdsAtom } from "../atoms/atoms";
 import { useAtomValue } from "jotai";
+import { notificationIdsAtom } from "../atoms/atoms";
+import Divider from "./Divider";
 import NotificationComponent from "./NotificationComponent";
 
 // fetch all invites a user has received

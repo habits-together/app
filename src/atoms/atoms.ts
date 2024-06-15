@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { atom } from "jotai";
-import { atomFamily, atomWithReducer, atomWithStorage, createJSONStorage } from "jotai/utils";
+import { atomFamily, atomWithStorage, createJSONStorage } from "jotai/utils";
 import { AsyncStorage as AsyncStorageType } from "jotai/vanilla/utils/atomWithStorage";
 import {
   acceptFriendRequestInDB,
@@ -174,8 +174,7 @@ export const friendIdsAtom = atom((get) =>
   Object.keys(get(friendsAtom)).map(Number),
 );
 
-
-// NOTIFICATIONS 
+// NOTIFICATIONS
 const notificationsAtom = atom<UserNotificationsDataType>([]);
 notificationsAtom.onMount = (set) => {
   fetchNotifications().then(set);
@@ -192,7 +191,7 @@ export const notificationIdsAtom = atom((get) =>
   Object.keys(get(notificationsAtom)).map(Number),
 );
 
-// export const notificationTypeAtom = atomFamily((id: number) => 
+// export const notificationTypeAtom = atomFamily((id: number) =>
 //   atom((get) => get(notificationsAtom)[id].type),
 // );
 
@@ -205,8 +204,8 @@ export const acceptFriendRequestAtom = atomFamily((id: number) =>
         const { [id]: _, ...remaining } = prev;
         return remaining;
       });
-    }
-  )
+    },
+  ),
 );
 
 export const acceptHabitInviteAtom = atomFamily((id: number) =>
@@ -218,8 +217,8 @@ export const acceptHabitInviteAtom = atomFamily((id: number) =>
         const { [id]: _, ...remaining } = prev;
         return remaining;
       });
-    }
-  )
+    },
+  ),
 );
 
 export const deleteNotificationAtom = atomFamily((id: number) =>
@@ -231,8 +230,8 @@ export const deleteNotificationAtom = atomFamily((id: number) =>
         const { [id]: _, ...remaining } = prev;
         return remaining;
       });
-    }
-  )
+    },
+  ),
 );
 
 // export const habitParticipantsAtom = atomFamily((id: number) =>
