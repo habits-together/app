@@ -34,6 +34,10 @@ export async function fetchHabits() {
 export async function updateHabitInfoInDB(habitId: number, habitInfo: Habit) {
   // update habit info in firebase
 }
+export async function createNewHabitInDB(habitInfo: Habit) : Promise<number> {
+  // add new habit in firebase and returns its ID
+  return 123;
+}
 
 export async function updateHabitCompletionsInDB(
   habitId: number,

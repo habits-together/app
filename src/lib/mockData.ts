@@ -1,7 +1,4 @@
 import {
-  IconBarbell,
-  IconBook,
-  IconBottle,
   IconCode,
   IconExclamationCircle,
   IconMoodTongue,
@@ -54,7 +51,7 @@ export function getMockHabitMonthData(
 export const mockHabitData: Habit[] = [
   {
     title: "Read for 15 minutes",
-    icon: IconBook,
+    icon: "book",
     color: "orange",
     id: 1,
     description: "Let's expand our mind capacity",
@@ -65,7 +62,7 @@ export const mockHabitData: Habit[] = [
   },
   {
     title: "Work out",
-    icon: IconBarbell,
+    icon: "barbell",
     color: "green",
     id: 2,
     description: "Working out is better together",
@@ -76,7 +73,7 @@ export const mockHabitData: Habit[] = [
   },
   {
     title: "Drink water",
-    icon: IconBottle,
+    icon: "bottle",
     color: "violet",
     id: 3,
     description: "Stay hydrated",
@@ -213,6 +210,15 @@ export function getMockHabitCompletionData(habitId: number) {
   const targetNumberOfCompletionsPerDay =
     habit.goal.period === "daily" ? habit.goal.completionsPerPeriod : 1;
 
+  return getMockHabitMonthData(
+    (numWeeksToDisplayInMonthlyView - 1) * 7 + getNumberOfDaysInLastWeek(),
+    targetNumberOfCompletionsPerDay,
+  );
+}
+
+export function genMockHabitCompletionData(
+  targetNumberOfCompletionsPerDay: number,
+) {
   return getMockHabitMonthData(
     (numWeeksToDisplayInMonthlyView - 1) * 7 + getNumberOfDaysInLastWeek(),
     targetNumberOfCompletionsPerDay,
