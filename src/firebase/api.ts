@@ -68,7 +68,7 @@ export async function fetchNotifications() {
   return getMockNotifications();
 }
 
-export async function deleteNotificationFromDB(id: number) {
+export async function deleteNotificationInDB(id: number) {
   // delete notification from firebase
 }
 

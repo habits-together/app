@@ -10,13 +10,6 @@ import { acceptFriendRequestAtom, deleteNotificationAtom, notificationInfoAtom }
 import { NotifProfilePicture } from "./ProfilePicture";
 
 export type HabitReminderProps = {
-  // id: number;
-  // title: string;
-  // color: keyof typeof colors.habitColors;
-  // icon: TablerIcon;
-  // timeSent: number;
-  // displayName: string;
-  // profilePic: React.JSX.Element;\
   notifId: number;
 };
 
@@ -73,13 +66,6 @@ export function HabitReminder({
 }
 
 export type HabitInviteProps = {
-  // id: number;
-  // title: string;
-  // color: keyof typeof colors.habitColors;
-  // icon: TablerIcon;
-  // numberOfParticipants: number;
-  // displayName: string;
-  // profilePic: React.JSX.Element;\
   notifId: number;
 };
 
@@ -134,9 +120,6 @@ export function HabitInvite({
 }
 
 export type FriendRequestProps = {
-  // displayName: string;
-  // mutualCount: number;
-  // profilePic: React.JSX.Element;
   notifId: number;
 };
 

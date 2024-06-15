@@ -3,15 +3,15 @@ import { Pressable } from "react-native";
 import colors from "../constants/colors";
 import { Text, View } from "./Themed";
 
+type SetAtom<Args extends unknown[], Result> = (...args: Args) => Result
+
 export default function ConfirmAndDeleteButtons({
   confirmInvite,
   deleteInvite,
 }: {
-  confirmInvite: any;
-  deleteInvite: any;
+  confirmInvite: SetAtom<[], void>;
+  deleteInvite: SetAtom<[], void>;
 }) {
-  const { colorScheme } = useColorScheme();
-
   return (
     <View className="flex flex-row bg-transparent">
       <Pressable

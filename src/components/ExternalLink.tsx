@@ -20,6 +20,6 @@ export function ExternalLink(
           WebBrowser.openBrowserAsync(props.href as string);
         }
       }}
-    />
+    />``
   );
 }
