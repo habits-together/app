@@ -97,8 +97,8 @@ export default function Createhabit({ habitid }: { habitid: String }) {
       </View>
 
       {/* Icon & Name */}
-      <View className="flex flex-col gap-y-2">
-        <Text className="text-base font-semibold">Icon & Name</Text>
+      <View className="flex flex-col">
+        <Text className="text-base font-semibold mb-1">Icon & Name</Text>
         <View className="flex flex-row">
           <IconButton
             icon={icons[icon]}
@@ -127,8 +127,8 @@ export default function Createhabit({ habitid }: { habitid: String }) {
       </View>
 
       {/* Description */}
-      <View className="flex flex-col gap-y-2">
-        <Text className="text-base font-semibold">Description (optional)</Text>
+      <View className="flex flex-col">
+        <Text className="text-base font-semibold mb-1">Description (optional)</Text>
         <TextInput
           className="h-10 rounded-lg border px-3"
           style={{
@@ -142,32 +142,37 @@ export default function Createhabit({ habitid }: { habitid: String }) {
       </View>
 
       {/* Colour */}
-      <View className="flex flex-col gap-y-1">
-        <Text className="text-base font-semibold">Color</Text>
-        <View className="flex flex-row flex-wrap justify-between gap-x-1 gap-y-1">
-          {colorNames.map((col, idx) => (
-            <TouchableOpacity
-              className="flex h-9 w-9 items-center justify-center rounded-full"
-              key={idx}
-              style={{
-                backgroundColor:
-                  col === "stone"
-                    ? colors.stone[400]
-                    : colors.habitColors[col]?.base,
-              }}
-              onPress={() => {
-                setColor(col);
-              }}
-            >
-              {col === color ? <Icon icon={IconCheck} /> : null}
-            </TouchableOpacity>
+      <View className="flex flex-col">
+        <Text className="text-base font-semibold mb-1">Color</Text>
+        <View className="flex flex-col">
+          {[0, 1].map((i) => (
+            <View className="flex max-w-full flex-row gap-x-2">
+              {colorNames.slice(i * 9, 9 + i * 9).map((col, idx) => (
+                <TouchableOpacity
+                  className="flex aspect-square flex-1 items-center justify-center rounded-full"
+                  key={idx}
+                  style={{
+                    backgroundColor:
+                      col === "stone"
+                        ? colors.stone[400]
+                        : colors.habitColors[col]?.base,
+                    marginBottom: i === 0 ? 8 : 0,
+                  }}
+                  onPress={() => {
+                    setColor(col);
+                  }}
+                >
+                  {col === color ? <Icon icon={IconCheck} /> : null}
+                </TouchableOpacity>
+              ))}
+            </View>
           ))}
         </View>
       </View>
 
       {/* Goal */}
-      <View className="flex flex-col gap-y-2">
-        <Text className="text-base font-semibold">Goal</Text>
+      <View className="flex flex-col">
+        <Text className="text-base font-semibold mb-1">Goal</Text>
         <View className="rounded-lg border" style={{ borderColor }}>
           <View
             className="flex flex-row justify-between p-2"
