@@ -32,7 +32,7 @@ export default function HabitIcons() {
     ];
   }, []);
 
-    return (
+  return (
     <View className="flex flex-1 flex-col gap-y-5 px-5 pt-12">
       {/* Header */}
       <View className="relative flex flex-row items-center justify-center">

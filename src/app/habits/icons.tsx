@@ -54,5 +54,5 @@ export const icons: { [key: string]: Icon } = {
   // Financial
   saving: IconBuildingBank,
   spending: IconWallet,
-  investing: IconChartLine
+  investing: IconChartLine,
 };

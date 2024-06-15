@@ -1,5 +1,6 @@
 import Divider from "@/src/components/Divider";
 import Icon from "@/src/components/Icon";
+import RoundedButton from "@/src/components/RoundedButton";
 import { Text, View } from "@/src/components/Themed";
 import DefaultColors from "@/src/constants/DefaultColors";
 import colors from "@/src/constants/colors";
@@ -22,7 +23,6 @@ import {
 import { IconContext } from "./_layout";
 import { IconButton } from "./icon-button";
 import { icons } from "./icons";
-import RoundedButton from "@/src/components/RoundedButton";
 
 export default function Createhabit({ habitid }: { habitid: String }) {
   const { colorScheme } = useColorScheme();
@@ -39,9 +39,12 @@ export default function Createhabit({ habitid }: { habitid: String }) {
   const needsName = habitName === "";
   const canCreateHabit = !needsTag && !needsName;
 
-
   // generate plural texts
-  const pluralize = (count: number, singularText: string, pluralText: string) => {
+  const pluralize = (
+    count: number,
+    singularText: string,
+    pluralText: string,
+  ) => {
     if (count === 1) {
       return `${count} ${singularText}`;
     } else {
@@ -195,7 +198,10 @@ export default function Createhabit({ habitid }: { habitid: String }) {
             className="flex flex-row justify-between p-2"
             style={{ backgroundColor: colors.transparent }}
           >
-            <Text className="text-base font-semibold"> Completions per {goalType === 'Daily' ? 'day' : 'week'}</Text>
+            <Text className="text-base font-semibold">
+              {" "}
+              Completions per {goalType === "Daily" ? "day" : "week"}
+            </Text>
             <Menu onSelect={(val) => setCompletion(val)}>
               <MenuTrigger>
                 <View className="flex flex-row">
@@ -224,4 +230,6 @@ export default function Createhabit({ habitid }: { habitid: String }) {
     </View>
   );
 }
-const colorNames = Object.keys(colors.habitColors) as (keyof typeof colors.habitColors)[];
+const colorNames = Object.keys(
+  colors.habitColors,
+) as (keyof typeof colors.habitColors)[];
