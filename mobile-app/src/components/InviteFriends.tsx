@@ -1,12 +1,8 @@
 import { Text, View } from "@/src/components/Themed";
-import { IconShare2 } from "@tabler/icons-react-native";
 import { useAtomValue } from "jotai";
-import { Pressable } from "react-native";
 import { friendIdsAtom } from "../atoms/atoms";
-import colors from "../constants/colors";
 import FriendCard from "./FriendCard";
 import FriendSearchBar from "./FriendSearchBar";
-import Icon from "./Icon";
 import ShareInviteLink from "./ShareInviteLink";
 
 export default function InviteFriends() {

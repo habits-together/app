@@ -54,7 +54,7 @@ export const mockHabitData: Habit[] = [
     title: "Read for 15 minutes",
     icon: "book",
     color: "orange",
-    id: '1',
+    id: "1",
     description: "Let's expand our mind capacity",
     goal: {
       period: "daily",
@@ -65,7 +65,7 @@ export const mockHabitData: Habit[] = [
     title: "Work out",
     icon: "barbell",
     color: "green",
-    id: '2',
+    id: "2",
     description: "Working out is better together",
     goal: {
       period: "weekly",
@@ -76,7 +76,7 @@ export const mockHabitData: Habit[] = [
     title: "Drink water",
     icon: "bottle",
     color: "violet",
-    id: '3',
+    id: "3",
     description: "Stay hydrated",
     goal: {
       period: "daily",
@@ -94,13 +94,13 @@ export async function getMockFriendInvites() {
 
   const mockFriendInvites: FriendRequestData[] = [
     {
-      id: '1',
+      id: "1",
       displayName: "Someone else",
       mutualCount: 3,
       profilePicUrl: pic1.imgurl,
     },
     {
-      id: '2',
+      id: "2",
       displayName: "Eduardo",
       mutualCount: 5,
       profilePicUrl: pic2.imgurl,
@@ -116,7 +116,7 @@ export async function getMockHabitInvites() {
 
   const mockHabitInvites: HabitInviteData[] = [
     {
-      id: '1',
+      id: "1",
       title: "Play Guitar",
       color: "purple",
       icon: IconMusic,
@@ -125,7 +125,7 @@ export async function getMockHabitInvites() {
       profilePicUrl: pic1.imgurl,
     },
     {
-      id: '2',
+      id: "2",
       title: "Yum Yum",
       color: "red",
       icon: IconMoodTongue,
@@ -143,7 +143,7 @@ export async function getMockReminderInvites() {
 
   const mockReminderInvites: HabitReminderData[] = [
     {
-      id: '1',
+      id: "1",
       title: "Work on Habit",
       color: "purple",
       icon: IconCode,
@@ -152,7 +152,7 @@ export async function getMockReminderInvites() {
       profilePicUrl: pic1.imgurl,
     },
     {
-      id: '2',
+      id: "2",
       title: "Yum Yum",
       color: "red",
       icon: IconMoodTongue,
@@ -167,14 +167,14 @@ export async function getMockReminderInvites() {
 export async function getMockFriends() {
   const mockFriends: FriendData[] = [
     {
-      id: '12',
+      id: "12",
       displayName: "Someone else",
       userName: "some1else",
       profilePicUrl: "",
       commonHabits: mockHabitData,
     },
     {
-      id: '45',
+      id: "45",
       displayName: "Eduardo",
       userName: "eduardo_012003",
       profilePicUrl: "",
@@ -185,9 +185,9 @@ export async function getMockFriends() {
 }
 
 export const mockHabitFriendData: HabitParticipants[] = [
-  { habitId: '1', participants: [1, 2, 3, 4] },
-  { habitId: '2', participants: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20] },
-  { habitId: '3', participants: [21, 22] },
+  { habitId: "1", participants: [1, 2, 3, 4] },
+  { habitId: "2", participants: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20] },
+  { habitId: "3", participants: [21, 22] },
 ];
 export async function getMockHabitParticipantData() {
   return mockHabitFriendData;
@@ -228,7 +228,7 @@ export async function getMockNotifications() {
 
   const mockNotifications: NotificationData[] = [
     {
-      id: '1',
+      id: "1",
       type: "friendRequest",
       displayName: "Someone else",
       mutualCount: 3,
@@ -240,7 +240,7 @@ export async function getMockNotifications() {
       timeSent: 0,
     },
     {
-      id: '2',
+      id: "2",
       type: "habitReminder",
       displayName: "Guy One",
       mutualCount: 0,
@@ -252,7 +252,7 @@ export async function getMockNotifications() {
       timeSent: 0,
     },
     {
-      id: '3',
+      id: "3",
       type: "habitInvite",
       displayName: "Kush Blaze",
       mutualCount: 0,
@@ -264,7 +264,7 @@ export async function getMockNotifications() {
       timeSent: 0,
     },
     {
-      id: '4',
+      id: "4",
       type: "friendRequest",
       displayName: "Eduardo",
       mutualCount: 5,
@@ -276,7 +276,7 @@ export async function getMockNotifications() {
       timeSent: 0,
     },
     {
-      id: '5',
+      id: "5",
       type: "habitInvite",
       displayName: "Blaze Kush",
       mutualCount: 0,
@@ -288,7 +288,7 @@ export async function getMockNotifications() {
       timeSent: 0,
     },
     {
-      id: '6',
+      id: "6",
       type: "habitReminder",
       displayName: "Dude Two",
       mutualCount: 0,

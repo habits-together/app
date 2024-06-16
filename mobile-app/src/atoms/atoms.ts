@@ -20,10 +20,10 @@ import {
 import {
   AllFriendsDataType,
   AllHabitsDataType,
+  AllUserNotificationsDataType,
   Habit,
   HabitCompletion,
   HabitDisplayType,
-  AllUserNotificationsDataType,
 } from "../lib/frontend_types";
 import { genMockHabitCompletionData } from "../lib/mockData";
 
@@ -73,7 +73,7 @@ export const createNewHabitAtom = atom(
               ? newHabitInfo.goal.completionsPerPeriod
               : 1,
           ),
-          habitParticipants: ['69'], // This should be current user id, type should also be a string from auth.curentUser.uid
+          habitParticipants: ["69"], // This should be current user id, type should also be a string from auth.curentUser.uid
         },
       };
     });
@@ -282,7 +282,7 @@ export const getMutualFriendsAtom = atomFamily((friendId: string) =>
   }),
 );
 
-export const currentUserIdAttom = atom<string>('0');
+export const currentUserIdAttom = atom<string>("0");
 currentUserIdAttom.onMount = (set) => {
   getCurrentUserIdFromDB().then(set);
 };
