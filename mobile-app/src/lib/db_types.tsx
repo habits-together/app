@@ -81,11 +81,14 @@ export type userT = Omit<
   dbT["users"][0],
   "friends" | "habits" | "habit_invites" | "friend_requests" | "nudges"
 >;
+export type allUsersInfoT = Record<string, userT>;
 export type nudgeT = dbT["nudges"][0];
 export type habitInviteT = dbT["habit_invites"][0];
 export type friendRequestT = dbT["friend_requests"][0];
 
-export type habitInfoT = Omit<dbT["habits"][0], "participants">;
+export type habitInfoT = dbT["habits"][0];
+export type allHabitsInfoT = Record<string, habitInfoT>;
+// export type habitInfoT = Omit<dbT["habits"][0], "participants">;
 export type completionT = dbT["users"][0]["habits"][0]["completions"][0];
 export type habitCardDataT = {
   habit_info: habitInfoT;
