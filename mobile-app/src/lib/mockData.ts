@@ -174,14 +174,14 @@ export interface FriendData {
 export async function getMockFriends() {
   const mockFriends: FriendData[] = [
     {
-      id: 1,
+      id: 12,
       displayName: "Someone else",
       userName: "some1else",
       profilePicUrl: "",
       commonHabits: mockHabitData,
     },
     {
-      id: 2,
+      id: 45,
       displayName: "Eduardo",
       userName: "eduardo_012003",
       profilePicUrl: "",

@@ -201,3 +201,19 @@ export function editProfileOptions(
     ...sharedOptions(colorScheme),
   };
 }
+
+export function addFriendsOptions(
+  colorScheme: string,
+): NativeStackNavigationOptions {
+  return {
+    presentation: "modal",
+    headerLeft: () => <HeaderBackButton chevronDirection="down" />,
+    headerTitle: () => (
+      <Text className="text-base font-semibold text-black dark:text-white">
+        Add friends
+      </Text>
+    ),
+    headerTitleAlign: "center",
+    ...sharedOptions(colorScheme),
+  };
+}

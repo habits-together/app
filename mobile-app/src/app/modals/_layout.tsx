@@ -1,4 +1,5 @@
 import {
+  addFriendsOptions,
   editProfileOptions,
   inviteFriendsOptions,
   viewHabitOptions,
@@ -32,6 +33,10 @@ export default function SettingsLayout() {
         <Stack.Screen
           name="invitefriends"
           options={inviteFriendsOptions(colorScheme)}
+        />
+        <Stack.Screen
+          name="addfriends"
+          options={addFriendsOptions(colorScheme)}
         />
         <Stack.Screen
           name="editprofile"
