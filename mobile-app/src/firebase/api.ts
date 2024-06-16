@@ -1,12 +1,18 @@
+import {
+  AllFriendsDataType,
+  AllHabitsDataType,
+  AllUserNotificationsDataType,
+  Habit,
+  HabitCompletion,
+} from "../lib/frontend_types";
 import { fetchSingleUserThumbnail } from "../lib/getRandomProfilePics";
 import {
   getAllHabitData,
   getMockFriends,
   getMockNotifications,
 } from "../lib/mockData";
-import { FriendData, Habit, HabitCompletion } from "../lib/types";
 
-export async function fetchHabits() {
+export async function fetchHabits(): Promise<AllHabitsDataType> {
   // fetch all habit data from firebase
 
   // const exampleData: AllHabitsDataType = {
@@ -31,7 +37,7 @@ export async function fetchHabits() {
   return getAllHabitData();
 }
 
-export async function updateHabitInfoInDB(habitId: number, habitInfo: Habit) {
+export async function updateHabitInfoInDB(habitId: string, habitInfo: Habit) {
   // update habit info in firebase
 }
 export async function createNewHabitInDB(habitInfo: Habit): Promise<number> {
@@ -40,20 +46,20 @@ export async function createNewHabitInDB(habitInfo: Habit): Promise<number> {
 }
 
 export async function updateHabitCompletionsInDB(
-  habitId: number,
+  habitId: string,
   habitCompletionData: HabitCompletion[],
 ) {
   // update habit completion data in firebase
 }
 export async function updateCompletionsTodayInDB(
-  habitId: number,
+  habitId: string,
   numberOfCompletionsToday: number,
 ) {
   // update number of completions today in firebase
 }
 
 export async function updateHabitParticipantsInDB(
-  habitId: number,
+  habitId: string,
   habitParticipants: number[],
 ) {
   // update habit participants in firebase
@@ -67,42 +73,52 @@ export async function fetchFriends() {
     ...friend,
     profilePicUrl: pics[index].imgurl,
   }));
-  const friendIdtoDataMap: Record<number, FriendData> = {};
+  const friendIdtoDataMap: AllFriendsDataType = {};
   updatedFriends.forEach((friend) => {
     friendIdtoDataMap[friend.id] = friend;
   });
   return friendIdtoDataMap;
 }
 
-export async function fetchNotifications() {
+export async function fetchNotifications(): Promise<AllUserNotificationsDataType> {
   // fetch all notifications from firebase
-  return getMockNotifications();
+  const data = await getMockNotifications();
+  const notificationIdToDataMap: AllUserNotificationsDataType = {};
+  data.forEach((notification) => {
+    notificationIdToDataMap[notification.id] = notification;
+  });
+  return notificationIdToDataMap;
 }
 
-export async function deleteNotificationInDB(id: number) {
+export async function deleteNotificationInDB(id: string) {
   // delete notification from firebase
 }
 
-export async function acceptFriendRequestInDB(id: number) {
+export async function acceptFriendRequestInDB(id: string) {
   // accept friend request in firebase
 }
 
-export async function acceptHabitInviteInDB(id: number) {
+export async function acceptHabitInviteInDB(id: string) {
   // accept habit invite in firebase
 }
 
 // friend search
-export async function searchForFriendsInDB(searchText: string) : Promise<number[]> {
+export async function searchForFriendsInDB(
+  searchText: string,
+): Promise<string[]> {
   // query database for usernames and emails including the searchText and return array of ids of the users that match
-  return [12, 45];  
+  return ["12", "45"];
 }
 
-export async function getMutualFriendsInDB(userId: number, friendId: number) {
+export async function getMutualFriendsInDB(
+  userId: string,
+  friendId: string,
+): Promise<string[]> {
   // query database for mutual friends of userId and friendId and return array of ids of the mutual friends
-  return [12, 45];
+  return ["12", "45"];
 }
 
-export async function getCurrentUserIdFromDB() {
+export async function getCurrentUserIdFromDB(): Promise<string> {
   // query database for the current user's id and return it
-  return 0;
+  return "1";
 }

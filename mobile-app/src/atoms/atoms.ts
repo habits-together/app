@@ -17,15 +17,15 @@ import {
   updateHabitInfoInDB,
   updateHabitParticipantsInDB,
 } from "../firebase/api";
-import { genMockHabitCompletionData } from "../lib/mockData";
 import {
   AllFriendsDataType,
   AllHabitsDataType,
   Habit,
   HabitCompletion,
   HabitDisplayType,
-  UserNotificationsDataType,
-} from "../lib/types";
+  AllUserNotificationsDataType,
+} from "../lib/frontend_types";
+import { genMockHabitCompletionData } from "../lib/mockData";
 
 // using Jotai atoms: https://jotai.org/docs/introduction
 // we especially use the atomFamily atom: https://jotai.org/docs/utilities/family
@@ -33,16 +33,16 @@ import {
 const storage = createJSONStorage(() => AsyncStorage);
 
 // HABITS -------------------------------------------------------------------------
-const habitsAtom = atom<AllHabitsDataType>([]);
+const habitsAtom = atom<AllHabitsDataType>({});
 habitsAtom.onMount = (set) => {
   fetchHabits().then(set);
 };
 
 // habit info
-export const habitInfoAtom = atomFamily((id: number) =>
+export const habitInfoAtom = atomFamily((id: string) =>
   atom((get) => get(habitsAtom)[id].habitInfo),
 );
-export const editHabitInfoAtom = atomFamily((id: number) =>
+export const editHabitInfoAtom = atomFamily((id: string) =>
   atom(null, (_get, set, newValue: Habit) => {
     updateHabitInfoInDB(id, newValue);
     set(habitsAtom, (prev) => {
@@ -73,7 +73,7 @@ export const createNewHabitAtom = atom(
               ? newHabitInfo.goal.completionsPerPeriod
               : 1,
           ),
-          habitParticipants: [69], // This should be current user id, type should also be a string from auth.curentUser.uid
+          habitParticipants: ['69'], // This should be current user id, type should also be a string from auth.curentUser.uid
         },
       };
     });
@@ -83,19 +83,19 @@ export const createNewHabitAtom = atom(
 export const habitIdAtom = atom((get) =>
   Object.keys(get(habitsAtom)).map(Number),
 );
-export const habitColorAtom = atomFamily((id: number) =>
+export const habitColorAtom = atomFamily((id: string) =>
   atom((get) => get(habitInfoAtom(id)).color),
 );
-export const habitGoalAtom = atomFamily((id: number) =>
+export const habitGoalAtom = atomFamily((id: string) =>
   atom((get) => get(habitInfoAtom(id)).goal),
 );
-export const targetNumberOfCompletionsPerDayAtom = atomFamily((id: number) =>
+export const targetNumberOfCompletionsPerDayAtom = atomFamily((id: string) =>
   atom((get) => {
     const habitGoal = get(habitInfoAtom(id)).goal;
     return habitGoal.period === "daily" ? habitGoal.completionsPerPeriod : 1;
   }),
 );
-export const targetNumberOfCompletionsPerWeekAtom = atomFamily((id: number) =>
+export const targetNumberOfCompletionsPerWeekAtom = atomFamily((id: string) =>
   atom((get) => {
     const habitGoal = get(habitInfoAtom(id)).goal;
     return habitGoal.period === "weekly"
@@ -105,7 +105,7 @@ export const targetNumberOfCompletionsPerWeekAtom = atomFamily((id: number) =>
 );
 
 // habit completions
-export const habitCompletionsAtom = atomFamily((id: number) =>
+export const habitCompletionsAtom = atomFamily((id: string) =>
   atom(
     (get) => get(habitsAtom)[id].habitCompletionData,
     (_get, set, newValue: HabitCompletion[]) => {
@@ -122,7 +122,7 @@ export const habitCompletionsAtom = atomFamily((id: number) =>
     },
   ),
 );
-const habitCompletionsTodayAtom = atomFamily((id: number) =>
+const habitCompletionsTodayAtom = atomFamily((id: string) =>
   atom(
     (get) => get(habitCompletionsAtom(id)).at(-1)!,
     (get, set, newValue: HabitCompletion) => {
@@ -133,7 +133,7 @@ const habitCompletionsTodayAtom = atomFamily((id: number) =>
     },
   ),
 );
-export const numberOfCompletionsTodayAtom = atomFamily((id: number) =>
+export const numberOfCompletionsTodayAtom = atomFamily((id: string) =>
   atom(
     (get) => get(habitCompletionsTodayAtom(id)).numberOfCompletions,
     (get, set, newValue: number) => {
@@ -145,7 +145,7 @@ export const numberOfCompletionsTodayAtom = atomFamily((id: number) =>
     },
   ),
 );
-export const incrementNumberOfCompletionsTodayAtom = atomFamily((id: number) =>
+export const incrementNumberOfCompletionsTodayAtom = atomFamily((id: string) =>
   atom(null, (get, set) => {
     const currentNumberOfCompletions = get(numberOfCompletionsTodayAtom(id));
     const targetNumberOfCompletionsPerDay = get(
@@ -161,7 +161,7 @@ export const incrementNumberOfCompletionsTodayAtom = atomFamily((id: number) =>
 );
 
 // habit participants
-export const habitParticipantsAtom = atomFamily((id: number) =>
+export const habitParticipantsAtom = atomFamily((id: string) =>
   atom(
     (get) => get(habitsAtom)[id].habitParticipants,
     (_get, set, newValue: number[]) => {
@@ -180,7 +180,7 @@ export const habitParticipantsAtom = atomFamily((id: number) =>
 );
 
 // whether we should display the habit in weekly or monthly view
-export const habitDisplayTypeAtom = atomFamily((id: number) =>
+export const habitDisplayTypeAtom = atomFamily((id: string) =>
   atomWithStorage<HabitDisplayType>(
     `habitDisplayType-${id}`,
     "weekly-view",
@@ -190,12 +190,12 @@ export const habitDisplayTypeAtom = atomFamily((id: number) =>
 );
 
 // FRIENDS
-export const friendsAtom = atom<AllFriendsDataType>([]);
+export const friendsAtom = atom<AllFriendsDataType>({});
 friendsAtom.onMount = (set) => {
   fetchFriends().then(set);
 };
 
-export const friendInfoAtom = atomFamily((id: number) =>
+export const friendInfoAtom = atomFamily((id: string) =>
   atom((get) => get(friendsAtom)[id]),
 );
 
@@ -204,15 +204,15 @@ export const friendIdsAtom = atom((get) => {
 });
 
 // NOTIFICATIONS
-const notificationsAtom = atom<UserNotificationsDataType>([]);
+const notificationsAtom = atom<AllUserNotificationsDataType>({});
 notificationsAtom.onMount = (set) => {
   fetchNotifications().then(set);
 };
 
-export const notificationInfoAtom = atomFamily((id: number) =>
+export const notificationInfoAtom = atomFamily((id: string) =>
   atom((get) => get(notificationsAtom)[id]),
 );
-export const notificationTypeAtom = atomFamily((id: number) =>
+export const notificationTypeAtom = atomFamily((id: string) =>
   atom((get) => get(notificationInfoAtom(id)).type),
 );
 
@@ -220,7 +220,7 @@ export const notificationIdsAtom = atom((get) =>
   Object.keys(get(notificationsAtom)).map(Number),
 );
 
-export const acceptFriendRequestAtom = atomFamily((id: number) =>
+export const acceptFriendRequestAtom = atomFamily((id: string) =>
   atom(
     (get) => get(notificationsAtom),
     (_get, set) => {
@@ -233,7 +233,7 @@ export const acceptFriendRequestAtom = atomFamily((id: number) =>
   ),
 );
 
-export const acceptHabitInviteAtom = atomFamily((id: number) =>
+export const acceptHabitInviteAtom = atomFamily((id: string) =>
   atom(
     (get) => get(notificationsAtom),
     (_get, set) => {
@@ -246,7 +246,7 @@ export const acceptHabitInviteAtom = atomFamily((id: number) =>
   ),
 );
 
-export const deleteNotificationAtom = atomFamily((id: number) =>
+export const deleteNotificationAtom = atomFamily((id: string) =>
   atom(
     (get) => get(notificationsAtom),
     (_get, set) => {
@@ -260,21 +260,16 @@ export const deleteNotificationAtom = atomFamily((id: number) =>
 );
 
 // friend search
-export const searchQueryAtom = atom(
-  "",
-  (_get, set, newValue: string) => {
-    set(searchQueryAtom, newValue);
-  },
-);
+export const searchQueryAtom = atom("", (_get, set, newValue: string) => {
+  set(searchQueryAtom, newValue);
+});
 
-export const searchResultsAtom = atom(
-  async (get) => {
-    console.log("searching for friends");
-    return await searchForFriendsInDB(get(searchQueryAtom));
-  }
-);
+export const searchResultsAtom = atom(async (get) => {
+  console.log("searching for friends");
+  return await searchForFriendsInDB(get(searchQueryAtom));
+});
 
-export const getMutualFriendsAtom = atomFamily((friendId: number) =>
+export const getMutualFriendsAtom = atomFamily((friendId: string) =>
   atom(async (get) => {
     try {
       const uid = get(currentUserIdAttom);
@@ -287,7 +282,7 @@ export const getMutualFriendsAtom = atomFamily((friendId: number) =>
   }),
 );
 
-export const currentUserIdAttom = atom(10);
+export const currentUserIdAttom = atom<string>('0');
 currentUserIdAttom.onMount = (set) => {
   getCurrentUserIdFromDB().then(set);
 };
