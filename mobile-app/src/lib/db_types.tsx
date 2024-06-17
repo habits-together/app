@@ -1,109 +1,94 @@
 type dbT = {
-  users: [
-    id: {
-      created_at: Date;
-      display_name: string;
+  users: Record<
+    string, // userId
+    {
+      createdAt: Date;
+      displayName: string;
       username: string;
       picture: string;
-      habit_invites: [
-        habit_invite_ref: string, // references habit_invites
-      ];
-      friend_requests: [
-        friend_request_ref: string, // references friend_requests
-      ];
-      nudges: [
-        nudge_ref: string, // references nudges
-      ];
-      // collections
-      friends: [
-        id: {
-          friend_ref: string; // references users
-          friends_since: Date;
-        },
-      ];
-      habits: [
-        habit_participation_id: {
-          habit_ref: string; // references habits
-          // collections
-          completions: [
-            completionId: {
-              // index & return sorted by date
-              date: Date;
-              numberOfCompletions: number;
-            },
-          ];
-        },
-      ];
-    },
-  ];
+    }
+  >;
 
-  habits: [
-    habit_id: {
+  friendships: Record<
+    string, // friendshipId
+    {
+      // user1Id is always less than user2Id (just use frontend functions)
+      user1Id: string;
+      user2Id: string;
+      friendsSince: Date;
+    }
+  >;
+
+  habits: Record<
+    string, // habitId
+    {
       color: string;
-      created_at: Date;
+      createdAt: Date;
       description: string;
       title: string;
-      owner_id: string;
-      goal_period: string;
-      goal_completions_per_period: number;
+      goal: {
+        period: string;
+        completionsPerPeriod: number;
+      };
       icon: string;
-      participants: [
-        user_ref: string, // references users
-      ];
-    },
-  ];
+      participants: Record<
+        string, // participantId
+        {
+          displayName: string; // maintained by cloud function
+          username: string; // maintained by cloud function
+          picture: string; // maintained by cloud function
+          mostRecentCompletionDate: Date; // maintained by cloud function
+          isOwner?: true; // only owner has this field
+        }
+      >;
+      // collection
+      participantCompletions: Record<
+        string, // participantId
+        { date: number } // i.e. { date: numberOfCompletions }
+      >;
+    }
+  >;
 
-  habit_invites: [
-    invite_id: {
-      habit_ref: string; // references habits
-      friend_ref: string; // references users
-      sent_at: Date;
-    },
-  ];
-  friend_requests: [
-    request_id: {
-      sender_ref: string; // references users
-      receiver_ref: string; // references users
-      sent_at: Date;
-    },
-  ];
-  nudges: [
-    nudge_id: {
-      habit_ref: string; // references habits
-      sender_ref: string; // references users
-      receiver_ref: string; // references users
-      sent_at: Date;
-    },
-  ];
+  notifications: Record<
+    string, // inviteId
+    habitNotificationT | friendNotificationT
+  >;
 };
 
-export type userT = Omit<
-  dbT["users"][0],
-  "friends" | "habits" | "habit_invites" | "friend_requests" | "nudges"
->;
-export type allUsersInfoT = Record<string, userT>;
-export type nudgeT = dbT["nudges"][0];
-export type habitInviteT = dbT["habit_invites"][0];
-export type friendRequestT = dbT["friend_requests"][0];
-
-export type habitInfoT = dbT["habits"][0];
-export type allHabitsInfoT = Record<string, habitInfoT>;
-// export type habitInfoT = Omit<dbT["habits"][0], "participants">;
-export type completionT = dbT["users"][0]["habits"][0]["completions"][0];
-export type habitCardDataT = {
-  habit_info: habitInfoT;
-  my_completion_data: completionT[];
-  participant_data: [
-    {
-      user_info: userT;
-      completion_data: completionT[];
-    },
-  ];
+export type friendNotificationT = {
+  type: "friendRequest";
+  senderId: string;
+  receiverId: string;
+  sentAt: Date;
+};
+export type habitNotificationT = {
+  type: "habitInvite" | "nudge";
+  habitId: string;
+  senderId: string;
+  receiverId: string;
+  sentAt: Date;
 };
 
+export type allUsersInfoT = dbT["users"];
+export type userT = allUsersInfoT[0];
+
+export type allFriendshipsT = dbT["friendships"];
+export type friendshipT = allFriendshipsT[0];
+
+export type habitT = Omit<dbT["habits"][0], "participantCompletions">;
+export type allHabitsT = Record<string, habitT>;
+export type habitInfoT = Omit<habitT, "participants">;
+
+export type habitParticipantsT = dbT["habits"][0]["participants"];
+export type habitParticipantT = habitParticipantsT[0];
+
+export type habitCompletionsT = dbT["habits"][0]["participantCompletions"];
+export type habitCompletionT = habitCompletionsT[0];
+
+// more types
 export type friendCardDataT = {
-  friend_info: userT;
-  common_habits: commonHabitT[];
+  friendInfo: userT;
+  commonHabits: commonHabitT[];
 };
 export type commonHabitT = {
   color: string;

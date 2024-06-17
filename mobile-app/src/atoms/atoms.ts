@@ -2,8 +2,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 // import { atom } from "jotai";
 import { atom } from "jotai";
 import { atomFamily, createJSONStorage } from "jotai/utils";
-import { fetchallHabitsInfoFromDB } from "../firebase/betterApi";
-import { allHabitsInfoT } from "../lib/db_types";
+import { fetchAllHabitsInfo, fetchHabitCompletionsForParticipant } from "../firebase/betterApi";
+import { allHabitsT, allUsersInfoT, habitCompletionsT, habitParticipantsT } from "../lib/db_types";
 // import { atomFamily, atomWithStorage, createJSONStorage } from "jotai/utils";
 // import { AsyncStorage as AsyncStorageType } from "jotai/vanilla/utils/atomWithStorage";
 // import {
@@ -36,41 +36,47 @@ import { allHabitsInfoT } from "../lib/db_types";
 
 const storage = createJSONStorage(() => AsyncStorage);
 
-const allHabitsInfoAtom = atom<allHabitsInfoT>({});
+const allHabitsInfoAtom = atom<allHabitsT>({});
 allHabitsInfoAtom.onMount = (set) => {
-  fetchallHabitsInfoFromDB().then(set);
+  fetchAllHabitsInfo().then(set);
 };
 export const habitIdsAtom = atom((get) => Object.keys(get(allHabitsInfoAtom)));
-const habitInfoAtom = atomFamily((id: string) =>
-  atom((get) => get(allHabitsInfoAtom)[id]),
+const habitInfoAtom = atomFamily((habitId: string) =>
+  atom((get) => get(allHabitsInfoAtom)[habitId]),
 );
-export const habitColorAtom = atomFamily((id: string) =>
-  atom((get) => get(habitInfoAtom(id)).color),
+export const habitColorAtom = atomFamily((habitId: string) =>
+  atom((get) => get(habitInfoAtom(habitId)).color),
 );
-export const habitDescriptionAtom = atomFamily((id: string) =>
-  atom((get) => get(habitInfoAtom(id)).description),
+export const habitDescriptionAtom = atomFamily((habitId: string) =>
+  atom((get) => get(habitInfoAtom(habitId)).description),
 );
-export const habitTitleAtom = atomFamily((id: string) =>
-  atom((get) => get(habitInfoAtom(id)).title),
+export const habitTitleAtom = atomFamily((habitId: string) =>
+  atom((get) => get(habitInfoAtom(habitId)).title),
 );
-export const habitOwnerAtom = atomFamily((id: string) =>
-  atom((get) => get(habitInfoAtom(id)).owner_id),
+export const habitGoalPeriodAtom = atomFamily((habitId: string) =>
+  atom((get) => get(habitInfoAtom(habitId)).goal.period),
 );
-export const habitGoalPeriodAtom = atomFamily((id: string) =>
-  atom((get) => get(habitInfoAtom(id)).goal_period),
+export const habitGoalCompletionsPerPeriodAtom = atomFamily((habitId: string) =>
+  atom((get) => get(habitInfoAtom(habitId)).goal.completionsPerPeriod),
 );
-export const habitGoalCompletionsPerPeriodAtom = atomFamily((id: string) =>
-  atom((get) => get(habitInfoAtom(id)).goal_completions_per_period),
+export const habitIconAtom = atomFamily((habitId: string) =>
+  atom((get) => get(habitInfoAtom(habitId)).icon),
 );
-export const habitIconAtom = atomFamily((id: string) =>
-  atom((get) => get(habitInfoAtom(id)).icon),
+export const habitParticipantsAtom = atomFamily((habitId: string) =>
+  atom((get) => get(habitInfoAtom(habitId)).participants),
 );
-export const habitParticipantIdsAtom = atomFamily((id: string) =>
-  atom((get) => get(habitInfoAtom(id)).participants),
+export const habitParticipantIdsAtom = atomFamily((habitId: string) =>
+  atom((get) => Object.keys(get(habitParticipantsAtom(habitId)))),
 );
 
 
-const allUsersInfoAtom = atom<allHabitsInfoT>({});
+// export const habitCompletionsByParticipantAtom = atomFamily(({habitId, participantId}: {habitId: string, participantId: string}) =>
+//   atom(async (get) => fetchHabitCompletionsForParticipant({habitId, participantId})),
+// );
+
+
+
+// const allFriendsInfoAtom = atom<allUsersInfoT>({});
 
 // // HABITS -------------------------------------------------------------------------
 // const habitsAtom = atom<AllHabitsDataType>([]);
