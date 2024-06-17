@@ -3,7 +3,7 @@ import { Icon as TablerIcon } from "@tabler/icons-react-native";
 
 // habits
 
-export type AllHabitsDataType = Record<number, HabitData>;
+export type AllHabitsDataType = Record<string, HabitData>;
 export type HabitData = {
   habitInfo: Habit;
   habitCompletionData: HabitCompletion[];
@@ -14,7 +14,7 @@ export type HabitGoalPeriod = "daily" | "weekly";
 export type HabitDisplayType = "weekly-view" | "monthly-view";
 
 export type Habit = {
-  id: number;
+  id: string;
   title: string;
   description: string;
   color: keyof typeof colors.habitColors;
@@ -26,7 +26,7 @@ export type Habit = {
 };
 
 export type HabitCompletions = {
-  habitId: number;
+  habitId: string;
   habitCompletionData: HabitCompletion[];
 };
 export type HabitCompletion = {
@@ -37,14 +37,14 @@ export type HabitCompletion = {
 };
 
 export type HabitParticipants = {
-  habitId: number;
+  habitId: string;
   participants: number[];
 };
 
 // friends
-export type AllFriendsDataType = Record<number, FriendData>;
+export type AllFriendsDataType = Record<string, FriendData>;
 export type FriendData = {
-  id: number;
+  id: string;
   displayName: string;
   userName: string;
   profilePicUrl: string;
@@ -52,7 +52,7 @@ export type FriendData = {
 };
 
 export type FriendRequestData = {
-  id: number;
+  id: string;
   displayName: string;
   mutualCount: number;
   profilePicUrl: string;
@@ -66,7 +66,7 @@ export type ProfilePic = {
 // notifications
 
 export type HabitInviteData = {
-  id: number; // unique id for each invite
+  id: string; // unique id for each invite
   title: string;
   color: keyof typeof colors.habitColors;
   icon: TablerIcon;
@@ -75,10 +75,9 @@ export type HabitInviteData = {
   profilePicUrl: string;
 };
 
-export type UserNotificationsDataType = Record<number, NotificationData>;
-
+export type AllUserNotificationsDataType = Record<string, NotificationData>;
 export type NotificationData = {
-  id: number; // unique id for each reminder
+  id: string; // unique id for each reminder
   type: "friendRequest" | "habitInvite" | "habitReminder";
   displayName: string;
   mutualCount: number; // only for friend requests
@@ -91,7 +90,7 @@ export type NotificationData = {
 };
 
 export type HabitReminderData = {
-  id: number; // unique id for each reminder
+  id: string; // unique id for each reminder
   title: string;
   color: keyof typeof colors.habitColors;
   icon: TablerIcon;
