@@ -4,6 +4,11 @@ type dbT = {
     {
       createdAt: Date;
       displayName: string;
+  users: Record<
+    string, // userId
+    {
+      createdAt: Date;
+      displayName: string;
       username: string;
       picture: string;
     }
@@ -22,10 +27,31 @@ type dbT = {
   habits: Record<
     string, // habitId
     {
+    }
+  >;
+
+  friendships: Record<
+    string, // friendshipId
+    {
+      // user1Id is always less than user2Id (just use frontend functions)
+      user1Id: string;
+      user2Id: string;
+      friendsSince: Date;
+    }
+  >;
+
+  habits: Record<
+    string, // habitId
+    {
       color: string;
+      createdAt: Date;
       createdAt: Date;
       description: string;
       title: string;
+      goal: {
+        period: string;
+        completionsPerPeriod: number;
+      };
       goal: {
         period: string;
         completionsPerPeriod: number;
@@ -92,6 +118,8 @@ export type notificationT = allNotificationsT[0];
 
 // more types
 export type friendCardDataT = {
+  friendInfo: userT;
+  commonHabits: commonHabitT[];
   friendInfo: userT;
   commonHabits: commonHabitT[];
 };

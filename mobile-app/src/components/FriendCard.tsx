@@ -7,7 +7,7 @@ import React, { useState } from "react";
 import { Pressable } from "react-native";
 import { friendInfoAtom, getMutualFriendsAtom } from "../atoms/atoms";
 import colors from "../constants/colors";
-import { Habit } from "../lib/types";
+import { Habit } from "../lib/frontend_types";
 import DotsMenu from "./DotsMenu";
 import Icon, { HabitIcon } from "./Icon";
 import { MediumProfilePicture, SmallProfilePicture } from "./ProfilePicture";
