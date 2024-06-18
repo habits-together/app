@@ -10,7 +10,7 @@ export default function AuthInputField({
 }: {
   text: string;
   isPass: boolean;
-  updateFunction: (text: string) => void;
+  updateFunction?: (text: string) => void;
 }) {
   const { colorScheme } = useColorScheme();
   return (
@@ -22,7 +22,7 @@ export default function AuthInputField({
         className="h-10 w-full rounded-xl border border-stone-300 pl-3"
         secureTextEntry={isPass}
         keyboardType="default"
-        onChangeText={(text) => updateFunction(text)}
+        onChangeText={(text) => updateFunction && updateFunction(text)}
         // android only for the cursor color
         cursorColor={
           colorScheme === "dark" ? colors.stone[200] : colors.stone[600]
