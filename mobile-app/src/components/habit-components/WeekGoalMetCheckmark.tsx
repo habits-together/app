@@ -10,7 +10,7 @@ export default function WeekGoalMetCheckmark({
   habitId,
   weekGoalMet,
 }: {
-  habitId: number;
+  habitId: string;
   weekGoalMet: boolean;
 }) {
   const color = useAtomValue(habitColorAtom(habitId));

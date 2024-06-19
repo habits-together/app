@@ -1,4 +1,8 @@
-import { habitDisplayTypeAtom, habitInfoAtom } from "@/src/atoms/atoms";
+import {
+  habitDisplayTypeAtom,
+  habitIconAtom,
+  habitTitleAtom,
+} from "@/src/atoms/atoms";
 import colors from "@/src/constants/colors";
 import { router } from "expo-router";
 import { useAtom, useAtomValue } from "jotai";
@@ -7,19 +11,20 @@ import { Text, View } from "react-native";
 import DotsMenu from "../DotsMenu";
 import { HabitIcon } from "../Icon";
 
-export function HabitHeader({ habitId }: { habitId: number }) {
-  const habit = useAtomValue(habitInfoAtom(habitId));
+export function HabitHeader({ habitId }: { habitId: string }) {
   const [displayType, setDisplayType] = useAtom(habitDisplayTypeAtom(habitId));
+  const title = useAtomValue(habitTitleAtom(habitId));
+  const icon = useAtomValue(habitIconAtom(habitId));
 
   return (
     <View className="-mb-[10px] ml-1 flex-row items-center justify-between">
       <View className="mr-2 flex-1 flex-row items-center gap-1">
-        <HabitIcon icon={habit.icon} />
+        <HabitIcon icon={icon} />
         <Text
           numberOfLines={1}
           className="mb-1 flex-1 text-base font-bold text-black dark:text-white"
         >
-          {habit.title}
+          {title}
         </Text>
       </View>
 

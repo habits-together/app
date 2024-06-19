@@ -16,15 +16,15 @@ import Icon from "../Icon";
 export default function HabitCompletionButton({
   habitId,
 }: {
-  habitId: number;
+  habitId: string;
 }) {
   const { colorScheme } = useColorScheme();
 
   const color = useAtomValue(habitColorAtom(habitId));
-
   const numberOfCompletionsToday = useAtomValue(
     numberOfCompletionsTodayAtom(habitId),
   );
+
   const incrementNumberOfCompletionsToday = useSetAtom(
     incrementNumberOfCompletionsTodayAtom(habitId),
   );

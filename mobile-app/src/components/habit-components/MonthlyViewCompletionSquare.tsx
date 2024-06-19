@@ -4,7 +4,6 @@ import {
   targetNumberOfCompletionsPerDayAtom,
 } from "@/src/atoms/atoms";
 import colors from "@/src/constants/colors";
-import { HabitCompletion } from "@/src/lib/types";
 import { useAtomValue } from "jotai";
 import { useColorScheme } from "nativewind";
 import React from "react";
@@ -12,10 +11,10 @@ import { View } from "react-native";
 
 export default function MonthlyViewCompletionSquare({
   habitId,
-  completion,
+  numberOfCompletions,
 }: {
-  habitId: number;
-  completion: HabitCompletion;
+  habitId: string;
+  numberOfCompletions: number;
 }) {
   const { colorScheme } = useColorScheme();
 
@@ -49,7 +48,7 @@ export default function MonthlyViewCompletionSquare({
         className="absolute h-full w-full"
         style={{
           backgroundColor: colors.habitColors[color].base,
-          opacity: getHabitSquareOpacity(completion.numberOfCompletions),
+          opacity: getHabitSquareOpacity(numberOfCompletions),
         }}
       />
     </View>

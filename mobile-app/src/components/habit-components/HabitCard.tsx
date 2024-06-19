@@ -4,18 +4,17 @@ import { useAtomValue } from "jotai";
 import { useColorScheme } from "nativewind";
 import React from "react";
 import { Pressable, View } from "react-native";
-import { habitDisplayTypeAtom, habitInfoAtom } from "../../atoms/atoms";
+import { habitColorAtom, habitDisplayTypeAtom } from "../../atoms/atoms";
 import HabitCompletionButton from "./HabitCompletionButton";
 import HabitCompletionsMonthlyView from "./HabitCompletionsMonthlyView";
 import HabitCompletionsWeeklyView from "./HabitCompletionsWeeklyView";
 import { HabitFriendCompletions } from "./HabitFriendCompletions";
 import { HabitHeader } from "./HabitHeader";
 
-export function HabitCard({ habitId }: { habitId: number }) {
+export function HabitCard({ habitId }: { habitId: string }) {
   const { colorScheme } = useColorScheme();
   const displayType = useAtomValue(habitDisplayTypeAtom(habitId));
-
-  const habitInfo = useAtomValue(habitInfoAtom(habitId));
+  const color = useAtomValue(habitColorAtom(habitId));
 
   return (
     <Link
@@ -32,7 +31,7 @@ export function HabitCard({ habitId }: { habitId: number }) {
           backgroundColor:
             colorScheme === "dark"
               ? colors.stone.light
-              : colors.habitColors[habitInfo.color].light,
+              : colors.habitColors[color].light,
         }}
       >
         <HabitHeader habitId={habitId} />

@@ -7,7 +7,7 @@ import { View } from "react-native";
 import HabitParticipantCompletedBadge from "./HabitParticipantCompletedBadge";
 import ParticipantProfilePictures from "./ParticipantProfilePictures";
 
-export function HabitFriendCompletions({ habitId }: { habitId: number }) {
+export function HabitFriendCompletions({ habitId }: { habitId: string }) {
   const habitColor = useAtomValue(habitColorAtom(habitId));
   const displayType = useAtomValue(habitDisplayTypeAtom(habitId));
 

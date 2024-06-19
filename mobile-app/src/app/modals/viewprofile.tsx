@@ -1,21 +1,20 @@
+import { commonHabitIdsAtom, getUserInfoAtom } from "@/src/atoms/atoms";
 import { ScrollView, Text, View } from "@/src/components/Themed";
 import { HabitCard } from "@/src/components/habit-components/HabitCard";
-import { mockHabitData } from "@/src/lib/mockData";
 import { Link, useLocalSearchParams } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { useAtomValue } from "jotai";
+import React from "react";
 import { Pressable } from "react-native";
 import { BigProfilePicture } from "../../components/ProfilePicture";
-import { profilePicsDataPromise } from "../../lib/getRandomProfilePics";
 
 export default function Profile() {
-  const { displayName } = useLocalSearchParams<{ displayName: string }>();
+  const { theirUserId } = useLocalSearchParams<{ theirUserId: string }>();
+  if (!theirUserId) {
+    throw new Error("No theirUserId provided");
+  }
 
-  const [profilePicUrl, setProfilePicUrl] = useState<string>("undefined");
-  useEffect(() => {
-    profilePicsDataPromise(1).then((profilePic) => {
-      setProfilePicUrl(profilePic[0].imgurl);
-    });
-  }, []);
+  const { picture, displayName } = useAtomValue(getUserInfoAtom(theirUserId));
+  const commonHabitIds = useAtomValue(commonHabitIdsAtom(theirUserId));
 
   return (
     <View className="flex-1">
@@ -29,7 +28,7 @@ export default function Profile() {
         >
           {/* Profile Info */}
           <View className="flex flex-row space-x-3">
-            <BigProfilePicture picUrl={profilePicUrl} />
+            <BigProfilePicture picUrl={picture} />
             <View className="flex flex-col">
               <Text className="text-3xl font-semibold">{displayName}</Text>
               <Text>Friends for 8 months</Text>
@@ -39,18 +38,18 @@ export default function Profile() {
           {/* Habits */}
           <View className="space-y-4 pb-32 pt-4">
             <Text className="text-xl font-semibold">Habits Together</Text>
-            {mockHabitData.map((habit) => (
+            {commonHabitIds.map((habitId) => (
               <Link
                 push
                 href={{
                   pathname: "/modals/viewhabit",
-                  params: { id: habit.id },
+                  params: { id: habitId },
                 }}
                 asChild
-                key={habit.id}
+                key={habitId}
               >
                 <Pressable>
-                  <HabitCard habitId={habit.id} />
+                  <HabitCard habitId={habitId} />
                 </Pressable>
               </Link>
             ))}

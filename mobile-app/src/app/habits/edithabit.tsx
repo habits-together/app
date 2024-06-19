@@ -9,8 +9,12 @@ export default function EditHabit() {
   if (typeof habitidStr !== "string") {
     throw new Error("Invalid habit id provided in URL params");
   }
-  const habitId = parseInt(habitidStr);
 
-  const habitInfo = useAtomValue(habitInfoAtom(habitId));
-  return <CreateOrEditHabit initialHabitInfoValues={habitInfo} />;
+  const habitInfo = useAtomValue(habitInfoAtom(habitidStr));
+  return (
+    <CreateOrEditHabit
+      habitId={habitidStr}
+      initialHabitInfoValues={habitInfo}
+    />
+  );
 }

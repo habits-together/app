@@ -44,7 +44,7 @@ type dbT = {
       // collection
       participantCompletions: Record<
         string, // participantId
-        { date: number } // i.e. { date: numberOfCompletions }
+        Record<string, number> // { date: numberOfCompletions }
       >;
     }
   >;
@@ -71,6 +71,7 @@ export type habitNotificationT = {
 
 export type allUsersInfoT = dbT["users"];
 export type userT = allUsersInfoT[0];
+export type userWithIdT = userT & { id: string };
 
 export type allFriendshipsT = dbT["friendships"];
 export type friendshipT = allFriendshipsT[0];
@@ -82,8 +83,22 @@ export type habitInfoT = Omit<habitT, "participants">;
 export type habitParticipantsT = dbT["habits"][0]["participants"];
 export type habitParticipantT = habitParticipantsT[0];
 
-export type habitCompletionsT = dbT["habits"][0]["participantCompletions"];
-export type habitCompletionT = habitCompletionsT[0];
+export type allParticipantCompletionsT =
+  dbT["habits"][0]["participantCompletions"];
+export type habitCompletionsT = allParticipantCompletionsT[0];
+export type habitCompletionT = number;
+export type habitCompletionWithDateInfoT = {
+  numberOfCompletions: number;
+  dayOfTheMonth: number;
+  dayOfTheWeek: string;
+};
+export type allParticipantCompletionsForAllHabitsT = Record<
+  string,
+  allParticipantCompletionsT
+>;
+
+export type allNotificationsT = dbT["notifications"];
+export type notificationT = allNotificationsT[0];
 
 // more types
 export type friendCardDataT = {
@@ -95,3 +110,5 @@ export type commonHabitT = {
   icon: string;
   title: string;
 };
+
+export type HabitDisplayType = "weekly-view" | "monthly-view";

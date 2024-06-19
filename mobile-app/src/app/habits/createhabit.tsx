@@ -4,7 +4,7 @@ export default function Createhabit() {
   return (
     <CreateOrEditHabit
       initialHabitInfoValues={{
-        id: 0,
+        createdAt: new Date(),
         title: "",
         description: "",
         color: "red",

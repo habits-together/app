@@ -10,13 +10,14 @@ export function SmallProfilePicture({
   return (
     <Image
       className="h-[30px] w-[30px] rounded-full"
-      source={
-        isLocalImage
-          ? picUrl
-          : picUrl
-            ? { uri: picUrl }
-            : require("../../assets/images/default_user.png")
-      }
+      // source={
+      //   isLocalImage
+      //     ? picUrl
+      //     : picUrl
+      //       ? { uri: picUrl }
+      //       : require("../../assets/images/default_user.png")
+      // }
+      source={{ uri: picUrl }}
     />
   );
 }
