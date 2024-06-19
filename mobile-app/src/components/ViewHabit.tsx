@@ -21,7 +21,7 @@ export default function ViewHabitComponent() {
     throw new Error("Invalid habit id provided in URL params");
   }
   // get habit based on id
-  const habit = useAtomValue(habitInfoAtom(parseInt(id)));
+  const habit = useAtomValue(habitInfoAtom(id));
   if (!habit) {
     throw new Error(`Habit with id ${id} not found`);
   }

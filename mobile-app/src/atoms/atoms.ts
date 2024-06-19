@@ -1,16 +1,28 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-// import { atom } from "jotai";
-import { atom, createStore } from "jotai";
+import { atom } from "jotai";
 import { atomFamily, atomWithStorage, createJSONStorage } from "jotai/utils";
+import { AsyncStorage as AsyncStorageType } from "jotai/vanilla/utils/atomWithStorage";
+import colors from "../constants/colors";
 import {
+  acceptFriendRequestInDb,
+  acceptHabitInviteInDb,
   createNewHabitInDb,
+  deleteNotificationInDb,
   editHabitInDb,
-  fetchAllHabitsInfo,
+  fetchAllMyHabitsInfo,
+  fetchCommonHabits,
   fetchFriends,
   fetchHabitCompletionsForAllParticipants,
   fetchHabitCompletionsForParticipant,
+  fetchHabitInfo,
+  fetchMutualFriends,
   fetchNotifications,
+  fetchOutboundNotifications,
+  fetchUserInfo,
+  searchUsersInDb,
+  sendNotificationInDb,
 } from "../firebase/betterApi";
+import { generateMockId } from "../lib/betterMock";
 import {
   HabitDisplayType,
   allHabitsT,
@@ -21,52 +33,25 @@ import {
   habitCompletionsT,
   habitInfoT,
   habitNotificationT,
-  userWithIdT,
+  habitParticipantT,
+  notificationT,
 } from "../lib/db_types";
-import { todayString } from "../lib/todayString";
-// import { atomFamily, atomWithStorage, createJSONStorage } from "jotai/utils";
-import { AsyncStorage as AsyncStorageType } from "jotai/vanilla/utils/atomWithStorage";
-import { mockUser } from "../lib/betterMock";
-// import {
-//   acceptFriendRequestInDB,
-//   acceptHabitInviteInDB,
-//   createNewHabitInDB,
-//   deleteNotificationInDB,
-//   fetchFriends,
-//   fetchHabits,
-//   fetchNotifications,
-// getCurrentUserIdFromDB,
-// getMutualFriendsInDB,
-// searchForFriendsInDB,
-//   updateHabitCompletionsInDB,
-//   updateHabitInfoInDB,
-//   updateHabitParticipantsInDB,
-// } from "../firebase/api";
-// import { genMockHabitCompletionData } from "../lib/mockData";
-// import {
-//   AllFriendsDataType,
-//   AllHabitsDataType,
-//   Habit,
-//   HabitCompletion,
-//   HabitDisplayType,
-//   UserNotificationsDataType,
-// } from "../lib/types";
+import { todayString } from "../lib/formatDateString";
+import { getNumberOfDaysInLastWeek } from "../lib/mockData";
+import { structureCompletionData } from "../lib/structureCompletionData";
+import { currentUserAtom, currentUserIdAtom } from "./currentUserAtom";
 
 // using Jotai atoms: https://jotai.org/docs/introduction
 // we especially use the atomFamily atom: https://jotai.org/docs/utilities/family
 
-export const atomStore = createStore();
 const localStore = createJSONStorage(() => AsyncStorage);
-
-const currentUserAtom = atom<userWithIdT>(mockUser);
-export const currentUserIdAtom = atom((get) => get(currentUserAtom).id);
 
 const allHabitsAtom = atom<allHabitsT>({});
 allHabitsAtom.onMount = (set) => {
-  fetchAllHabitsInfo().then(set);
+  fetchAllMyHabitsInfo().then(set);
 };
 export const habitIdsAtom = atom((get) => Object.keys(get(allHabitsAtom)));
-const habitInfoAtom = atomFamily((habitId: string) =>
+export const habitInfoAtom = atomFamily((habitId: string) =>
   atom((get) => {
     const { participants, ...habitInfo } = get(allHabitsAtom)[habitId];
     return habitInfo;
@@ -76,10 +61,15 @@ export const habitParticipantIdsAtom = atomFamily((habitId: string) =>
   atom((get) => Object.keys(get(habitParticipantsAtom(habitId)))),
 );
 export const habitParticipantsAtom = atomFamily((habitId: string) =>
-  atom((get) => get(allHabitsAtom)[habitId].participants),
+  atom((get) => {
+    return get(allHabitsAtom)[habitId].participants;
+  }),
 );
 export const habitColorAtom = atomFamily((habitId: string) =>
-  atom((get) => get(habitInfoAtom(habitId)).color),
+  atom(
+    (get) =>
+      get(habitInfoAtom(habitId)).color as keyof typeof colors.habitColors,
+  ),
 );
 export const habitDescriptionAtom = atomFamily((habitId: string) =>
   atom((get) => get(habitInfoAtom(habitId)).description),
@@ -90,12 +80,6 @@ export const habitTitleAtom = atomFamily((habitId: string) =>
 export const habitGoalAtom = atomFamily((habitId: string) =>
   atom((get) => get(habitInfoAtom(habitId)).goal),
 );
-// export const habitGoalPeriodAtom = atomFamily((habitId: string) =>
-//   atom((get) => get(habitInfoAtom(habitId)).goal.period),
-// );
-// export const habitGoalCompletionsPerPeriodAtom = atomFamily((habitId: string) =>
-//   atom((get) => get(habitInfoAtom(habitId)).goal.completionsPerPeriod),
-// );
 export const habitIconAtom = atomFamily((habitId: string) =>
   atom((get) => get(habitInfoAtom(habitId)).icon),
 );
@@ -166,7 +150,6 @@ export const habitCompletionsForAllParticipantsAtom = atomFamily(
     return completionsAtom;
   },
 );
-
 export const habitCompletionsForParticipantAtom = atomFamily(
   ({ habitId, participantId }: { habitId: string; participantId: string }) => {
     const completionsAtom = atom<habitCompletionsT>({});
@@ -176,6 +159,23 @@ export const habitCompletionsForParticipantAtom = atomFamily(
     return completionsAtom;
   },
   (a, b) => a.habitId === b.habitId && a.participantId === b.participantId,
+);
+const myHabitCompletionsAtom = atomFamily((habitId: string) =>
+  atom((get) => {
+    const userId = get(currentUserIdAtom);
+    return get(
+      habitCompletionsForParticipantAtom({ habitId, participantId: userId }),
+    );
+  }),
+);
+export const myStructuredHabitCompletionsAtom = atomFamily((habitId: string) =>
+  atom((get) => {
+    const habitCompletions = get(myHabitCompletionsAtom(habitId));
+    return structureCompletionData({
+      completionData: habitCompletions,
+      numDays: 12 * 7 + getNumberOfDaysInLastWeek(),
+    });
+  }),
 );
 
 export const numberOfCompletionsTodayAtom = atomFamily((habitId: string) =>
@@ -188,7 +188,7 @@ export const numberOfCompletionsTodayAtom = atomFamily((habitId: string) =>
           participantId: userId,
         }),
       );
-      const completionsToday = habitCompletions[userId][todayString()] as
+      const completionsToday = habitCompletions[todayString()] as
         | number
         | undefined;
       return completionsToday ?? 0;
@@ -208,10 +208,7 @@ export const numberOfCompletionsTodayAtom = atomFamily((habitId: string) =>
         }),
         {
           ...habitCompletions,
-          [userId]: {
-            ...habitCompletions[userId],
-            [todayString()]: newValue,
-          },
+          [todayString()]: newValue,
         },
       );
     },
@@ -235,6 +232,29 @@ export const incrementNumberOfCompletionsTodayAtom = atomFamily(
     }),
 );
 
+export const participantAtom = atomFamily(
+  ({ habitId, participantId }: { habitId: string; participantId: string }) =>
+    atom<habitParticipantT>(
+      (get) => get(habitParticipantsAtom(habitId))[participantId],
+    ),
+  (a, b) => a.participantId === b.participantId,
+);
+export const participantDisplayNameAtom = atomFamily(
+  ({ habitId, participantId }: { habitId: string; participantId: string }) =>
+    atom((get) => get(participantAtom({ habitId, participantId })).displayName),
+  (a, b) => a.participantId === b.participantId,
+);
+export const participantUsernameAtom = atomFamily(
+  ({ habitId, participantId }: { habitId: string; participantId: string }) =>
+    atom((get) => get(participantAtom({ habitId, participantId })).username),
+  (a, b) => a.participantId === b.participantId,
+);
+export const participantPictureAtom = atomFamily(
+  ({ habitId, participantId }: { habitId: string; participantId: string }) =>
+    atom((get) => get(participantAtom({ habitId, participantId })).picture),
+  (a, b) => a.participantId === b.participantId,
+);
+
 // FRIENDS
 const friendsAtom = atom<allUsersInfoT>({});
 friendsAtom.onMount = (set) => {
@@ -252,6 +272,10 @@ export const friendUsernameAtom = atomFamily((friendId: string) =>
 );
 export const friendPictureAtom = atomFamily((friendId: string) =>
   atom((get) => get(friendAtom(friendId)).picture),
+);
+
+export const commonHabitIdsAtom = atomFamily((friendId: string) =>
+  atom(async () => fetchCommonHabits({ participantId: friendId })),
 );
 
 // NOTIFICATIONS
@@ -276,80 +300,159 @@ export const friendNotificationAtom = atomFamily((notificationId: string) =>
   }),
 );
 export const habitNotificationAtom = atomFamily((notificationId: string) =>
-  atom<habitNotificationT>((get) => {
-    const notiAtom = get(notificationAtom(notificationId));
-    if (!("habitId" in notiAtom)) throw new Error("Not a habit notification");
-    return notiAtom as habitNotificationT;
+  atom(async (get) => {
+    const notificationInfo = get(notificationAtom(notificationId));
+    if (!("habitId" in notificationInfo))
+      throw new Error("Not a habit notification");
+
+    const {
+      title: habitTitle,
+      icon: habitIcon,
+      color: habitColor,
+      participants: habitParticipants,
+    } = await fetchHabitInfo({
+      habitId: notificationInfo.habitId,
+    });
+    return {
+      habitTitle,
+      habitIcon,
+      habitColor: habitColor as keyof typeof colors.habitColors,
+      numberOfParticipants: Object.keys(habitParticipants).length,
+      ...(notificationInfo as habitNotificationT),
+    };
   }),
 );
 
-// export const acceptFriendRequestAtom = atomFamily((id: number) =>
-//   atom(
-//     (get) => get(notificationsAtom),
-//     (_get, set) => {
-//       acceptFriendRequestInDB(id);
-//       set(notificationsAtom, (prev) => {
-//         const { [id]: _, ...remaining } = prev;
-//         return remaining;
-//       });
-//     },
-//   ),
-// );
+export const getUserInfoAtom = atomFamily((userId: string) =>
+  atom(async (get) => fetchUserInfo({ userId })),
+);
 
-// export const acceptHabitInviteAtom = atomFamily((id: number) =>
-//   atom(
-//     (get) => get(notificationsAtom),
-//     (_get, set) => {
-//       acceptHabitInviteInDB(id);
-//       set(notificationsAtom, (prev) => {
-//         const { [id]: _, ...remaining } = prev;
-//         return remaining;
-//       });
-//     },
-//   ),
-// );
+/**
+ * Does not remove in Db !
+ */
+const removeLocalCopyOfNotification = atomFamily((notificationId: string) =>
+  atom(null, (get, set) => {
+    set(notificationsAtom, (prev) => {
+      const { [notificationId]: _, ...remaining } = prev;
+      return remaining;
+    });
+  }),
+);
 
-// export const deleteNotificationAtom = atomFamily((id: number) =>
-//   atom(
-//     (get) => get(notificationsAtom),
-//     (_get, set) => {
-//       deleteNotificationInDB(id);
-//       set(notificationsAtom, (prev) => {
-//         const { [id]: _, ...remaining } = prev;
-//         return remaining;
-//       });
-//     },
-//   ),
-// );
+export const deleteNotificationAtom = atomFamily((notificationId: string) =>
+  atom(null, async (get, set) => {
+    deleteNotificationInDb({ notifId: notificationId });
+    set(removeLocalCopyOfNotification(notificationId));
+  }),
+);
 
-// // friend search
-// export const searchQueryAtom = atom("", (_get, set, newValue: string) => {
-//   set(searchQueryAtom, newValue);
-// });
+export const acceptFriendRequestAtom = atomFamily((notificationId: string) =>
+  atom(null, async (get, set) => {
+    set(removeLocalCopyOfNotification(notificationId));
+    acceptFriendRequestInDb({ notifId: notificationId }).then(() =>
+      fetchFriends().then((friends) => set(friendsAtom, friends)),
+    );
+  }),
+);
 
-// export const searchResultsAtom = atom(async (get) => {
-//   console.log("searching for friends");
-//   return await searchForFriendsInDB(get(searchQueryAtom));
-// });
+export const acceptHabitInviteAtom = atomFamily((notificationId: string) =>
+  atom(null, async (get, set) => {
+    set(removeLocalCopyOfNotification(notificationId));
+    acceptHabitInviteInDb({ notifId: notificationId }).then(() =>
+      fetchAllMyHabitsInfo().then((allHabitsInfo) =>
+        set(allHabitsAtom, allHabitsInfo),
+      ),
+    );
+  }),
+);
 
-// export const getMutualFriendsAtom = atomFamily((friendId: number) =>
-//   atom(async (get) => {
-//     try {
-//       const uid = get(currentUserIdAttom);
-//       const mutualList = await getMutualFriendsInDB(uid, friendId);
-//       return mutualList;
-//     } catch (error) {
-//       console.error("Error fetching mutual friends:", error);
-//       return [];
-//     }
-//   }),
-// );
+export const mutualFriendsAtom = atomFamily((friendId: string) =>
+  atom(async (get) => await fetchMutualFriends({ friendId })),
+);
 
-// export const currentUserIdAttom = atom(10);
-// currentUserIdAttom.onMount = (set) => {
-//   getCurrentUserIdFromDB().then(set);
-// };
-// // do an onmount to get this
+export const numberOfMutualFriendsAtom = atomFamily((friendId: string) =>
+  atom(
+    async (get) => Object.keys(await get(mutualFriendsAtom(friendId))).length,
+  ),
+);
+
+// friend search
+export const searchQueryAtom = atom("");
+searchQueryAtom.onMount = (set) => {
+  return () => set("");
+};
+
+export const searchResultUsersAtom = atom(async (get) => {
+  return await searchUsersInDb({ searchText: get(searchQueryAtom) });
+});
+export const searchResultUserIdsAtom = atom((get) =>
+  Object.keys(get(searchResultUsersAtom)),
+);
+
+export const outboundNotificationsAtom = atom<allNotificationsT>({});
+outboundNotificationsAtom.onMount = (set) => {
+  fetchOutboundNotifications().then(set);
+};
+
+export const inviteUserToHabitAtom = atomFamily(
+  ({ habitId, theirUserId }: { habitId: string; theirUserId: string }) =>
+    atom(
+      async (get) => {
+        const outboundNotifications = get(outboundNotificationsAtom);
+        const inviteExists = Object.values(outboundNotifications).some(
+          (notif) =>
+            notif.type === "habitInvite" &&
+            notif.habitId === habitId &&
+            notif.receiverId === theirUserId,
+        );
+        return inviteExists;
+      },
+      async (get, set) => {
+        const currentUserId = get(currentUserIdAtom);
+        const notificationInfo: notificationT = {
+          type: "habitInvite",
+          habitId,
+          senderId: currentUserId,
+          receiverId: theirUserId,
+          sentAt: new Date(),
+        };
+        sendNotificationInDb({ info: notificationInfo });
+        set(outboundNotificationsAtom, (prev) => ({
+          ...prev,
+          [generateMockId()]: notificationInfo,
+        }));
+      },
+    ),
+  (a, b) => a.theirUserId === b.theirUserId && a.habitId === b.habitId,
+);
+
+export const sendFriendRequestAtom = atomFamily((theirUserId: string) =>
+  atom(
+    async (get) => {
+      const outboundNotifications = get(outboundNotificationsAtom);
+      const inviteExists = Object.values(outboundNotifications).some(
+        (notif) =>
+          notif.type === "friendRequest" && notif.receiverId === theirUserId,
+      );
+      return inviteExists;
+    },
+
+    async (get, set) => {
+      const currentUserId = get(currentUserIdAtom);
+      const notificationInfo: notificationT = {
+        type: "friendRequest",
+        senderId: currentUserId,
+        receiverId: theirUserId,
+        sentAt: new Date(),
+      };
+      sendNotificationInDb({ info: notificationInfo });
+      set(outboundNotificationsAtom, (prev) => ({
+        ...prev,
+        [generateMockId()]: notificationInfo,
+      }));
+    },
+  ),
+);
 
 // whether we should display the habit in weekly or monthly view
 export const habitDisplayTypeAtom = atomFamily((id: string) =>

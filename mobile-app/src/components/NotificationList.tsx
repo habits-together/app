@@ -12,7 +12,7 @@ export default function NotificationList() {
     return (
       <View className="">
         <Text className="mt-8 text-center text-base font-medium text-stone-400">
-          You’re all caught up 🎉
+          You're all caught up 🎉
         </Text>
       </View>
     );

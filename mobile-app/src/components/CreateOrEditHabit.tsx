@@ -1,11 +1,10 @@
-import { createNewHabitAtom, editHabitInfoAtom } from "@/src/atoms/atoms";
+import { createNewHabitAtom, editHabitAtom } from "@/src/atoms/atoms";
 import Divider from "@/src/components/Divider";
 import RoundedButton from "@/src/components/RoundedButton";
 import { Text, View } from "@/src/components/Themed";
 import DefaultColors from "@/src/constants/DefaultColors";
 import colors from "@/src/constants/colors";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
-import { Habit, HabitGoalPeriod } from "@/src/lib/types";
 import {
   IconArrowForwardUp,
   IconCheck,
@@ -13,7 +12,7 @@ import {
   IconX,
 } from "@tabler/icons-react-native";
 import { router } from "expo-router";
-import { atom, useAtom } from "jotai";
+import { atom, useAtom, useSetAtom } from "jotai";
 import { useColorScheme } from "nativewind";
 import { useEffect, useState } from "react";
 import { TextInput, TouchableOpacity } from "react-native";
@@ -25,14 +24,17 @@ import {
 } from "react-native-popup-menu";
 import { IconButton } from "../app/habits/icon-button";
 import { iconStrNameToTablerIcon } from "../app/habits/icons";
+import { habitInfoT } from "../lib/db_types";
 import Icon from "./Icon";
 
 export const tempIconAtom = atom<string>("default");
 
 export default function CreateOrEditHabit({
+  habitId = undefined,
   initialHabitInfoValues,
 }: {
-  initialHabitInfoValues: Habit;
+  habitId?: string;
+  initialHabitInfoValues: habitInfoT;
 }) {
   const { colorScheme } = useColorScheme();
   const borderColor = DefaultColors[colorScheme].tint;
@@ -56,10 +58,8 @@ export default function CreateOrEditHabit({
   const needsName = habitName === "";
   const canCreateHabit = !needsTag && !needsName;
 
-  const [, setHabitInfo] = useAtom(
-    editHabitInfoAtom(initialHabitInfoValues.id),
-  );
-  const [, creatNewHabitInfo] = useAtom(createNewHabitAtom);
+  const editHabit = habitId ? useSetAtom(editHabitAtom(habitId)) : () => {};
+  const createNewHabit = useSetAtom(createNewHabitAtom);
 
   // generate plural texts
   const pluralize = (
@@ -73,6 +73,24 @@ export default function CreateOrEditHabit({
       return `${count} ${pluralText}`;
     }
   };
+
+  function handleCreateOrEditHabit() {
+    const habitInfo: habitInfoT = {
+      createdAt: new Date(),
+      title: habitName,
+      description: description,
+      color: color as keyof typeof colors.habitColors,
+      icon: icon,
+      goal: {
+        period: goalType,
+        completionsPerPeriod: completion,
+      },
+    };
+    {
+      habitId ? editHabit(habitInfo) : createNewHabit(habitInfo);
+    }
+    resetNavigationStack("/");
+  }
 
   return (
     <View className="flex flex-1 flex-col gap-y-5 px-5 pt-11">
@@ -88,32 +106,14 @@ export default function CreateOrEditHabit({
           />
         }
         <Text className="text-base font-semibold">
-          {initialHabitInfoValues.id ? "Edit" : "New"} habit
+          {habitId ? "Edit" : "New"} habit
         </Text>
         {
           <RoundedButton
-            text={initialHabitInfoValues.id ? "Done" : "Next"}
-            icon={initialHabitInfoValues.id ? IconCheck : IconArrowForwardUp}
+            text={habitId ? "Done" : "Next"}
+            icon={habitId ? IconCheck : IconArrowForwardUp}
             isDisabled={!canCreateHabit}
-            onPress={() => {
-              const habitInfo: Habit = {
-                id: initialHabitInfoValues.id,
-                title: habitName,
-                description: description,
-                color: color as keyof typeof colors.habitColors,
-                icon: icon,
-                goal: {
-                  period: goalType as HabitGoalPeriod,
-                  completionsPerPeriod: completion,
-                },
-              };
-              {
-                initialHabitInfoValues.id
-                  ? setHabitInfo(habitInfo)
-                  : creatNewHabitInfo(habitInfo);
-              }
-              resetNavigationStack("/");
-            }}
+            onPress={handleCreateOrEditHabit}
           />
         }
       </View>

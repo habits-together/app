@@ -1,16 +1,14 @@
 import { useAtomValue } from "jotai";
 import { notificationTypeAtom } from "../atoms/atoms";
-import {
-  FriendRequest,
-  HabitInvite,
-  HabitReminder,
-} from "./NotificationComponents";
 import { Text } from "./Themed";
+import { FriendRequest } from "./notification-components/FriendRequest";
+import { HabitInvite } from "./notification-components/HabitInvite";
+import { Nudge } from "./notification-components/Nudge";
 
 export default function NotificationComponent({
   notificationId,
 }: {
-  notificationId: number;
+  notificationId: string;
 }) {
   const notificationType = useAtomValue(notificationTypeAtom(notificationId));
 
@@ -19,8 +17,8 @@ export default function NotificationComponent({
       return <FriendRequest notifId={notificationId} />;
     case "habitInvite":
       return <HabitInvite notifId={notificationId} />;
-    case "habitReminder":
-      return <HabitReminder notifId={notificationId} />;
+    case "nudge":
+      return <Nudge notifId={notificationId} />;
     default:
       return <Text>Unknown notification type</Text>;
   }

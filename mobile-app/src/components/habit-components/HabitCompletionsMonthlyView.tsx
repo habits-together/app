@@ -1,24 +1,28 @@
 import {
-  habitCompletionsAtom,
-  habitInfoAtom,
+  habitGoalAtom,
+  myStructuredHabitCompletionsAtom,
   numberOfCompletionsTodayAtom,
   targetNumberOfCompletionsPerWeekAtom,
 } from "@/src/atoms/atoms";
+import { habitCompletionWithDateInfoT } from "@/src/lib/db_types";
 import { getNumberOfDaysInLastWeek } from "@/src/lib/mockData";
-import { HabitCompletion } from "@/src/lib/types";
 import { useAtomValue } from "jotai";
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import MonthlyViewCompletionSquare from "./MonthlyViewCompletionSquare";
 import WeekGoalMetCheckmark from "./WeekGoalMetCheckmark";
 
+// const numDays = 4;
+
 export default function HabitCompletionsMonthlyView({
   habitId,
 }: {
-  habitId: number;
+  habitId: string;
 }) {
-  const habit = useAtomValue(habitInfoAtom(habitId));
-  const completionData = useAtomValue(habitCompletionsAtom(habitId));
+  const goal = useAtomValue(habitGoalAtom(habitId));
+  const completionData = useAtomValue(
+    myStructuredHabitCompletionsAtom(habitId),
+  );
   const numberOfCompletionsToday = useAtomValue(
     numberOfCompletionsTodayAtom(habitId),
   );
@@ -36,8 +40,9 @@ export default function HabitCompletionsMonthlyView({
 
   // separate each week of completions into its own array
   const [completionsByWeek, setCompletionsByWeek] = useState<
-    HabitCompletion[][]
+    habitCompletionWithDateInfoT[][]
   >([]);
+
   useEffect(() => {
     if (completionData.length === 0) return;
     setCompletionsByWeek(
@@ -77,7 +82,7 @@ export default function HabitCompletionsMonthlyView({
 
   return (
     <View
-      className={`flex flex-row ${habit.goal.period === "weekly" && "-mt-[13px]"}`}
+      className={`flex flex-row ${goal.period === "weekly" && "-mt-[13px]"}`}
     >
       {/* all columns except the last one */}
       {completionsByWeek.length > 0 &&
@@ -85,7 +90,7 @@ export default function HabitCompletionsMonthlyView({
           .slice(0, completionsByWeek.length - 1)
           .map((completions, index) => (
             <View key={index} className="mr-[3px] flex flex-col">
-              {habit.goal.period === "weekly" && (
+              {goal.period === "weekly" && (
                 <WeekGoalMetCheckmark
                   habitId={habitId}
                   weekGoalMet={weekGoalsMet[index]}
@@ -95,7 +100,7 @@ export default function HabitCompletionsMonthlyView({
                 <MonthlyViewCompletionSquare
                   key={index * 7 + dayIndex}
                   habitId={habitId}
-                  completion={completion}
+                  numberOfCompletions={completion.numberOfCompletions}
                 />
               ))}
             </View>
@@ -103,7 +108,7 @@ export default function HabitCompletionsMonthlyView({
       {/* last column needs to be separate */}
       {/* because we need to pass numberOfCompletionsToday to today's square */}
       <View className="flex flex-col">
-        {habit.goal.period === "weekly" && (
+        {goal.period === "weekly" && (
           <WeekGoalMetCheckmark
             habitId={habitId}
             weekGoalMet={weekGoalsMet[completionsByWeek.length - 1]}
@@ -116,17 +121,12 @@ export default function HabitCompletionsMonthlyView({
               <MonthlyViewCompletionSquare
                 key={7 * 7 + dayIndex}
                 habitId={habitId}
-                completion={completion}
+                numberOfCompletions={completion.numberOfCompletions}
               />
             ))}
         <MonthlyViewCompletionSquare
           habitId={habitId}
-          completion={{
-            numberOfCompletions: numberOfCompletionsToday,
-            dayOfTheWeek: "Today",
-            dayOfTheMonth: new Date().getDay().toString(),
-            date: new Date().toISOString().split("T")[0],
-          }}
+          numberOfCompletions={numberOfCompletionsToday}
         />
       </View>
     </View>
