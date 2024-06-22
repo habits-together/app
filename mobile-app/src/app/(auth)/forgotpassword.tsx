@@ -22,7 +22,7 @@ export default function forgotpassword() {
   };
   const redirToLoginPage = () => {
     resetNavigationStack("/(auth)/emaillogin");
-  }
+  };
   return (
     <View className="flex-1 items-center px-3 pt-5">
       {checkEmail ? (
@@ -31,7 +31,8 @@ export default function forgotpassword() {
             Check your email
           </Text>
           <Text className="mb-7 ml-2 self-start text-stone-400">
-            We’ve sent a reset link to <Text className="font-bold">{email}</Text>
+            We’ve sent a reset link to{" "}
+            <Text className="font-bold">{email}</Text>
           </Text>
           <AuthButton text="Go back to Login page" onPress={redirToLoginPage} />
         </>
