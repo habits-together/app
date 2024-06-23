@@ -5,6 +5,7 @@ import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { Link } from "expo-router";
 import { getAuth, signInWithEmailAndPassword , AuthErrorCodes} from "firebase/auth";
 import { useState } from "react";
+import { Alert } from "react-native";
 
 export default function emaillogin() {
   const [data, setData] = useState({ email: "", password: "" });
@@ -26,16 +27,16 @@ export default function emaillogin() {
         console.log(errorCode, errorMessage);
         switch (errorCode) {
           case AuthErrorCodes.INVALID_EMAIL:
-            alert("User does not exist");
+            Alert.alert("User does not exist");
             break;
           case AuthErrorCodes.INVALID_PASSWORD:
-            alert("Wrong password please try again");
+            Alert.alert("Wrong password please try again");
             break;
           case AuthErrorCodes.INVALID_IDP_RESPONSE:
-            alert("Wrong email or password please try again"); // This one is usually triggered instead of the invalid password one for somereson
+            Alert.alert("Wrong email or password please try again"); // This one is usually triggered instead of the invalid password one for somereson
             break;
           default:
-            alert(`An error occurred. Please try again. ${errorMessage} "${errorCode}"`);
+            Alert.alert(`An error occurred. Please try again. ${errorMessage} "${errorCode}"`);
             break;
         }
       });

@@ -8,6 +8,7 @@ import { Link } from "expo-router";
 import { createUserWithEmailAndPassword, AuthErrorCodes } from "firebase/auth";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
+import { Alert } from "react-native";
 
 export default function emailsignup() {
   const [data, setData] = useState({
@@ -36,16 +37,16 @@ export default function emailsignup() {
         console.log(errorCode, errorMessage);
         switch (errorCode) {
           case AuthErrorCodes.EMAIL_EXISTS:
-            alert("Email already in use");
+            Alert.alert("Email already in use");
             return;
           case AuthErrorCodes.INVALID_EMAIL:
-            alert("Invalid email");
+            Alert.alert("Invalid email");
             return;
           case AuthErrorCodes.WEAK_PASSWORD:
-            alert("Weak password");
+            Alert.alert("Weak password");
             return;
           default:
-            alert(`An error occurred. Please try again. ${errorMessage} "${errorCode}"`);
+            Alert.alert(`An error occurred. Please try again. ${errorMessage} "${errorCode}"`);
             return;
         }
       },
