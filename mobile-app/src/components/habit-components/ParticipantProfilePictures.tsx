@@ -17,7 +17,7 @@ export default function ParticipantProfilePictures({
   habitId: string;
 }) {
   const { colorScheme } = useColorScheme();
-
+  
   const displayType = useAtomValue(habitDisplayTypeAtom(habitId));
 
   // it would be good to figure out how to do this responsively based on screen width

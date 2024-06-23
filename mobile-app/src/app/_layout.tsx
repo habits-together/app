@@ -3,10 +3,12 @@ import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
+import { Provider } from "jotai";
 import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
 import { MenuProvider } from "react-native-popup-menu";
 import "react-native-reanimated";
+import { atomStore } from "../atoms/currentUserAtom";
 import {
   emailLoginOptions,
   emailSignUpOptions,
@@ -55,45 +57,47 @@ function RootLayoutNav() {
   const { colorScheme } = useColorScheme();
 
   return (
-    <MenuProvider>
-      <ThemeProvider value={DefaultTheme}>
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            animation: "ios",
-          }}
-        >
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="(auth)/signin" />
-          <Stack.Screen
-            name="(auth)/emailsignup"
-            options={emailSignUpOptions(colorScheme)}
-          />
-          <Stack.Screen
-            name="(auth)/emaillogin"
-            options={emailLoginOptions(colorScheme)}
-          />
-          <Stack.Screen
-            name="(auth)/forgotpassword"
-            options={forgotPasswordOptions(colorScheme)}
-          />
-          <Stack.Screen
-            name="(auth)/createprofile"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="viewhabit"
-            options={viewHabitOptions(colorScheme)}
-          />
-          <Stack.Screen
-            name="modals"
-            options={{
-              presentation: "modal",
-              animation: "slide_from_bottom",
+    <Provider store={atomStore}>
+      <MenuProvider>
+        <ThemeProvider value={DefaultTheme}>
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              animation: "ios",
             }}
-          />
-        </Stack>
-      </ThemeProvider>
-    </MenuProvider>
+          >
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="(auth)/signin" />
+            <Stack.Screen
+              name="(auth)/emailsignup"
+              options={emailSignUpOptions(colorScheme)}
+            />
+            <Stack.Screen
+              name="(auth)/emaillogin"
+              options={emailLoginOptions(colorScheme)}
+            />
+            <Stack.Screen
+              name="(auth)/forgotpassword"
+              options={forgotPasswordOptions(colorScheme)}
+            />
+            <Stack.Screen
+              name="(auth)/createprofile"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="viewhabit"
+              options={viewHabitOptions(colorScheme)}
+            />
+            <Stack.Screen
+              name="modals"
+              options={{
+                presentation: "modal",
+                animation: "slide_from_bottom",
+              }}
+            />
+          </Stack>
+        </ThemeProvider>
+      </MenuProvider>
+    </Provider>
   );
 }

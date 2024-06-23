@@ -1,5 +1,10 @@
-import { atomStore, currentUserIdAtom } from "../atoms/currentUserAtom";
 import {
+  atomStore,
+  currentUserAtom,
+  currentUserIdAtom,
+} from "../atoms/currentUserAtom";
+import {
+  generateMockId,
   mockFriendships,
   mockHabitCompletions,
   mockHabits,
@@ -54,10 +59,23 @@ export async function createNewHabitInDb({
 }: {
   habitInfo: habitInfoT;
 }): Promise<string> {
-  const userId = atomStore.get(currentUserIdAtom);
-  const habitId = "udiwqniudwq"; // replace with call to firebase
+  const user = atomStore.get(currentUserAtom);
+
+  const habitId = generateMockId(); // replace with call to firebase
   mockHabitCompletions[habitId] = {
-    [userId]: { [todayString()]: 0 },
+    [user.id]: { [todayString()]: 0 },
+  };
+  mockHabits[habitId] = {
+    ...habitInfo,
+    participants: {
+      [user.id]: {
+        displayName: user.displayName,
+        username: user.username,
+        picture: user.picture,
+        mostRecentCompletionDate: new Date(),
+        isOwner: true,
+      },
+    },
   };
   return habitId;
 }
