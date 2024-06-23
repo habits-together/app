@@ -3,7 +3,11 @@ import AuthInputField from "@/src/components/AuthInputField";
 import { Text, View } from "@/src/components/Themed";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { Link } from "expo-router";
-import { getAuth, signInWithEmailAndPassword , AuthErrorCodes} from "firebase/auth";
+import {
+  AuthErrorCodes,
+  getAuth,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { useState } from "react";
 
 export default function emaillogin() {
@@ -35,7 +39,9 @@ export default function emaillogin() {
             alert("Wrong email or password please try again"); // This one is usually triggered instead of the invalid password one for somereson
             break;
           default:
-            alert(`An error occurred. Please try again. ${errorMessage} "${errorCode}"`);
+            alert(
+              `An error occurred. Please try again. ${errorMessage} "${errorCode}"`,
+            );
             break;
         }
       });

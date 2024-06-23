@@ -2,10 +2,9 @@ import AuthButton from "@/src/components/AuthButton";
 import AuthInputField from "@/src/components/AuthInputField";
 import { Text, View } from "@/src/components/Themed";
 import { auth, firestore } from "@/src/firebase/config";
-import { allUsersInfoT } from "@/src/lib/db_types";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { Link } from "expo-router";
-import { createUserWithEmailAndPassword, AuthErrorCodes } from "firebase/auth";
+import { AuthErrorCodes, createUserWithEmailAndPassword } from "firebase/auth";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 
@@ -45,7 +44,9 @@ export default function emailsignup() {
             alert("Weak password");
             return;
           default:
-            alert(`An error occurred. Please try again. ${errorMessage} "${errorCode}"`);
+            alert(
+              `An error occurred. Please try again. ${errorMessage} "${errorCode}"`,
+            );
             return;
         }
       },
