@@ -2,9 +2,10 @@ import AuthButton from "@/src/components/AuthButton";
 import AuthInputField from "@/src/components/AuthInputField";
 import { Text, View } from "@/src/components/Themed";
 import { auth, firestore } from "@/src/firebase/config";
+import { allUsersInfoT } from "@/src/lib/db_types";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { Link } from "expo-router";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, AuthErrorCodes } from "firebase/auth";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 
@@ -31,13 +32,13 @@ export default function emailsignup() {
       },
       (err) => {
         switch (err.code) {
-          case "auth/email-already-in-use":
+          case AuthErrorCodes.EMAIL_EXISTS:
             alert("Email already in use");
             return;
-          case "auth/invalid-email":
+          case AuthErrorCodes.INVALID_EMAIL:
             alert("Invalid email");
             return;
-          case "auth/weak-password":
+          case AuthErrorCodes.WEAK_PASSWORD:
             alert("Weak password");
             return;
           default:

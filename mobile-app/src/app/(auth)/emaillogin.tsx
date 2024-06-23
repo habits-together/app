@@ -17,10 +17,21 @@ export default function emaillogin() {
   const Login = () => {
     signInWithEmailAndPassword(getAuth(), data.email, data.password)
       .then((userCredential) => {
+        console.log(userCredential)
         resetNavigationStack("/");
       })
-      .catch((err) => {
-        console.log;
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+        // switch (errror.code) {
+        // case "auth/user-not-found":
+        //   alert("User not found");
+        //   break;
+        // case "auth/wrong-password":
+        //   alert("Wrong password");
+        //   break;
+        
       });
   };
   return (
