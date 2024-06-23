@@ -8,7 +8,7 @@ import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
 import { MenuProvider } from "react-native-popup-menu";
 import "react-native-reanimated";
-import { atomStore } from "../atoms/currentUserAtom";
+import { atomStore } from "../atoms/store";
 import {
   emailLoginOptions,
   emailSignUpOptions,
