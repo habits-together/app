@@ -22,6 +22,15 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+export async function getCurrentNumberOfSignups() {
+  try {
+    const numSignups = (await getDocs(collection(db, "website-signups"))).size;
+    return numSignups;
+  } catch {
+    return null;
+  }
+}
+
 export async function emailSignupInDB(email: string) {
   try {
     const docSnap = await getDoc(doc(db, "website-signups", email));
@@ -48,6 +57,6 @@ export async function emailSignupInDB(email: string) {
     }
   } catch {
     // error
-    return { status: "error", signup_number: 0 };
+    return { status: "error", signup_number: null };
   }
 }

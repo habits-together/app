@@ -1,28 +1,41 @@
 "use client";
 
-import { emailSignupInDB } from "@/lib/api";
-import { useState } from "react";
+import { emailSignupInDB, getCurrentNumberOfSignups } from "@/lib/api";
+import { getOrdinalSuffix } from "@/lib/getOrdinalSuffix";
+import { useEffect, useState } from "react";
 import LoadingSpinner from "./loadingSpinner";
 
 export default function EmailSignupButton() {
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "loading" | "success" | "error" | "already_signed_up"
   >("idle");
-  const [signupNumber, setSignupNumber] = useState<number | null>(null);
+  const [numSignups, setNumSignups] = useState<number | null>(null);
+  const [hasSignedUp, setHasSignedUp] = useState(false);
+
+  useEffect(() => {
+    getCurrentNumberOfSignups().then(setNumSignups);
+  }, []);
+
+  useEffect(() => {
+    if (submitStatus === "success" || submitStatus === "already_signed_up") {
+      setHasSignedUp(true);
+    } else {
+      setHasSignedUp(false);
+    }
+  }, [submitStatus]);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
     const email = formData.get("email") as string;
-    console.log(email);
     setSubmitStatus("loading");
     emailSignupInDB(email).then((result) => {
       if (result.status === "already_signed_up") {
         setSubmitStatus("already_signed_up");
-        setSignupNumber(result.signup_number);
+        setNumSignups(result.signup_number);
       } else if (result.status === "success") {
         setSubmitStatus("success");
-        setSignupNumber(result.signup_number);
+        setNumSignups(result.signup_number);
       } else {
         setSubmitStatus("error");
       }
@@ -80,21 +93,25 @@ export default function EmailSignupButton() {
         </div>
       </div>
       <div className="mx-auto w-max max-w-full text-center text-xs font-normal text-stone-500 md:text-base dark:text-stone-400">
-        {signupNumber === null && (
-          <>
-            Sign up and we&#039;ll let you know when the app is ready!
+        {!hasSignedUp && (
+          <p
+            className={`${numSignups ? "opacity-100" : "translate-y-1 opacity-0"} transition`}
+          >
+            Join {numSignups?.toLocaleString()} others who have signed up and
+            we&apos;ll keep you updated!
             <br />
             We might even give you early access & a special badge &#128064;
-          </>
+          </p>
         )}
-        {signupNumber !== null && (
-          <>
-            You {submitStatus === "already_signed_up" ? "were" : "are"} sign up
-            number {signupNumber}! 🎉
+        {hasSignedUp && numSignups !== null && (
+          <p>
+            You {submitStatus === "already_signed_up" ? "were" : "are"} the{" "}
+            {numSignups}
+            {getOrdinalSuffix(numSignups)} to sign up! 🎉
             {/* add extra line so that layout doesn't shift */}
             <br />
             &nbsp;
-          </>
+          </p>
         )}
       </div>
     </form>
