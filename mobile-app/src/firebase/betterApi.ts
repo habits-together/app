@@ -1,5 +1,5 @@
+import { atomStore } from "../atoms/store";
 import {
-  atomStore,
   currentUserAtom,
   currentUserIdAtom,
 } from "../atoms/currentUserAtom";
