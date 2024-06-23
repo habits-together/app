@@ -31,7 +31,9 @@ export default function forgotpassword() {
             Alert.alert("User not found");
             break;
           default:
-            Alert.alert(`An error occurred. Please try again. ${errorMessage} "${errorCode}"`);
+            Alert.alert(
+              `An error occurred. Please try again. ${errorMessage} "${errorCode}"`,
+            );
             break;
         }
       } else {

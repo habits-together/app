@@ -5,7 +5,7 @@ import { auth, firestore } from "@/src/firebase/config";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { Link } from "expo-router";
 import { FirebaseError } from "firebase/app";
-import { createUserWithEmailAndPassword, AuthErrorCodes } from "firebase/auth";
+import { AuthErrorCodes, createUserWithEmailAndPassword } from "firebase/auth";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 import { Alert } from "react-native";
@@ -49,7 +49,9 @@ export default function emailsignup() {
             Alert.alert("Weak password");
             return;
           default:
-            Alert.alert(`An error occurred. Please try again. ${errorMessage} "${errorCode}"`);
+            Alert.alert(
+              `An error occurred. Please try again. ${errorMessage} "${errorCode}"`,
+            );
             return;
         }
       },

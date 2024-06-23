@@ -4,7 +4,11 @@ import { Text, View } from "@/src/components/Themed";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { Link } from "expo-router";
 import { FirebaseError } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword , AuthErrorCodes} from "firebase/auth";
+import {
+  AuthErrorCodes,
+  getAuth,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { useState } from "react";
 import { Alert } from "react-native";
 
@@ -40,7 +44,9 @@ export default function emaillogin() {
             Alert.alert("Wrong email or password please try again"); // This one is usually triggered instead of the invalid password one for somereson
             break;
           default:
-            Alert.alert(`An error occurred. Please try again. ${errorMessage} "${errorCode}"`);
+            Alert.alert(
+              `An error occurred. Please try again. ${errorMessage} "${errorCode}"`,
+            );
             break;
         }
       });
