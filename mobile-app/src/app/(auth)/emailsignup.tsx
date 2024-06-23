@@ -5,6 +5,7 @@ import { auth, firestore } from "@/src/firebase/config";
 import { allUsersInfoT } from "@/src/lib/db_types";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { Link } from "expo-router";
+import { FirebaseError } from "firebase/app";
 import { createUserWithEmailAndPassword, AuthErrorCodes } from "firebase/auth";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
@@ -31,7 +32,7 @@ export default function emailsignup() {
         handleDatabaseSignUp();
         resetNavigationStack("/");
       },
-      (error) => {
+      (error: FirebaseError) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);

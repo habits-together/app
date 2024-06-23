@@ -3,6 +3,7 @@ import AuthInputField from "@/src/components/AuthInputField";
 import { Text, View } from "@/src/components/Themed";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { Link } from "expo-router";
+import { FirebaseError } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword , AuthErrorCodes} from "firebase/auth";
 import { useState } from "react";
 import { Alert } from "react-native";
@@ -21,7 +22,7 @@ export default function emaillogin() {
         console.log(userCredential);
         resetNavigationStack("/");
       })
-      .catch((error) => {
+      .catch((error: FirebaseError) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
