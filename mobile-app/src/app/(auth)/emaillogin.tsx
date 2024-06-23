@@ -31,7 +31,7 @@ export default function emaillogin() {
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
         switch (errorCode) {
-          case "auth/missing-email": // WHY TF IS THIS NOT IN THE ENUM I HATE ERROR HANDLEING IN JS
+          case "auth/missing-email":
             Alert.alert("Please enter an email");
             break;
           case AuthErrorCodes.INVALID_EMAIL:
@@ -41,7 +41,7 @@ export default function emaillogin() {
             Alert.alert("Wrong password please try again");
             break;
           case AuthErrorCodes.INVALID_IDP_RESPONSE:
-            Alert.alert("Wrong email or password please try again"); // This one is usually triggered instead of the invalid password one for somereson
+            Alert.alert("Wrong email or password please try again");
             break;
           default:
             Alert.alert(
