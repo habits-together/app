@@ -1,8 +1,5 @@
+import { currentUserAtom, currentUserIdAtom } from "../atoms/currentUserAtom";
 import { atomStore } from "../atoms/store";
-import {
-  currentUserAtom,
-  currentUserIdAtom,
-} from "../atoms/currentUserAtom";
 import {
   generateMockId,
   mockFriendships,
