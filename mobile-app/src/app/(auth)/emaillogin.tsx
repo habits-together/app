@@ -27,6 +27,9 @@ export default function emaillogin() {
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
         switch (errorCode) {
+          case "auth/missing-email": // WHY TF IS THIS NOT IN THE ENUM I HATE ERROR HANDLEING IN JS
+            Alert.alert("Please enter an email");
+            break;
           case AuthErrorCodes.INVALID_EMAIL:
             Alert.alert("User does not exist");
             break;
