@@ -3,8 +3,14 @@ import AuthInputField from "@/src/components/AuthInputField";
 import { Text, View } from "@/src/components/Themed";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { Link } from "expo-router";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { FirebaseError } from "firebase/app";
+import {
+  AuthErrorCodes,
+  getAuth,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { useState } from "react";
+import { Alert } from "react-native";
 
 export default function emaillogin() {
   const [data, setData] = useState({ email: "", password: "" });
@@ -17,10 +23,32 @@ export default function emaillogin() {
   const Login = () => {
     signInWithEmailAndPassword(getAuth(), data.email, data.password)
       .then((userCredential) => {
+        console.log(userCredential);
         resetNavigationStack("/");
       })
-      .catch((err) => {
-        console.log;
+      .catch((error: FirebaseError) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+        switch (errorCode) {
+          case "auth/missing-email":
+            Alert.alert("Please enter an email");
+            break;
+          case AuthErrorCodes.INVALID_EMAIL:
+            Alert.alert("User does not exist");
+            break;
+          case AuthErrorCodes.INVALID_PASSWORD:
+            Alert.alert("Wrong password please try again");
+            break;
+          case AuthErrorCodes.INVALID_IDP_RESPONSE:
+            Alert.alert("Wrong email or password please try again");
+            break;
+          default:
+            Alert.alert(
+              `An error occurred. Please try again. ${errorMessage} "${errorCode}"`,
+            );
+            break;
+        }
       });
   };
   return (

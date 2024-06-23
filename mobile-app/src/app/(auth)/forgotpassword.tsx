@@ -2,9 +2,11 @@ import AuthButton from "@/src/components/AuthButton";
 import AuthInputField from "@/src/components/AuthInputField";
 import { Text, View } from "@/src/components/Themed";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
-import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import { FirebaseError } from "firebase/app";
+import { AuthErrorCodes, getAuth, sendPasswordResetEmail } from "firebase/auth";
 
 import { useState } from "react";
+import { Alert } from "react-native";
 
 export default function forgotpassword() {
   const [email, setEmail] = useState("");
@@ -17,7 +19,26 @@ export default function forgotpassword() {
       await sendPasswordResetEmail(getAuth(), email);
       setCheckEmail(true);
     } catch (error) {
-      console.log(error);
+      if (error instanceof FirebaseError) {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+        switch (errorCode) {
+          case "auth/missing-email":
+            Alert.alert("Please enter an email");
+            break;
+          case AuthErrorCodes.INVALID_EMAIL:
+            Alert.alert("User not found");
+            break;
+          default:
+            Alert.alert(
+              `An error occurred. Please try again. ${errorMessage} "${errorCode}"`,
+            );
+            break;
+        }
+      } else {
+        console.log(error);
+      }
     }
   };
   const redirToLoginPage = () => {

@@ -4,9 +4,11 @@ import { Text, View } from "@/src/components/Themed";
 import { auth, firestore } from "@/src/firebase/config";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { Link } from "expo-router";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { FirebaseError } from "firebase/app";
+import { AuthErrorCodes, createUserWithEmailAndPassword } from "firebase/auth";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
+import { Alert } from "react-native";
 
 export default function emailsignup() {
   const [data, setData] = useState({
@@ -29,19 +31,27 @@ export default function emailsignup() {
         handleDatabaseSignUp();
         resetNavigationStack("/");
       },
-      (err) => {
-        switch (err.code) {
-          case "auth/email-already-in-use":
-            alert("Email already in use");
+      (error: FirebaseError) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+        switch (errorCode) {
+          case "auth/missing-email":
+            Alert.alert("Please enter an email");
+            break;
+          case AuthErrorCodes.EMAIL_EXISTS:
+            Alert.alert("Email already in use");
             return;
-          case "auth/invalid-email":
-            alert("Invalid email");
+          case AuthErrorCodes.INVALID_EMAIL:
+            Alert.alert("Invalid email");
             return;
-          case "auth/weak-password":
-            alert("Weak password");
+          case AuthErrorCodes.WEAK_PASSWORD:
+            Alert.alert("Weak password");
             return;
           default:
-            alert(`An error occurred. Please try again. ${err.code}`);
+            Alert.alert(
+              `An error occurred. Please try again. ${errorMessage} "${errorCode}"`,
+            );
             return;
         }
       },
