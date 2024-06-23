@@ -36,7 +36,7 @@ export default function emailsignup() {
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
         switch (errorCode) {
-          case "auth/missing-email": // WHY TF IS THIS NOT IN THE ENUM I HATE ERROR HANDLEING IN JS
+          case "auth/missing-email":
             Alert.alert("Please enter an email");
             break;
           case AuthErrorCodes.EMAIL_EXISTS:
