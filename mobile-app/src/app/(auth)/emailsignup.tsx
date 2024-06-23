@@ -30,8 +30,11 @@ export default function emailsignup() {
         handleDatabaseSignUp();
         resetNavigationStack("/");
       },
-      (err) => {
-        switch (err.code) {
+      (error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+        switch (errorCode) {
           case AuthErrorCodes.EMAIL_EXISTS:
             alert("Email already in use");
             return;
@@ -42,7 +45,7 @@ export default function emailsignup() {
             alert("Weak password");
             return;
           default:
-            alert(`An error occurred. Please try again. ${err.code}`);
+            alert(`An error occurred. Please try again. ${errorMessage} "${errorCode}"`);
             return;
         }
       },

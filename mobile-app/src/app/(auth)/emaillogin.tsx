@@ -3,7 +3,7 @@ import AuthInputField from "@/src/components/AuthInputField";
 import { Text, View } from "@/src/components/Themed";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { Link } from "expo-router";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword , AuthErrorCodes} from "firebase/auth";
 import { useState } from "react";
 
 export default function emaillogin() {
@@ -17,21 +17,27 @@ export default function emaillogin() {
   const Login = () => {
     signInWithEmailAndPassword(getAuth(), data.email, data.password)
       .then((userCredential) => {
-        console.log(userCredential)
+        console.log(userCredential);
         resetNavigationStack("/");
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
-        // switch (errror.code) {
-        // case "auth/user-not-found":
-        //   alert("User not found");
-        //   break;
-        // case "auth/wrong-password":
-        //   alert("Wrong password");
-        //   break;
-        
+        switch (errorCode) {
+          case AuthErrorCodes.INVALID_EMAIL:
+            alert("User does not exist");
+            break;
+          case AuthErrorCodes.INVALID_PASSWORD:
+            alert("Wrong password please try again");
+            break;
+          case AuthErrorCodes.INVALID_IDP_RESPONSE:
+            alert("Wrong email or password please try again"); // This one is usually triggered instead of the invalid password one for somereson
+            break;
+          default:
+            alert(`An error occurred. Please try again. ${errorMessage} "${errorCode}"`);
+            break;
+        }
       });
   };
   return (
