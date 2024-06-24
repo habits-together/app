@@ -4,8 +4,7 @@ import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const title =
-  "Habits Together - Social Habit Tracking App";
+const title = "Habits Together - Social Habit Tracking App";
 const description =
   "Habits Together is the perfect app to help you and your friends stay accountable and motivated to reach your goals. Sign up and we'll let you know when the app is ready!";
 
