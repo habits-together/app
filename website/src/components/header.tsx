@@ -11,7 +11,7 @@ export default function Header() {
       <div className="mx-auto overflow-hidden rounded-full md:absolute md:left-1/2 md:-translate-x-1/2">
         <div className="flex items-center bg-gradient-to-r from-habitColors-orange-light to-habitColors-red-light px-8 py-4 dark:from-habitColors-orange-base/10 dark:to-habitColors-red-base/10">
           <span className="inline-block bg-gradient-to-r from-habitColors-orange-base to-habitColors-red-base bg-clip-text text-center text-xl font-bold text-transparent">
-            Coming July 2024
+            Coming August 2024
           </span>
         </div>
       </div>
