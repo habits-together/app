@@ -278,8 +278,14 @@ export const commonHabitIdsAtom = atomFamily((friendId: string) =>
   atom(async () => fetchCommonHabits({ participantId: friendId })),
 );
 
-export const mutaualFriendsAtom = atomFamily((friendId: string) =>
-  atom(async () => fetchMutualFriends({ friendId })),
+export const mutualFriendsAtom = atomFamily((friendId: string) =>
+  atom(async () => await fetchMutualFriends({ friendId })),
+);
+
+export const numberOfMutualFriendsAtom = atomFamily((friendId: string) =>
+  atom(
+    async (get) => Object.keys(await get(mutualFriendsAtom(friendId))).length,
+  ),
 );
 
 // NOTIFICATIONS
@@ -370,15 +376,6 @@ export const acceptHabitInviteAtom = atomFamily((notificationId: string) =>
   }),
 );
 
-export const mutualFriendsAtom = atomFamily((friendId: string) =>
-  atom(async (get) => await fetchMutualFriends({ friendId })),
-);
-
-export const numberOfMutualFriendsAtom = atomFamily((friendId: string) =>
-  atom(
-    async (get) => Object.keys(await get(mutualFriendsAtom(friendId))).length,
-  ),
-);
 
 // friend search
 export const searchQueryAtom = atom("");

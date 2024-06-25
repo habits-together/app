@@ -12,7 +12,7 @@ import {
   habitIconAtom,
   habitTitleAtom,
   inviteUserToHabitAtom,
-  mutaualFriendsAtom,
+  mutualFriendsAtom,
   sendFriendRequestAtom,
 } from "../atoms/atoms";
 import colors from "../constants/colors";
@@ -200,7 +200,7 @@ function CommonHabits({ friendId }: { friendId: string }) {
 function MutualFriends({ userId }: { userId: string }) {
   const { colorScheme } = useColorScheme();
   const maxPfps = 4;
-  const mutualFriends = useAtomValue(mutaualFriendsAtom(userId));
+  const mutualFriends = useAtomValue(mutualFriendsAtom(userId));
   const mutualFriendsIdPicturesMap = Object.keys(mutualFriends).map((key) => ({
     id: key,
     pic: mutualFriends[key].picture,
@@ -220,26 +220,31 @@ function MutualFriends({ userId }: { userId: string }) {
             +{mutualFriendsIdPicturesMap.length - maxPfps}
           </Text>
         </View>
-        <Text className="my-auto ml-1 text-xs font-semibold text-stone-400">
-          {mutualFriendsIdPicturesMap.length} Mutual Friends
-        </Text>
       </View>
     );
   }
   return (
     <View className="ml-1 mr-auto mt-2 flex flex-row-reverse">
+      {mutualFriendsIdPicturesMap.length > 0 && (
+        <Text className="my-auto ml-4 text-xs font-semibold text-stone-400">
+          {mutualFriendsIdPicturesMap.length} Mutual Friends
+        </Text>
+      )}
       {mutualFriendsIdPicturesMap.length == 0 && (
-      <Text className="text-xs font-semibold text-stone-400 pb-2 pl-1">No mutual friends</Text>
+        <Text className="pb-2 pl-1 text-xs font-semibold text-stone-400">
+          No mutual friends
+        </Text>
       )}
       {mutualFriendsIdPicturesMap.length > maxPfps && <ExtraHiddenPfpsCircle />}
       {mutualFriendsIdPicturesMap.slice(0, maxPfps).map((friend) => (
         <View
           key={friend.id}
-          className="-mr-[5px] rounded-full border border-stone-300"
+          className="-mr-[10px] rounded-full border border-stone-300"
         >
           <SmallProfilePicture picUrl={friend.pic} isLocalImage={true} />
         </View>
       ))}
+      
     </View>
   );
 }

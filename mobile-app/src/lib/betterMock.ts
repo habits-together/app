@@ -153,8 +153,8 @@ export const mockFriendships: allFriendshipsT = {
     friendsSince: new Date(),
   },
   friendship2: {
-    user1Id: "currentUserId123",
-    user2Id: "friend2",
+    user1Id: "friend2",
+    user2Id: "currentUserId123",
     friendsSince: new Date(),
   },
   friendship3: {
