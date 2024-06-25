@@ -19,7 +19,8 @@ import colors from "../constants/colors";
 import { userWithIdT } from "../lib/db_types";
 import DotsMenu from "./DotsMenu";
 import Icon, { HabitIcon } from "./Icon";
-import { MediumProfilePicture, SmallProfilePicture } from "./ProfilePicture";
+import { MediumProfilePicture } from "./ProfilePicture";
+import HorizontalProfilePics from "./HorizontalProfilePics";
 
 type InviteAddButtonProps =
   | {
@@ -198,57 +199,27 @@ function CommonHabits({ friendId }: { friendId: string }) {
 }
 
 function MutualFriends({ userId }: { userId: string }) {
-  const { colorScheme } = useColorScheme();
   const maxPfps = 4;
   const mutualFriends = useAtomValue(mutualFriendsAtom(userId));
-  const mutualFriendsIdPicturesMap = Object.keys(mutualFriends).map((key) => ({
-    id: key,
-    pic: mutualFriends[key].picture,
-  }));
+  const mutualFriendsPictures = Object.values(mutualFriends).map(friend => friend.picture);
 
-  function ExtraHiddenPfpsCircle() {
-    return (
-      <View className="flex flex-row justify-center ">
-        <View
-          className="h-[31px] w-[31px] rounded-full" // 30px + 1px border
-          style={{
-            backgroundColor:
-              colorScheme === "dark" ? colors.stone.faded : colors.stone[300],
-          }}
-        >
-          <Text className="mx-auto my-auto text-xs font-semibold text-stone-400">
-            +{mutualFriendsIdPicturesMap.length - maxPfps}
-          </Text>
-        </View>
-      </View>
-    );
-  }
   return (
-    <View className="ml-1 mr-auto mt-2 flex flex-row-reverse">
-      {mutualFriendsIdPicturesMap.length > 0 && (
-        <Text className="my-auto ml-4 text-xs font-semibold text-stone-400">
-          {mutualFriendsIdPicturesMap.length} Mutual Friends
+    <View className="flex flex-row ml-1 mr-auto mt-2">
+      <HorizontalProfilePics ProfilePics={mutualFriendsPictures} maxPics={maxPfps} borderColor={colors.stone[300]} />
+      {mutualFriendsPictures.length > 0 && (
+        <Text className="my-auto ml-3 text-xs font-semibold text-stone-400">
+          {mutualFriendsPictures.length} Mutual Friends
         </Text>
       )}
-      {mutualFriendsIdPicturesMap.length == 0 && (
+      {mutualFriendsPictures.length == 0 && (
         <Text className="pb-2 pl-1 text-xs font-semibold text-stone-400">
           No mutual friends
         </Text>
       )}
-      {mutualFriendsIdPicturesMap.length > maxPfps && <ExtraHiddenPfpsCircle />}
-      {mutualFriendsIdPicturesMap.slice(0, maxPfps).map((friend) => (
-        <View
-          key={friend.id}
-          className="-mr-[10px] rounded-full border border-stone-300"
-        >
-          <SmallProfilePicture picUrl={friend.pic} isLocalImage={true} />
-        </View>
-      ))}
-      
     </View>
   );
 }
-
+  
 function HabitTag({ habitId }: { habitId: string }) {
   const { colorScheme } = useColorScheme();
   const title = useAtomValue(habitTitleAtom(habitId));

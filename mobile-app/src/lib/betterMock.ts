@@ -34,6 +34,18 @@ export const mockUsers: Record<string, userT> = {
     username: "alice3",
     picture: mockProfilePictures[3],
   },
+  friend4: {
+    createdAt: new Date(),
+    displayName: "Guy",
+    username: "guy4",
+    picture: mockProfilePictures[4],
+  },
+  friend5: {
+    createdAt: new Date(),
+    displayName: "Dude",
+    username: "dude5",
+    picture: mockProfilePictures[5],
+  },
 };
 
 export const mockCurrentUser: userWithIdT = {
@@ -65,11 +77,11 @@ export const mockHabits: allHabitsT = {
       friend2: {
         mostRecentCompletionDate: new Date("2024-05-4T04:00:00"),
         ...mockUsers["friend2"],
-      },
+      }
     },
   },
   habit2_userNotPartOfToStart: {
-    createdAt: new Date(),
+    createdAt: new Date(), 
     title: "Work out",
     icon: "barbell",
     color: "green",
@@ -172,6 +184,27 @@ export const mockFriendships: allFriendshipsT = {
     user2Id: "friend3",
     friendsSince: new Date(),
   },
+  friendship4: {
+    user1Id: "currentUserId123",
+    user2Id: "friend4",
+    friendsSince: new Date(),
+  },
+  otherpplsfriendship3: {
+    user1Id: "friend3",
+    user2Id: "friend4",
+    friendsSince: new Date(),
+  },
+  friendship5: {
+    user1Id: "currentUserId123",
+    user2Id: "friend5",
+    friendsSince: new Date(),
+  },
+  otherpplsfriendship4: {
+    user1Id: "friend3",
+    user2Id: "friend5",
+    friendsSince: new Date(),
+  },
+
 };
 
 export function generateMockId() {
