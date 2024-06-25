@@ -147,17 +147,27 @@ export const mockNotifications: allNotificationsT = {
 //   friend3: mockUsers['friend3'],
 // };
 export const mockFriendships: allFriendshipsT = {
+  friendship1: {
+    user1Id: "currentUserId123",
+    user2Id: "friend1",
+    friendsSince: new Date(),
+  },
   friendship2: {
     user1Id: "currentUserId123",
     user2Id: "friend2",
     friendsSince: new Date(),
   },
   friendship3: {
-    user1Id: "friend3",
-    user2Id: "currentUserId123",
+    user1Id: "currentUserId123",
+    user2Id: "friend3",
     friendsSince: new Date(),
   },
   otherpplsfriendship: {
+    user1Id: "friend2",
+    user2Id: "friend3",
+    friendsSince: new Date(),
+  },
+  otherpplsfriendship2: {
     user1Id: "friend1",
     user2Id: "friend3",
     friendsSince: new Date(),

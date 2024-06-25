@@ -130,7 +130,7 @@ export async function fetchCommonHabits({
   );
 }
 
-export async function fetchMutualFriends({ friendId }: { friendId: string }) {
+export async function fetchMutualFriends({ friendId }: { friendId: string }): Promise<allUsersInfoT> {
   const userId = atomStore.get(currentUserIdAtom);
   // fetch friends WHERE userId in friendships AND friendId in friendships
   const myFriendIds = Object.values(mockFriendships)

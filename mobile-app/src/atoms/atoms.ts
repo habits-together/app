@@ -278,6 +278,10 @@ export const commonHabitIdsAtom = atomFamily((friendId: string) =>
   atom(async () => fetchCommonHabits({ participantId: friendId })),
 );
 
+export const mutaualFriendsAtom = atomFamily((friendId: string) =>
+  atom(async () => fetchMutualFriends({ friendId })),
+);
+
 // NOTIFICATIONS
 const notificationsAtom = atom<allNotificationsT>({});
 notificationsAtom.onMount = (set) => {

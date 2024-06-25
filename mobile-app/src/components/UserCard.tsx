@@ -12,13 +12,14 @@ import {
   habitIconAtom,
   habitTitleAtom,
   inviteUserToHabitAtom,
+  mutaualFriendsAtom,
   sendFriendRequestAtom,
 } from "../atoms/atoms";
 import colors from "../constants/colors";
 import { userWithIdT } from "../lib/db_types";
 import DotsMenu from "./DotsMenu";
 import Icon, { HabitIcon } from "./Icon";
-import { MediumProfilePicture } from "./ProfilePicture";
+import { MediumProfilePicture, SmallProfilePicture } from "./ProfilePicture";
 
 type InviteAddButtonProps =
   | {
@@ -84,8 +85,6 @@ export default function UserCard({
 }) {
   const { id: userId, displayName, username, picture } = userInfo;
 
-  // const mutualList = useAtomValue(getMutualFriendsAtom(friendId));
-
   return (
     <Link
       push
@@ -132,9 +131,7 @@ export default function UserCard({
         </View>
 
         {displayType !== "addFriends" && <CommonHabits friendId={userId} />}
-        {/* {displayType === "addFriends" && (
-          <MutualFriends mutualFriends={mutualList} />
-        )} */}
+        {displayType === "addFriends" && <MutualFriends userId={userId} />}
       </Pressable>
     </Link>
   );
@@ -200,35 +197,52 @@ function CommonHabits({ friendId }: { friendId: string }) {
   );
 }
 
-// // Takes an array of userids, currently uses numbers but should be strings
-// function MutualFriends({ mutualFriends }: { mutualFriends: number[] }) {
-//   const mutual= mutualFriends.map((friendId) =>
-//     useAtomValue(friendA(friendId)),
-//   );
-//   const { colorScheme } = useColorScheme();
-//   return (
-//     <View className="mt-1 flex flex-row items-center">
-//       {/* // TODO: Add user pfps once database query for mutuals is implemented */}
-//       {mutualmap((friend) => (
-//         <View
-//           key={friend.id}
-//           className="-mr-[7px] rounded-full border border-stone-400"
-//         >
-//           <SmallProfilePicture picUrl={friend.profilePicUrl} />
-//         </View>
-//       ))}
-//       {mutualFriends.length == 0 ? (
-//         <Text className="ml-3 text-xs font-semibold text-stone-400">
-//           No mutual friends
-//         </Text>
-//       ) : (
-//         <Text className="ml-3 text-xs font-semibold text-stone-400">
-//           {mutualFriends.length} mutual friends
-//         </Text>
-//       )}
-//     </View>
-//   );
-// }
+function MutualFriends({ userId }: { userId: string }) {
+  const { colorScheme } = useColorScheme();
+  const maxPfps = 4;
+  const mutualFriends = useAtomValue(mutaualFriendsAtom(userId));
+  const mutualFriendsIdPicturesMap = Object.keys(mutualFriends).map((key) => ({
+    id: key,
+    pic: mutualFriends[key].picture,
+  }));
+
+  function ExtraHiddenPfpsCircle() {
+    return (
+      <View className="flex flex-row justify-center ">
+        <View
+          className="h-[31px] w-[31px] rounded-full" // 30px + 1px border
+          style={{
+            backgroundColor:
+              colorScheme === "dark" ? colors.stone.faded : colors.stone[300],
+          }}
+        >
+          <Text className="mx-auto my-auto text-xs font-semibold text-stone-400">
+            +{mutualFriendsIdPicturesMap.length - maxPfps}
+          </Text>
+        </View>
+        <Text className="my-auto ml-1 text-xs font-semibold text-stone-400">
+          {mutualFriendsIdPicturesMap.length} Mutual Friends
+        </Text>
+      </View>
+    );
+  }
+  return (
+    <View className="ml-1 mr-auto mt-2 flex flex-row-reverse">
+      {mutualFriendsIdPicturesMap.length == 0 && (
+      <Text className="text-xs font-semibold text-stone-400 pb-2 pl-1">No mutual friends</Text>
+      )}
+      {mutualFriendsIdPicturesMap.length > maxPfps && <ExtraHiddenPfpsCircle />}
+      {mutualFriendsIdPicturesMap.slice(0, maxPfps).map((friend) => (
+        <View
+          key={friend.id}
+          className="-mr-[5px] rounded-full border border-stone-300"
+        >
+          <SmallProfilePicture picUrl={friend.pic} isLocalImage={true} />
+        </View>
+      ))}
+    </View>
+  );
+}
 
 function HabitTag({ habitId }: { habitId: string }) {
   const { colorScheme } = useColorScheme();

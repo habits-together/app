@@ -41,7 +41,7 @@ export default function ParticipantProfilePictures({
   function ExtraHiddenPfpsCircle() {
     return (
       <View
-        className="-mr-[7px] h-[30px] w-[30px] rounded-full"
+        className="-mr-[7px] h-[31px] w-[31px] rounded-full" // 30px + 1px border
         style={{
           backgroundColor:
             colorScheme === "dark"
