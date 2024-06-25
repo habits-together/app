@@ -376,7 +376,6 @@ export const acceptHabitInviteAtom = atomFamily((notificationId: string) =>
   }),
 );
 
-
 // friend search
 export const searchQueryAtom = atom("");
 searchQueryAtom.onMount = (set) => {
