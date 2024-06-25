@@ -3,17 +3,17 @@ import colors from "@/src/constants/colors";
 import { IconSearch } from "@tabler/icons-react-native";
 import { useAtom } from "jotai";
 import { useColorScheme } from "nativewind";
+import { useEffect, useState } from "react";
 import { TextInput } from "react-native";
 import { searchQueryAtom } from "../atoms/atoms";
 import Icon from "./Icon";
-import { useEffect, useState } from "react";
 
 export default function FriendSearchBar({
   placeholder,
 }: {
   placeholder: string;
 }) {
-  const [localSearchText, setLocalSearchText] = useState('');
+  const [localSearchText, setLocalSearchText] = useState("");
   const [searchText, setSearchText] = useAtom(searchQueryAtom);
   const { colorScheme } = useColorScheme();
 

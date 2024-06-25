@@ -23,7 +23,8 @@ export default function SettingsLayout() {
         <Stack
           screenOptions={{
             contentStyle: {
-              backgroundColor: colorScheme === "dark" ? colors.stone.base : colors.white
+              backgroundColor:
+                colorScheme === "dark" ? colors.stone.base : colors.white,
             },
             animation: "ios",
           }}

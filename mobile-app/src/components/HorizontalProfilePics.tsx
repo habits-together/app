@@ -19,7 +19,7 @@ export default function HorizontalProfilePics({
 }) {
   const [numPfpsToDisplay, setNumPfpsToDisplay] = useState<number>(maxPics);
   const { colorScheme } = useColorScheme();
-  let backgroundColor:string =
+  let backgroundColor: string =
     colorScheme === "dark" ? colors.stone.base : colors.white;
   if (habitId) {
     const habitColor = useAtomValue(habitColorAtom(habitId));

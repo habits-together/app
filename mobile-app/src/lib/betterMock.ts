@@ -77,11 +77,11 @@ export const mockHabits: allHabitsT = {
       friend2: {
         mostRecentCompletionDate: new Date("2024-05-4T04:00:00"),
         ...mockUsers["friend2"],
-      }
+      },
     },
   },
   habit2_userNotPartOfToStart: {
-    createdAt: new Date(), 
+    createdAt: new Date(),
     title: "Work out",
     icon: "barbell",
     color: "green",
@@ -204,7 +204,6 @@ export const mockFriendships: allFriendshipsT = {
     user2Id: "friend5",
     friendsSince: new Date(),
   },
-
 };
 
 export function generateMockId() {
