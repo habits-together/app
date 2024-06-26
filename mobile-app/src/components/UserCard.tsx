@@ -12,11 +12,13 @@ import {
   habitIconAtom,
   habitTitleAtom,
   inviteUserToHabitAtom,
+  mutualFriendsPfpsListAtom,
   sendFriendRequestAtom,
 } from "../atoms/atoms";
 import colors from "../constants/colors";
 import { userWithIdT } from "../lib/db_types";
 import DotsMenu from "./DotsMenu";
+import HorizontalProfilePicsList from "./HorizontalProfilePicsList";
 import Icon, { HabitIcon } from "./Icon";
 import { MediumProfilePicture } from "./ProfilePicture";
 
@@ -84,8 +86,6 @@ export default function UserCard({
 }) {
   const { id: userId, displayName, username, picture } = userInfo;
 
-  // const mutualList = useAtomValue(getMutualFriendsAtom(friendId));
-
   return (
     <Link
       push
@@ -132,9 +132,7 @@ export default function UserCard({
         </View>
 
         {displayType !== "addFriends" && <CommonHabits friendId={userId} />}
-        {/* {displayType === "addFriends" && (
-          <MutualFriends mutualFriends={mutualList} />
-        )} */}
+        {displayType === "addFriends" && <MutualFriends userId={userId} />}
       </Pressable>
     </Link>
   );
@@ -200,35 +198,30 @@ function CommonHabits({ friendId }: { friendId: string }) {
   );
 }
 
-// // Takes an array of userids, currently uses numbers but should be strings
-// function MutualFriends({ mutualFriends }: { mutualFriends: number[] }) {
-//   const mutual= mutualFriends.map((friendId) =>
-//     useAtomValue(friendA(friendId)),
-//   );
-//   const { colorScheme } = useColorScheme();
-//   return (
-//     <View className="mt-1 flex flex-row items-center">
-//       {/* // TODO: Add user pfps once database query for mutuals is implemented */}
-//       {mutualmap((friend) => (
-//         <View
-//           key={friend.id}
-//           className="-mr-[7px] rounded-full border border-stone-400"
-//         >
-//           <SmallProfilePicture picUrl={friend.profilePicUrl} />
-//         </View>
-//       ))}
-//       {mutualFriends.length == 0 ? (
-//         <Text className="ml-3 text-xs font-semibold text-stone-400">
-//           No mutual friends
-//         </Text>
-//       ) : (
-//         <Text className="ml-3 text-xs font-semibold text-stone-400">
-//           {mutualFriends.length} mutual friends
-//         </Text>
-//       )}
-//     </View>
-//   );
-// }
+function MutualFriends({ userId }: { userId: string }) {
+  const maxPfps = 8;
+  const mutualFriendsPictures = useAtomValue(mutualFriendsPfpsListAtom(userId));
+
+  return (
+    <View className="ml-1 mr-auto mt-2 flex flex-row">
+      <HorizontalProfilePicsList
+        profilePics={mutualFriendsPictures}
+        maxPics={maxPfps}
+        borderColor={colors.stone[300]}
+      />
+      {mutualFriendsPictures.length > 0 && (
+        <Text className="my-auto ml-3 text-xs font-semibold text-stone-400">
+          {mutualFriendsPictures.length} Mutual Friends
+        </Text>
+      )}
+      {mutualFriendsPictures.length == 0 && (
+        <Text className="pb-2 pl-1 text-xs font-semibold text-stone-400">
+          No mutual friends
+        </Text>
+      )}
+    </View>
+  );
+}
 
 function HabitTag({ habitId }: { habitId: string }) {
   const { colorScheme } = useColorScheme();

@@ -34,6 +34,18 @@ export const mockUsers: Record<string, userT> = {
     username: "alice3",
     picture: mockProfilePictures[3],
   },
+  friend4: {
+    createdAt: new Date(),
+    displayName: "Guy",
+    username: "guy4",
+    picture: mockProfilePictures[4],
+  },
+  friend5: {
+    createdAt: new Date(),
+    displayName: "Dude",
+    username: "dude5",
+    picture: mockProfilePictures[5],
+  },
 };
 
 export const mockCurrentUser: userWithIdT = {
@@ -147,19 +159,49 @@ export const mockNotifications: allNotificationsT = {
 //   friend3: mockUsers['friend3'],
 // };
 export const mockFriendships: allFriendshipsT = {
-  friendship2: {
+  friendship1: {
     user1Id: "currentUserId123",
-    user2Id: "friend2",
+    user2Id: "friend1",
     friendsSince: new Date(),
   },
-  friendship3: {
-    user1Id: "friend3",
+  friendship2: {
+    user1Id: "friend2",
     user2Id: "currentUserId123",
     friendsSince: new Date(),
   },
+  friendship3: {
+    user1Id: "currentUserId123",
+    user2Id: "friend3",
+    friendsSince: new Date(),
+  },
   otherpplsfriendship: {
+    user1Id: "friend2",
+    user2Id: "friend3",
+    friendsSince: new Date(),
+  },
+  otherpplsfriendship2: {
     user1Id: "friend1",
     user2Id: "friend3",
+    friendsSince: new Date(),
+  },
+  friendship4: {
+    user1Id: "currentUserId123",
+    user2Id: "friend4",
+    friendsSince: new Date(),
+  },
+  otherpplsfriendship3: {
+    user1Id: "friend3",
+    user2Id: "friend4",
+    friendsSince: new Date(),
+  },
+  friendship5: {
+    user1Id: "currentUserId123",
+    user2Id: "friend5",
+    friendsSince: new Date(),
+  },
+  otherpplsfriendship4: {
+    user1Id: "friend3",
+    user2Id: "friend5",
     friendsSince: new Date(),
   },
 };

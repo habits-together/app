@@ -65,6 +65,15 @@ export const habitParticipantsAtom = atomFamily((habitId: string) =>
     return get(allHabitsAtom)[habitId].participants;
   }),
 );
+export const habitParticipantPfpsListAtom = atomFamily((habitId: string) =>
+  atom((get) => {
+    const habitParticipants = get(habitParticipantsAtom(habitId));
+    return Object.values(habitParticipants).map(
+      (participant) => participant.picture,
+    );
+  }),
+);
+
 export const habitColorAtom = atomFamily((habitId: string) =>
   atom(
     (get) =>
@@ -278,6 +287,22 @@ export const commonHabitIdsAtom = atomFamily((friendId: string) =>
   atom(async () => fetchCommonHabits({ participantId: friendId })),
 );
 
+export const mutualFriendsAtom = atomFamily((friendId: string) =>
+  atom(async () => await fetchMutualFriends({ friendId })),
+);
+export const mutualFriendsPfpsListAtom = atomFamily((friendId: string) =>
+  atom(async (get) => {
+    const mutualFriends = await get(mutualFriendsAtom(friendId));
+    return Object.values(mutualFriends).map((friend) => friend.picture);
+  }),
+);
+
+export const numberOfMutualFriendsAtom = atomFamily((friendId: string) =>
+  atom(
+    async (get) => Object.keys(await get(mutualFriendsAtom(friendId))).length,
+  ),
+);
+
 // NOTIFICATIONS
 const notificationsAtom = atom<allNotificationsT>({});
 notificationsAtom.onMount = (set) => {
@@ -364,16 +389,6 @@ export const acceptHabitInviteAtom = atomFamily((notificationId: string) =>
       ),
     );
   }),
-);
-
-export const mutualFriendsAtom = atomFamily((friendId: string) =>
-  atom(async (get) => await fetchMutualFriends({ friendId })),
-);
-
-export const numberOfMutualFriendsAtom = atomFamily((friendId: string) =>
-  atom(
-    async (get) => Object.keys(await get(mutualFriendsAtom(friendId))).length,
-  ),
 );
 
 // friend search

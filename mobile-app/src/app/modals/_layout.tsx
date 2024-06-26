@@ -5,6 +5,8 @@ import {
   viewHabitOptions,
   viewProfileOptions,
 } from "@/src/components/HeaderOptions";
+import colors from "@/src/constants/colors";
+import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import { useColorScheme } from "nativewind";
 import React from "react";
@@ -17,32 +19,38 @@ export default function SettingsLayout() {
     // need another menu provider since this is a modal
     // https://github.com/instea/react-native-popup-menu/blob/master/doc/api.md#menuprovider
     <MenuProvider skipInstanceCheck>
-      <Stack
-        screenOptions={{
-          animation: "ios",
-        }}
-      >
-        <Stack.Screen
-          name="viewprofile"
-          options={viewProfileOptions(colorScheme)}
-        />
-        <Stack.Screen
-          name="viewhabit"
-          options={viewHabitOptions(colorScheme)}
-        />
-        <Stack.Screen
-          name="invitefriends"
-          options={inviteFriendsOptions(colorScheme)}
-        />
-        <Stack.Screen
-          name="addfriends"
-          options={addFriendsOptions(colorScheme)}
-        />
-        <Stack.Screen
-          name="editprofile"
-          options={editProfileOptions(colorScheme)}
-        />
-      </Stack>
+      <ThemeProvider value={DefaultTheme}>
+        <Stack
+          screenOptions={{
+            contentStyle: {
+              backgroundColor:
+                colorScheme === "dark" ? colors.stone.base : colors.white,
+            },
+            animation: "ios",
+          }}
+        >
+          <Stack.Screen
+            name="viewprofile"
+            options={viewProfileOptions(colorScheme)}
+          />
+          <Stack.Screen
+            name="viewhabit"
+            options={viewHabitOptions(colorScheme)}
+          />
+          <Stack.Screen
+            name="invitefriends"
+            options={inviteFriendsOptions(colorScheme)}
+          />
+          <Stack.Screen
+            name="addfriends"
+            options={addFriendsOptions(colorScheme)}
+          />
+          <Stack.Screen
+            name="editprofile"
+            options={editProfileOptions(colorScheme)}
+          />
+        </Stack>
+      </ThemeProvider>
     </MenuProvider>
   );
 }
