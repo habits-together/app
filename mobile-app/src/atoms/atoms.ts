@@ -68,7 +68,9 @@ export const habitParticipantsAtom = atomFamily((habitId: string) =>
 export const habitParticipantPfpsListAtom = atomFamily((habitId: string) =>
   atom((get) => {
     const habitParticipants = get(habitParticipantsAtom(habitId));
-    return Object.values(habitParticipants).map((participant) => participant.picture);
+    return Object.values(habitParticipants).map(
+      (participant) => participant.picture,
+    );
   }),
 );
 

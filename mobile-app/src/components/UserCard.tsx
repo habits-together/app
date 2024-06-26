@@ -12,7 +12,6 @@ import {
   habitIconAtom,
   habitTitleAtom,
   inviteUserToHabitAtom,
-  mutualFriendsAtom,
   mutualFriendsPfpsListAtom,
   sendFriendRequestAtom,
 } from "../atoms/atoms";
