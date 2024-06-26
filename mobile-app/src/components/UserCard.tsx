@@ -13,12 +13,13 @@ import {
   habitTitleAtom,
   inviteUserToHabitAtom,
   mutualFriendsAtom,
+  mutualFriendsPfpsListAtom,
   sendFriendRequestAtom,
 } from "../atoms/atoms";
 import colors from "../constants/colors";
 import { userWithIdT } from "../lib/db_types";
 import DotsMenu from "./DotsMenu";
-import HorizontalProfilePics from "./HorizontalProfilePics";
+import HorizontalProfilePicsList from "./HorizontalProfilePicsList";
 import Icon, { HabitIcon } from "./Icon";
 import { MediumProfilePicture } from "./ProfilePicture";
 
@@ -199,16 +200,13 @@ function CommonHabits({ friendId }: { friendId: string }) {
 }
 
 function MutualFriends({ userId }: { userId: string }) {
-  const maxPfps = 4;
-  const mutualFriends = useAtomValue(mutualFriendsAtom(userId));
-  const mutualFriendsPictures = Object.values(mutualFriends).map(
-    (friend) => friend.picture,
-  );
+  const maxPfps = 8;
+  const mutualFriendsPictures = useAtomValue(mutualFriendsPfpsListAtom(userId));
 
   return (
     <View className="ml-1 mr-auto mt-2 flex flex-row">
-      <HorizontalProfilePics
-        ProfilePics={mutualFriendsPictures}
+      <HorizontalProfilePicsList
+        profilePics={mutualFriendsPictures}
         maxPics={maxPfps}
         borderColor={colors.stone[300]}
       />

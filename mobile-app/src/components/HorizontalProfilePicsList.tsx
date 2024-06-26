@@ -6,52 +6,42 @@ import colors from "../constants/colors";
 import { SmallProfilePicture } from "./ProfilePicture";
 import { Text, View } from "./Themed";
 
-export default function HorizontalProfilePics({
-  ProfilePics,
+export default function HorizontalProfilePicsList({
+  profilePics,
   maxPics,
   borderColor,
   habitId,
 }: {
-  ProfilePics: string[];
+  profilePics: string[];
   maxPics: number;
   borderColor: string;
   habitId?: string;
 }) {
   const [numPfpsToDisplay, setNumPfpsToDisplay] = useState<number>(maxPics);
-  const { colorScheme } = useColorScheme();
-  let backgroundColor: string =
-    colorScheme === "dark" ? colors.stone.base : colors.white;
-  if (habitId) {
-    const habitColor = useAtomValue(habitColorAtom(habitId));
-    backgroundColor =
-      colorScheme === "dark"
-        ? colors.stone.light
-        : colors.habitColors[habitColor].light;
-  }
   useEffect(() => {
     // since we want to display x pfps
     // but if there are more, we want to take one away
     // in order to display the +y circle
-    if (ProfilePics.length === maxPics) {
+    if (profilePics.length === maxPics) {
       setNumPfpsToDisplay(maxPics);
     } else {
       setNumPfpsToDisplay(maxPics - 1);
     }
-  }, [ProfilePics]);
+  }, [profilePics, maxPics]);
 
   return (
     <View
       className="mr-[7px] flex flex-row-reverse"
-      style={{ backgroundColor }}
+      style={{ backgroundColor: "transparent" }}
     >
-      {ProfilePics.length > maxPics && (
+      {profilePics.length > maxPics && (
         <ExtraHiddenPfpsCircle
           maxPics={maxPics}
-          totalPicLen={ProfilePics.length}
+          totalPicLen={profilePics.length}
           habitId={habitId}
         />
       )}
-      {ProfilePics.slice(0, numPfpsToDisplay).map((picBase64String) => (
+      {profilePics.slice(0, numPfpsToDisplay).map((picBase64String) => (
         <View
           key={picBase64String}
           className="-mr-[7px] rounded-full border"
