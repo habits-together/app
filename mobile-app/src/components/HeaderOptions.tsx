@@ -29,7 +29,15 @@ export function viewHabitOptions(
     headerTitle: () => <></>,
     headerRight: () => (
       <View className="flex-row items-center">
-        <Pressable className="mr-2" onPress={() => router.push({pathname: "/habits/edithabit", params: {habitidStr:"habit1"}})}>
+        <Pressable
+          className="mr-2"
+          onPress={() =>
+            router.push({
+              pathname: "/habits/edithabit",
+              params: { habitidStr: "habit1" },
+            })
+          }
+        >
           <Icon icon={IconEdit} />
         </Pressable>
         <DotsMenu
