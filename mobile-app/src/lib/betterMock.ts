@@ -123,6 +123,15 @@ export const mockHabitCompletions: allParticipantCompletionsForAllHabitsT = {
       [formatDateString(new Date("2024-05-3T04:00:00"))]: 1,
       [formatDateString(new Date("2024-05-2T04:00:00"))]: 1,
     },
+    friend1: {
+      [formatDateString(new Date("2024-06-26T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-06-25T04:00:00"))]: 1,
+    },
+    friend2: {
+      [todayString()]: 1,
+      [formatDateString(new Date("2024-06-26T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-06-23T04:00:00"))]: 1,
+    }
   },
   habit2_userNotPartOfToStart: {
     friend2: {
