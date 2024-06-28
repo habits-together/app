@@ -1,5 +1,5 @@
-import InviteFriends from "@/src/components/InviteFriends";
+import InviteFriendsComponent from "@/src/components/InviteFriends";
 
-export default function ViewHabit() {
-  return <InviteFriends />;
+export default function InviteFriends() {
+  return <InviteFriendsComponent />;
 }

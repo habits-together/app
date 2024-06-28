@@ -11,7 +11,7 @@ import HabitCompletionsWeeklyView from "./HabitCompletionsWeeklyView";
 import { HabitFriendCompletions } from "./HabitFriendCompletions";
 import { HabitHeader } from "./HabitHeader";
 
-export function HabitCard({ habitId }: { habitId: string }) {
+export function HabitCard({ habitId, screenType="" }: { habitId: string, screenType?: "" | "/modals"}) {
   const { colorScheme } = useColorScheme();
   const displayType = useAtomValue(habitDisplayTypeAtom(habitId));
   const color = useAtomValue(habitColorAtom(habitId));
@@ -20,7 +20,7 @@ export function HabitCard({ habitId }: { habitId: string }) {
     <Link
       push
       href={{
-        pathname: "/viewhabit",
+        pathname: screenType.concat("/viewhabit"),
         params: { id: habitId },
       }}
       asChild

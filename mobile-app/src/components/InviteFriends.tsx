@@ -5,7 +5,7 @@ import FriendSearchBar from "./FriendSearchBar";
 import ShareInviteLink from "./ShareInviteLink";
 import { FriendCard } from "./UserCard";
 
-export default function InviteFriends() {
+export default function InviteFriendsComponent() {
   const friendIds = useAtomValue(friendIdsAtom);
 
   return (

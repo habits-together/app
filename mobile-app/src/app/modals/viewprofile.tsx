@@ -39,19 +39,7 @@ export default function Profile() {
           <View className="space-y-4 pb-32 pt-4">
             <Text className="text-xl font-semibold">Habits Together</Text>
             {commonHabitIds.map((habitId) => (
-              <Link
-                push
-                href={{
-                  pathname: "/modals/viewhabit",
-                  params: { id: habitId },
-                }}
-                asChild
-                key={habitId}
-              >
-                <Pressable>
-                  <HabitCard habitId={habitId} />
-                </Pressable>
-              </Link>
+              <HabitCard habitId={habitId} screenType="/modals" />
             ))}
           </View>
         </ScrollView>
