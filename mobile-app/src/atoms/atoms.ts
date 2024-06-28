@@ -177,13 +177,26 @@ const myHabitCompletionsAtom = atomFamily((habitId: string) =>
     );
   }),
 );
+export const structuredHabitCompletionsAtom = atomFamily(
+  ({ habitId, participantId }: { habitId: string; participantId: string }) => {
+    return atom((get) => {
+      const habitCompletions = get(
+        habitCompletionsForParticipantAtom({ habitId, participantId }),
+      );
+      return structureCompletionData({
+        completionData: habitCompletions,
+        numDays: 12 * 7 + getNumberOfDaysInLastWeek(),
+      });
+    });
+  },
+  (a, b) => a.habitId === b.habitId && a.participantId === b.participantId,
+);
 export const myStructuredHabitCompletionsAtom = atomFamily((habitId: string) =>
   atom((get) => {
-    const habitCompletions = get(myHabitCompletionsAtom(habitId));
-    return structureCompletionData({
-      completionData: habitCompletions,
-      numDays: 12 * 7 + getNumberOfDaysInLastWeek(),
-    });
+    const userId = get(currentUserIdAtom);
+    return get(
+      structuredHabitCompletionsAtom({ habitId, participantId: userId }),
+    );
   }),
 );
 

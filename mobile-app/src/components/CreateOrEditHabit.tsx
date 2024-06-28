@@ -212,9 +212,35 @@ export default function CreateOrEditHabit({
                   />
                 </View>
               </MenuTrigger>
-              <MenuOptions>
-                <MenuOption value="daily" text="Daily goal" />
-                <MenuOption value="weekly" text="Weekly goal" />
+              <MenuOptions
+                customStyles={{
+                  optionsContainer: {
+                    backgroundColor:
+                      colorScheme === "dark" ? colors.stone[800] : colors.white,
+                    borderRadius: 8,
+                  },
+                }}
+              >
+                <MenuOption value="daily">
+                  <Text
+                    style={{
+                      color:
+                        colorScheme === "dark" ? colors.white : colors.black,
+                    }}
+                  >
+                    Daily goal
+                  </Text>
+                </MenuOption>
+                <MenuOption value="weekly">
+                  <Text
+                    style={{
+                      color:
+                        colorScheme === "dark" ? colors.white : colors.black,
+                    }}
+                  >
+                    Weekly goal
+                  </Text>
+                </MenuOption>
               </MenuOptions>
             </Menu>
           </View>
@@ -240,12 +266,29 @@ export default function CreateOrEditHabit({
                   />
                 </View>
               </MenuTrigger>
-              <MenuOptions>
+              <MenuOptions
+                customStyles={{
+                  optionsContainer: {
+                    backgroundColor:
+                      colorScheme === "dark" ? colors.stone[800] : colors.white,
+                    borderRadius: 8,
+                  },
+                }}
+              >
                 {[
                   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
                   19, 20,
                 ].map((num) => (
-                  <MenuOption key={num} value={num} text={`${num}`} />
+                  <MenuOption key={num} value={num}>
+                    <Text
+                      style={{
+                        color:
+                          colorScheme === "dark" ? colors.white : colors.black,
+                      }}
+                    >
+                      {num}
+                    </Text>
+                  </MenuOption>
                 ))}
               </MenuOptions>
             </Menu>
