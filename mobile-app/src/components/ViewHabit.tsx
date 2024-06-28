@@ -100,7 +100,7 @@ function ParticipantsSection({ habitId }: { habitId: string }) {
         {participantIds
           .filter((participantId) => participantId != userId)
           .map((participantId) => (
-            <ActivityCard habitId={habitId} participantId={participantId} />
+            <ActivityCard key={participantId} habitId={habitId} participantId={participantId} />
           ))}
       </View>
       <InviteFriendsButton />
@@ -210,7 +210,7 @@ function NudgeButton({
     setDisplayNudgeButton(
       numberOfCompletionsToday === 0 && participantId !== userId,
     );
-  }, [userId]);
+  }, [numberOfCompletionsToday,userId]);
 
   return displayNudgeButton ? (
     <Pressable

@@ -1,4 +1,5 @@
 import { IconDots } from "@tabler/icons-react-native";
+import { useColorScheme } from "nativewind";
 import { Text } from "react-native";
 import {
   Menu,
@@ -6,6 +7,7 @@ import {
   MenuOptions,
   MenuTrigger,
 } from "react-native-popup-menu";
+import colors from "../constants/colors";
 import Icon from "./Icon";
 import { View } from "./Themed";
 
@@ -16,6 +18,8 @@ export type Option = {
 };
 
 export default function DotsMenu({ options }: { options: Option[] }) {
+  const { colorScheme } = useColorScheme();
+
   return (
     <Menu>
       <MenuTrigger>
@@ -23,10 +27,24 @@ export default function DotsMenu({ options }: { options: Option[] }) {
           <Icon icon={IconDots} />
         </View>
       </MenuTrigger>
-      <MenuOptions>
+      <MenuOptions
+        customStyles={{
+          optionsContainer: {
+            backgroundColor:
+              colorScheme === "dark" ? colors.stone[800] : colors.white,
+            borderRadius: 8,
+          },
+        }}
+      >
         {options.map((item) => (
           <MenuOption onSelect={item.action} key={item.label}>
-            <Text style={{ color: item.color }}>{item.label}</Text>
+            <Text
+              style={{
+                color: colorScheme === "dark" ? colors.white : colors.black,
+              }}
+            >
+              {item.label}
+            </Text>
           </MenuOption>
         ))}
       </MenuOptions>
