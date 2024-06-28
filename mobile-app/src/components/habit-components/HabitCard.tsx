@@ -11,7 +11,13 @@ import HabitCompletionsWeeklyView from "./HabitCompletionsWeeklyView";
 import { HabitFriendCompletions } from "./HabitFriendCompletions";
 import { HabitHeader } from "./HabitHeader";
 
-export function HabitCard({ habitId, screenType="" }: { habitId: string, screenType?: "" | "/modals"}) {
+export function HabitCard({
+  habitId,
+  screenType = "",
+}: {
+  habitId: string;
+  screenType?: "" | "/modals";
+}) {
   const { colorScheme } = useColorScheme();
   const displayType = useAtomValue(habitDisplayTypeAtom(habitId));
   const color = useAtomValue(habitColorAtom(habitId));

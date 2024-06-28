@@ -1,10 +1,9 @@
 import { commonHabitIdsAtom, getUserInfoAtom } from "@/src/atoms/atoms";
 import { ScrollView, Text, View } from "@/src/components/Themed";
 import { HabitCard } from "@/src/components/habit-components/HabitCard";
-import { Link, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { useAtomValue } from "jotai";
 import React from "react";
-import { Pressable } from "react-native";
 import { BigProfilePicture } from "../../components/ProfilePicture";
 
 export default function Profile() {
