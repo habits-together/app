@@ -18,7 +18,7 @@ import { Alert } from "react-native";
 
 export default function emaillogin() {
   const [data, setData] = useState({ email: "", password: "" });
-  const [val, setCurrentUserAtom] = useAtom(currentUserAtom)
+  const [val, setCurrentUserAtom] = useAtom(currentUserAtom);
   const handleEmailChange = (email: string) => {
     setData({ ...data, email: email });
   };
@@ -28,13 +28,11 @@ export default function emaillogin() {
   const Login = () => {
     signInWithEmailAndPassword(getAuth(), data.email, data.password)
       .then((userCredential) => {
-        handleDatabaseLogin().then(
-          (success:userWithIdT) => {
-            setCurrentUserAtom(success);
-            console.log(val)
-            resetNavigationStack("/");
-          });
-
+        handleDatabaseLogin().then((success: userWithIdT) => {
+          setCurrentUserAtom(success);
+          console.log(val);
+          resetNavigationStack("/");
+        });
       })
       .catch((error: FirebaseError) => {
         const errorCode = error.code;
