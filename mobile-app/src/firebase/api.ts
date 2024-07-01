@@ -11,7 +11,6 @@ import {
   habitT,
   notificationT,
   userT,
-  userWithIdT,
 } from "../lib/db_types";
 import { todayString } from "../lib/formatDateString";
 import {
@@ -259,7 +258,6 @@ export async function fetchUserInfo({
 }): Promise<userT> {
   return mockUsers[userId];
 }
-
 
 export async function searchUsersInDb({
   searchText,
