@@ -1,344 +1,220 @@
 import {
-  IconCode,
-  IconExclamationCircle,
-  IconMoodTongue,
-  IconMusic,
-} from "@tabler/icons-react-native";
-import { numWeeksToDisplayInMonthlyView } from "../constants/constants";
-import {
-  AllHabitsDataType,
-  FriendData,
-  FriendRequestData,
-  Habit,
-  HabitCompletion,
-  HabitCompletions,
-  HabitInviteData,
-  HabitParticipants,
-  HabitReminderData,
-  NotificationData,
-} from "./frontend_types";
-import { fetchSingleUserThumbnail } from "./getRandomProfilePics";
+  allFriendshipsT,
+  allHabitsT,
+  allNotificationsT,
+  allParticipantCompletionsForAllHabitsT,
+  userT,
+  userWithIdT,
+} from "./db_types";
+import { formatDateString, todayString } from "./formatDateString";
+import { mockProfilePictures } from "./mockBase64Images";
 
-export function getNumberOfDaysInLastWeek() {
-  const currDay = new Date().getDay();
-  return currDay === 0 ? 7 : currDay;
-}
+export const mockUsers: Record<string, userT> = {
+  currentUserId123: {
+    createdAt: new Date(),
+    displayName: "John",
+    username: "jdoe",
+    picture: mockProfilePictures[0],
+  },
+  friend1: {
+    createdAt: new Date(),
+    displayName: "Jane",
+    username: "janejane",
+    picture: mockProfilePictures[1],
+  },
+  friend2: {
+    createdAt: new Date(),
+    displayName: "Bob",
+    username: "bobby_boy",
+    picture: mockProfilePictures[2],
+  },
+  friend3: {
+    createdAt: new Date(),
+    displayName: "Alice",
+    username: "alice3",
+    picture: mockProfilePictures[3],
+  },
+  friend4: {
+    createdAt: new Date(),
+    displayName: "Guy",
+    username: "guy4",
+    picture: mockProfilePictures[4],
+  },
+  friend5: {
+    createdAt: new Date(),
+    displayName: "Dude",
+    username: "dude5",
+    picture: mockProfilePictures[5],
+  },
+};
 
-export function getMockHabitMonthData(
-  numberOfDays: number,
-  targetNumberOfCompletionsPerDay: number,
-) {
-  const activityData: HabitCompletion[] = new Array(numberOfDays);
+export const mockCurrentUser: userWithIdT = {
+  id: "currentUserId123",
+  ...mockUsers["currentUserId123"],
+};
 
-  let date = new Date();
-  date.setDate(date.getDate() - numberOfDays);
-
-  for (let i = 0; i < numberOfDays; i++) {
-    let numCompletions = Math.floor(
-      Math.random() * (targetNumberOfCompletionsPerDay + 1),
-    );
-    activityData[i] = {
-      numberOfCompletions: numCompletions,
-      dayOfTheWeek: date.toLocaleString("en-US", { weekday: "short" }),
-      dayOfTheMonth: date.getDate().toString(),
-      date: date.toISOString().split("T")[0],
-    };
-    date.setDate(date.getDate() + 1);
-  }
-
-  return activityData;
-}
-
-export const mockHabitData: Habit[] = [
-  {
+export const mockHabits: allHabitsT = {
+  habit1: {
+    createdAt: new Date(),
     title: "Read for 15 minutes",
     icon: "book",
     color: "orange",
-    id: "1",
     description: "Let's expand our mind capacity",
     goal: {
       period: "daily",
       completionsPerPeriod: 1,
     },
+    participants: {
+      currentUserId123: {
+        mostRecentCompletionDate: new Date(),
+        isOwner: true,
+        ...mockUsers["currentUserId123"],
+      },
+      friend1: {
+        mostRecentCompletionDate: new Date(),
+        ...mockUsers["friend1"],
+      },
+      friend2: {
+        mostRecentCompletionDate: new Date("2024-05-4T04:00:00"),
+        ...mockUsers["friend2"],
+      },
+    },
   },
-  {
+  habit2_userNotPartOfToStart: {
+    createdAt: new Date(),
     title: "Work out",
     icon: "barbell",
     color: "green",
-    id: "2",
     description: "Working out is better together",
     goal: {
       period: "weekly",
       completionsPerPeriod: 4,
     },
-  },
-  {
-    title: "Drink water",
-    icon: "bottle",
-    color: "violet",
-    id: "3",
-    description: "Stay hydrated",
-    goal: {
-      period: "daily",
-      completionsPerPeriod: 5,
+    participants: {
+      friend2: {
+        mostRecentCompletionDate: new Date("2024-05-4T04:00:00"),
+        ...mockUsers["friend2"],
+      },
+      friend3: {
+        mostRecentCompletionDate: new Date(),
+        ...mockUsers["friend3"],
+      },
     },
   },
-];
-export async function getMockHabitData() {
-  return mockHabitData;
+};
+
+export const mockHabitCompletions: allParticipantCompletionsForAllHabitsT = {
+  habit1: {
+    currentUserId123: {
+      [todayString()]: 1,
+      [formatDateString(new Date("2024-06-14T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-06-14T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-06-8T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-06-2T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-04-15T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-04-2T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-04-14T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-04-22T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-05-30T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-05-23T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-05-20T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-05-10T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-05-4T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-05-3T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-05-2T04:00:00"))]: 1,
+    },
+    friend1: {
+      [formatDateString(new Date("2024-06-26T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-06-25T04:00:00"))]: 1,
+    },
+    friend2: {
+      [todayString()]: 1,
+      [formatDateString(new Date("2024-06-26T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-06-23T04:00:00"))]: 1,
+    },
+  },
+  habit2_userNotPartOfToStart: {
+    friend2: {
+      [formatDateString(new Date("2024-05-4T04:00:00"))]: 1,
+    },
+  },
+};
+
+export const mockNotifications: allNotificationsT = {
+  noti1: {
+    type: "friendRequest",
+    senderId: "friend1",
+    receiverId: "currentUserId123",
+    sentAt: new Date(),
+  },
+  noti2: {
+    type: "habitInvite",
+    habitId: "habit2_userNotPartOfToStart",
+    senderId: "friend2",
+    receiverId: "currentUserId123",
+    sentAt: new Date(),
+  },
+  noti3: {
+    type: "nudge",
+    habitId: "habit1",
+    senderId: "friend3",
+    receiverId: "currentUserId123",
+    sentAt: new Date(),
+  },
+};
+
+// export const mockFriends: allUsersInfoT = {
+//   friend2: mockUsers['friend2'],
+//   friend3: mockUsers['friend3'],
+// };
+export const mockFriendships: allFriendshipsT = {
+  friendship1: {
+    user1Id: "currentUserId123",
+    user2Id: "friend1",
+    friendsSince: new Date(),
+  },
+  friendship2: {
+    user1Id: "friend2",
+    user2Id: "currentUserId123",
+    friendsSince: new Date(),
+  },
+  friendship3: {
+    user1Id: "currentUserId123",
+    user2Id: "friend3",
+    friendsSince: new Date(),
+  },
+  otherpplsfriendship: {
+    user1Id: "friend2",
+    user2Id: "friend3",
+    friendsSince: new Date(),
+  },
+  otherpplsfriendship2: {
+    user1Id: "friend1",
+    user2Id: "friend3",
+    friendsSince: new Date(),
+  },
+  friendship4: {
+    user1Id: "currentUserId123",
+    user2Id: "friend4",
+    friendsSince: new Date(),
+  },
+  otherpplsfriendship3: {
+    user1Id: "friend3",
+    user2Id: "friend4",
+    friendsSince: new Date(),
+  },
+  friendship5: {
+    user1Id: "currentUserId123",
+    user2Id: "friend5",
+    friendsSince: new Date(),
+  },
+  otherpplsfriendship4: {
+    user1Id: "friend3",
+    user2Id: "friend5",
+    friendsSince: new Date(),
+  },
+};
+
+export function generateMockId() {
+  return Math.random().toString(36).substring(2, 15);
 }
-
-export async function getMockFriendInvites() {
-  const pic1 = await fetchSingleUserThumbnail();
-  const pic2 = await fetchSingleUserThumbnail();
-
-  const mockFriendInvites: FriendRequestData[] = [
-    {
-      id: "1",
-      displayName: "Someone else",
-      mutualCount: 3,
-      profilePicUrl: pic1.imgurl,
-    },
-    {
-      id: "2",
-      displayName: "Eduardo",
-      mutualCount: 5,
-      profilePicUrl: pic2.imgurl,
-    },
-  ];
-
-  return mockFriendInvites;
-}
-
-export async function getMockHabitInvites() {
-  const pic1 = await fetchSingleUserThumbnail();
-  const pic2 = await fetchSingleUserThumbnail();
-
-  const mockHabitInvites: HabitInviteData[] = [
-    {
-      id: "1",
-      title: "Play Guitar",
-      color: "purple",
-      icon: IconMusic,
-      numberOfParticipants: 3,
-      displayName: "Kush Blaze",
-      profilePicUrl: pic1.imgurl,
-    },
-    {
-      id: "2",
-      title: "Yum Yum",
-      color: "red",
-      icon: IconMoodTongue,
-      numberOfParticipants: 10,
-      displayName: "Blaze Kush",
-      profilePicUrl: pic2.imgurl,
-    },
-  ];
-  return mockHabitInvites;
-}
-
-export async function getMockReminderInvites() {
-  const pic1 = await fetchSingleUserThumbnail();
-  const pic2 = await fetchSingleUserThumbnail();
-
-  const mockReminderInvites: HabitReminderData[] = [
-    {
-      id: "1",
-      title: "Work on Habit",
-      color: "purple",
-      icon: IconCode,
-      timeSent: 4,
-      displayName: "Guy One",
-      profilePicUrl: pic1.imgurl,
-    },
-    {
-      id: "2",
-      title: "Yum Yum",
-      color: "red",
-      icon: IconMoodTongue,
-      timeSent: 12,
-      displayName: "Dude Two",
-      profilePicUrl: pic2.imgurl,
-    },
-  ];
-  return mockReminderInvites;
-}
-
-export async function getMockFriends() {
-  const mockFriends: FriendData[] = [
-    {
-      id: "12",
-      displayName: "Someone else",
-      userName: "some1else",
-      profilePicUrl: "",
-      commonHabits: mockHabitData,
-    },
-    {
-      id: "45",
-      displayName: "Eduardo",
-      userName: "eduardo_012003",
-      profilePicUrl: "",
-      commonHabits: [],
-    },
-  ];
-  return mockFriends;
-}
-
-export const mockHabitFriendData: HabitParticipants[] = [
-  { habitId: "1", participants: [1, 2, 3, 4] },
-  { habitId: "2", participants: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20] },
-  { habitId: "3", participants: [21, 22] },
-];
-export async function getMockHabitParticipantData() {
-  return mockHabitFriendData;
-}
-
-export function getMockHabitCompletionData(habitId: string) {
-  const habit = mockHabitData.find((habit) => habit.id === habitId);
-
-  if (!habit) {
-    throw `Could not find habit with id ${habitId}`;
-  }
-
-  const targetNumberOfCompletionsPerDay =
-    habit.goal.period === "daily" ? habit.goal.completionsPerPeriod : 1;
-
-  return getMockHabitMonthData(
-    (numWeeksToDisplayInMonthlyView - 1) * 7 + getNumberOfDaysInLastWeek(),
-    targetNumberOfCompletionsPerDay,
-  );
-}
-
-export function genMockHabitCompletionData(
-  targetNumberOfCompletionsPerDay: number,
-) {
-  return getMockHabitMonthData(
-    (numWeeksToDisplayInMonthlyView - 1) * 7 + getNumberOfDaysInLastWeek(),
-    targetNumberOfCompletionsPerDay,
-  );
-}
-
-export async function getMockNotifications() {
-  const pic1 = await fetchSingleUserThumbnail();
-  const pic2 = await fetchSingleUserThumbnail();
-  const pic3 = await fetchSingleUserThumbnail();
-  const pic4 = await fetchSingleUserThumbnail();
-  const pic5 = await fetchSingleUserThumbnail();
-  const pic6 = await fetchSingleUserThumbnail();
-
-  const mockNotifications: NotificationData[] = [
-    {
-      id: "1",
-      type: "friendRequest",
-      displayName: "Someone else",
-      mutualCount: 3,
-      profilePicUrl: pic1.imgurl,
-      title: "",
-      color: "red",
-      icon: IconExclamationCircle,
-      numberOfParticipants: 0,
-      timeSent: 0,
-    },
-    {
-      id: "2",
-      type: "habitReminder",
-      displayName: "Guy One",
-      mutualCount: 0,
-      profilePicUrl: pic2.imgurl,
-      title: "Work on Habit",
-      color: "red",
-      icon: IconCode,
-      numberOfParticipants: 0,
-      timeSent: 0,
-    },
-    {
-      id: "3",
-      type: "habitInvite",
-      displayName: "Kush Blaze",
-      mutualCount: 0,
-      profilePicUrl: pic3.imgurl,
-      title: "Play Guitar",
-      color: "purple",
-      icon: IconMusic,
-      numberOfParticipants: 3,
-      timeSent: 0,
-    },
-    {
-      id: "4",
-      type: "friendRequest",
-      displayName: "Eduardo",
-      mutualCount: 5,
-      profilePicUrl: pic4.imgurl,
-      title: "",
-      color: "red",
-      icon: IconExclamationCircle,
-      numberOfParticipants: 0,
-      timeSent: 0,
-    },
-    {
-      id: "5",
-      type: "habitInvite",
-      displayName: "Blaze Kush",
-      mutualCount: 0,
-      profilePicUrl: pic5.imgurl,
-      title: "Yum Yum",
-      color: "red",
-      icon: IconMoodTongue,
-      numberOfParticipants: 10,
-      timeSent: 0,
-    },
-    {
-      id: "6",
-      type: "habitReminder",
-      displayName: "Dude Two",
-      mutualCount: 0,
-      profilePicUrl: pic6.imgurl,
-      title: "Yum Yum",
-      color: "red",
-      icon: IconMoodTongue,
-      numberOfParticipants: 0,
-      timeSent: 12,
-    },
-  ];
-  return mockNotifications;
-}
-
-export async function generateAllMockHabitCompletionData(): Promise<
-  HabitCompletions[]
-> {
-  return mockHabitData.map((habit) => {
-    return {
-      habitId: habit.id,
-      habitCompletionData: getMockHabitCompletionData(habit.id),
-    };
-  });
-}
-
-export async function getAllHabitData() {
-  const habits = await getMockHabitData();
-  const habitCompletions = await generateAllMockHabitCompletionData();
-  const habitParticipants = await getMockHabitParticipantData();
-  // zip the data together into an object of objects
-  // { habitId1: { habitData, habitCompletions, habitParticipants }, habitId2: ... }
-  const habitData = habits.reduce((acc, habit) => {
-    const habitCompletion = habitCompletions.find(
-      (hc) => hc.habitId === habit.id,
-    );
-    const habitParticipant = habitParticipants.find(
-      (hp) => hp.habitId === habit.id,
-    );
-    if (!habitCompletion || !habitParticipant) {
-      throw `Could not find completion or participant data for habit with id ${habit.id}`;
-    }
-    acc[habit.id] = {
-      habitInfo: habit,
-      habitCompletionData: habitCompletion.habitCompletionData,
-      habitParticipants: habitParticipant.participants,
-    };
-    return acc;
-  }, {} as AllHabitsDataType);
-
-  return habitData;
-}
-
-export { NotificationData };
