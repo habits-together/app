@@ -47,4 +47,3 @@ export const handleDatabaseLogin = async (): Promise<userWithIdT> => {
 
   return {} as userWithIdT;
 };
-

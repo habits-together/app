@@ -33,21 +33,21 @@ export default function emailsignup() {
     createUserWithEmailAndPassword(auth, data.email, data.password).then(
       (userCredential) => {
         handleDatabaseSignUp(data).then(() => {
-          const user = userCredential.user // same as auth.currentUser but is guaranteed to exist
-          
+          const user = userCredential.user; // same as auth.currentUser but is guaranteed to exist
+
           //Updating current user atom
           const currentUserData: userWithIdT = {
             createdAt: new Date(),
             displayName: data.email,
             picture: "",
             username: user.email as string, //kinda hacky, under other login methods they may not have an email
-            id: user.uid
+            id: user.uid,
           };
 
-            setCurrentUserAtom(currentUserData);
+          setCurrentUserAtom(currentUserData);
 
-            resetNavigationStack("/");
-          })
+          resetNavigationStack("/");
+        });
       },
       (error: FirebaseError) => {
         const errorCode = error.code;
