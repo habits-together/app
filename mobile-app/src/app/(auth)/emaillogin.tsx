@@ -18,7 +18,7 @@ import { Alert } from "react-native";
 
 export default function emaillogin() {
   const [data, setData] = useState({ email: "", password: "" });
-  const [_, setCurrentUserAtom] = useAtom(currentUserAtom)
+  const [val, setCurrentUserAtom] = useAtom(currentUserAtom)
   const handleEmailChange = (email: string) => {
     setData({ ...data, email: email });
   };
@@ -31,6 +31,7 @@ export default function emaillogin() {
         handleDatabaseLogin().then(
           (success:userWithIdT) => {
             setCurrentUserAtom(success);
+            console.log(val)
             resetNavigationStack("/");
           });
 
