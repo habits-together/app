@@ -31,25 +31,22 @@ export default function emailsignup() {
   const SignUp = () => {
     console.log("Sign Up Attempted");
     createUserWithEmailAndPassword(auth, data.email, data.password).then(
-      (success) => {
-        const dataCopy = { ...data }
-        handleDatabaseSignUp(dataCopy).then(() => {
-          if (auth.currentUser) {
-            //Updating current user atom
+      (userCredential) => {
+        handleDatabaseSignUp(data).then(() => {
+          const user = userCredential.user // same as auth.currentUser but is guaranteed to exist
+          
+          //Updating current user atom
+          const currentUserData: userWithIdT = {
+            createdAt: new Date(),
+            displayName: data.email,
+            picture: "",
+            username: user.email as string, //kinda hacky, under other login methods they may not have an email
+            id: user.uid
+          };
 
-            const currentUserData: userWithIdT = {
-              createdAt: new Date(),
-              displayName: data.email,
-              picture: "",
-              username: auth.currentUser.email as string, //kinda hacky
-              id: auth.currentUser.uid
-            };
+          setCurrentUserAtom(currentUserData)
+          resetNavigationStack("/");
 
-            setCurrentUserAtom(currentUserData)
-
-
-            resetNavigationStack("/");
-          }
         }
         )
       },

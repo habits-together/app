@@ -1,6 +1,7 @@
 import { auth, firestore } from "@/src/firebase/config";
 import { DocumentSnapshot, doc, getDoc, setDoc } from "firebase/firestore";
 import { userWithIdT } from "../lib/db_types";
+import { userDataConverter } from "./helper";
 export const handleDatabaseSignUp = async (data: {
     email: string;
     password: string;
@@ -53,16 +54,3 @@ export const handleDatabaseLogin = async (): Promise<userWithIdT> => {
 }
 
 
-const userDataConverter = {
-    fromFirestore: (snapshot: DocumentSnapshot): userWithIdT => {
-        const data = snapshot.data();
-        const typedData: userWithIdT = {
-            createdAt: data?.createdAt,
-            displayName: data?.displayName,
-            id: data?.id,
-            picture: data?.picture,
-            username: data?.username
-        };
-        return typedData;
-    }
-}
