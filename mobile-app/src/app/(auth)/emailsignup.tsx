@@ -1,12 +1,15 @@
+import { currentUserAtom } from "@/src/atoms/currentUserAtom";
 import AuthButton from "@/src/components/AuthButton";
 import AuthInputField from "@/src/components/AuthInputField";
 import { Text, View } from "@/src/components/Themed";
-import { auth, firestore } from "@/src/firebase/config";
+import { handleDatabaseSignUp } from "@/src/firebase/auth";
+import { auth } from "@/src/firebase/config";
+import { userWithIdT } from "@/src/lib/db_types";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { Link } from "expo-router";
 import { FirebaseError } from "firebase/app";
 import { AuthErrorCodes, createUserWithEmailAndPassword } from "firebase/auth";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { useAtom } from "jotai";
 import { useState } from "react";
 import { Alert } from "react-native";
 
@@ -15,6 +18,7 @@ export default function emailsignup() {
     email: "",
     password: "",
   });
+  const [_, setCurrentUserAtom] = useAtom(currentUserAtom);
 
   const handleEmailChange = (email: string) => {
     setData({ ...data, email: email });
@@ -27,9 +31,23 @@ export default function emailsignup() {
   const SignUp = () => {
     console.log("Sign Up Attempted");
     createUserWithEmailAndPassword(auth, data.email, data.password).then(
-      (success) => {
-        handleDatabaseSignUp();
-        resetNavigationStack("/");
+      (userCredential) => {
+        handleDatabaseSignUp(data).then(() => {
+          const user = userCredential.user; // same as auth.currentUser but is guaranteed to exist
+
+          //Updating current user atom
+          const currentUserData: userWithIdT = {
+            createdAt: new Date(),
+            displayName: data.email,
+            picture: "",
+            username: user.email as string, //kinda hacky, under other login methods they may not have an email
+            id: user.uid,
+          };
+
+          setCurrentUserAtom(currentUserData);
+
+          resetNavigationStack("/");
+        });
       },
       (error: FirebaseError) => {
         const errorCode = error.code;
@@ -58,60 +76,6 @@ export default function emailsignup() {
     );
   };
 
-  const handleDatabaseSignUp = async () => {
-    // BASE DATA
-    const baseData = {
-      created_at: new Date(),
-      display_name: data.email,
-      picture: "",
-      username: auth.currentUser?.email,
-      habit_invites: [], // references habit_invites
-      friend_requests: [], // references friend_requests
-    };
-
-    const dummyHabitData = {
-      habit_ref: doc(firestore, "habits", "BASEHABIT"),
-    };
-
-    const nudgeDummyData = {
-      habit_ref: doc(firestore, "habits", "BASEHABIT"),
-      friend_ref: doc(firestore, "users", "otheruser"),
-      sent_at: new Date(),
-    };
-
-    const friendDummyData = {
-      friend_ref: doc(firestore, "users", "otheruser"),
-      friends_since: new Date(),
-    };
-
-    // PUSH TO FIREBASE
-    if (auth.currentUser) {
-      // write regular user data doc
-      const accDocRef = doc(firestore, "users", auth.currentUser.uid);
-      await setDoc(accDocRef, baseData);
-
-      // create habit completion collection
-      const habitUserCompletionColRef = collection(accDocRef, "habits");
-
-      await addDoc(habitUserCompletionColRef, dummyHabitData);
-
-      // create nudge collection
-      const nudgeColRef = collection(accDocRef, "nudges");
-      await addDoc(nudgeColRef, nudgeDummyData);
-
-      // create friends collection
-      const friendsColRef = collection(accDocRef, "friends");
-      await addDoc(friendsColRef, friendDummyData);
-
-      console.log(
-        "Added User Document written with ID: ",
-        auth.currentUser.uid,
-      );
-    } else {
-      //potential issue: if user gets created but DB write fails
-      console.log("An error occurred. Please try again.");
-    }
-  };
   return (
     <View className="flex-1 items-center px-3 pt-5">
       <AuthInputField
