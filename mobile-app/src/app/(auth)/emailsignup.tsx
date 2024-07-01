@@ -47,8 +47,7 @@ export default function emailsignup() {
             setCurrentUserAtom(currentUserData);
 
             resetNavigationStack("/");
-          }
-        });
+          })
       },
       (error: FirebaseError) => {
         const errorCode = error.code;
