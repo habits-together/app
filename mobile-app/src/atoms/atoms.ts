@@ -21,8 +21,7 @@ import {
   fetchUserInfo,
   searchUsersInDb,
   sendNotificationInDb,
-} from "../firebase/betterApi";
-import { generateMockId } from "../lib/betterMock";
+} from "../firebase/api";
 import {
   HabitDisplayType,
   allHabitsT,
@@ -37,7 +36,8 @@ import {
   notificationT,
 } from "../lib/db_types";
 import { todayString } from "../lib/formatDateString";
-import { getNumberOfDaysInLastWeek } from "../lib/mockData";
+import { getNumberOfDaysInLastWeek } from "../lib/getNumberOfDaysInLastWeek";
+import { generateMockId } from "../lib/mockData";
 import { structureCompletionData } from "../lib/structureCompletionData";
 import { currentUserAtom, currentUserIdAtom } from "./currentUserAtom";
 
