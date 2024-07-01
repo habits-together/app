@@ -18,7 +18,7 @@ export default function emailsignup() {
     email: "",
     password: "",
   });
-  const [_, setCurrentUserAtom] = useAtom(currentUserAtom)
+  const [_, setCurrentUserAtom] = useAtom(currentUserAtom);
 
   const handleEmailChange = (email: string) => {
     setData({ ...data, email: email });
@@ -32,7 +32,7 @@ export default function emailsignup() {
     console.log("Sign Up Attempted");
     createUserWithEmailAndPassword(auth, data.email, data.password).then(
       (success) => {
-        const dataCopy = { ...data }
+        const dataCopy = { ...data };
         handleDatabaseSignUp(dataCopy).then(() => {
           if (auth.currentUser) {
             //Updating current user atom
@@ -42,16 +42,14 @@ export default function emailsignup() {
               displayName: data.email,
               picture: "",
               username: auth.currentUser.email as string, //kinda hacky
-              id: auth.currentUser.uid
+              id: auth.currentUser.uid,
             };
 
-            setCurrentUserAtom(currentUserData)
-
+            setCurrentUserAtom(currentUserData);
 
             resetNavigationStack("/");
           }
-        }
-        )
+        });
       },
       (error: FirebaseError) => {
         const errorCode = error.code;
@@ -79,7 +77,6 @@ export default function emailsignup() {
       },
     );
   };
-
 
   return (
     <View className="flex-1 items-center px-3 pt-5">
