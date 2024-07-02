@@ -6,15 +6,18 @@ import { useColorScheme } from "nativewind";
 import React from "react";
 import { Pressable } from "react-native";
 import {
-  commonHabitIdsAtom,
-  friendAtom,
   habitColorAtom,
   habitIconAtom,
   habitTitleAtom,
   inviteUserToHabitAtom,
-  mutualFriendsPfpsListAtom,
   sendFriendRequestAtom,
 } from "../atoms/atoms";
+import {
+  commonHabitIdsAtom,
+  friendAtom,
+  mutualFriendsPfpsListAtom,
+} from "../atoms/friendsAtom";
+
 import colors from "../constants/colors";
 import { userWithIdT } from "../lib/db_types";
 import DotsMenu from "./DotsMenu";
@@ -85,7 +88,6 @@ export default function UserCard({
   displayType: "friendsList" | "inviteFriendsToHabit" | "addFriends";
 }) {
   const { id: userId, displayName, username, picture } = userInfo;
-
   return (
     <Link
       push
@@ -201,6 +203,7 @@ function CommonHabits({ friendId }: { friendId: string }) {
 function MutualFriends({ userId }: { userId: string }) {
   const maxPfps = 8;
   const mutualFriendsPictures = useAtomValue(mutualFriendsPfpsListAtom(userId));
+  console.log(`inside comp 2 -> ${userId} -> ${mutualFriendsPictures.length}`)
 
   return (
     <View className="ml-1 mr-auto mt-2 flex flex-row">

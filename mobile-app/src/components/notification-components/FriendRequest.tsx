@@ -3,8 +3,8 @@ import {
   deleteNotificationAtom,
   friendNotificationAtom,
   getUserInfoAtom,
-  numberOfMutualFriendsAtom,
 } from "@/src/atoms/atoms";
+import { numberOfMutualFriendsAtom } from "@/src/atoms/friendsAtom";
 import { useAtomValue } from "jotai";
 import { NotifProfilePicture } from "../ProfilePicture";
 import { Text, View } from "../Themed";
@@ -16,6 +16,7 @@ export function FriendRequest({ notifId }: { notifId: string }) {
   const numberOfMutualFriends = useAtomValue(
     numberOfMutualFriendsAtom(notifData.senderId),
   );
+  console.log(`inside comp -> ${notifData.senderId} -> ${numberOfMutualFriends}`)
 
   return (
     <View className="mt-2 flex grow-0 flex-row items-center rounded-3xl px-0 py-2">

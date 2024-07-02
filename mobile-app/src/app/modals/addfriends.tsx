@@ -8,7 +8,7 @@ import { useAtomValue } from "jotai";
 export default function AddFriends() {
   const searchText = useAtomValue(searchQueryAtom);
   const searchResultUsers = useAtomValue(searchResultUsersAtom);
-
+  
   return (
     <View className="flex-1 p-4">
       <FriendSearchBar placeholder="Username or email" />
