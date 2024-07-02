@@ -1,139 +1,235 @@
 import {
+  IconActivity,
+  IconAdjustmentsHeart,
+  IconApple,
+  IconBallAmericanFootball,
+  IconBallBaseball,
+  IconBallBasketball,
+  IconBallFootball,
+  IconBallTennis,
+  IconBallVolleyball,
   IconBarbell,
+  IconBeach,
+  IconBed,
+  IconBike,
   IconBook,
+  IconBooks,
   IconBottle,
+  IconBoxMultiple,
   IconBrain,
+  IconBriefcase,
   IconBrush,
   IconBuildingBank,
   IconBuildingChurch,
+  IconBuildingEstate,
   IconBulb,
   IconCalendar,
   IconCamera,
+  IconCertificate,
+  IconChartArrowsVertical,
+  IconChartDots3,
   IconChartLine,
+  IconChecklist,
+  IconChefHat,
+  IconChess,
+  IconChristmasTree,
   IconClock,
+  IconCode,
+  IconCoin,
+  IconCoins,
+  IconConfetti,
+  IconDatabaseDollar,
+  IconDeviceAnalytics,
+  IconDeviceDesktop,
+  IconDevicesDollar,
+  IconDeviceGamepad2,
   IconDeviceLaptop,
+  IconDeviceMobileOff,
+  IconEdit,
+  IconEmpathize,
+  IconFileText,
+  IconFishHook,
   IconFlower,
+  IconHeadphones,
   IconHeart,
+  IconHeartbeat,
+  IconHeartHandshake,
+  IconHearts,
   IconHome,
+  IconHomeHeart,
+  IconHomeStats,
+  IconHourglass,
+  IconJewishStar,
   IconLadder,
+  IconLanguage,
   IconLeaf,
+  IconListSearch,
+  IconMail,
+  IconMessageChatbot,
+  IconMessages,
+  IconMichelinStar,
+  IconMicroscope,
+  IconMoodCrazyHappy,
+  IconMoodDollar,
+  IconMoodEdit,
+  IconMoodHeart,
+  IconMoon2,
+  IconMovie,
   IconMusic,
   IconPeace,
   IconPhotoScan,
+  IconPigMoney,
+  IconPingPong,
+  IconPlanet,
+  IconPlant,
+  IconPlant2,
+  IconReportMoney,
+  IconRollerSkating,
+  IconRun,
+  IconSalad,
+  IconScale,
+  IconSchool,
+  IconShoppingCartDollar,
+  IconSwimming,
+  IconTable,
+  IconTent,
+  IconTrees,
+  IconTrendingUp,
+  IconUserHeart,
+  IconUsers,
   IconUsersGroup,
+  IconVideo,
+  IconWalk,
   IconWallet,
+  IconWindow,
+  IconWorldHeart,
+  IconYinYang,
   IconYoga,
+  IconZoomMoney,
   Icon as TablerIcon,
 } from "@tabler/icons-react-native";
 
+const iconMapping: { [key: string]: TablerIcon } = {
+  IconActivity,
+  IconAdjustmentsHeart,
+  IconApple,
+  IconBallAmericanFootball,
+  IconBallBaseball,
+  IconBallBasketball,
+  IconBallFootball,
+  IconBallTennis,
+  IconBallVolleyball,
+  IconBarbell,
+  IconBeach,
+  IconBed,
+  IconBike,
+  IconBook,
+  IconBooks,
+  IconBoxMultiple,
+  IconBottle,
+  IconBrain,
+  IconBriefcase,
+  IconBrush,
+  IconBuildingBank,
+  IconBuildingChurch,
+  IconBuildingEstate,
+  IconBulb,
+  IconCalendar,
+  IconCamera,
+  IconCertificate,
+  IconChartArrowsVertical,
+  IconChartDots3,
+  IconChartLine,
+  IconChecklist,
+  IconChefHat,
+  IconChess,
+  IconChristmasTree,
+  IconClock,
+  IconCode,
+  IconCoin,
+  IconCoins,
+  IconConfetti,
+  IconDatabaseDollar,
+  IconDeviceAnalytics,
+  IconDeviceDesktop,
+  IconDevicesDollar,
+  IconDeviceGamepad2,
+  IconDeviceLaptop,
+  IconDeviceMobileOff,
+  IconEdit,
+  IconEmpathize,
+  IconFileText,
+  IconFishHook,
+  IconFlower,
+  IconHeadphones,
+  IconHeart,
+  IconHeartbeat,
+  IconHeartHandshake,
+  IconHearts,
+  IconHome,
+  IconHomeHeart,
+  IconHomeStats,
+  IconHourglass,
+  IconJewishStar,
+  IconLadder,
+  IconLanguage,
+  IconLeaf,
+  IconListSearch,
+  IconMail,
+  IconMessageChatbot,
+  IconMessages,
+  IconMichelinStar,
+  IconMicroscope,
+  IconMoodCrazyHappy,
+  IconMoodDollar,
+  IconMoodEdit,
+  IconMoodHeart,
+  IconMoon2,
+  IconMovie,
+  IconMusic,
+  IconPeace,
+  IconPhotoScan,
+  IconPigMoney,
+  IconPingPong,
+  IconPlanet,
+  IconPlant,
+  IconPlant2,
+  IconReportMoney,
+  IconRollerSkating,
+  IconRun,
+  IconSalad,
+  IconScale,
+  IconSchool,
+  IconShoppingCartDollar,
+  IconSwimming,
+  IconTable,
+  IconTent,
+  IconTrees,
+  IconTrendingUp,
+  IconUserHeart,
+  IconUsers,
+  IconUsersGroup,
+  IconVideo,
+  IconWalk,
+  IconWallet,
+  IconWindow,
+  IconWorldHeart,
+  IconYinYang,
+  IconYoga,
+  IconZoomMoney,
+};
+
 export function iconStrNameToTablerIcon(iconStrName: string): TablerIcon {
-  switch (iconStrName) {
-    case "barbell":
-      return IconBarbell;
-    case "book":
-      return IconBook;
-    case "bottle":
-      return IconBottle;
-    case "brain":
-      return IconBrain;
-    case "brush":
-      return IconBrush;
-    case "buildingBank":
-      return IconBuildingBank;
-    case "buildingChurch":
-      return IconBuildingChurch;
-    case "bulb":
-      return IconBulb;
-    case "calendar":
-      return IconCalendar;
-    case "camera":
-      return IconCamera;
-    case "chartLine":
-      return IconChartLine;
-    case "clock":
-      return IconClock;
-    case "deviceLaptop":
-      return IconDeviceLaptop;
-    case "flower":
-      return IconFlower;
-    case "heart":
-      return IconHeart;
-    case "home":
-      return IconHome;
-    case "ladder":
-      return IconLadder;
-    case "leaf":
-      return IconLeaf;
-    case "music":
-      return IconMusic;
-    case "peace":
-      return IconPeace;
-    case "photoScan":
-      return IconPhotoScan;
-    case "usersGroup":
-      return IconUsersGroup;
-    case "wallet":
-      return IconWallet;
-    case "yoga":
-      return IconYoga;
-    default:
-      return IconPhotoScan;
-  }
+  const iconKey = `Icon${iconStrName.charAt(0).toUpperCase()}${iconStrName.slice(1)}`; // Capitalize the first letter and add the "Icon" prefix
+  return iconMapping[iconKey] || IconPhotoScan;
 }
 
 export function tablerIconToStr(tablerIcon: TablerIcon): string {
-  switch (tablerIcon) {
-    case IconBarbell:
-      return "barbell";
-    case IconBook:
-      return "book";
-    case IconBottle:
-      return "bottle";
-    case IconBrain:
-      return "brain";
-    case IconBrush:
-      return "brush";
-    case IconBuildingBank:
-      return "buildingBank";
-    case IconBuildingChurch:
-      return "buildingChurch";
-    case IconBulb:
-      return "bulb";
-    case IconCalendar:
-      return "calendar";
-    case IconCamera:
-      return "camera";
-    case IconChartLine:
-      return "chartLine";
-    case IconClock:
-      return "clock";
-    case IconDeviceLaptop:
-      return "deviceLaptop";
-    case IconFlower:
-      return "flower";
-    case IconHeart:
-      return "heart";
-    case IconHome:
-      return "home";
-    case IconLadder:
-      return "ladder";
-    case IconLeaf:
-      return "leaf";
-    case IconMusic:
-      return "music";
-    case IconPeace:
-      return "peace";
-    case IconPhotoScan:
-      return "photoScan";
-    case IconUsersGroup:
-      return "usersGroup";
-    case IconWallet:
-      return "wallet";
-    case IconYoga:
-      return "yoga";
-    case IconPhotoScan:
-      return "default";
-    default:
-      return "default";
+  for (const [key, value] of Object.entries(iconMapping)) {
+    if (value === tablerIcon) {
+      const baseName = key.replace(/^Icon/, ''); // Remove the "Icon" prefix
+      return baseName.charAt(0).toLowerCase() + baseName.slice(1); // Lowercase the first letter
+    }
   }
+  return "default"; // Return "default" if no match is found
 }
