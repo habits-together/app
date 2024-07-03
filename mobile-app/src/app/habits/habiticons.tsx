@@ -186,7 +186,7 @@ export default function HabitIcons() {
   return (
     <View className="flex flex-1 flex-col gap-y-5 px-5 pt-12">
       {/* Header */}
-      <View className="felx-row relative flex items-center justify-center">
+      <View className="relative flex flex-row items-center justify-center">
         <TouchableOpacity
           className="absolute -left-1 flex flex-row items-center justify-center px-2 py-1"
           onPress={() => {
