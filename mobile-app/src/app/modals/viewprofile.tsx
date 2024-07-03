@@ -38,7 +38,7 @@ export default function Profile() {
           <View className="space-y-4 pb-32 pt-4">
             <Text className="text-xl font-semibold">Habits Together</Text>
             {commonHabitIds.map((habitId) => (
-              <HabitCard key={habitId} habitId={habitId} screenType="/modals" />
+              <HabitCard key={habitId} habitId={habitId} openAsModal={true} />
             ))}
           </View>
         </ScrollView>

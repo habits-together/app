@@ -13,10 +13,10 @@ import { HabitHeader } from "./HabitHeader";
 
 export function HabitCard({
   habitId,
-  screenType = "",
+  openAsModal = false,
 }: {
   habitId: string;
-  screenType?: "" | "/modals";
+  openAsModal?: boolean;
 }) {
   const { colorScheme } = useColorScheme();
   const displayType = useAtomValue(habitDisplayTypeAtom(habitId));
@@ -26,7 +26,7 @@ export function HabitCard({
     <Link
       push
       href={{
-        pathname: screenType.concat("/viewhabit"),
+        pathname: openAsModal ? "modals/viewhabit" : "viewhabit",
         params: { id: habitId },
       }}
       asChild
