@@ -1,6 +1,9 @@
+import { currentUserAtom } from "@/src/atoms/currentUserAtom";
 import AuthButton from "@/src/components/AuthButton";
 import AuthInputField from "@/src/components/AuthInputField";
 import { Text, View } from "@/src/components/Themed";
+import { handleDatabaseLogin } from "@/src/firebase/auth";
+import { userWithIdT } from "@/src/lib/db_types";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { Link } from "expo-router";
 import { FirebaseError } from "firebase/app";
@@ -9,11 +12,13 @@ import {
   getAuth,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import { useAtom } from "jotai";
 import { useState } from "react";
 import { Alert } from "react-native";
 
 export default function emaillogin() {
   const [data, setData] = useState({ email: "", password: "" });
+  const [val, setCurrentUserAtom] = useAtom(currentUserAtom);
   const handleEmailChange = (email: string) => {
     setData({ ...data, email: email });
   };
@@ -23,8 +28,11 @@ export default function emaillogin() {
   const Login = () => {
     signInWithEmailAndPassword(getAuth(), data.email, data.password)
       .then((userCredential) => {
-        console.log(userCredential);
-        resetNavigationStack("/");
+        handleDatabaseLogin().then((success: userWithIdT) => {
+          setCurrentUserAtom(success);
+          console.log(val);
+          resetNavigationStack("/");
+        });
       })
       .catch((error: FirebaseError) => {
         const errorCode = error.code;
