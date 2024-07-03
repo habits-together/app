@@ -1,6 +1,6 @@
 import { auth, firestore } from "@/src/firebase/config";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { userWithIdT } from "../lib/db_types";
+import { userT, userWithIdT } from "../lib/db_types";
 import { userDataConverter } from "./helper";
 export const handleDatabaseSignUp = async (data: {
   email: string;
@@ -8,13 +8,12 @@ export const handleDatabaseSignUp = async (data: {
 }) => {
   // PUSH TO FIREBASE
   if (auth.currentUser) {
-    // BASE DATA
-    const currentUserData: userWithIdT = {
+    // BASE DATA FOR NEW USER
+    const currentUserData: userT = {
       createdAt: new Date(),
       displayName: data.email,
       picture: "",
       username: auth.currentUser.email as string, //kinda hacky
-      id: auth.currentUser.uid,
     };
 
     // write regular user data doc
@@ -34,8 +33,9 @@ export const handleDatabaseLogin = async (): Promise<userWithIdT> => {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      const data: userWithIdT = userDataConverter.fromFirestore(docSnap);
-      return data;
+      const data: userT = userDataConverter.fromFirestore(docSnap);
+      const typed_data: userWithIdT = { ...data, id: auth.currentUser.uid }
+      return typed_data;
     } else {
       console.log(
         "Critical error: user is authenticated but does not exist in database",
