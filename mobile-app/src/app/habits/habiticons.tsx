@@ -163,7 +163,7 @@ export default function HabitIcons() {
   const renderItem = ({ item }: { item: HabitIconsTuple }) => {
     const [section, keys] = item;
     return (
-      <View style={{ marginBottom: 20 }}>
+      <View className="mb-5" key={section}>
         <Text className="text-base font-semibold">{section}</Text>
         <View className="flex-row flex-wrap">
           {keys.map((key) => (
