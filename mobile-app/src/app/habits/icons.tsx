@@ -41,10 +41,10 @@ import {
   IconDatabaseDollar,
   IconDeviceAnalytics,
   IconDeviceDesktop,
-  IconDevicesDollar,
   IconDeviceGamepad2,
   IconDeviceLaptop,
   IconDeviceMobileOff,
+  IconDevicesDollar,
   IconEdit,
   IconEmpathize,
   IconFileText,
@@ -52,8 +52,8 @@ import {
   IconFlower,
   IconHeadphones,
   IconHeart,
-  IconHeartbeat,
   IconHeartHandshake,
+  IconHeartbeat,
   IconHearts,
   IconHome,
   IconHomeHeart,
@@ -227,7 +227,7 @@ export function iconStrNameToTablerIcon(iconStrName: string): TablerIcon {
 export function tablerIconToStr(tablerIcon: TablerIcon): string {
   for (const [key, value] of Object.entries(iconMapping)) {
     if (value === tablerIcon) {
-      const baseName = key.replace(/^Icon/, ''); // Remove the "Icon" prefix
+      const baseName = key.replace(/^Icon/, ""); // Remove the "Icon" prefix
       return baseName.charAt(0).toLowerCase() + baseName.slice(1); // Lowercase the first letter
     }
   }
