@@ -157,7 +157,9 @@ const categories: HabitIconsTuple[] = [
 export default function HabitIcons() {
   const [icon, setIcon] = useAtom(tempIconAtom);
 
-  const habitIcons: HabitIconsTuple[] = useMemo(() => { return categories }, []) 
+  const habitIcons: HabitIconsTuple[] = useMemo(() => {
+    return categories;
+  }, []);
   const renderItem = ({ item }: { item: HabitIconsTuple }) => {
     const [section, keys] = item;
     return (
@@ -184,9 +186,9 @@ export default function HabitIcons() {
   return (
     <View style={{ flex: 1, paddingHorizontal: 10, paddingTop: 55 }}>
       {/* Header */}
-      <View className="relative flex felx-row items-center justify-center">
+      <View className="felx-row relative flex items-center justify-center">
         <TouchableOpacity
-        className="absolute -left-1 flex flex-row items-center justify-center px-2 py-1"
+          className="absolute -left-1 flex flex-row items-center justify-center px-2 py-1"
           onPress={() => {
             router.back();
           }}
