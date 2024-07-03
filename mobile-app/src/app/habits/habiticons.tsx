@@ -4,6 +4,7 @@ import { Text, View } from "@/src/components/Themed";
 import { IconChevronLeft } from "@tabler/icons-react-native";
 import { router } from "expo-router";
 import { useAtom } from "jotai";
+import { useMemo } from "react";
 import { FlatList, TouchableOpacity } from "react-native";
 import { IconButton } from "./icon-button";
 import { iconStrNameToTablerIcon} from "./icons";
@@ -32,14 +33,15 @@ const categories: HabitIconsTuple[] = [
 export default function HabitIcons() {
   const [icon, setIcon] = useAtom(tempIconAtom);
 
+  const habitIcons: HabitIconsTuple[] = useMemo(() => { return categories }, []) 
   const renderItem = ({ item }: { item: HabitIconsTuple }) => {
     const [section, keys] = item;
     return (
       <View style={{ marginBottom: 20 }}>
-        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{section}</Text>
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+        <Text className="text-base font-semibold">{section}</Text>
+        <View className="flex-row flex-wrap">
           {keys.map((key) => (
-            <View style={{ marginRight: 10, marginTop: 10 }} key={key}>
+            <View className="mr-2 mt-2" key={key}>
               <IconButton
                 icon={iconStrNameToTablerIcon(key)}
                 onPress={() => {
@@ -58,22 +60,23 @@ export default function HabitIcons() {
   return (
     <View style={{ flex: 1, paddingHorizontal: 10, paddingTop: 55 }}>
       {/* Header */}
-      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', position: 'relative', marginBottom: 20 }}>
+      <View className="relative flex felx-row items-center justify-center">
         <TouchableOpacity
+        className="absolute -left-1 flex flex-row items-center justify-center px-2 py-1"
           onPress={() => {
             router.back();
           }}
           style={{ position: 'absolute', left: -1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: 5 }}
         >
           <Icon icon={IconChevronLeft} size={20} />
-          <Text style={{ marginLeft: 5, fontSize: 16, fontWeight: 'bold' }}>Back</Text>
+          <Text className="ml-1 text-base font-semibold">Back</Text>
         </TouchableOpacity>
-        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Select Icon</Text>
+        <Text className="text-base font-semibold">Select Icon</Text>
       </View>
 
       {/* Content */}
       <FlatList
-        data={categories}
+        data={habitIcons}
         renderItem={renderItem}
         keyExtractor={(item) => item[0]} // Assuming the first element in the tuple is unique
       />
