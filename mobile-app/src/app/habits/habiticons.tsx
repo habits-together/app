@@ -182,21 +182,13 @@ export default function HabitIcons() {
   };
 
   return (
-    <View style={{ flex: 1, paddingHorizontal: 10, paddingTop: 55 }}>
+    <View className="flex flex-1 flex-col gap-y-5 px-5 pt-12">
       {/* Header */}
       <View className="relative flex felx-row items-center justify-center">
         <TouchableOpacity
         className="absolute -left-1 flex flex-row items-center justify-center px-2 py-1"
           onPress={() => {
             router.back();
-          }}
-          style={{
-            position: "absolute",
-            left: -1,
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: 5,
           }}
         >
           <Icon icon={IconChevronLeft} size={20} />
@@ -209,7 +201,7 @@ export default function HabitIcons() {
       <FlatList
         data={habitIcons}
         renderItem={renderItem}
-        keyExtractor={(item) => item[0]} // Assuming the first element in the tuple is unique
+        keyExtractor={(item) => item[0]}
       />
     </View>
   );
