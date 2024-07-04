@@ -167,7 +167,7 @@ export const mockHabitCompletions: allParticipantCompletionsForAllHabitsT = {
     friend1: {
       [todayString()]: 1,
     },
-  }
+  },
 };
 
 export const mockNotifications: allNotificationsT = {
