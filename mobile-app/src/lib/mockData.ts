@@ -159,6 +159,9 @@ export const mockHabitCompletions: allParticipantCompletionsForAllHabitsT = {
     friend2: {
       [formatDateString(new Date("2024-05-4T04:00:00"))]: 1,
     },
+    friend3: {
+      [formatDateString(new Date("2024-05-4T04:00:00"))]: 1,
+    },
   },
   habit3: {
     currentUserId123: {
