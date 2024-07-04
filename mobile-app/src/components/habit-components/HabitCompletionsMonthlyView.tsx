@@ -5,7 +5,7 @@ import {
   targetNumberOfCompletionsPerWeekAtom,
 } from "@/src/atoms/atoms";
 import { habitCompletionWithDateInfoT } from "@/src/lib/db_types";
-import { getNumberOfDaysInLastWeek } from "@/src/lib/mockData";
+import { getNumberOfDaysInLastWeek } from "@/src/lib/getNumberOfDaysInLastWeek";
 import { useAtomValue } from "jotai";
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
