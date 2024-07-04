@@ -1,10 +1,9 @@
 import { commonHabitIdsAtom, getUserInfoAtom } from "@/src/atoms/atoms";
 import { ScrollView, Text, View } from "@/src/components/Themed";
 import { HabitCard } from "@/src/components/habit-components/HabitCard";
-import { Link, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { useAtomValue } from "jotai";
 import React from "react";
-import { Pressable } from "react-native";
 import { BigProfilePicture } from "../../components/ProfilePicture";
 
 export default function Profile() {
@@ -39,19 +38,7 @@ export default function Profile() {
           <View className="space-y-4 pb-32 pt-4">
             <Text className="text-xl font-semibold">Habits Together</Text>
             {commonHabitIds.map((habitId) => (
-              <Link
-                push
-                href={{
-                  pathname: "/modals/viewhabit",
-                  params: { id: habitId },
-                }}
-                asChild
-                key={habitId}
-              >
-                <Pressable>
-                  <HabitCard habitId={habitId} />
-                </Pressable>
-              </Link>
+              <HabitCard key={habitId} habitId={habitId} openAsModal={true} />
             ))}
           </View>
         </ScrollView>
