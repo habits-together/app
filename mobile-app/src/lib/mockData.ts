@@ -101,6 +101,28 @@ export const mockHabits: allHabitsT = {
       },
     },
   },
+  habit3: {
+    createdAt: new Date(),
+    title: "Test code",
+    icon: "book",
+    color: "red",
+    description: "Let's code",
+    goal: {
+      period: "daily",
+      completionsPerPeriod: 1,
+    },
+    participants: {
+      currentUserId123: {
+        mostRecentCompletionDate: new Date(),
+        isOwner: true,
+        ...mockUsers["currentUserId123"],
+      },
+      friend1: {
+        mostRecentCompletionDate: new Date(),
+        ...mockUsers["friend1"],
+      },
+    },
+  },
 };
 
 export const mockHabitCompletions: allParticipantCompletionsForAllHabitsT = {

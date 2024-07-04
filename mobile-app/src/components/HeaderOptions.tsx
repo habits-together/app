@@ -24,6 +24,8 @@ function sharedOptions(colorScheme: string): NativeStackNavigationOptions {
 export function viewHabitOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
+  const { id } = useGlobalSearchParams<{ id: string }>();
+
   return {
     headerLeft: () => <HeaderBackButton showText={true} />,
     headerTitle: () => <></>,
@@ -34,7 +36,7 @@ export function viewHabitOptions(
           onPress={() =>
             router.push({
               pathname: "/habits/edithabit",
-              params: { habitidStr: "habit1" },
+              params: { habitidStr: id },
             })
           }
         >
