@@ -103,13 +103,13 @@ export const mockHabits: allHabitsT = {
   },
   habit3: {
     createdAt: new Date(),
-    title: "Test code",
-    icon: "book",
-    color: "red",
-    description: "Let's code",
+    title: "Drink water",
+    icon: "bottle",
+    color: "purple",
+    description: "",
     goal: {
       period: "daily",
-      completionsPerPeriod: 1,
+      completionsPerPeriod: 5,
     },
     participants: {
       currentUserId123: {
@@ -160,6 +160,14 @@ export const mockHabitCompletions: allParticipantCompletionsForAllHabitsT = {
       [formatDateString(new Date("2024-05-4T04:00:00"))]: 1,
     },
   },
+  habit3: {
+    currentUserId123: {
+      [todayString()]: 1,
+    },
+    friend1: {
+      [todayString()]: 1,
+    },
+  }
 };
 
 export const mockNotifications: allNotificationsT = {
