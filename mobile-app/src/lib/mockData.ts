@@ -101,6 +101,28 @@ export const mockHabits: allHabitsT = {
       },
     },
   },
+  habit3: {
+    createdAt: new Date(),
+    title: "Drink water",
+    icon: "bottle",
+    color: "purple",
+    description: "",
+    goal: {
+      period: "daily",
+      completionsPerPeriod: 5,
+    },
+    participants: {
+      currentUserId123: {
+        mostRecentCompletionDate: new Date(),
+        isOwner: true,
+        ...mockUsers["currentUserId123"],
+      },
+      friend1: {
+        mostRecentCompletionDate: new Date(),
+        ...mockUsers["friend1"],
+      },
+    },
+  },
 };
 
 export const mockHabitCompletions: allParticipantCompletionsForAllHabitsT = {
@@ -136,6 +158,14 @@ export const mockHabitCompletions: allParticipantCompletionsForAllHabitsT = {
   habit2_userNotPartOfToStart: {
     friend2: {
       [formatDateString(new Date("2024-05-4T04:00:00"))]: 1,
+    },
+  },
+  habit3: {
+    currentUserId123: {
+      [todayString()]: 1,
+    },
+    friend1: {
+      [todayString()]: 1,
     },
   },
 };
