@@ -1,11 +1,11 @@
 import { getUserInfoAtom } from "@/src/atoms/atoms";
+import { commonHabitIdsAtom } from "@/src/atoms/friendsAtom";
 import { ScrollView, Text, View } from "@/src/components/Themed";
 import { HabitCard } from "@/src/components/habit-components/HabitCard";
 import { useLocalSearchParams } from "expo-router";
 import { useAtomValue } from "jotai";
 import React from "react";
 import { BigProfilePicture } from "../../components/ProfilePicture";
-import { commonHabitIdsAtom } from "@/src/atoms/friendsAtom";
 
 export default function Profile() {
   const { theirUserId } = useLocalSearchParams<{ theirUserId: string }>();

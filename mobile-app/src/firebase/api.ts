@@ -309,7 +309,6 @@ export async function fetchUserInfo({
   return userData;
 }
 
-
 export async function searchUsersInDb({
   searchText,
 }: {

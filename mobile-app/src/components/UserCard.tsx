@@ -203,8 +203,6 @@ function CommonHabits({ friendId }: { friendId: string }) {
 function MutualFriends({ userId }: { userId: string }) {
   const maxPfps = 8;
   const mutualFriendsPictures = useAtomValue(mutualFriendsPfpsListAtom(userId));
-  console.log(`inside comp 2 -> ${userId} -> ${mutualFriendsPictures.length}`)
-
   return (
     <View className="ml-1 mr-auto mt-2 flex flex-row">
       <HorizontalProfilePicsList

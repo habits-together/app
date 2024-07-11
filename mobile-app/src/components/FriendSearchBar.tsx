@@ -1,9 +1,9 @@
 import { SafeAreaView, View } from "@/src/components/Themed";
 import colors from "@/src/constants/colors";
 import { IconSearch } from "@tabler/icons-react-native";
-import { useAtom, useSetAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { useColorScheme } from "nativewind";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TextInput } from "react-native";
 import { searchQueryAtom } from "../atoms/atoms";
 import Icon from "./Icon";

@@ -22,25 +22,25 @@ export const mockUsers: Record<string, userT> = {
     username: "dude5",
     picture: mockProfilePictures[5],
   },
-  "OqpamKgeRUPCR7X9GbkydZH3uqQ2": {
+  OqpamKgeRUPCR7X9GbkydZH3uqQ2: {
     createdAt: new Date(),
     displayName: "Guy",
     username: "guy4",
     picture: mockProfilePictures[4],
   },
-  "Xbc5C2wQfxc0rFFwFyXHsF6LtWp1": {
+  Xbc5C2wQfxc0rFFwFyXHsF6LtWp1: {
     createdAt: new Date(),
     displayName: "Bob",
     username: "bobby_boy",
     picture: mockProfilePictures[2],
   },
-  "ognaplankMQIgapbAOvv5npyTWR2": {
+  ognaplankMQIgapbAOvv5npyTWR2: {
     createdAt: new Date(),
     displayName: "John",
     username: "jdoe",
     picture: mockProfilePictures[0],
   },
-  "qyPPiAHAYweKNxyWJmdCNXNbXSV2": {
+  qyPPiAHAYweKNxyWJmdCNXNbXSV2: {
     createdAt: new Date(),
     displayName: "Jane",
     username: "janejane",

@@ -53,7 +53,6 @@ export const commonHabitIdsAtom = atomFamily((friendId: string) =>
   }),
 );
 
-// console.log(`${friendId} -> ${Object.keys(mutualFriends).length}`);
 export const mutualFriendsAtom = atomFamily((friendId: string) =>
   atom(async () => {
     const mutualFriends = await fetchMutualFriends({ friendId });
@@ -74,5 +73,3 @@ export const numberOfMutualFriendsAtom = atomFamily((friendId: string) =>
     return Object.keys(mutualFriends).length;
   }),
 );
-
-// console.log(`inside mutualFriendsPfpsListAtom ${friendId} -> ${Object.keys(mutualFriends).length}`)
