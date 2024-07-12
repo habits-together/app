@@ -10,21 +10,25 @@ import {
   deleteNotificationInDb,
   editHabitInDb,
   fetchAllMyHabitsInfo,
+  fetchCommonHabitIds,
   fetchFriendData,
   fetchHabitCompletionsForAllParticipants,
   fetchHabitCompletionsForParticipant,
   fetchHabitInfo,
+  fetchMutualFriends,
   fetchNotifications,
   fetchOutboundNotifications,
   fetchUserInfo,
   searchFriendsInDb,
   sendNotificationInDb,
+  subscribeToFriendList,
 } from "../firebase/api";
 import {
   HabitDisplayType,
   allHabitsT,
   allNotificationsT,
   allParticipantCompletionsT,
+  allUsersInfoT,
   friendNotificationT,
   habitCompletionsT,
   habitInfoT,
@@ -37,7 +41,6 @@ import { getNumberOfDaysInLastWeek } from "../lib/getNumberOfDaysInLastWeek";
 import { generateMockId } from "../lib/mockData";
 import { structureCompletionData } from "../lib/structureCompletionData";
 import { currentUserAtom, currentUserIdAtom } from "./currentUserAtom";
-import { allFriendsDataAtom } from "./friendsAtom";
 
 // using Jotai atoms: https://jotai.org/docs/introduction
 // we especially use the atomFamily atom: https://jotai.org/docs/utilities/family
@@ -280,6 +283,61 @@ export const participantPictureAtom = atomFamily(
   ({ habitId, participantId }: { habitId: string; participantId: string }) =>
     atom((get) => get(participantAtom({ habitId, participantId })).picture),
   (a, b) => a.participantId === b.participantId,
+);
+
+// Friends
+export const allFriendsDataAtom = atom<allUsersInfoT>({});
+allFriendsDataAtom.onMount = (set) => {
+  // refetch everytime users friends change
+  const unsubscribeFriendlist = subscribeToFriendList(set);
+  return () => {
+    // close the socket when allFriendsDataAtom is unmount
+    unsubscribeFriendlist();
+  };
+};
+
+export const friendIdsAtom = atom((get) =>
+  Object.keys(get(allFriendsDataAtom)),
+);
+export const friendAtom = atomFamily((friendId: string) =>
+  atom((get) => get(allFriendsDataAtom)[friendId]),
+);
+export const friendDisplayNameAtom = atomFamily((friendId: string) =>
+  atom((get) => get(friendAtom(friendId)).displayName),
+);
+export const friendUsernameAtom = atomFamily((friendId: string) =>
+  atom((get) => get(friendAtom(friendId)).username),
+);
+export const friendPictureAtom = atomFamily((friendId: string) =>
+  atom((get) => get(friendAtom(friendId)).picture),
+);
+
+export const commonHabitIdsAtom = atomFamily((friendId: string) =>
+  atom(async () => {
+    return await fetchCommonHabitIds({ participantId: friendId });
+  }),
+);
+
+export const mutualFriendsAtom = atomFamily((friendId: string) =>
+  atom(async (get) => {
+    const myFriendIds = get(friendIdsAtom);
+    const mutualFriends = await fetchMutualFriends({ friendId, myFriendIds });
+    return mutualFriends;
+  }),
+);
+
+export const mutualFriendsPfpsListAtom = atomFamily((friendId: string) =>
+  atom(async (get) => {
+    const mutualFriends = await get(mutualFriendsAtom(friendId));
+    return Object.values(mutualFriends).map((friend) => friend.picture);
+  }),
+);
+
+export const numberOfMutualFriendsAtom = atomFamily((friendId: string) =>
+  atom(async (get) => {
+    const mutualFriends = await get(mutualFriendsAtom(friendId));
+    return Object.keys(mutualFriends).length;
+  }),
 );
 
 // NOTIFICATIONS

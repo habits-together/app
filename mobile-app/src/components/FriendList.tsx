@@ -1,7 +1,7 @@
 import { View } from "@/src/components/Themed";
 import { FriendCard } from "@/src/components/UserCard";
 import { useAtomValue } from "jotai";
-import { friendIdsAtom } from "../atoms/friendsAtom";
+import { friendIdsAtom } from "../atoms/atoms";
 
 export default function FriendList() {
   const friendIds = useAtomValue(friendIdsAtom);

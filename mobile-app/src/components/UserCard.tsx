@@ -6,17 +6,15 @@ import { useColorScheme } from "nativewind";
 import React from "react";
 import { Pressable } from "react-native";
 import {
+  commonHabitIdsAtom,
+  friendAtom,
   habitColorAtom,
   habitIconAtom,
   habitTitleAtom,
   inviteUserToHabitAtom,
+  mutualFriendsPfpsListAtom,
   sendFriendRequestAtom,
 } from "../atoms/atoms";
-import {
-  commonHabitIdsAtom,
-  friendAtom,
-  mutualFriendsPfpsListAtom,
-} from "../atoms/friendsAtom";
 
 import colors from "../constants/colors";
 import { userWithIdT } from "../lib/db_types";

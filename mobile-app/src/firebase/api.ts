@@ -1,14 +1,17 @@
 import {
+  and,
   collection,
   doc,
   getDoc,
   getDocs,
+  onSnapshot,
   or,
   query,
+  Unsubscribe,
   where,
 } from "firebase/firestore";
+import { SetStateAction } from "jotai";
 import { currentUserAtom, currentUserIdAtom } from "../atoms/currentUserAtom";
-import { friendIdsAtom } from "../atoms/friendsAtom";
 import { atomStore } from "../atoms/store";
 import {
   allHabitsT,
@@ -140,7 +143,8 @@ export async function fetchFriendData({
 }): Promise<allUsersInfoT> {
   const allFreindData: allUsersInfoT = {};
   const myFriendIds = await fetchFriendIds({ userId });
-  for (const friendId of myFriendIds) {
+  // create a array of prommises so each user data can be fetched async
+  const userDocPromises = myFriendIds.map(async (friendId) => {
     const userDocRef = doc(firestore, "users", friendId);
     const userDocSnap = await getDoc(userDocRef);
     if (userDocSnap.exists()) {
@@ -154,8 +158,26 @@ export async function fetchFriendData({
     } else {
       console.error(`No user found with ID: ${friendId}`);
     }
-  }
+  });
+  await Promise.all(userDocPromises);
   return allFreindData;
+}
+
+type SetFunction = (update: SetStateAction<allUsersInfoT>) => void;
+export function subscribeToFriendList(setter: SetFunction): Unsubscribe {
+  const currentUserId = atomStore.get(currentUserIdAtom);
+  const q = query(
+    collection(firestore, "friendships"),
+    or(
+      where("user1Id", "==", currentUserId),
+      where("user2Id", "==", currentUserId),
+    ),
+  );
+  // this only gonna refetch if MY friends change
+  const unsub = onSnapshot(q, () => {
+    fetchFriendData({ userId: currentUserId }).then(setter);
+  });
+  return unsub;
 }
 
 export async function fetchCommonHabitIds({
@@ -182,11 +204,12 @@ export async function fetchCommonHabitIds({
 
 export async function fetchMutualFriends({
   friendId,
+  myFriendIds,
 }: {
   friendId: string;
+  myFriendIds: string[];
 }): Promise<allUsersInfoT> {
   const allMutualFriendData: allUsersInfoT = {};
-  const myFriendIds: string[] = atomStore.get(friendIdsAtom);
   const hisFriendIds: string[] = await fetchFriendIds({ userId: friendId });
 
   const mutualFriendIds = myFriendIds.filter((id) => hisFriendIds.includes(id));
@@ -314,33 +337,29 @@ export async function searchUsersInDb({
 }: {
   searchText: string;
 }): Promise<allUsersInfoT> {
-  // const
   const usersCollection = collection(firestore, "users");
+  const searchTextLower = searchText.toLowerCase();
+  const searchTextHigh = searchText.toLowerCase() + "\uf8ff"; // high Unicode character used to simulate "starting with" behaviour
 
-  // displayname match
-  const displayNameQuery = query(
+  const q = query(
     usersCollection,
-    where("displayName", ">=", searchText.toLowerCase()),
-    where("displayName", "<=", searchText.toLowerCase() + "\uf8ff"), // high Unicode character used to simulate "starting with" behaviour
+    or(
+      and(
+        where("username", ">=", searchTextLower),
+        where("username", "<=", searchTextHigh),
+      ),
+      and(
+        where("displayName", ">=", searchTextLower),
+        where("displayName", "<=", searchTextHigh),
+      ),
+    ),
   );
-  const displayNameSnapshot = await getDocs(displayNameQuery);
 
-  // username match
-  const usernameQuery = query(
-    usersCollection,
-    where("username", ">=", searchText.toLowerCase()),
-    where("username", "<=", searchText.toLowerCase() + "\uf8ff"),
-  );
-  const usernameSnapshot = await getDocs(usernameQuery);
+  const searchResultSnapshot = await getDocs(q);
 
   const searchResultUsersInfo: allUsersInfoT = {};
 
-  // combine
-  displayNameSnapshot.forEach((doc) => {
-    searchResultUsersInfo[doc.id] = doc.data() as userT;
-  });
-
-  usernameSnapshot.forEach((doc) => {
+  searchResultSnapshot.forEach((doc) => {
     searchResultUsersInfo[doc.id] = doc.data() as userT;
   });
 

@@ -1,5 +1,4 @@
-import { getUserInfoAtom } from "@/src/atoms/atoms";
-import { commonHabitIdsAtom } from "@/src/atoms/friendsAtom";
+import { getUserInfoAtom, commonHabitIdsAtom } from "@/src/atoms/atoms";
 import { ScrollView, Text, View } from "@/src/components/Themed";
 import { HabitCard } from "@/src/components/habit-components/HabitCard";
 import { useLocalSearchParams } from "expo-router";
