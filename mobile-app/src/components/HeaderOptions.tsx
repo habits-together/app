@@ -8,6 +8,8 @@ import HeaderBackButton from "./HeaderBackButton";
 import Icon from "./Icon";
 import RoundedButton from "./RoundedButton";
 import { Text, View } from "./Themed";
+import { friendUsernameAtom } from "../atoms/atoms";
+import { useAtomValue } from "jotai";
 
 function sharedOptions(colorScheme: string): NativeStackNavigationOptions {
   return {
@@ -73,7 +75,8 @@ export function viewHabitOptions(
 export function viewProfileOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
-  const { username } = useGlobalSearchParams<{ username: string }>();
+  const { theirUserId } = useGlobalSearchParams<{ theirUserId: string }>();
+  const username = useAtomValue(friendUsernameAtom(theirUserId as string));
 
   return {
     presentation: "modal",
