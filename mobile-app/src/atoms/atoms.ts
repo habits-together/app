@@ -185,7 +185,7 @@ export const structuredHabitCompletionsAtom = atomFamily(
       );
       return structureCompletionData({
         completionData: habitCompletions,
-        numDays: 12 * 7 + getNumberOfDaysInLastWeek(),
+        numDays: 30 * 7 + getNumberOfDaysInLastWeek(),
       });
     });
   },
@@ -483,9 +483,18 @@ export const sendFriendRequestAtom = atomFamily((theirUserId: string) =>
 );
 
 // whether we should display the habit in weekly or monthly view
-export const habitDisplayTypeAtom = atomFamily((id: string) =>
+export const homeScreenHabitDisplayTypeAtom = atomFamily((id: string) =>
   atomWithStorage<HabitDisplayType>(
-    `habitDisplayType-${id}`,
+    `homeScreenHabitDisplayTypeAtom-${id}`,
+    "weekly-view",
+    localStore as AsyncStorageType<HabitDisplayType>,
+    { getOnInit: true },
+  ),
+);
+
+export const viewHabitDisplayTypeAtom = atomFamily((id: string) =>
+  atomWithStorage<HabitDisplayType>(
+    `viewHabitDisplayTypeAtom-${id}`,
     "weekly-view",
     localStore as AsyncStorageType<HabitDisplayType>,
     { getOnInit: true },

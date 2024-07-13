@@ -1,6 +1,6 @@
 import {
   habitColorAtom,
-  habitDisplayTypeAtom,
+  homeScreenHabitDisplayTypeAtom,
   incrementNumberOfCompletionsTodayAtom,
   numberOfCompletionsTodayAtom,
   targetNumberOfCompletionsPerDayAtom,
@@ -32,7 +32,7 @@ export default function HabitCompletionButton({
     targetNumberOfCompletionsPerDayAtom(habitId),
   );
 
-  const displayType = useAtomValue(habitDisplayTypeAtom(habitId));
+  const displayType = useAtomValue(homeScreenHabitDisplayTypeAtom(habitId));
 
   return (
     <View className="flex flex-col items-center gap-1">

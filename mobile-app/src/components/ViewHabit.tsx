@@ -7,21 +7,24 @@ import {
   IconUserPlus,
 } from "@tabler/icons-react-native";
 import { Link, useLocalSearchParams } from "expo-router";
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { useColorScheme } from "nativewind";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Pressable, TouchableOpacity } from "react-native";
 import {
   habitColorAtom,
+  habitGoalAtom,
   habitInfoAtom,
   habitParticipantIdsAtom,
   participantAtom,
   structuredHabitCompletionsAtom,
+  viewHabitDisplayTypeAtom,
 } from "../atoms/atoms";
 import { currentUserIdAtom } from "../atoms/currentUserAtom";
 import colors from "../constants/colors";
 import DotsMenu from "./DotsMenu";
 import { MediumProfilePicture } from "./ProfilePicture";
+import HabitCompletionsMonthlyView from "./habit-components/HabitCompletionsMonthlyView";
 import WeeklyViewCompletionSquare from "./habit-components/WeeklyViewCompletionSquare";
 
 export default function ViewHabitComponent() {
@@ -85,11 +88,15 @@ function ParticipantsSection({ habitId }: { habitId: string }) {
         Participants ({participantIds.length})
       </Text>
       <View className="mx-auto">
-        <WeeklyOrMonthlySwitcher />
+        <Suspense fallback={<></>}>
+          <WeeklyOrMonthlySwitcher habitId={habitId} />
+        </Suspense>
       </View>
       <View className="flex flex-1 flex-col" style={{ gap: 10 }}>
         <View className="flex flex-1 flex-col">
-          <ActivityCard habitId={habitId} participantId={userId} />
+          <Suspense fallback={<></>}>
+            <ActivityCard habitId={habitId} participantId={userId} />
+          </Suspense>
           <TouchableOpacity className="my-2 flex w-full flex-row items-center justify-center">
             <Icon icon={IconEye} />
             <Text className="ml-1 text-sm font-semibold">
@@ -100,11 +107,9 @@ function ParticipantsSection({ habitId }: { habitId: string }) {
         {participantIds
           .filter((participantId) => participantId != userId)
           .map((participantId) => (
-            <ActivityCard
-              key={participantId}
-              habitId={habitId}
-              participantId={participantId}
-            />
+            <Suspense key={participantId} fallback={<></>}>
+              <ActivityCard habitId={habitId} participantId={participantId} />
+            </Suspense>
           ))}
       </View>
       <InviteFriendsButton />
@@ -125,6 +130,8 @@ function ActivityCard({
   const completions = useAtomValue(
     structuredHabitCompletionsAtom({ habitId, participantId }),
   );
+  const viewType = useAtomValue(viewHabitDisplayTypeAtom(habitId));
+  const habitGoalPeriod = useAtomValue(habitGoalAtom(habitId)).period;
 
   return (
     <View
@@ -181,7 +188,7 @@ function ActivityCard({
       </View>
       {/* completions */}
       <View
-        className="flex w-full flex-1 flex-row items-end justify-between rounded-[15px] p-[10px] pb-[6px]"
+        className="flex h-full w-full flex-1 flex-col rounded-[15px] p-[10px] pb-[6px]"
         style={{
           backgroundColor:
             colorScheme === "dark"
@@ -189,14 +196,58 @@ function ActivityCard({
               : colors.habitColors[habitColor].light,
         }}
       >
-        {completions.slice(-7).map((completion, index) => (
-          <WeeklyViewCompletionSquare
-            key={index}
+        {viewType === "weekly-view" && (
+          <ViewHabitWeeklyCompletions
             habitId={habitId}
-            completion={completion}
+            participantId={participantId}
           />
-        ))}
+        )}
+        {viewType === "monthly-view" && (
+          <View
+            className={`flex h-full flex-1 bg-transparent ${habitGoalPeriod === "weekly" && "pt-[6px]"}`}
+          >
+            <HabitCompletionsMonthlyView
+              habitId={habitId}
+              userId={participantId}
+              currentScreen="view-habit"
+            />
+          </View>
+        )}
       </View>
+    </View>
+  );
+}
+
+function ViewHabitWeeklyCompletions({
+  habitId,
+  participantId,
+}: {
+  habitId: string;
+  participantId: string;
+}) {
+  const { colorScheme } = useColorScheme();
+  const habitColor = useAtomValue(habitColorAtom(habitId));
+  const completions = useAtomValue(
+    structuredHabitCompletionsAtom({ habitId, participantId }),
+  );
+
+  return (
+    <View
+      className="flex w-full flex-1 flex-row items-end justify-between"
+      style={{
+        backgroundColor:
+          colorScheme === "dark"
+            ? colors.habitColors.stone.light
+            : colors.habitColors[habitColor].light,
+      }}
+    >
+      {completions.slice(-7).map((completion, index) => (
+        <WeeklyViewCompletionSquare
+          key={index}
+          habitId={habitId}
+          completion={completion}
+        />
+      ))}
     </View>
   );
 }
@@ -230,28 +281,30 @@ function NudgeButton({
   );
 }
 
-function WeeklyOrMonthlySwitcher() {
-  const [selected, setSelected] = useState<"weekly" | "monthly">("weekly");
+function WeeklyOrMonthlySwitcher({ habitId }: { habitId: string }) {
+  const [selected, setSelected] = useAtom(viewHabitDisplayTypeAtom(habitId));
 
   return (
     <View
       className="flex h-11 w-60 flex-row rounded-full bg-stone-100 p-2 dark:bg-stone-700"
       style={{ gap: 10 }}
     >
-      <View
-        className={`flex-1 rounded-full ${selected === "weekly" ? "border border-stone-300 bg-white dark:bg-stone-800" : "bg-transparent"}`}
+      <Pressable
+        onPress={() => setSelected("weekly-view")}
+        className={`flex-1 rounded-full ${selected === "weekly-view" ? "border border-stone-300 bg-white dark:bg-stone-800" : "bg-transparent p-[1px]"}`}
       >
         <Text className="m-auto font-semibold text-black dark:text-white">
           Weekly
         </Text>
-      </View>
-      <View
-        className={`flex-1 rounded-full ${selected === "monthly" ? "border border-stone-300 bg-white dark:bg-stone-800" : "bg-transparent"}`}
+      </Pressable>
+      <Pressable
+        onPress={() => setSelected("monthly-view")}
+        className={`flex-1 rounded-full ${selected === "monthly-view" ? "border border-stone-300 bg-white dark:bg-stone-800" : "bg-transparent p-[1px]"}`}
       >
         <Text className="m-auto font-semibold text-black dark:text-white">
           Monthly
         </Text>
-      </View>
+      </Pressable>
     </View>
   );
 }

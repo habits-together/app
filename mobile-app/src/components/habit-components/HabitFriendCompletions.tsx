@@ -1,4 +1,4 @@
-import { habitColorAtom, habitDisplayTypeAtom } from "@/src/atoms/atoms";
+import { habitColorAtom, homeScreenHabitDisplayTypeAtom } from "@/src/atoms/atoms";
 import colors from "@/src/constants/colors";
 import { getTranslucentColor } from "@/src/lib/getTranslucentColor";
 import { useAtomValue } from "jotai";
@@ -9,7 +9,7 @@ import ParticipantProfilePictures from "./ParticipantProfilePictures";
 
 export function HabitFriendCompletions({ habitId }: { habitId: string }) {
   const habitColor = useAtomValue(habitColorAtom(habitId));
-  const displayType = useAtomValue(habitDisplayTypeAtom(habitId));
+  const displayType = useAtomValue(homeScreenHabitDisplayTypeAtom(habitId));
 
   return (
     <View

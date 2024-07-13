@@ -1,27 +1,29 @@
 import {
   habitGoalAtom,
-  myStructuredHabitCompletionsAtom,
   numberOfCompletionsTodayAtom,
+  structuredHabitCompletionsAtom,
   targetNumberOfCompletionsPerWeekAtom,
 } from "@/src/atoms/atoms";
 import { habitCompletionWithDateInfoT } from "@/src/lib/db_types";
 import { getNumberOfDaysInLastWeek } from "@/src/lib/getNumberOfDaysInLastWeek";
 import { useAtomValue } from "jotai";
 import React, { useEffect, useState } from "react";
-import { View } from "react-native";
+import { Dimensions, View } from "react-native";
 import MonthlyViewCompletionSquare from "./MonthlyViewCompletionSquare";
 import WeekGoalMetCheckmark from "./WeekGoalMetCheckmark";
 
-// const numDays = 4;
-
 export default function HabitCompletionsMonthlyView({
   habitId,
+  userId,
+  currentScreen,
 }: {
   habitId: string;
+  userId: string;
+  currentScreen: "home" | "view-habit";
 }) {
   const goal = useAtomValue(habitGoalAtom(habitId));
   const completionData = useAtomValue(
-    myStructuredHabitCompletionsAtom(habitId),
+    structuredHabitCompletionsAtom({ habitId, participantId: userId }),
   );
   const numberOfCompletionsToday = useAtomValue(
     numberOfCompletionsTodayAtom(habitId),
@@ -80,14 +82,26 @@ export default function HabitCompletionsMonthlyView({
     numberOfCompletionsToday,
   ]);
 
+  // We want the completions to fill up any space on the screen
+  // These are some calculations to accomodate for different screen widths
+  const screenWidth = Dimensions.get("window").width;
+  const completionSquareWidth = 16;
+  // Magic number to account for other elements on the screen
+  const containerWidth = screenWidth - (currentScreen === "home" ? 185 : 74);
+  const numWeeksToDisplay = Math.ceil(containerWidth / completionSquareWidth);
+
   return (
     <View
       className={`flex flex-row ${goal.period === "weekly" && "-mt-[13px]"}`}
     >
       {/* all columns except the last one */}
-      {completionsByWeek.length > 0 &&
+      {completionsByWeek.length >= numWeeksToDisplay && // avoid slice error
         completionsByWeek
-          .slice(0, completionsByWeek.length - 1)
+          .slice(
+            // only display the last numWeeksToDisplay weeks
+            completionsByWeek.length - numWeeksToDisplay,
+            completionsByWeek.length - 1,
+          )
           .map((completions, index) => (
             <View key={index} className="mr-[3px] flex flex-col">
               {goal.period === "weekly" && (
