@@ -1,15 +1,15 @@
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import { IconCheck, IconEdit, IconX } from "@tabler/icons-react-native";
 import { router, useGlobalSearchParams } from "expo-router";
+import { useAtomValue } from "jotai";
 import { Pressable } from "react-native";
+import { friendUsernameAtom } from "../atoms/atoms";
 import colors from "../constants/colors";
 import DotsMenu from "./DotsMenu";
 import HeaderBackButton from "./HeaderBackButton";
 import Icon from "./Icon";
 import RoundedButton from "./RoundedButton";
 import { Text, View } from "./Themed";
-import { friendUsernameAtom } from "../atoms/atoms";
-import { useAtomValue } from "jotai";
 
 function sharedOptions(colorScheme: string): NativeStackNavigationOptions {
   return {

@@ -92,7 +92,7 @@ export default function UserCard({
       href={{
         pathname: "/modals/viewprofile",
         params: {
-          theirUserId: userId
+          theirUserId: userId,
         },
       }}
       asChild
