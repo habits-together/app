@@ -76,7 +76,9 @@ export function viewProfileOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
   const { theirUserId } = useGlobalSearchParams<{ theirUserId: string }>();
-  const username = useAtomValue(getUserInfoAtom(theirUserId as string)).username;
+  const username = useAtomValue(
+    getUserInfoAtom(theirUserId as string),
+  ).username;
 
   return {
     presentation: "modal",
