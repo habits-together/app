@@ -3,7 +3,7 @@ import { IconCheck, IconEdit, IconX } from "@tabler/icons-react-native";
 import { router, useGlobalSearchParams } from "expo-router";
 import { useAtomValue } from "jotai";
 import { Pressable } from "react-native";
-import { friendUsernameAtom } from "../atoms/atoms";
+import { getUserInfoAtom } from "../atoms/atoms";
 import colors from "../constants/colors";
 import DotsMenu from "./DotsMenu";
 import HeaderBackButton from "./HeaderBackButton";
@@ -76,7 +76,7 @@ export function viewProfileOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
   const { theirUserId } = useGlobalSearchParams<{ theirUserId: string }>();
-  const username = useAtomValue(friendUsernameAtom(theirUserId as string));
+  const username = useAtomValue(getUserInfoAtom(theirUserId as string)).username;
 
   return {
     presentation: "modal",
