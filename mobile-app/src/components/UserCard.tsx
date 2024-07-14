@@ -15,6 +15,7 @@ import {
   mutualFriendsPfpsListAtom,
   sendFriendRequestAtom,
 } from "../atoms/atoms";
+
 import colors from "../constants/colors";
 import { userWithIdT } from "../lib/db_types";
 import DotsMenu from "./DotsMenu";
@@ -85,7 +86,6 @@ export default function UserCard({
   displayType: "friendsList" | "inviteFriendsToHabit" | "addFriends";
 }) {
   const { id: userId, displayName, username, picture } = userInfo;
-
   return (
     <Link
       push
@@ -201,7 +201,6 @@ function CommonHabits({ friendId }: { friendId: string }) {
 function MutualFriends({ userId }: { userId: string }) {
   const maxPfps = 8;
   const mutualFriendsPictures = useAtomValue(mutualFriendsPfpsListAtom(userId));
-
   return (
     <View className="ml-1 mr-auto mt-2 flex flex-row">
       <HorizontalProfilePicsList

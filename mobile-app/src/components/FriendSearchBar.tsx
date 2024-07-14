@@ -1,9 +1,9 @@
 import { SafeAreaView, View } from "@/src/components/Themed";
 import colors from "@/src/constants/colors";
 import { IconSearch } from "@tabler/icons-react-native";
-import { useAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { useColorScheme } from "nativewind";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TextInput } from "react-native";
 import { searchQueryAtom } from "../atoms/atoms";
 import Icon from "./Icon";
@@ -14,16 +14,24 @@ export default function FriendSearchBar({
   placeholder: string;
 }) {
   const [localSearchText, setLocalSearchText] = useState("");
-  const [searchText, setSearchText] = useAtom(searchQueryAtom);
+  const setSearchText = useSetAtom(searchQueryAtom);
   const { colorScheme } = useColorScheme();
+  const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
-  // Setup debounce effect
+  // Handle input change with debounce
   useEffect(() => {
-    const timerId = setTimeout(() => {
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current);
+    }
+    debounceTimeout.current = setTimeout(() => {
       setSearchText(localSearchText);
     }, 500); // 500ms delay
 
-    return () => clearTimeout(timerId);
+    return () => {
+      if (debounceTimeout.current) {
+        clearTimeout(debounceTimeout.current);
+      }
+    };
   }, [localSearchText, setSearchText]);
 
   return (

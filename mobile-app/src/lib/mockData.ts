@@ -10,47 +10,47 @@ import { formatDateString, todayString } from "./formatDateString";
 import { mockProfilePictures } from "./mockBase64Images";
 
 export const mockUsers: Record<string, userT> = {
-  currentUserId123: {
-    createdAt: new Date(),
-    displayName: "John",
-    username: "jdoe",
-    picture: mockProfilePictures[0],
-  },
-  friend1: {
-    createdAt: new Date(),
-    displayName: "Jane",
-    username: "janejane",
-    picture: mockProfilePictures[1],
-  },
-  friend2: {
-    createdAt: new Date(),
-    displayName: "Bob",
-    username: "bobby_boy",
-    picture: mockProfilePictures[2],
-  },
-  friend3: {
+  "1QsFUZQSFsV83tYNPnChFOwbhjK2": {
     createdAt: new Date(),
     displayName: "Alice",
     username: "alice3",
     picture: mockProfilePictures[3],
   },
-  friend4: {
-    createdAt: new Date(),
-    displayName: "Guy",
-    username: "guy4",
-    picture: mockProfilePictures[4],
-  },
-  friend5: {
+  "8p0Jom3hTUTA3r1JpEWwsxHfYXK2": {
     createdAt: new Date(),
     displayName: "Dude",
     username: "dude5",
     picture: mockProfilePictures[5],
   },
+  OqpamKgeRUPCR7X9GbkydZH3uqQ2: {
+    createdAt: new Date(),
+    displayName: "Guy",
+    username: "guy4",
+    picture: mockProfilePictures[4],
+  },
+  Xbc5C2wQfxc0rFFwFyXHsF6LtWp1: {
+    createdAt: new Date(),
+    displayName: "Bob",
+    username: "bobby_boy",
+    picture: mockProfilePictures[2],
+  },
+  ognaplankMQIgapbAOvv5npyTWR2: {
+    createdAt: new Date(),
+    displayName: "John",
+    username: "jdoe",
+    picture: mockProfilePictures[0],
+  },
+  qyPPiAHAYweKNxyWJmdCNXNbXSV2: {
+    createdAt: new Date(),
+    displayName: "Jane",
+    username: "janejane",
+    picture: mockProfilePictures[1],
+  },
 };
 
 export const mockCurrentUser: userWithIdT = {
-  id: "currentUserId123",
-  ...mockUsers["currentUserId123"],
+  id: "1QsFUZQSFsV83tYNPnChFOwbhjK2",
+  ...mockUsers["1QsFUZQSFsV83tYNPnChFOwbhjK2"],
 };
 
 export const mockHabits: allHabitsT = {
@@ -65,18 +65,18 @@ export const mockHabits: allHabitsT = {
       completionsPerPeriod: 1,
     },
     participants: {
-      currentUserId123: {
+      "1QsFUZQSFsV83tYNPnChFOwbhjK2": {
         mostRecentCompletionDate: new Date(),
         isOwner: true,
-        ...mockUsers["currentUserId123"],
+        ...mockUsers["1QsFUZQSFsV83tYNPnChFOwbhjK2"],
       },
-      friend1: {
+      qyPPiAHAYweKNxyWJmdCNXNbXSV2: {
         mostRecentCompletionDate: new Date(),
-        ...mockUsers["friend1"],
+        ...mockUsers["qyPPiAHAYweKNxyWJmdCNXNbXSV2"],
       },
-      friend2: {
+      Xbc5C2wQfxc0rFFwFyXHsF6LtWp1: {
         mostRecentCompletionDate: new Date("2024-05-4T04:00:00"),
-        ...mockUsers["friend2"],
+        ...mockUsers["Xbc5C2wQfxc0rFFwFyXHsF6LtWp1"],
       },
     },
   },
@@ -91,13 +91,13 @@ export const mockHabits: allHabitsT = {
       completionsPerPeriod: 4,
     },
     participants: {
-      friend2: {
+      Xbc5C2wQfxc0rFFwFyXHsF6LtWp1: {
         mostRecentCompletionDate: new Date("2024-05-4T04:00:00"),
-        ...mockUsers["friend2"],
+        ...mockUsers["Xbc5C2wQfxc0rFFwFyXHsF6LtWp1"],
       },
-      friend3: {
+      ognaplankMQIgapbAOvv5npyTWR2: {
         mostRecentCompletionDate: new Date(),
-        ...mockUsers["friend3"],
+        ...mockUsers["ognaplankMQIgapbAOvv5npyTWR2"],
       },
     },
   },
@@ -127,7 +127,7 @@ export const mockHabits: allHabitsT = {
 
 export const mockHabitCompletions: allParticipantCompletionsForAllHabitsT = {
   habit1: {
-    currentUserId123: {
+    "1QsFUZQSFsV83tYNPnChFOwbhjK2": {
       [todayString()]: 1,
       [formatDateString(new Date("2024-06-14T04:00:00"))]: 1,
       [formatDateString(new Date("2024-06-14T04:00:00"))]: 1,
@@ -145,18 +145,18 @@ export const mockHabitCompletions: allParticipantCompletionsForAllHabitsT = {
       [formatDateString(new Date("2024-05-3T04:00:00"))]: 1,
       [formatDateString(new Date("2024-05-2T04:00:00"))]: 1,
     },
-    friend1: {
+    qyPPiAHAYweKNxyWJmdCNXNbXSV2: {
       [formatDateString(new Date("2024-06-26T04:00:00"))]: 1,
       [formatDateString(new Date("2024-06-25T04:00:00"))]: 1,
     },
-    friend2: {
+    Xbc5C2wQfxc0rFFwFyXHsF6LtWp1: {
       [todayString()]: 1,
       [formatDateString(new Date("2024-06-26T04:00:00"))]: 1,
       [formatDateString(new Date("2024-06-23T04:00:00"))]: 1,
     },
   },
   habit2_userNotPartOfToStart: {
-    friend2: {
+    Xbc5C2wQfxc0rFFwFyXHsF6LtWp1: {
       [formatDateString(new Date("2024-05-4T04:00:00"))]: 1,
     },
     friend3: {
@@ -176,74 +176,70 @@ export const mockHabitCompletions: allParticipantCompletionsForAllHabitsT = {
 export const mockNotifications: allNotificationsT = {
   noti1: {
     type: "friendRequest",
-    senderId: "friend1",
-    receiverId: "currentUserId123",
+    senderId: "qyPPiAHAYweKNxyWJmdCNXNbXSV2",
+    receiverId: "1QsFUZQSFsV83tYNPnChFOwbhjK2",
     sentAt: new Date(),
   },
   noti2: {
     type: "habitInvite",
     habitId: "habit2_userNotPartOfToStart",
-    senderId: "friend2",
-    receiverId: "currentUserId123",
+    senderId: "Xbc5C2wQfxc0rFFwFyXHsF6LtWp1",
+    receiverId: "1QsFUZQSFsV83tYNPnChFOwbhjK2",
     sentAt: new Date(),
   },
   noti3: {
     type: "nudge",
     habitId: "habit1",
-    senderId: "friend3",
-    receiverId: "currentUserId123",
+    senderId: "ognaplankMQIgapbAOvv5npyTWR2",
+    receiverId: "1QsFUZQSFsV83tYNPnChFOwbhjK2",
     sentAt: new Date(),
   },
 };
 
-// export const mockFriends: allUsersInfoT = {
-//   friend2: mockUsers['friend2'],
-//   friend3: mockUsers['friend3'],
-// };
 export const mockFriendships: allFriendshipsT = {
   friendship1: {
-    user1Id: "currentUserId123",
-    user2Id: "friend1",
+    user1Id: "1QsFUZQSFsV83tYNPnChFOwbhjK2",
+    user2Id: "qyPPiAHAYweKNxyWJmdCNXNbXSV2",
     friendsSince: new Date(),
   },
   friendship2: {
-    user1Id: "friend2",
-    user2Id: "currentUserId123",
+    user1Id: "Xbc5C2wQfxc0rFFwFyXHsF6LtWp1",
+    user2Id: "1QsFUZQSFsV83tYNPnChFOwbhjK2",
     friendsSince: new Date(),
   },
   friendship3: {
-    user1Id: "currentUserId123",
-    user2Id: "friend3",
-    friendsSince: new Date(),
-  },
-  otherpplsfriendship: {
-    user1Id: "friend2",
-    user2Id: "friend3",
-    friendsSince: new Date(),
-  },
-  otherpplsfriendship2: {
-    user1Id: "friend1",
-    user2Id: "friend3",
+    user1Id: "1QsFUZQSFsV83tYNPnChFOwbhjK2",
+    user2Id: "ognaplankMQIgapbAOvv5npyTWR2",
     friendsSince: new Date(),
   },
   friendship4: {
-    user1Id: "currentUserId123",
-    user2Id: "friend4",
-    friendsSince: new Date(),
-  },
-  otherpplsfriendship3: {
-    user1Id: "friend3",
-    user2Id: "friend4",
+    user1Id: "1QsFUZQSFsV83tYNPnChFOwbhjK2",
+    user2Id: "OqpamKgeRUPCR7X9GbkydZH3uqQ2",
     friendsSince: new Date(),
   },
   friendship5: {
-    user1Id: "currentUserId123",
-    user2Id: "friend5",
+    user1Id: "1QsFUZQSFsV83tYNPnChFOwbhjK2",
+    user2Id: "8p0Jom3hTUTA3r1JpEWwsxHfYXK2",
+    friendsSince: new Date(),
+  },
+  otherpplsfriendship: {
+    user1Id: "Xbc5C2wQfxc0rFFwFyXHsF6LtWp1",
+    user2Id: "ognaplankMQIgapbAOvv5npyTWR2",
+    friendsSince: new Date(),
+  },
+  otherpplsfriendship2: {
+    user1Id: "qyPPiAHAYweKNxyWJmdCNXNbXSV2",
+    user2Id: "ognaplankMQIgapbAOvv5npyTWR2",
+    friendsSince: new Date(),
+  },
+  otherpplsfriendship3: {
+    user1Id: "ognaplankMQIgapbAOvv5npyTWR2",
+    user2Id: "OqpamKgeRUPCR7X9GbkydZH3uqQ2",
     friendsSince: new Date(),
   },
   otherpplsfriendship4: {
-    user1Id: "friend3",
-    user2Id: "friend5",
+    user1Id: "ognaplankMQIgapbAOvv5npyTWR2",
+    user2Id: "8p0Jom3hTUTA3r1JpEWwsxHfYXK2",
     friendsSince: new Date(),
   },
 };
