@@ -1,7 +1,9 @@
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import { IconCheck, IconEdit, IconX } from "@tabler/icons-react-native";
 import { router, useGlobalSearchParams } from "expo-router";
+import { useAtomValue } from "jotai";
 import { Pressable } from "react-native";
+import { getUserInfoAtom } from "../atoms/atoms";
 import colors from "../constants/colors";
 import DotsMenu from "./DotsMenu";
 import HeaderBackButton from "./HeaderBackButton";
@@ -75,14 +77,17 @@ export function viewHabitOptions(
 export function viewProfileOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
-  const { userName } = useGlobalSearchParams<{ userName: string }>();
+  const { theirUserId } = useGlobalSearchParams<{ theirUserId: string }>();
+  const username = useAtomValue(
+    getUserInfoAtom(theirUserId as string),
+  ).username;
 
   return {
     presentation: "modal",
     headerLeft: () => <HeaderBackButton chevronDirection="down" />,
     headerTitle: () => (
       <Text className="text-base font-semibold text-black dark:text-white">
-        {userName}
+        {username}
       </Text>
     ),
     headerRight: () => (
