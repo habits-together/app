@@ -41,13 +41,15 @@ import { userSnapToUserWithIdT } from "./helper";
 
 export async function fetchAllMyHabitsInfo(): Promise<allHabitsT> {
   const userId = atomStore.get(currentUserIdAtom);
+  const habitsCollection = collection(firestore, "habits");
 
-  // get only habit user is part of
-  const myHabits = Object.fromEntries(
-    Object.entries(mockHabits).filter(
-      ([habitId, habitData]) => habitData.participants[userId],
-    ),
-  );
+  const q = query(habitsCollection, where(`participants.${userId}`, '!=', null))
+  const querySnapshot = await getDocs(q);
+  const myHabits: allHabitsT = {};
+  querySnapshot.forEach((doc) => {
+    console.log(doc.data());
+    myHabits[doc.id] = doc.data() as habitT;
+  });
   return myHabits;
 }
 
