@@ -56,7 +56,12 @@ export async function fetchHabitInfo({
 }: {
   habitId: string;
 }): Promise<habitT> {
-  return mockHabits[habitId];
+  const habitDocRef = doc(firestore, "habits", habitId);
+  const habitDocSnap = await getDoc(habitDocRef);
+  if (!habitDocSnap.exists()) {
+    throw new Error(`No habit found with ID: ${habitId}`);
+  }
+  return habitDocSnap.data() as habitT;
 }
 
 export async function editHabitInDb({

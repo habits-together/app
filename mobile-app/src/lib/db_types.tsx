@@ -46,6 +46,19 @@ type dbT = {
         string, // participantId
         Record<string, number> // { date: numberOfCompletions }
       >;
+      // participantCompletions: Record<
+      //   string, // participantId
+      //   {
+      //     completions: Record<string, number> // { date: numberOfCompletions }
+      //   }
+      // >;
+      // TODO: wip, figure out top or bottom
+      // participantCompletions: Record<
+      //   string, // participantId
+      //   {
+      //     completions: { date: Date; numberOfCompletions: number };
+      //   }
+      // >;
     }
   >;
 
