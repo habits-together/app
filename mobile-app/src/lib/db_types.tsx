@@ -88,6 +88,7 @@ export type allParticipantCompletionsT =
 export type habitCompletionsT = allParticipantCompletionsT[0];
 export type habitCompletionT = number;
 export type habitCompletionWithDateInfoT = {
+  date: string;
   numberOfCompletions: number;
   dayOfTheMonth: number;
   dayOfTheWeek: string;

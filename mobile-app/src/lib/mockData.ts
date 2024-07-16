@@ -88,7 +88,7 @@ export const mockHabits: allHabitsT = {
     description: "Working out is better together",
     goal: {
       period: "weekly",
-      completionsPerPeriod: 4,
+      completionsPerPeriod: 2,
     },
     participants: {
       friend2: {
@@ -161,6 +161,10 @@ export const mockHabitCompletions: allParticipantCompletionsForAllHabitsT = {
       [formatDateString(new Date("2024-07-2T04:00:00"))]: 1,
       [formatDateString(new Date("2024-07-3T04:00:00"))]: 1,
       [formatDateString(new Date("2024-07-4T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-07-5T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-07-6T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-07-7T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-07-8T04:00:00"))]: 1,
     },
     friend3: {
       [formatDateString(new Date("2024-05-4T04:00:00"))]: 1,

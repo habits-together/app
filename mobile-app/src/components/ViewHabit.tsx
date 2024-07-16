@@ -188,7 +188,7 @@ function ActivityCard({
       </View>
       {/* completions */}
       <View
-        className="flex h-full w-full flex-1 flex-col rounded-[15px] p-[10px] pb-[6px]"
+        className="flex h-full w-full flex-1 flex-col rounded-[15px] p-[8px]"
         style={{
           backgroundColor:
             colorScheme === "dark"
@@ -204,7 +204,7 @@ function ActivityCard({
         )}
         {viewType === "monthly-view" && (
           <View
-            className={`flex h-full flex-1 bg-transparent ${habitGoalPeriod === "weekly" && "pt-[6px]"}`}
+            className={`flex h-[112px] flex-1 bg-transparent ${habitGoalPeriod === "weekly" && "mt-[10px]"}`}
           >
             <HabitCompletionsMonthlyView
               habitId={habitId}

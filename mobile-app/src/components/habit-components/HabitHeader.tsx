@@ -1,7 +1,7 @@
 import {
-  homeScreenHabitDisplayTypeAtom,
   habitIconAtom,
   habitTitleAtom,
+  homeScreenHabitDisplayTypeAtom,
 } from "@/src/atoms/atoms";
 import colors from "@/src/constants/colors";
 import { router } from "expo-router";
@@ -12,7 +12,9 @@ import DotsMenu from "../DotsMenu";
 import { HabitIcon } from "../Icon";
 
 export function HabitHeader({ habitId }: { habitId: string }) {
-  const [displayType, setDisplayType] = useAtom(homeScreenHabitDisplayTypeAtom(habitId));
+  const [displayType, setDisplayType] = useAtom(
+    homeScreenHabitDisplayTypeAtom(habitId),
+  );
   const title = useAtomValue(habitTitleAtom(habitId));
   const icon = useAtomValue(habitIconAtom(habitId));
 

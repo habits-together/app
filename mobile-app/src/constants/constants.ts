@@ -1,1 +1,1 @@
-export const numWeeksToDisplayInMonthlyView = 13;
+export const maxNumWeeksToDisplay = 20;
