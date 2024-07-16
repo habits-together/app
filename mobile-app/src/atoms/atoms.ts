@@ -514,3 +514,5 @@ export const habitDisplayTypeAtom = atomFamily((id: string) =>
     { getOnInit: true },
   ),
 );
+
+export const profileFormDataAtom = atom({displayName: "", username: "", }) //maybe change to use user atom data?

@@ -1,8 +1,10 @@
 import Icon from "@/src/components/Icon";
 import ProfileCreationBoxes from "@/src/components/PfpNameUsernameBoxes";
 import { Text, View } from "@/src/components/Themed";
+import { userT } from "@/src/lib/db_types";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { IconTrash } from "@tabler/icons-react-native";
+import { atom } from "jotai";
 import {
   Platform,
   SafeAreaView,

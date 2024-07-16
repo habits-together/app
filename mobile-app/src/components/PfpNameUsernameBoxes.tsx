@@ -3,15 +3,18 @@ import { Text, View } from "@/src/components/Themed";
 import DefaultColors from "@/src/constants/DefaultColors";
 import { fetchSingleUserThumbnail } from "@/src/lib/getRandomProfilePics";
 import { IconCirclePlus } from "@tabler/icons-react-native";
+import { useAtom, useSetAtom } from "jotai";
 import { useColorScheme } from "nativewind";
 import { useEffect, useRef, useState } from "react";
 import { Image, TextInput, TouchableOpacity } from "react-native";
+import { profileFormDataAtom } from "../atoms/atoms";
 
 export default function ProfileCreationBoxes({
   editPage,
 }: {
   editPage: boolean;
 }) {
+  const [formData, setFormData] = useAtom(profileFormDataAtom)
   const { colorScheme } = useColorScheme();
   const [displayName, setDisplayName] = useState("");
   const [username, setUsername] = useState("");
@@ -54,7 +57,10 @@ export default function ProfileCreationBoxes({
           placeholder="John Doe"
           placeholderTextColor={DefaultColors[colorScheme].placeholder}
           value={displayName}
-          onChangeText={(text) => setDisplayName(text)}
+          onChangeText={(text) => {
+            setDisplayName(text)
+            setFormData({...formData,displayName:text})
+          }}
           onSubmitEditing={() => {
             refUsernameInput.current?.focus();
           }}
@@ -71,14 +77,17 @@ export default function ProfileCreationBoxes({
           }}
           ref={refUsernameInput}
           value={username}
-          onChangeText={(text) => setUsername(text)}
+          onChangeText={(text) => {
+            setUsername(text);
+            setFormData({ ...formData, username: text });
+          }}
           onSubmitEditing={() => {
             refEmailInput.current?.focus();
           }}
         ></TextInput>
       </View>
       {/* Email */}
-      {editPage == true && (
+      {/* {editPage == true && (
         <View className="mt-5 flex flex-col">
           <Text className="text-base font-semibold">Email</Text>
           <TextInput
@@ -92,7 +101,7 @@ export default function ProfileCreationBoxes({
             onChangeText={(text) => setEmail(text)}
           ></TextInput>
         </View>
-      )}
-    </View>
+      )} */}
+    </View >
   );
 }
