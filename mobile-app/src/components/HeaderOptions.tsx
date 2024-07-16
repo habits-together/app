@@ -12,6 +12,7 @@ import RoundedButton from "./RoundedButton";
 import { Text, View } from "./Themed";
 import { useAtom } from "jotai";
 import { profileFormDataAtom } from "../atoms/atoms";
+import { currentUserAtom } from "../atoms/currentUserAtom";
 
 function sharedOptions(colorScheme: string): NativeStackNavigationOptions {
   return {
@@ -190,13 +191,18 @@ export function editProfileOptions(
 ): NativeStackNavigationOptions {
   const { userName } = useGlobalSearchParams<{ userName: string }>();
   const [profileFormData, setProfileFormData] = useAtom(profileFormDataAtom)
+  const [userData, setUserData] = useAtom(currentUserAtom)
   return {
     headerLeft: () => (
       <RoundedButton
         text="Cancel"
         icon={IconX}
         onPress={() => {
-          //TODO change back to profile data
+          //change back to actual profile data
+          setProfileFormData({
+            displayName: userData.displayName,
+            username: userData.displayName
+          })
           router.back();
         }}
       />
@@ -211,10 +217,15 @@ export function editProfileOptions(
         text="Done"
         icon={IconCheck}
         onPress={() => {
-          //TODO Push Data to DB
-          
-          //TODO Update the current atoms accordingly 
+          //TODO Ensure username is unique
 
+          //TODO Push Data to DB
+
+          //Update the current atoms accordingly 
+          setUserData({
+            ...userData,
+            ...profileFormData,
+          })
           router.back();
         }}
       />
