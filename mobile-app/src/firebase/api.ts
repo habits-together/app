@@ -396,7 +396,6 @@ export async function searchUsersInDb({
 
   // return searchResultUsersInfo;
 
-  
   return Object.fromEntries(
     Object.entries(mockUsers).filter(
       ([, userData]) =>
