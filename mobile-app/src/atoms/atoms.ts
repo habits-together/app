@@ -169,7 +169,7 @@ export const habitCompletionsForAllParticipantsAtom = atomFamily(
 );
 export const habitCompletionsForParticipantAtom = atomFamily(
   ({ habitId, participantId }: { habitId: string; participantId: string }) => {
-    const completionsAtom = atom<habitCompletionsT>({});
+    const completionsAtom = atom<habitCompletionsT>({ completions: {} });
     completionsAtom.onMount = (set) => {
       fetchHabitCompletionsForParticipant({ habitId, participantId }).then(set);
     };
@@ -218,7 +218,7 @@ export const numberOfCompletionsTodayAtom = atomFamily((habitId: string) =>
           participantId: userId,
         }),
       );
-      const completionsToday = habitCompletions[todayString()] as
+      const completionsToday = habitCompletions.completions[todayString()] as
         | number
         | undefined;
       return completionsToday ?? 0;
