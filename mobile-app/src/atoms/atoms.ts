@@ -22,6 +22,7 @@ import {
   searchFriendsInDb,
   sendNotificationInDb,
   subscribeToFriendList,
+  subscribeToNotifications,
   updatetHabitCompletionsInDb,
 } from "../firebase/api";
 import {
@@ -311,7 +312,7 @@ allFriendsDataAtom.onMount = (set) => {
   // refetch everytime users friends change
   const unsubscribeFriendlist = subscribeToFriendList(set);
   return () => {
-    // close the socket when allFriendsDataAtom is unmount
+    // close the socket on unmount
     unsubscribeFriendlist();
   };
 };
@@ -363,7 +364,12 @@ export const numberOfMutualFriendsAtom = atomFamily((friendId: string) =>
 // NOTIFICATIONS
 const notificationsAtom = atom<allNotificationsT>({});
 notificationsAtom.onMount = (set) => {
-  fetchNotifications().then(set);
+  // refresh everytime notification changes
+  const unsubscribeNotifs = subscribeToNotifications(set);
+  return () => {
+    // close the socket on unmount
+    unsubscribeNotifs();
+  }
 };
 export const notificationIdsAtom = atom((get) =>
   Object.keys(get(notificationsAtom)),

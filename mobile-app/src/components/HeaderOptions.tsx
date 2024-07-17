@@ -1,6 +1,6 @@
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import { IconCheck, IconEdit, IconX } from "@tabler/icons-react-native";
-import { router, useGlobalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useAtomValue } from "jotai";
 import { Pressable } from "react-native";
 import { getUserInfoAtom } from "../atoms/atoms";
@@ -26,8 +26,10 @@ function sharedOptions(colorScheme: string): NativeStackNavigationOptions {
 export function viewHabitOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
-  const { id } = useGlobalSearchParams<{ id: string }>();
-
+  const { id } = useLocalSearchParams<{ id: string }>();
+  if (!id) {
+    return sharedOptions(colorScheme);
+  }
   return {
     headerLeft: () => <HeaderBackButton showText={true} />,
     headerTitle: () => <></>,
@@ -77,7 +79,10 @@ export function viewHabitOptions(
 export function viewProfileOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
-  const { theirUserId } = useGlobalSearchParams<{ theirUserId: string }>();
+  const { theirUserId } = useLocalSearchParams<{ theirUserId: string }>();
+  if (!theirUserId) {
+    return sharedOptions(colorScheme);
+  }
   const username = useAtomValue(
     getUserInfoAtom(theirUserId as string),
   ).username;
@@ -186,8 +191,6 @@ export function forgotPasswordOptions(
 export function editProfileOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
-  const { userName } = useGlobalSearchParams<{ userName: string }>();
-
   return {
     headerLeft: () => (
       <RoundedButton

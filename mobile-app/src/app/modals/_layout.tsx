@@ -12,9 +12,12 @@ import { useColorScheme } from "nativewind";
 import React from "react";
 import { MenuProvider } from "react-native-popup-menu";
 
-export default function SettingsLayout() {
+export default function ModalLayout() {
   const { colorScheme } = useColorScheme();
-
+  /**
+   * For somereson EACH modal options get calculated everytime any 
+   * model is displayed. what the actual fudge is going on
+   */
   return (
     // need another menu provider since this is a modal
     // https://github.com/instea/react-native-popup-menu/blob/master/doc/api.md#menuprovider
