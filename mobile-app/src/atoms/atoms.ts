@@ -237,8 +237,8 @@ export const numberOfCompletionsTodayAtom = atomFamily((habitId: string) =>
           participantId: userId,
         }),
         {
-          ...habitCompletions,
           completions: {
+            ...habitCompletions.completions,
             [todayString()]: newValue,
           },
         },
