@@ -166,17 +166,17 @@ export async function fetchFriendIds({
     friendshipsCollection,
     or(where("user1Id", "==", userId), where("user2Id", "==", userId)),
   );
-  const myFriendshipSnap = await getDocs(q);
-  const myFriendIds: string[] = [];
-  myFriendshipSnap.forEach((doc) => {
+  const friendshipSnap = await getDocs(q);
+  const friendIds: string[] = [];
+  friendshipSnap.forEach((doc) => {
     const friendship = doc.data() as friendshipT;
     if (friendship.user1Id === userId) {
-      myFriendIds.push(friendship.user2Id);
+      friendIds.push(friendship.user2Id);
     } else if (friendship.user2Id === userId) {
-      myFriendIds.push(friendship.user1Id);
+      friendIds.push(friendship.user1Id);
     }
   });
-  return myFriendIds;
+  return friendIds;
 }
 
 export async function fetchFriendData({
@@ -184,7 +184,7 @@ export async function fetchFriendData({
 }: {
   userId: string;
 }): Promise<allUsersInfoT> {
-  const allFreindData: allUsersInfoT = {};
+  const allFriendData: allUsersInfoT = {};
   const myFriendIds = await fetchFriendIds({ userId });
   // create a array of prommises so each user data can be fetched async
   const userDocPromises = myFriendIds.map(async (friendId) => {
@@ -192,7 +192,7 @@ export async function fetchFriendData({
     const userDocSnap = await getDoc(userDocRef);
     if (userDocSnap.exists()) {
       const userData = userDocSnap.data() as userT;
-      allFreindData[friendId] = {
+      allFriendData[friendId] = {
         createdAt: userData.createdAt,
         displayName: userData.displayName,
         username: userData.username,
@@ -203,7 +203,7 @@ export async function fetchFriendData({
     }
   });
   await Promise.all(userDocPromises);
-  return allFreindData;
+  return allFriendData;
 }
 
 type SetFunction = (update: SetStateAction<allUsersInfoT>) => void;
