@@ -25,12 +25,13 @@ import {
   fetchHabitCompletionsForParticipant,
   fetchHabitInfo,
   fetchMutualFriends,
-  fetchNotifications,
   fetchOutboundNotifications,
   fetchUserInfo,
   searchFriendsInDb,
   sendNotificationInDb,
   subscribeToFriendList,
+  subscribeToNotifications,
+  updatetHabitCompletionsInDb,
 } from "../firebase/api";
 import {
   HabitDisplayType,
@@ -202,7 +203,23 @@ export const habitCompletionsForAllParticipantsAtom = atomFamily(
 );
 export const habitCompletionsForParticipantAtom = atomFamily(
   ({ habitId, participantId }: { habitId: string; participantId: string }) => {
-    const completionsAtom = atom<habitCompletionsT>({});
+    const completionsBaseAtom = atom<habitCompletionsT>({ completions: {} });
+
+    const completionsAtom = atom<
+      habitCompletionsT, // getter type
+      [habitCompletionsT], // arguments passed to the set function as an array
+      Promise<void> // return type of the set function
+    >(
+      (get) => get(completionsBaseAtom),
+      async (_get, set, newCompletions) => {
+        set(completionsBaseAtom, newCompletions);
+        await updatetHabitCompletionsInDb({
+          habitId,
+          participantId,
+          completionData: newCompletions,
+        });
+      },
+    );
     completionsAtom.onMount = (set) => {
       fetchHabitCompletionsForParticipant({ habitId, participantId }).then(set);
     };
@@ -365,7 +382,7 @@ allFriendsDataAtom.onMount = (set) => {
   // refetch everytime users friends change
   const unsubscribeFriendlist = subscribeToFriendList(set);
   return () => {
-    // close the socket when allFriendsDataAtom is unmount
+    // close the socket on unmount
     unsubscribeFriendlist();
   };
 };
@@ -418,7 +435,12 @@ export const numberOfMutualFriendsAtom = atomFamily((friendId: string) =>
 // NOTIFICATIONS
 const notificationsAtom = atom<allNotificationsT>({});
 notificationsAtom.onMount = (set) => {
-  fetchNotifications().then(set);
+  // refresh everytime notification changes
+  const unsubscribeNotifs = subscribeToNotifications(set);
+  return () => {
+    // close the socket on unmount
+    unsubscribeNotifs();
+  };
 };
 export const notificationIdsAtom = atom((get) =>
   Object.keys(get(notificationsAtom)),

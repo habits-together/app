@@ -27,3 +27,8 @@ export const userSnapToUserWithIdT = (
     id: userDocSnap.id,
   };
 };
+
+export const userWithIdToUserT = (user: userWithIdT): userT => {
+  const { id, ...userWithoutId } = user;
+  return userWithoutId;
+};

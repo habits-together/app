@@ -24,13 +24,12 @@ export function structureCompletionData({
   let currentDate = new Date();
   // go back to the first day we want to display
   currentDate.setDate(currentDate.getDate() - numDays + 1);
-
   // loop through each day and add the completion data for that day to the structured data
   for (let i = 0; i < numDays; i++) {
     // if there is no completion data for the current date, default to 0 (no completions that day)
     structuredCompletionData.push({
-      date: formatDateString(currentDate),
-      numberOfCompletions: completionData[formatDateString(currentDate)] ?? 0,
+      numberOfCompletions:
+        completionData?.completions?.[formatDateString(currentDate)] ?? 0,
       dayOfTheMonth: currentDate.getDate(),
       dayOfTheWeek: currentDate.toLocaleString("en-US", { weekday: "short" }),
     });
