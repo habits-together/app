@@ -128,47 +128,61 @@ export const mockHabits: allHabitsT = {
 export const mockHabitCompletions: allParticipantCompletionsForAllHabitsT = {
   habit1: {
     "1QsFUZQSFsV83tYNPnChFOwbhjK2": {
-      [todayString()]: 1,
-      [formatDateString(new Date("2024-06-14T04:00:00"))]: 1,
-      [formatDateString(new Date("2024-06-14T04:00:00"))]: 1,
-      [formatDateString(new Date("2024-06-8T04:00:00"))]: 1,
-      [formatDateString(new Date("2024-06-2T04:00:00"))]: 1,
-      [formatDateString(new Date("2024-04-15T04:00:00"))]: 1,
-      [formatDateString(new Date("2024-04-2T04:00:00"))]: 1,
-      [formatDateString(new Date("2024-04-14T04:00:00"))]: 1,
-      [formatDateString(new Date("2024-04-22T04:00:00"))]: 1,
-      [formatDateString(new Date("2024-05-30T04:00:00"))]: 1,
-      [formatDateString(new Date("2024-05-23T04:00:00"))]: 1,
-      [formatDateString(new Date("2024-05-20T04:00:00"))]: 1,
-      [formatDateString(new Date("2024-05-10T04:00:00"))]: 1,
-      [formatDateString(new Date("2024-05-4T04:00:00"))]: 1,
-      [formatDateString(new Date("2024-05-3T04:00:00"))]: 1,
-      [formatDateString(new Date("2024-05-2T04:00:00"))]: 1,
+      completions: {
+        [todayString()]: 1,
+        [formatDateString(new Date("2024-06-14T04:00:00"))]: 1,
+        [formatDateString(new Date("2024-06-14T04:00:00"))]: 1,
+        [formatDateString(new Date("2024-06-8T04:00:00"))]: 1,
+        [formatDateString(new Date("2024-06-2T04:00:00"))]: 1,
+        [formatDateString(new Date("2024-04-15T04:00:00"))]: 1,
+        [formatDateString(new Date("2024-04-2T04:00:00"))]: 1,
+        [formatDateString(new Date("2024-04-14T04:00:00"))]: 1,
+        [formatDateString(new Date("2024-04-22T04:00:00"))]: 1,
+        [formatDateString(new Date("2024-05-30T04:00:00"))]: 1,
+        [formatDateString(new Date("2024-05-23T04:00:00"))]: 1,
+        [formatDateString(new Date("2024-05-20T04:00:00"))]: 1,
+        [formatDateString(new Date("2024-05-10T04:00:00"))]: 1,
+        [formatDateString(new Date("2024-05-4T04:00:00"))]: 1,
+        [formatDateString(new Date("2024-05-3T04:00:00"))]: 1,
+        [formatDateString(new Date("2024-05-2T04:00:00"))]: 1,
+      },
     },
     qyPPiAHAYweKNxyWJmdCNXNbXSV2: {
-      [formatDateString(new Date("2024-06-26T04:00:00"))]: 1,
-      [formatDateString(new Date("2024-06-25T04:00:00"))]: 1,
+      completions: {
+        [formatDateString(new Date("2024-06-26T04:00:00"))]: 1,
+        [formatDateString(new Date("2024-06-25T04:00:00"))]: 1,
+      },
     },
     Xbc5C2wQfxc0rFFwFyXHsF6LtWp1: {
-      [todayString()]: 1,
-      [formatDateString(new Date("2024-06-26T04:00:00"))]: 1,
-      [formatDateString(new Date("2024-06-23T04:00:00"))]: 1,
+      completions: {
+        [todayString()]: 1,
+        [formatDateString(new Date("2024-06-26T04:00:00"))]: 1,
+        [formatDateString(new Date("2024-06-23T04:00:00"))]: 1,
+      },
     },
   },
   habit2_userNotPartOfToStart: {
     Xbc5C2wQfxc0rFFwFyXHsF6LtWp1: {
-      [formatDateString(new Date("2024-05-4T04:00:00"))]: 1,
+      completions: {
+        [formatDateString(new Date("2024-05-4T04:00:00"))]: 1,
+      },
     },
     friend3: {
-      [formatDateString(new Date("2024-05-4T04:00:00"))]: 1,
+      completions: {
+        [formatDateString(new Date("2024-05-4T04:00:00"))]: 1,
+      },
     },
   },
   habit3: {
     currentUserId123: {
-      [todayString()]: 1,
+      completions: {
+        [todayString()]: 1,
+      },
     },
     friend1: {
-      [todayString()]: 1,
+      completions: {
+        [todayString()]: 1,
+      },
     },
   },
 };

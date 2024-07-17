@@ -44,21 +44,11 @@ type dbT = {
       // collection
       participantCompletions: Record<
         string, // participantId
-        Record<string, number> // { date: numberOfCompletions }
+        {
+          completions: Record<string, number>; // { date: numberOfCompletions }
+          // 20240715 : 2
+        }
       >;
-      // participantCompletions: Record<
-      //   string, // participantId
-      //   {
-      //     completions: Record<string, number> // { date: numberOfCompletions }
-      //   }
-      // >;
-      // TODO: wip, figure out top or bottom
-      // participantCompletions: Record<
-      //   string, // participantId
-      //   {
-      //     completions: { date: Date; numberOfCompletions: number };
-      //   }
-      // >;
     }
   >;
 
@@ -67,7 +57,6 @@ type dbT = {
     habitNotificationT | friendNotificationT
   >;
 };
-
 export type friendNotificationT = {
   type: "friendRequest";
   senderId: string;

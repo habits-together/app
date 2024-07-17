@@ -1,4 +1,5 @@
 import {
+  addDoc,
   and,
   collection,
   doc,
@@ -7,7 +8,9 @@ import {
   onSnapshot,
   or,
   query,
+  setDoc,
   Unsubscribe,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { SetStateAction } from "jotai";
@@ -29,7 +32,6 @@ import {
 } from "../lib/db_types";
 import { todayString } from "../lib/formatDateString";
 import {
-  generateMockId,
   mockFriendships,
   mockHabitCompletions,
   mockHabits,
@@ -43,11 +45,13 @@ export async function fetchAllMyHabitsInfo(): Promise<allHabitsT> {
   const userId = atomStore.get(currentUserIdAtom);
   const habitsCollection = collection(firestore, "habits");
 
-  const q = query(habitsCollection, where(`participants.${userId}`, '!=', null))
+  const q = query(
+    habitsCollection,
+    where(`participants.${userId}`, "!=", null),
+  );
   const querySnapshot = await getDocs(q);
   const myHabits: allHabitsT = {};
   querySnapshot.forEach((doc) => {
-    console.log(doc.data());
     myHabits[doc.id] = doc.data() as habitT;
   });
   return myHabits;
@@ -73,20 +77,18 @@ export async function editHabitInDb({
   habitId: string;
   habitInfo: habitInfoT;
 }): Promise<void> {
-  // replace with call to firebase
+  const habitDocRef = doc(firestore, "habits", habitId);
+  await updateDoc(habitDocRef, habitInfo);
 }
+
 export async function createNewHabitInDb({
   habitInfo,
 }: {
   habitInfo: habitInfoT;
 }): Promise<string> {
   const user = atomStore.get(currentUserAtom);
-
-  const habitId = generateMockId(); // replace with call to firebase
-  mockHabitCompletions[habitId] = {
-    [user.id]: { [todayString()]: 0 },
-  };
-  mockHabits[habitId] = {
+  // add new habit
+  const habitData: habitT = {
     ...habitInfo,
     participants: {
       [user.id]: {
@@ -98,7 +100,20 @@ export async function createNewHabitInDb({
       },
     },
   };
-  return habitId;
+  const newHabitDocRef = await addDoc(
+    collection(firestore, "habits"),
+    habitData,
+  );
+  const newHabitId = newHabitDocRef.id;
+  // add completion
+  const completionData = { completions: { [todayString()]: 0 } };
+  const participantCompletionsRef = collection(
+    newHabitDocRef,
+    "participantCompletions",
+  );
+  await setDoc(doc(participantCompletionsRef, user.id), completionData);
+  // return new habit id
+  return newHabitId;
 }
 
 export async function fetchHabitCompletionsForAllParticipants({
@@ -106,7 +121,19 @@ export async function fetchHabitCompletionsForAllParticipants({
 }: {
   habitId: string;
 }): Promise<allParticipantCompletionsT> {
-  return mockHabitCompletions[habitId];
+  const allParticipantCompletions: allParticipantCompletionsT = {};
+  const habitDocRef = doc(firestore, "habits", habitId);
+  const participantCompletionsRef = collection(
+    habitDocRef,
+    "participantCompletions",
+  );
+  const allParticipantCompletionsSnapshot = await getDocs(
+    participantCompletionsRef,
+  );
+  allParticipantCompletionsSnapshot.forEach((doc) => {
+    allParticipantCompletions[doc.id] = doc.data() as habitCompletionsT;
+  });
+  return allParticipantCompletions;
 }
 
 export async function fetchHabitCompletionsForParticipant({
@@ -116,7 +143,16 @@ export async function fetchHabitCompletionsForParticipant({
   habitId: string;
   participantId: string;
 }): Promise<habitCompletionsT> {
-  return mockHabitCompletions[habitId][participantId];
+  const habitDocRef = doc(firestore, "habits", habitId);
+  const participantCompletionDocRef = doc(
+    habitDocRef,
+    "participantCompletions",
+    participantId,
+  );
+  const participantCompletionSnapshot = await getDoc(
+    participantCompletionDocRef,
+  );
+  return participantCompletionSnapshot.data() as habitCompletionsT;
 }
 
 // FRIENDS
@@ -319,7 +355,9 @@ export async function acceptHabitInviteInDb({
     mostRecentCompletionDate: new Date(),
     ...mockUsers[userId],
   };
-  mockHabitCompletions[notifData.habitId][userId] = { [todayString()]: 0 };
+  mockHabitCompletions[notifData.habitId][userId].completions = {
+    [todayString()]: 0,
+  };
   delete mockNotifications[notifId];
 }
 
