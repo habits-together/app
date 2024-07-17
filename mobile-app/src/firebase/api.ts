@@ -21,11 +21,13 @@ import {
   allNotificationsT,
   allParticipantCompletionsT,
   allUsersInfoT,
+  friendshipT,
   habitCompletionsT,
   habitInfoT,
   habitNotificationT,
   habitT,
   notificationT,
+  userT,
   userWithIdT,
 } from "../lib/db_types";
 import { todayString } from "../lib/formatDateString";
@@ -36,6 +38,8 @@ import {
   mockNotifications,
   mockUsers,
 } from "../lib/mockData";
+import { firestore } from "./config";
+import { userSnapToUserWithIdT } from "./helper";
 
 export async function fetchAllMyHabitsInfo(): Promise<allHabitsT> {
   const userId = atomStore.get(currentUserIdAtom);
@@ -157,32 +161,21 @@ export async function fetchFriendIds({
 }: {
   userId: string;
 }): Promise<string[]> {
-  // const friendshipsCollection = collection(firestore, "friendships");
-  // const q = query(
-  //   friendshipsCollection,
-  //   or(where("user1Id", "==", userId), where("user2Id", "==", userId)),
-  // );
-  // const myFriendshipSnap = await getDocs(q);
-  // const myFriendIds: string[] = [];
-  // myFriendshipSnap.forEach((doc) => {
-  //   const friendship = doc.data() as friendshipT;
-  //   if (friendship.user1Id === userId) {
-  //     myFriendIds.push(friendship.user2Id);
-  //   } else if (friendship.user2Id === userId) {
-  //     myFriendIds.push(friendship.user1Id);
-  //   }
-  // });
-  // return friendIds;
-
+  const friendshipsCollection = collection(firestore, "friendships");
+  const q = query(
+    friendshipsCollection,
+    or(where("user1Id", "==", userId), where("user2Id", "==", userId)),
+  );
+  const friendshipSnap = await getDocs(q);
   const friendIds: string[] = [];
-  for (const friendshipId in mockFriendships) {
-    const friendship = mockFriendships[friendshipId];
+  friendshipSnap.forEach((doc) => {
+    const friendship = doc.data() as friendshipT;
     if (friendship.user1Id === userId) {
       friendIds.push(friendship.user2Id);
     } else if (friendship.user2Id === userId) {
       friendIds.push(friendship.user1Id);
     }
-  }
+  });
   return friendIds;
 }
 
@@ -191,52 +184,43 @@ export async function fetchFriendData({
 }: {
   userId: string;
 }): Promise<allUsersInfoT> {
-  // const allFreindData: allUsersInfoT = {};
-  // const myFriendIds = await fetchFriendIds({ userId });
-  // // create a array of prommises so each user data can be fetched async
-  // const userDocPromises = myFriendIds.map(async (friendId) => {
-  //   const userDocRef = doc(firestore, "users", friendId);
-  //   const userDocSnap = await getDoc(userDocRef);
-  //   if (userDocSnap.exists()) {
-  //     const userData = userDocSnap.data() as userT;
-  //     allFreindData[friendId] = {
-  //       createdAt: userData.createdAt,
-  //       displayName: userData.displayName,
-  //       username: userData.username,
-  //       picture: userData.picture,
-  //     };
-  //   } else {
-  //     console.error(`No user found with ID: ${friendId}`);
-  //   }
-  // });
-  // await Promise.all(userDocPromises);
-  // return allFriendData;
-
-  const friendIds = await fetchFriendIds({ userId });
-  return Object.fromEntries(
-    Object.entries(mockUsers).filter(([userId]) => friendIds.includes(userId)),
-  );
+  const allFriendData: allUsersInfoT = {};
+  const myFriendIds = await fetchFriendIds({ userId });
+  // create a array of prommises so each user data can be fetched async
+  const userDocPromises = myFriendIds.map(async (friendId) => {
+    const userDocRef = doc(firestore, "users", friendId);
+    const userDocSnap = await getDoc(userDocRef);
+    if (userDocSnap.exists()) {
+      const userData = userDocSnap.data() as userT;
+      allFriendData[friendId] = {
+        createdAt: userData.createdAt,
+        displayName: userData.displayName,
+        username: userData.username,
+        picture: userData.picture,
+      };
+    } else {
+      console.error(`No user found with ID: ${friendId}`);
+    }
+  });
+  await Promise.all(userDocPromises);
+  return allFriendData;
 }
 
 type SetFunction = (update: SetStateAction<allUsersInfoT>) => void;
 export function subscribeToFriendList(setter: SetFunction): Unsubscribe {
-  // const currentUserId = atomStore.get(currentUserIdAtom);
-  // const q = query(
-  //   collection(firestore, "friendships"),
-  //   or(
-  //     where("user1Id", "==", currentUserId),
-  //     where("user2Id", "==", currentUserId),
-  //   ),
-  // );
-  // // this only gonna refetch if MY friends change
-  // const unsub = onSnapshot(q, () => {
-  //   fetchFriendData({ userId: currentUserId }).then(setter);
-  // });
-  // return unsub;
-
   const currentUserId = atomStore.get(currentUserIdAtom);
-  fetchFriendData({ userId: currentUserId }).then(setter);
-  return () => {};
+  const q = query(
+    collection(firestore, "friendships"),
+    or(
+      where("user1Id", "==", currentUserId),
+      where("user2Id", "==", currentUserId),
+    ),
+  );
+  // this only gonna refetch if MY friends change
+  const unsub = onSnapshot(q, () => {
+    fetchFriendData({ userId: currentUserId }).then(setter);
+  });
+  return unsub;
 }
 
 export async function fetchCommonHabitIds({
@@ -244,28 +228,21 @@ export async function fetchCommonHabitIds({
 }: {
   participantId: string;
 }): Promise<string[]> {
-  // const userId = atomStore.get(currentUserIdAtom);
-  // const habitsCollection = collection(firestore, "habits");
-  // const userQuery = query(
-  //   habitsCollection,
-  //   where(`participants.${userId}`, "!=", null),
-  // );
-  // const userHabitsSnap = await getDocs(userQuery);
-  // const commonHabitIds: string[] = [];
-  // userHabitsSnap.forEach((doc) => {
-  //   const habitData = doc.data();
-  //   if (habitData.participants[participantId]) {
-  //     commonHabitIds.push(doc.id);
-  //   }
-  // });
-  // return commonHabitIds;
-
   const userId = atomStore.get(currentUserIdAtom);
-  return Object.keys(mockHabits).filter(
-    (habitId) =>
-      mockHabits[habitId].participants[userId] &&
-      mockHabits[habitId].participants[participantId],
+  const habitsCollection = collection(firestore, "habits");
+  const userQuery = query(
+    habitsCollection,
+    where(`participants.${userId}`, "!=", null),
   );
+  const userHabitsSnap = await getDocs(userQuery);
+  const commonHabitIds: string[] = [];
+  userHabitsSnap.forEach((doc) => {
+    const habitData = doc.data();
+    if (habitData.participants[participantId]) {
+      commonHabitIds.push(doc.id);
+    }
+  });
+  return commonHabitIds;
 }
 
 export async function fetchMutualFriends({
@@ -275,32 +252,15 @@ export async function fetchMutualFriends({
   friendId: string;
   myFriendIds: string[];
 }): Promise<allUsersInfoT> {
-  // const allMutualFriendData: allUsersInfoT = {};
-  // const hisFriendIds: string[] = await fetchFriendIds({ userId: friendId });
+  const allMutualFriendData: allUsersInfoT = {};
+  const hisFriendIds: string[] = await fetchFriendIds({ userId: friendId });
 
-  // const mutualFriendIds = myFriendIds.filter((id) => hisFriendIds.includes(id));
-  // for (const mutualFriendId of mutualFriendIds) {
-  //   const friendInfo = await fetchUserInfo({ userId: mutualFriendId });
-  //   allMutualFriendData[mutualFriendId] = friendInfo;
-  // }
-  // return allMutualFriendData;
-
-  const theirFriendIds = Object.values(mockFriendships)
-    .filter(
-      (friendship) =>
-        friendship.user1Id === friendId || friendship.user2Id === friendId,
-    )
-    .map((friendship) =>
-      friendship.user1Id === friendId ? friendship.user2Id : friendship.user1Id,
-    );
-  const mutualFriendIds = myFriendIds.filter((friendId) =>
-    theirFriendIds.includes(friendId),
-  );
-  return Object.fromEntries(
-    Object.entries(mockUsers).filter(([userId]) =>
-      mutualFriendIds.includes(userId),
-    ),
-  );
+  const mutualFriendIds = myFriendIds.filter((id) => hisFriendIds.includes(id));
+  for (const mutualFriendId of mutualFriendIds) {
+    const friendInfo = await fetchUserInfo({ userId: mutualFriendId });
+    allMutualFriendData[mutualFriendId] = friendInfo;
+  }
+  return allMutualFriendData;
 }
 
 export async function searchFriendsInDb({
@@ -407,16 +367,14 @@ export async function fetchUserInfo({
 }: {
   userId: string;
 }): Promise<userWithIdT> {
-  // const userDocRef = doc(firestore, "users", userId);
-  // const userDocSnap = await getDoc(userDocRef);
-  // // replace this with
-  // if (!userDocSnap.exists()) {
-  //   throw new Error(`No user found with ID: ${userId}`);
-  // }
-  // const userData = userSnapToUserWithIdT(userDocSnap);
-  // return userData;
-
-  return { id: userId, ...mockUsers[userId] };
+  const userDocRef = doc(firestore, "users", userId);
+  const userDocSnap = await getDoc(userDocRef);
+  // replace this with
+  if (!userDocSnap.exists()) {
+    throw new Error(`No user found with ID: ${userId}`);
+  }
+  const userData = userSnapToUserWithIdT(userDocSnap);
+  return userData;
 }
 
 export async function searchUsersInDb({
@@ -424,39 +382,31 @@ export async function searchUsersInDb({
 }: {
   searchText: string;
 }): Promise<allUsersInfoT> {
-  // const usersCollection = collection(firestore, "users");
-  // const searchTextLower = searchText.toLowerCase();
-  // const searchTextHigh = searchText.toLowerCase() + "\uf8ff"; // high Unicode character used to simulate "starting with" behaviour
+  const usersCollection = collection(firestore, "users");
+  const searchTextLower = searchText.toLowerCase();
+  const searchTextHigh = searchText.toLowerCase() + "\uf8ff"; // high Unicode character used to simulate "starting with" behaviour
 
-  // const q = query(
-  //   usersCollection,
-  //   or(
-  //     and(
-  //       where("username", ">=", searchTextLower),
-  //       where("username", "<=", searchTextHigh),
-  //     ),
-  //     and(
-  //       where("displayName", ">=", searchTextLower),
-  //       where("displayName", "<=", searchTextHigh),
-  //     ),
-  //   ),
-  // );
-
-  // const searchResultSnapshot = await getDocs(q);
-
-  // const searchResultUsersInfo: allUsersInfoT = {};
-
-  // searchResultSnapshot.forEach((doc) => {
-  //   searchResultUsersInfo[doc.id] = doc.data() as userT;
-  // });
-
-  // return searchResultUsersInfo;
-
-  return Object.fromEntries(
-    Object.entries(mockUsers).filter(
-      ([, userData]) =>
-        userData.displayName.toLowerCase().includes(searchText.toLowerCase()) ||
-        userData.username.toLowerCase().includes(searchText.toLowerCase()),
+  const q = query(
+    usersCollection,
+    or(
+      and(
+        where("username", ">=", searchTextLower),
+        where("username", "<=", searchTextHigh),
+      ),
+      and(
+        where("displayName", ">=", searchTextLower),
+        where("displayName", "<=", searchTextHigh),
+      ),
     ),
   );
+
+  const searchResultSnapshot = await getDocs(q);
+
+  const searchResultUsersInfo: allUsersInfoT = {};
+
+  searchResultSnapshot.forEach((doc) => {
+    searchResultUsersInfo[doc.id] = doc.data() as userT;
+  });
+
+  return searchResultUsersInfo;
 }
