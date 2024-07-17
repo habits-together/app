@@ -22,6 +22,7 @@ import {
   searchFriendsInDb,
   sendNotificationInDb,
   subscribeToFriendList,
+  updatetHabitCompletionsInDb,
 } from "../firebase/api";
 import {
   HabitDisplayType,
@@ -169,7 +170,21 @@ export const habitCompletionsForAllParticipantsAtom = atomFamily(
 );
 export const habitCompletionsForParticipantAtom = atomFamily(
   ({ habitId, participantId }: { habitId: string; participantId: string }) => {
-    const completionsAtom = atom<habitCompletionsT>({ completions: {} });
+    const baseAtom = atom({ completions: {} });
+
+    const completionsAtom = atom<
+      habitCompletionsT, // getter type
+      [habitCompletionsT], // arguments passed to the set function as an array
+      Promise<void> // return type of the set function
+    >(
+      (get) => {
+        return get(baseAtom);
+      },
+      async (get, set, newCompletions) => {
+        set(baseAtom, newCompletions);
+        await updatetHabitCompletionsInDb({ habitId, participantId });
+      },
+    );
     completionsAtom.onMount = (set) => {
       fetchHabitCompletionsForParticipant({ habitId, participantId }).then(set);
     };
@@ -177,6 +192,7 @@ export const habitCompletionsForParticipantAtom = atomFamily(
   },
   (a, b) => a.habitId === b.habitId && a.participantId === b.participantId,
 );
+
 const myHabitCompletionsAtom = atomFamily((habitId: string) =>
   atom((get) => {
     const userId = get(currentUserIdAtom);

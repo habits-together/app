@@ -410,3 +410,13 @@ export async function searchUsersInDb({
 
   return searchResultUsersInfo;
 }
+
+export async function updatetHabitCompletionsInDb({
+  habitId,
+  participantId,
+}: {
+  habitId: string;
+  participantId: string;
+}): Promise<void> {
+  console.log("i want to get high af");
+}
