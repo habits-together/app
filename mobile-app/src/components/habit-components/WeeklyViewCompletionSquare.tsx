@@ -25,7 +25,8 @@ export default function WeeklyViewCompletionSquare({
     targetNumberOfCompletionsPerDayAtom(habitId),
   );
 
-  const { numberOfCompletions, dayOfTheWeek, dayOfTheMonth } = useAtomValue(completionAtom);
+  const { numberOfCompletions, dayOfTheWeek, dayOfTheMonth } =
+    useAtomValue(completionAtom);
 
   return (
     <View className="flex flex-col items-center gap-1">
