@@ -18,8 +18,8 @@ import {
   deleteNotificationInDb,
   editHabitInDb,
   fetchAllMyHabitsInfo,
-  fetchCommonHabits,
-  fetchFriends,
+  fetchCommonHabitIds,
+  fetchFriendData,
   fetchHabitCompletionsForAllParticipants,
   fetchHabitCompletionsForParticipant,
   fetchHabitInfo,
@@ -27,8 +27,9 @@ import {
   fetchNotifications,
   fetchOutboundNotifications,
   fetchUserInfo,
-  searchUsersInDb,
+  searchFriendsInDb,
   sendNotificationInDb,
+  subscribeToFriendList,
 } from "../firebase/api";
 import {
   HabitDisplayType,
@@ -54,6 +55,13 @@ import { currentUserAtom, currentUserIdAtom } from "./currentUserAtom";
 // we especially use the atomFamily atom: https://jotai.org/docs/utilities/family
 
 const localStore = createJSONStorage(() => AsyncStorage);
+
+currentUserAtom.onMount = (set) => {
+  fetchUserInfo({ userId: "1QsFUZQSFsV83tYNPnChFOwbhjK2" }).then(set);
+  // curently settign the default user to Alice, if will change when auth state changes
+  // TODO: stop doing this at some point
+  // change the defalut value to empty user and get this from auth
+};
 
 const allHabitsAtom = atom<allHabitsT>({});
 allHabitsAtom.onMount = (set) => {
@@ -327,14 +335,22 @@ export const participantPictureAtom = atomFamily(
   deepEquals,
 );
 
-// FRIENDS
-const friendsAtom = atom<allUsersInfoT>({});
-friendsAtom.onMount = (set) => {
-  fetchFriends().then(set);
+// Friends
+export const allFriendsDataAtom = atom<allUsersInfoT>({});
+allFriendsDataAtom.onMount = (set) => {
+  // refetch everytime users friends change
+  const unsubscribeFriendlist = subscribeToFriendList(set);
+  return () => {
+    // close the socket when allFriendsDataAtom is unmount
+    unsubscribeFriendlist();
+  };
 };
-export const friendIdsAtom = atom((get) => Object.keys(get(friendsAtom)));
+
+export const friendIdsAtom = atom((get) =>
+  Object.keys(get(allFriendsDataAtom)),
+);
 export const friendAtom = atomFamily((friendId: string) =>
-  atom((get) => get(friendsAtom)[friendId]),
+  atom((get) => get(allFriendsDataAtom)[friendId]),
 );
 export const friendDisplayNameAtom = atomFamily((friendId: string) =>
   atom((get) => get(friendAtom(friendId)).displayName),
@@ -347,12 +363,19 @@ export const friendPictureAtom = atomFamily((friendId: string) =>
 );
 
 export const commonHabitIdsAtom = atomFamily((friendId: string) =>
-  atom(async () => fetchCommonHabits({ participantId: friendId })),
+  atom(async () => {
+    return await fetchCommonHabitIds({ participantId: friendId });
+  }),
 );
 
 export const mutualFriendsAtom = atomFamily((friendId: string) =>
-  atom(async () => await fetchMutualFriends({ friendId })),
+  atom(async (get) => {
+    const myFriendIds = get(friendIdsAtom);
+    const mutualFriends = await fetchMutualFriends({ friendId, myFriendIds });
+    return mutualFriends;
+  }),
 );
+
 export const mutualFriendsPfpsListAtom = atomFamily((friendId: string) =>
   atom(async (get) => {
     const mutualFriends = await get(mutualFriendsAtom(friendId));
@@ -361,9 +384,10 @@ export const mutualFriendsPfpsListAtom = atomFamily((friendId: string) =>
 );
 
 export const numberOfMutualFriendsAtom = atomFamily((friendId: string) =>
-  atom(
-    async (get) => Object.keys(await get(mutualFriendsAtom(friendId))).length,
-  ),
+  atom(async (get) => {
+    const mutualFriends = await get(mutualFriendsAtom(friendId));
+    return Object.keys(mutualFriends).length;
+  }),
 );
 
 // NOTIFICATIONS
@@ -438,7 +462,9 @@ export const acceptFriendRequestAtom = atomFamily((notificationId: string) =>
   atom(null, async (get, set) => {
     set(removeLocalCopyOfNotification(notificationId));
     acceptFriendRequestInDb({ notifId: notificationId }).then(() =>
-      fetchFriends().then((friends) => set(friendsAtom, friends)),
+      fetchFriendData({ userId: get(currentUserIdAtom) }).then((friends) =>
+        set(allFriendsDataAtom, friends),
+      ),
     );
   }),
 );
@@ -456,12 +482,9 @@ export const acceptHabitInviteAtom = atomFamily((notificationId: string) =>
 
 // friend search
 export const searchQueryAtom = atom("");
-searchQueryAtom.onMount = (set) => {
-  return () => set("");
-};
 
 export const searchResultUsersAtom = atom(async (get) => {
-  return await searchUsersInDb({ searchText: get(searchQueryAtom) });
+  return await searchFriendsInDb({ searchText: get(searchQueryAtom) });
 });
 export const searchResultUserIdsAtom = atom((get) =>
   Object.keys(get(searchResultUsersAtom)),

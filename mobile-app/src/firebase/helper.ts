@@ -1,5 +1,9 @@
-import { DocumentSnapshot } from "firebase/firestore";
-import { userWithIdT } from "../lib/db_types";
+import {
+  DocumentData,
+  DocumentSnapshot,
+  QueryDocumentSnapshot,
+} from "firebase/firestore";
+import { userT, userWithIdT } from "../lib/db_types";
 
 export const userDataConverter = {
   fromFirestore: (snapshot: DocumentSnapshot): userWithIdT => {
@@ -13,4 +17,13 @@ export const userDataConverter = {
     };
     return typedData;
   },
+};
+
+export const userSnapToUserWithIdT = (
+  userDocSnap: QueryDocumentSnapshot<DocumentData, DocumentData>,
+): userWithIdT => {
+  return {
+    ...(userDocSnap.data() as userT),
+    id: userDocSnap.id,
+  };
 };
