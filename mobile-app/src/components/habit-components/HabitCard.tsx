@@ -5,7 +5,10 @@ import { useAtomValue } from "jotai";
 import { useColorScheme } from "nativewind";
 import React from "react";
 import { Pressable, View } from "react-native";
-import { habitColorAtom, homeScreenHabitDisplayTypeAtom } from "../../atoms/atoms";
+import {
+  habitColorAtom,
+  homeScreenHabitDisplayTypeAtom,
+} from "../../atoms/atoms";
 import HabitCompletionButton from "./HabitCompletionButton";
 import HabitCompletionsMonthlyView from "./HabitCompletionsMonthlyView";
 import HabitCompletionsWeeklyView from "./HabitCompletionsWeeklyView";
@@ -55,7 +58,11 @@ export function HabitCard({
           <>
             <View className="h-[10px]" />
             <View className="flex w-full flex-1 flex-row">
-              <HabitCompletionsMonthlyView habitId={habitId} userId={userId} currentScreen="home" />
+              <HabitCompletionsMonthlyView
+                habitId={habitId}
+                userId={userId}
+                currentScreen="home"
+              />
               <View className="w-[10px]" />
               <View className="flex flex-1 flex-col items-end justify-between">
                 <HabitFriendCompletions habitId={habitId} />

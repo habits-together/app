@@ -1,7 +1,7 @@
 import {
   habitColorAtom,
-  homeScreenHabitDisplayTypeAtom,
   habitGoalAtom,
+  homeScreenHabitDisplayTypeAtom,
 } from "@/src/atoms/atoms";
 import colors from "@/src/constants/colors";
 import { getTranslucentColor } from "@/src/lib/getTranslucentColor";

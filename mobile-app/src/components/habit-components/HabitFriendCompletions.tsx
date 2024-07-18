@@ -1,4 +1,7 @@
-import { habitColorAtom, homeScreenHabitDisplayTypeAtom } from "@/src/atoms/atoms";
+import {
+  habitColorAtom,
+  homeScreenHabitDisplayTypeAtom,
+} from "@/src/atoms/atoms";
 import colors from "@/src/constants/colors";
 import { getTranslucentColor } from "@/src/lib/getTranslucentColor";
 import { useAtomValue } from "jotai";
