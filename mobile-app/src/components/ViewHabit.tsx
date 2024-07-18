@@ -13,11 +13,13 @@ import { Suspense, useEffect, useState } from "react";
 import { Pressable, TouchableOpacity } from "react-native";
 import {
   habitColorAtom,
+  habitCompletionAtomsAtom,
   habitGoalAtom,
   habitInfoAtom,
   habitParticipantIdsAtom,
   participantAtom,
   structuredHabitCompletionsAtom,
+  todaysCompletionAtom,
   viewHabitDisplayTypeAtom,
 } from "../atoms/atoms";
 import { currentUserIdAtom } from "../atoms/currentUserAtom";
@@ -227,8 +229,8 @@ function ViewHabitWeeklyCompletions({
 }) {
   const { colorScheme } = useColorScheme();
   const habitColor = useAtomValue(habitColorAtom(habitId));
-  const completions = useAtomValue(
-    structuredHabitCompletionsAtom({ habitId, participantId }),
+  const completionAtoms = useAtomValue(
+    habitCompletionAtomsAtom({ habitId, participantId }),
   );
 
   return (
@@ -241,13 +243,22 @@ function ViewHabitWeeklyCompletions({
             : colors.habitColors[habitColor].light,
       }}
     >
-      {completions.slice(-7).map((completion, index) => (
+      {completionAtoms.slice(-7, -1).map((completionAtom, index) => (
         <WeeklyViewCompletionSquare
           key={index}
           habitId={habitId}
-          completion={completion}
+          completionAtom={completionAtom}
         />
       ))}
+      {
+        <WeeklyViewCompletionSquare
+          habitId={habitId}
+          completionAtom={todaysCompletionAtom({
+            habitId,
+            participantId,
+          })}
+        />
+      }
     </View>
   );
 }

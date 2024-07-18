@@ -1,4 +1,5 @@
-import { myStructuredHabitCompletionsAtom } from "@/src/atoms/atoms";
+import { habitCompletionAtomsAtom } from "@/src/atoms/atoms";
+import { currentUserIdAtom } from "@/src/atoms/currentUserAtom";
 import { useAtomValue } from "jotai";
 import React from "react";
 import { View } from "react-native";
@@ -10,17 +11,18 @@ export default function HabitCompletionsWeeklyView({
 }: {
   habitId: string;
 }) {
-  const completionData = useAtomValue(
-    myStructuredHabitCompletionsAtom(habitId),
+  const userId = useAtomValue(currentUserIdAtom);
+  const completionAtoms = useAtomValue(
+    habitCompletionAtomsAtom({ habitId, participantId: userId }),
   );
 
   return (
     <View className="flex w-full flex-1 flex-row items-end justify-between">
-      {completionData.slice(-7, -1).map((completion, index) => (
+      {completionAtoms.slice(-7, -1).map((completionAtom, index) => (
         <WeeklyViewCompletionSquare
           key={index}
           habitId={habitId}
-          completion={completion}
+          completionAtom={completionAtom}
         />
       ))}
       <HabitCompletionButton habitId={habitId} />

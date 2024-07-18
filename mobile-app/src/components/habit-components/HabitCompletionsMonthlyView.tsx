@@ -46,7 +46,7 @@ export default function HabitCompletionsMonthlyView({
       <View className={`flex flex-col flex-wrap`}>
         {completionAtoms.length >= numDaysToDisplay && // prevent errors on load
           completionAtoms
-            .slice(completionAtoms.length - numDaysToDisplay)
+            .slice(completionAtoms.length - numDaysToDisplay, -1)
             .map((completionAtom, index) => (
               <View key={completionAtom.toString()}>
                 <MonthlyViewCompletionSquare
