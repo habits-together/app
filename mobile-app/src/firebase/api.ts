@@ -41,6 +41,7 @@ import {
 import { firestore } from "./config";
 import { userSnapToUserWithIdT } from "./helper";
 
+// habit
 export async function fetchAllMyHabitsInfo(): Promise<allHabitsT> {
   const userId = atomStore.get(currentUserIdAtom);
   const habitsCollection = collection(firestore, "habits");
@@ -114,6 +115,25 @@ export async function createNewHabitInDb({
   await setDoc(doc(participantCompletionsRef, user.id), completionData);
   // return new habit id
   return newHabitId;
+}
+
+// habit completion
+export async function updatetHabitCompletionsInDb({
+  habitId,
+  participantId,
+  completionData,
+}: {
+  habitId: string;
+  participantId: string;
+  completionData: habitCompletionsT;
+}): Promise<void> {
+  const habitDocRef = doc(firestore, "habits", habitId);
+  const participantCompletionDocRef = doc(
+    habitDocRef,
+    "participantCompletions",
+    participantId,
+  );
+  await setDoc(participantCompletionDocRef, completionData);
 }
 
 export async function fetchHabitCompletionsForAllParticipants({
@@ -409,14 +429,4 @@ export async function searchUsersInDb({
   });
 
   return searchResultUsersInfo;
-}
-
-export async function updatetHabitCompletionsInDb({
-  habitId,
-  participantId,
-}: {
-  habitId: string;
-  participantId: string;
-}): Promise<void> {
-  console.log("i want to get high af");
 }

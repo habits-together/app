@@ -182,7 +182,11 @@ export const habitCompletionsForParticipantAtom = atomFamily(
       },
       async (get, set, newCompletions) => {
         set(baseAtom, newCompletions);
-        await updatetHabitCompletionsInDb({ habitId, participantId });
+        await updatetHabitCompletionsInDb({
+          habitId,
+          participantId,
+          completionData: newCompletions,
+        });
       },
     );
     completionsAtom.onMount = (set) => {
