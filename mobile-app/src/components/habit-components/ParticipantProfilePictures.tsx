@@ -1,7 +1,7 @@
 import {
   habitColorAtom,
-  homeScreenHabitDisplayTypeAtom,
   habitParticipantPfpsListAtom,
+  homeScreenHabitDisplayTypeAtom,
 } from "@/src/atoms/atoms";
 import colors from "@/src/constants/colors";
 import { useAtomValue } from "jotai";
