@@ -18,7 +18,6 @@ import {
   habitInfoAtom,
   habitParticipantIdsAtom,
   participantAtom,
-  structuredHabitCompletionsAtom,
   todaysCompletionAtom,
   viewHabitDisplayTypeAtom,
 } from "../atoms/atoms";
@@ -129,11 +128,11 @@ function ActivityCard({
   const { colorScheme } = useColorScheme();
   const participant = useAtomValue(participantAtom({ habitId, participantId }));
   const habitColor = useAtomValue(habitColorAtom(habitId));
-  const completions = useAtomValue(
-    structuredHabitCompletionsAtom({ habitId, participantId }),
-  );
   const viewType = useAtomValue(viewHabitDisplayTypeAtom(habitId));
   const habitGoalPeriod = useAtomValue(habitGoalAtom(habitId)).period;
+  const numCompletionsToday = useAtomValue(
+    todaysCompletionAtom({ habitId, participantId }),
+  ).numberOfCompletions;
 
   return (
     <View
@@ -160,7 +159,7 @@ function ActivityCard({
         <View className="flex flex-row items-center" style={{ gap: 10 }}>
           <NudgeButton
             participantId={participantId}
-            numberOfCompletionsToday={completions.at(-1)?.numberOfCompletions}
+            numberOfCompletionsToday={numCompletionsToday}
           />
           <DotsMenu
             options={[
