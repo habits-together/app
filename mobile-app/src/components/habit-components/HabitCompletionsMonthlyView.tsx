@@ -3,6 +3,7 @@ import {
   habitGoalAtom,
   todaysCompletionAtom,
 } from "@/src/atoms/atoms";
+import { maxNumWeeksToDisplay } from "@/src/constants/constants";
 import { getNumberOfDaysInLastWeek } from "@/src/lib/getNumberOfDaysInLastWeek";
 import { useAtomValue } from "jotai";
 import React from "react";
@@ -30,8 +31,11 @@ export default function HabitCompletionsMonthlyView({
   const screenWidth = Dimensions.get("window").width;
   const completionSquareWidth = 16;
   // Magic number to account for other elements on the screen
-  const containerWidth = screenWidth - (currentScreen === "home" ? 185 : 74);
-  const numWeeksToDisplay = Math.ceil(containerWidth / completionSquareWidth);
+  const containerWidth = screenWidth - (currentScreen === "home" ? 185 : 78);
+  const numWeeksToDisplay = Math.min(
+    Math.ceil(containerWidth / completionSquareWidth),
+    maxNumWeeksToDisplay,
+  );
   const numDaysToDisplay = (numWeeksToDisplay - 1) * 7 + numberOfDaysInLastWeek;
 
   return (

@@ -1,1 +1,1 @@
-export const maxNumWeeksToDisplay = 20;
+export const maxNumWeeksToDisplay = 24;
