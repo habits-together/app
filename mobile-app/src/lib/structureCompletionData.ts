@@ -29,6 +29,7 @@ export function structureCompletionData({
   for (let i = 0; i < numDays; i++) {
     // if there is no completion data for the current date, default to 0 (no completions that day)
     structuredCompletionData.push({
+      date: formatDateString(currentDate),
       numberOfCompletions: completionData[formatDateString(currentDate)] ?? 0,
       dayOfTheMonth: currentDate.getDate(),
       dayOfTheWeek: currentDate.toLocaleString("en-US", { weekday: "short" }),

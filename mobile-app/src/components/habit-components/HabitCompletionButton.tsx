@@ -1,10 +1,11 @@
 import {
   habitColorAtom,
-  habitDisplayTypeAtom,
-  incrementNumberOfCompletionsTodayAtom,
-  numberOfCompletionsTodayAtom,
+  homeScreenHabitDisplayTypeAtom,
+  incrementMyNumberOfCompletionsTodayAtom,
   targetNumberOfCompletionsPerDayAtom,
+  todaysCompletionAtom,
 } from "@/src/atoms/atoms";
+import { currentUserIdAtom } from "@/src/atoms/currentUserAtom";
 import colors from "@/src/constants/colors";
 import { IconCheck } from "@tabler/icons-react-native";
 import { useAtomValue, useSetAtom } from "jotai";
@@ -21,18 +22,19 @@ export default function HabitCompletionButton({
   const { colorScheme } = useColorScheme();
 
   const color = useAtomValue(habitColorAtom(habitId));
+  const userId = useAtomValue(currentUserIdAtom);
   const numberOfCompletionsToday = useAtomValue(
-    numberOfCompletionsTodayAtom(habitId),
-  );
+    todaysCompletionAtom({ habitId, participantId: userId }),
+  ).numberOfCompletions;
 
   const incrementNumberOfCompletionsToday = useSetAtom(
-    incrementNumberOfCompletionsTodayAtom(habitId),
+    incrementMyNumberOfCompletionsTodayAtom(habitId),
   );
   const targetNumberOfCompletionsPerDay = useAtomValue(
     targetNumberOfCompletionsPerDayAtom(habitId),
   );
 
-  const displayType = useAtomValue(habitDisplayTypeAtom(habitId));
+  const displayType = useAtomValue(homeScreenHabitDisplayTypeAtom(habitId));
 
   return (
     <View className="flex flex-col items-center gap-1">

@@ -16,7 +16,7 @@ export default function WeekGoalMetCheckmark({
   const color = useAtomValue(habitColorAtom(habitId));
 
   return (
-    <View className="h-[13px] w-[13px]">
+    <View className="mx-[1.5px] h-[13px] w-[13px]">
       {weekGoalMet && (
         <Icon
           icon={IconCheck}
