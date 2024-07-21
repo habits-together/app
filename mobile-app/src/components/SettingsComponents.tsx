@@ -7,9 +7,10 @@ import {
   IconCircle,
   IconCircleCheck,
 } from "@tabler/icons-react-native";
-import * as SecureStore from "expo-secure-store";
 import { useEffect, useState } from "react";
 import { ScrollView, TouchableOpacity } from "react-native";
+import { settingAtom } from "../atoms/atoms";
+import { useAtom } from "jotai";
 
 export function SettingsContainer({ children }: { children: React.ReactNode }) {
   return (
@@ -66,17 +67,17 @@ export function SettingsChoice({
   defaultSetting: number;
 }) {
   const [selected, setSelected] = useState(defaultSetting);
+  const [setting, setSetting] = useAtom(settingAtom(settingKey));
 
   useEffect(() => {
-    const savedSetting = SecureStore.getItem(settingKey);
-    if (savedSetting) {
-      setSelected(parseInt(savedSetting));
+    if (setting) {
+      setSelected(parseInt(setting));
     }
   });
 
   function changeSetting(index: number) {
     setSelected(index);
-    SecureStore.setItem(settingKey, index.toString());
+    setSetting(index.toString());
   }
 
   return (
