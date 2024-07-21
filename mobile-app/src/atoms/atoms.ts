@@ -170,7 +170,7 @@ export const habitCompletionsForAllParticipantsAtom = atomFamily(
 );
 export const habitCompletionsForParticipantAtom = atomFamily(
   ({ habitId, participantId }: { habitId: string; participantId: string }) => {
-    const baseAtom = atom({ completions: {} });
+    const baseAtom = atom<habitCompletionsT>({ completions: {} });
 
     const completionsAtom = atom<
       habitCompletionsT, // getter type
