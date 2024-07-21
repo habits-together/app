@@ -65,7 +65,7 @@ function RootLayoutNav() {
       NativeWindStyleSheet.setColorScheme("dark");
     } else {
       NativeWindStyleSheet.setColorScheme(
-        Appearance.getColorScheme() || "light",
+        colorScheme || "light",
       );
     }
   }, [themeSetting]);
