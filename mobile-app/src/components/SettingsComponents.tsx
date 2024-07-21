@@ -7,10 +7,10 @@ import {
   IconCircle,
   IconCircleCheck,
 } from "@tabler/icons-react-native";
+import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { ScrollView, TouchableOpacity } from "react-native";
 import { settingAtom } from "../atoms/atoms";
-import { useAtom } from "jotai";
 
 export function SettingsContainer({ children }: { children: React.ReactNode }) {
   return (

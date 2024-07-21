@@ -6,8 +6,10 @@ import * as SplashScreen from "expo-splash-screen";
 import { Provider, useAtomValue } from "jotai";
 import { NativeWindStyleSheet, useColorScheme } from "nativewind";
 import { useEffect } from "react";
+import { Appearance } from "react-native";
 import { MenuProvider } from "react-native-popup-menu";
 import "react-native-reanimated";
+import { settingAtom } from "../atoms/atoms";
 import { atomStore } from "../atoms/store";
 import {
   emailLoginOptions,
@@ -15,8 +17,6 @@ import {
   forgotPasswordOptions,
   viewHabitOptions,
 } from "../components/HeaderOptions";
-import { settingAtom } from "../atoms/atoms";
-import { Appearance } from "react-native";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -59,14 +59,14 @@ function RootLayoutNav() {
   const { colorScheme } = useColorScheme();
   const [themeSetting] = useAtomValue(settingAtom("theme"));
   useEffect(() => {
-    if(themeSetting == "1"){
-      NativeWindStyleSheet.setColorScheme("light")
-    }
-    else if(themeSetting == "2"){
-      NativeWindStyleSheet.setColorScheme("dark")
-    }
-    else {
-      NativeWindStyleSheet.setColorScheme(Appearance.getColorScheme() || "light")
+    if (themeSetting == "1") {
+      NativeWindStyleSheet.setColorScheme("light");
+    } else if (themeSetting == "2") {
+      NativeWindStyleSheet.setColorScheme("dark");
+    } else {
+      NativeWindStyleSheet.setColorScheme(
+        Appearance.getColorScheme() || "light",
+      );
     }
   }, [themeSetting]);
 
