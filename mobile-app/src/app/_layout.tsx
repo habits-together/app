@@ -57,11 +57,11 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const { colorScheme } = useColorScheme();
-  const [themeSetting] = useAtomValue(settingAtom("theme"));
+  const themeSetting = useAtomValue(settingAtom("theme"));
   useEffect(() => {
-    if (themeSetting == "1") {
+    if (themeSetting === 1) {
       NativeWindStyleSheet.setColorScheme("light");
-    } else if (themeSetting == "2") {
+    } else if (themeSetting === 2) {
       NativeWindStyleSheet.setColorScheme("dark");
     } else {
       NativeWindStyleSheet.setColorScheme(

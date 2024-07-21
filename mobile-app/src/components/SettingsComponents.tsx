@@ -71,13 +71,13 @@ export function SettingsChoice({
 
   useEffect(() => {
     if (setting) {
-      setSelected(parseInt(setting));
+      setSelected(setting);
     }
-  });
+  }, [setting]);
 
   function changeSetting(index: number) {
     setSelected(index);
-    setSetting(index.toString());
+    setSetting(index);
   }
 
   return (
