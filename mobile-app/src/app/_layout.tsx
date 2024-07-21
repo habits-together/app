@@ -6,7 +6,6 @@ import * as SplashScreen from "expo-splash-screen";
 import { Provider, useAtomValue } from "jotai";
 import { NativeWindStyleSheet, useColorScheme } from "nativewind";
 import { useEffect } from "react";
-import { Appearance } from "react-native";
 import { MenuProvider } from "react-native-popup-menu";
 import "react-native-reanimated";
 import { settingAtom } from "../atoms/atoms";
@@ -64,9 +63,7 @@ function RootLayoutNav() {
     } else if (themeSetting === 2) {
       NativeWindStyleSheet.setColorScheme("dark");
     } else {
-      NativeWindStyleSheet.setColorScheme(
-        colorScheme || "light",
-      );
+      NativeWindStyleSheet.setColorScheme(colorScheme || "light");
     }
   }, [themeSetting]);
 
