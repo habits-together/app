@@ -170,18 +170,16 @@ export const habitCompletionsForAllParticipantsAtom = atomFamily(
 );
 export const habitCompletionsForParticipantAtom = atomFamily(
   ({ habitId, participantId }: { habitId: string; participantId: string }) => {
-    const baseAtom = atom<habitCompletionsT>({ completions: {} });
+    const completionsBaseAtom = atom<habitCompletionsT>({ completions: {} });
 
     const completionsAtom = atom<
       habitCompletionsT, // getter type
       [habitCompletionsT], // arguments passed to the set function as an array
       Promise<void> // return type of the set function
     >(
-      (get) => {
-        return get(baseAtom);
-      },
-      async (get, set, newCompletions) => {
-        set(baseAtom, newCompletions);
+      (get) => get(completionsBaseAtom),
+      async (_get, set, newCompletions) => {
+        set(completionsBaseAtom, newCompletions);
         await updatetHabitCompletionsInDb({
           habitId,
           participantId,
