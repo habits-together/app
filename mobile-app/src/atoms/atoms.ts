@@ -573,3 +573,12 @@ export const viewHabitDisplayTypeAtom = atomFamily((id: string) =>
     { getOnInit: true },
   ),
 );
+
+export const settingAtom = atomFamily((settingKey: string) =>
+  atomWithStorage<number>(
+    settingKey,
+    0,
+    localStore as AsyncStorageType<number>,
+    { getOnInit: true },
+  ),
+);

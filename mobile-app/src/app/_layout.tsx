@@ -3,11 +3,12 @@ import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { Provider } from "jotai";
-import { useColorScheme } from "nativewind";
+import { Provider, useAtomValue } from "jotai";
+import { NativeWindStyleSheet, useColorScheme } from "nativewind";
 import { useEffect } from "react";
 import { MenuProvider } from "react-native-popup-menu";
 import "react-native-reanimated";
+import { settingAtom } from "../atoms/atoms";
 import { atomStore } from "../atoms/store";
 import {
   emailLoginOptions,
@@ -55,6 +56,16 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const { colorScheme } = useColorScheme();
+  const themeSetting = useAtomValue(settingAtom("theme"));
+  useEffect(() => {
+    if (themeSetting === 1) {
+      NativeWindStyleSheet.setColorScheme("light");
+    } else if (themeSetting === 2) {
+      NativeWindStyleSheet.setColorScheme("dark");
+    } else {
+      NativeWindStyleSheet.setColorScheme(colorScheme || "light");
+    }
+  }, [themeSetting]);
 
   return (
     <Provider store={atomStore}>
