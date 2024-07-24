@@ -583,4 +583,4 @@ export const settingAtom = atomFamily((settingKey: string) =>
   ),
 );
 
-export const profileFormDataAtom = atom({displayName: "", username: "", }) //maybe change to use user atom data?
+export const profileFormDataAtom = atom({ displayName: "", username: "" }); //maybe change to use user atom data?

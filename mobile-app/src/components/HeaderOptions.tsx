@@ -1,22 +1,20 @@
+import { collection, where } from "@firebase/firestore";
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import { IconCheck, IconEdit, IconX } from "@tabler/icons-react-native";
 import { router, useGlobalSearchParams } from "expo-router";
-import { useAtomValue } from "jotai";
+import { doc, getDocs, query, setDoc } from "firebase/firestore";
+import { useAtom, useAtomValue } from "jotai";
 import { Pressable } from "react-native";
-import { getUserInfoAtom } from "../atoms/atoms";
+import { getUserInfoAtom, profileFormDataAtom } from "../atoms/atoms";
+import { currentUserAtom } from "../atoms/currentUserAtom";
 import colors from "../constants/colors";
+import { firestore } from "../firebase/config";
+import { userT, userWithIdT } from "../lib/db_types";
 import DotsMenu from "./DotsMenu";
 import HeaderBackButton from "./HeaderBackButton";
 import Icon from "./Icon";
 import RoundedButton from "./RoundedButton";
 import { Text, View } from "./Themed";
-import { useAtom } from "jotai";
-import { profileFormDataAtom } from "../atoms/atoms";
-import { currentUserAtom } from "../atoms/currentUserAtom";
-import { auth, firestore } from "../firebase/config";
-import { collection, where } from "@firebase/firestore";
-import { doc, getDocs, query, setDoc } from "firebase/firestore";
-import { userT, userWithIdT } from "../lib/db_types";
 
 function sharedOptions(colorScheme: string): NativeStackNavigationOptions {
   return {
@@ -194,8 +192,8 @@ export function editProfileOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
   const { userName } = useGlobalSearchParams<{ userName: string }>();
-  const [profileFormData, setProfileFormData] = useAtom(profileFormDataAtom)
-  const [userData, setUserData] = useAtom(currentUserAtom)
+  const [profileFormData, setProfileFormData] = useAtom(profileFormDataAtom);
+  const [userData, setUserData] = useAtom(currentUserAtom);
   return {
     headerLeft: () => (
       <RoundedButton
@@ -205,8 +203,8 @@ export function editProfileOptions(
           //change back to actual profile data
           setProfileFormData({
             displayName: userData.displayName,
-            username: userData.displayName
-          })
+            username: userData.displayName,
+          });
           router.back();
         }}
       />
@@ -221,22 +219,24 @@ export function editProfileOptions(
         text="Done"
         icon={IconCheck}
         onPress={async () => {
-
-          
-
           // if (auth.currentUser == null) {
           //   console.log("Cannot edit profile: User not logged in")
           //   return;
           // }
 
-
           //TODO Ensure username is unique
           const usersRef = collection(firestore, "users");
-          const q = query(usersRef, where("username", "==", profileFormData.username))
+          const q = query(
+            usersRef,
+            where("username", "==", profileFormData.username),
+          );
           const queryResults = await getDocs(q);
 
           // Check if were changing username, if so check if username already exist in DB
-          if (userData.username !== profileFormData.username && queryResults.size >= 1) {
+          if (
+            userData.username !== profileFormData.username &&
+            queryResults.size >= 1
+          ) {
             console.log("Error: Username already taken"); // Display this on screen instead
             profileFormData.username = "";
             return;
@@ -246,21 +246,21 @@ export function editProfileOptions(
           const newDataForAtom: userWithIdT = {
             ...userData,
             ...profileFormData,
-          }
+          };
 
           const newDataForDb: userT = {
             username: profileFormData.username,
             displayName: profileFormData.displayName,
             picture: userData.picture,
-            createdAt: userData.createdAt
-          }
+            createdAt: userData.createdAt,
+          };
 
           //Push Data to DB
-          const userDocRef = doc(firestore, "users", userData.id) //change to auth.currentUser.uid when auth is fixed
-          await setDoc(userDocRef, newDataForDb)
+          const userDocRef = doc(firestore, "users", userData.id); //change to auth.currentUser.uid when auth is fixed
+          await setDoc(userDocRef, newDataForDb);
 
-          //Update the current atoms accordingly 
-          setUserData(newDataForAtom)
+          //Update the current atoms accordingly
+          setUserData(newDataForAtom);
           router.back();
         }}
       />
