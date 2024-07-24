@@ -16,6 +16,7 @@ import { currentUserAtom } from "../atoms/currentUserAtom";
 import { auth, firestore } from "../firebase/config";
 import { collection, where } from "@firebase/firestore";
 import { doc, getDocs, query, setDoc } from "firebase/firestore";
+import { userT, userWithIdT } from "../lib/db_types";
 
 function sharedOptions(colorScheme: string): NativeStackNavigationOptions {
   return {
@@ -220,36 +221,42 @@ export function editProfileOptions(
         text="Done"
         icon={IconCheck}
         onPress={async () => {
-          if (auth.currentUser == null){
-            console.log("Cannot edit profile: User not logged in")
-            return;
-          }
+
+          
+
+          // if (auth.currentUser == null) {
+          //   console.log("Cannot edit profile: User not logged in")
+          //   return;
+          // }
 
 
           //TODO Ensure username is unique
           const usersRef = collection(firestore, "users");
           const q = query(usersRef, where("username", "==", profileFormData.username))
           const queryResults = await getDocs(q);
-          if (queryResults.size > 1) {
+
+          // Check if were changing username, if so check if username already exist in DB
+          if (userData.username !== profileFormData.username && queryResults.size >= 1) {
             console.log("Error: Username already taken"); // Display this on screen instead
             profileFormData.username = "";
             return;
           }
+
           // On success
-          const newDataForAtom = {
+          const newDataForAtom: userWithIdT = {
             ...userData,
             ...profileFormData,
           }
-          
-          const newDataForDb = {
+
+          const newDataForDb: userT = {
             username: profileFormData.username,
             displayName: profileFormData.displayName,
             picture: userData.picture,
             createdAt: userData.createdAt
           }
-          
+
           //Push Data to DB
-          const userDocRef = doc(firestore, "users", auth.currentUser.uid )
+          const userDocRef = doc(firestore, "users", userData.id) //change to auth.currentUser.uid when auth is fixed
           await setDoc(userDocRef, newDataForDb)
 
           //Update the current atoms accordingly 
