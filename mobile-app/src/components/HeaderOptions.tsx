@@ -13,6 +13,9 @@ import { Text, View } from "./Themed";
 import { useAtom } from "jotai";
 import { profileFormDataAtom } from "../atoms/atoms";
 import { currentUserAtom } from "../atoms/currentUserAtom";
+import { auth, firestore } from "../firebase/config";
+import { collection, where } from "@firebase/firestore";
+import { doc, getDocs, query, setDoc } from "firebase/firestore";
 
 function sharedOptions(colorScheme: string): NativeStackNavigationOptions {
   return {
@@ -216,16 +219,41 @@ export function editProfileOptions(
       <RoundedButton
         text="Done"
         icon={IconCheck}
-        onPress={() => {
+        onPress={async () => {
+          if (auth.currentUser == null){
+            console.log("Cannot edit profile: User not logged in")
+            return;
+          }
+
+
           //TODO Ensure username is unique
-
-          //TODO Push Data to DB
-
-          //Update the current atoms accordingly 
-          setUserData({
+          const usersRef = collection(firestore, "users");
+          const q = query(usersRef, where("username", "==", profileFormData.username))
+          const queryResults = await getDocs(q);
+          if (queryResults.size > 1) {
+            console.log("Error: Username already taken"); // Display this on screen instead
+            profileFormData.username = "";
+            return;
+          }
+          // On success
+          const newDataForAtom = {
             ...userData,
             ...profileFormData,
-          })
+          }
+          
+          const newDataForDb = {
+            username: profileFormData.username,
+            displayName: profileFormData.displayName,
+            picture: userData.picture,
+            createdAt: userData.createdAt
+          }
+          
+          //Push Data to DB
+          const userDocRef = doc(firestore, "users", auth.currentUser.uid )
+          await setDoc(userDocRef, newDataForDb)
+
+          //Update the current atoms accordingly 
+          setUserData(newDataForAtom)
           router.back();
         }}
       />
