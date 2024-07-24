@@ -1,7 +1,7 @@
 import {
   habitColorAtom,
-  habitDisplayTypeAtom,
   habitGoalAtom,
+  homeScreenHabitDisplayTypeAtom,
 } from "@/src/atoms/atoms";
 import colors from "@/src/constants/colors";
 import { getTranslucentColor } from "@/src/lib/getTranslucentColor";
@@ -18,7 +18,7 @@ export default function HabitParticipantCompletedBadge({
 }) {
   const goal = useAtomValue(habitGoalAtom(habitId));
   const color = useAtomValue(habitColorAtom(habitId));
-  const displayType = useAtomValue(habitDisplayTypeAtom(habitId));
+  const displayType = useAtomValue(homeScreenHabitDisplayTypeAtom(habitId));
 
   function getCompletedBadgeText() {
     if (

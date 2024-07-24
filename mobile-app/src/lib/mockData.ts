@@ -88,7 +88,7 @@ export const mockHabits: allHabitsT = {
     description: "Working out is better together",
     goal: {
       period: "weekly",
-      completionsPerPeriod: 4,
+      completionsPerPeriod: 2,
     },
     participants: {
       Xbc5C2wQfxc0rFFwFyXHsF6LtWp1: {
@@ -117,9 +117,9 @@ export const mockHabits: allHabitsT = {
         isOwner: true,
         ...mockUsers["currentUserId123"],
       },
-      friend1: {
+      "8p0Jom3hTUTA3r1JpEWwsxHfYXK2": {
         mostRecentCompletionDate: new Date(),
-        ...mockUsers["friend1"],
+        ...mockUsers["8p0Jom3hTUTA3r1JpEWwsxHfYXK2"],
       },
     },
   },
@@ -157,9 +157,16 @@ export const mockHabitCompletions: allParticipantCompletionsForAllHabitsT = {
   },
   habit2_userNotPartOfToStart: {
     Xbc5C2wQfxc0rFFwFyXHsF6LtWp1: {
-      [formatDateString(new Date("2024-05-4T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-07-1T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-07-2T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-07-3T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-07-4T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-07-5T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-07-6T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-07-7T04:00:00"))]: 1,
+      [formatDateString(new Date("2024-07-8T04:00:00"))]: 1,
     },
-    friend3: {
+    ognaplankMQIgapbAOvv5npyTWR2: {
       [formatDateString(new Date("2024-05-4T04:00:00"))]: 1,
     },
   },
@@ -167,7 +174,7 @@ export const mockHabitCompletions: allParticipantCompletionsForAllHabitsT = {
     currentUserId123: {
       [todayString()]: 1,
     },
-    friend1: {
+    "8p0Jom3hTUTA3r1JpEWwsxHfYXK2": {
       [todayString()]: 1,
     },
   },
