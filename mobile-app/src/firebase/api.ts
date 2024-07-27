@@ -427,8 +427,7 @@ export async function acceptHabitInviteInDb({
   if (!notifDocSnap.exists()) {
     throw new Error(`No notification found with ID: ${notifId}`);
   }
-  const { habitId, receiverId } =
-    notifDocSnap.data() as habitNotificationT;
+  const { habitId, receiverId } = notifDocSnap.data() as habitNotificationT;
   const habitDocRef = doc(firestore, "habits", habitId);
 
   // get recivers data

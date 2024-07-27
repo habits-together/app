@@ -15,7 +15,7 @@ import { MenuProvider } from "react-native-popup-menu";
 export default function ModalLayout() {
   const { colorScheme } = useColorScheme();
   /**
-   * For somereson EACH modal options get calculated everytime any 
+   * For somereson EACH modal options get calculated everytime any
    * model is displayed. what the actual fudge is going on
    */
   return (

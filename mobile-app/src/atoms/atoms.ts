@@ -16,7 +16,6 @@ import {
   fetchHabitCompletionsForParticipant,
   fetchHabitInfo,
   fetchMutualFriends,
-  fetchNotifications,
   fetchOutboundNotifications,
   fetchUserInfo,
   searchFriendsInDb,
@@ -369,7 +368,7 @@ notificationsAtom.onMount = (set) => {
   return () => {
     // close the socket on unmount
     unsubscribeNotifs();
-  }
+  };
 };
 export const notificationIdsAtom = atom((get) =>
   Object.keys(get(notificationsAtom)),
