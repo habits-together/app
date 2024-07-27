@@ -1,5 +1,5 @@
-import { Unsubscribe } from "firebase/firestore";
-import { SetStateAction } from "jotai";
+import { collection, doc, getDocs, query, setDoc, Unsubscribe, where } from "firebase/firestore";
+import { PrimitiveAtom, SetStateAction, useAtom, useAtomValue } from "jotai";
 import { currentUserAtom, currentUserIdAtom } from "../atoms/currentUserAtom";
 import { atomStore } from "../atoms/store";
 import {
@@ -12,6 +12,7 @@ import {
   habitNotificationT,
   habitT,
   notificationT,
+  userT,
   userWithIdT,
 } from "../lib/db_types";
 import { todayString } from "../lib/formatDateString";
@@ -23,6 +24,8 @@ import {
   mockNotifications,
   mockUsers,
 } from "../lib/mockData";
+import { firestore } from "./config";
+import { router } from "expo-router";
 
 export async function fetchAllMyHabitsInfo(): Promise<allHabitsT> {
   const userId = atomStore.get(currentUserIdAtom);
@@ -182,7 +185,7 @@ export function subscribeToFriendList(setter: SetFunction): Unsubscribe {
 
   const currentUserId = atomStore.get(currentUserIdAtom);
   fetchFriendData({ userId: currentUserId }).then(setter);
-  return () => {};
+  return () => { };
 }
 
 export async function fetchCommonHabitIds({
@@ -403,4 +406,58 @@ export async function searchUsersInDb({
         userData.username.toLowerCase().includes(searchText.toLowerCase()),
     ),
   );
+}
+
+
+export async function updateProfileDataInDB(
+    profileFormDataAtom: PrimitiveAtom<{
+      displayName: string;
+      username: string;
+    }>,
+    currentUserAtom : PrimitiveAtom<userWithIdT>
+  ) {
+  async () => {
+
+    const profileFormData = useAtomValue(profileFormDataAtom) 
+    const [userData, setUserData] = useAtom(currentUserAtom)
+
+    // if (auth.currentUser == null) {
+    //   console.log("Cannot edit profile: User not logged in")
+    //   return;
+    // }
+
+
+    //Ensure user is unique
+    const usersRef = collection(firestore, "users");
+    const q = query(usersRef, where("username", "==", profileFormData.username))
+    const querySnapshot = await getDocs(q);
+
+    // Check if were changing username, if so check if username already exist in DB
+    if (userData.username !== profileFormData.username && !querySnapshot.empty) {
+      console.log("Error: Username already taken"); // Display this on screen instead
+      profileFormData.username = "";
+      return;
+    }
+
+    // On success
+    const newDataForAtom: userWithIdT = {
+      ...userData,
+      ...profileFormData,
+    }
+
+    const newDataForDb: userT = {
+      username: profileFormData.username,
+      displayName: profileFormData.displayName,
+      picture: userData.picture,
+      createdAt: userData.createdAt
+    }
+
+    //Push Data to DB
+    const userDocRef = doc(firestore, "users", userData.id) //change to auth.currentUser.uid when auth is fixed
+    await setDoc(userDocRef, newDataForDb)
+
+    //Update the current atoms accordingly 
+    setUserData(newDataForAtom)
+    router.back();
+  }
 }
