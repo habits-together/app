@@ -1,11 +1,13 @@
 import {
+  deleteHabitAtom,
+  deleteNotificationAtom,
   habitIconAtom,
   habitTitleAtom,
   homeScreenHabitDisplayTypeAtom,
 } from "@/src/atoms/atoms";
 import colors from "@/src/constants/colors";
 import { router } from "expo-router";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import React from "react";
 import { Text, View } from "react-native";
 import DotsMenu from "../DotsMenu";
@@ -17,6 +19,7 @@ export function HabitHeader({ habitId }: { habitId: string }) {
   );
   const title = useAtomValue(habitTitleAtom(habitId));
   const icon = useAtomValue(habitIconAtom(habitId));
+  const deleteHabit = useSetAtom(deleteHabitAtom(habitId));
 
   return (
     <View className="-mb-[10px] ml-1 flex-row items-center justify-between">
@@ -57,7 +60,9 @@ export function HabitHeader({ habitId }: { habitId: string }) {
             {
               label: "Delete",
               color: colors.black,
-              action: () => alert(`Delete`),
+              action: () => {
+                deleteHabit();
+              },
             },
           ]}
         />

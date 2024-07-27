@@ -15,6 +15,7 @@ import {
   acceptFriendRequestInDb,
   acceptHabitInviteInDb,
   createNewHabitInDb,
+  deleteHabitInDb,
   deleteNotificationInDb,
   editHabitInDb,
   fetchAllMyHabitsInfo,
@@ -47,7 +48,7 @@ import {
 } from "../lib/db_types";
 import { todayString } from "../lib/formatDateString";
 import { getNumberOfDaysInLastWeek } from "../lib/getNumberOfDaysInLastWeek";
-import { generateMockId } from "../lib/mockData";
+import { generateMockId, mockHabits, mockNotifications } from "../lib/mockData";
 import { structureCompletionData } from "../lib/structureCompletionData";
 import { currentUserAtom, currentUserIdAtom } from "./currentUserAtom";
 
@@ -165,6 +166,35 @@ export const createNewHabitAtom = atom(
       };
     });
   },
+);
+/**
+ * Does not remove from db yet
+ */
+const removeLocalCopyOfHabit = atomFamily((habitId: string) =>
+  atom(null, (get, set) => {
+    set(allHabitsAtom, (prev) => {
+      const { [habitId]: _, ...remaining } = prev;
+      return remaining;
+    });
+  }),
+);
+
+export const deleteHabitAtom = atomFamily((habitid: string) =>
+  atom(null, async (get, set) => {
+    deleteHabitInDb({ habitId: habitid });
+    set(removeLocalCopyOfHabit(habitid));
+    for(const property in mockNotifications) {
+      const notification = mockNotifications[property];
+      if(notification.type === "nudge" || notification.type === "habitInvite") {
+        if(notification.type === "nudge") {
+          if(notification.habitId === habitid) {
+            deleteNotificationInDb({ notifId: property });
+            set(removeLocalCopyOfNotification(property));
+          }
+        }
+      }
+    }
+  }),
 );
 
 export const habitCompletionsForAllParticipantsAtom = atomFamily(
