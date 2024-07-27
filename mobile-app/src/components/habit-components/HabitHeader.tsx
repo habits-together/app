@@ -1,6 +1,5 @@
 import {
   deleteHabitAtom,
-  deleteNotificationAtom,
   habitIconAtom,
   habitTitleAtom,
   homeScreenHabitDisplayTypeAtom,

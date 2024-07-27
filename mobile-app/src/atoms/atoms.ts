@@ -48,7 +48,7 @@ import {
 } from "../lib/db_types";
 import { todayString } from "../lib/formatDateString";
 import { getNumberOfDaysInLastWeek } from "../lib/getNumberOfDaysInLastWeek";
-import { generateMockId, mockHabits, mockNotifications } from "../lib/mockData";
+import { generateMockId, mockNotifications } from "../lib/mockData";
 import { structureCompletionData } from "../lib/structureCompletionData";
 import { currentUserAtom, currentUserIdAtom } from "./currentUserAtom";
 
@@ -183,11 +183,14 @@ export const deleteHabitAtom = atomFamily((habitid: string) =>
   atom(null, async (get, set) => {
     deleteHabitInDb({ habitId: habitid });
     set(removeLocalCopyOfHabit(habitid));
-    for(const property in mockNotifications) {
+    for (const property in mockNotifications) {
       const notification = mockNotifications[property];
-      if(notification.type === "nudge" || notification.type === "habitInvite") {
-        if(notification.type === "nudge") {
-          if(notification.habitId === habitid) {
+      if (
+        notification.type === "nudge" ||
+        notification.type === "habitInvite"
+      ) {
+        if (notification.type === "nudge") {
+          if (notification.habitId === habitid) {
             deleteNotificationInDb({ notifId: property });
             set(removeLocalCopyOfNotification(property));
           }
