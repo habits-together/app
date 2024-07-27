@@ -6,12 +6,12 @@ import { Pressable } from "react-native";
 import { getUserInfoAtom, profileFormDataAtom } from "../atoms/atoms";
 import { currentUserAtom } from "../atoms/currentUserAtom";
 import colors from "../constants/colors";
+import { updateProfileDataInDB } from "../firebase/api";
 import DotsMenu from "./DotsMenu";
 import HeaderBackButton from "./HeaderBackButton";
 import Icon from "./Icon";
 import RoundedButton from "./RoundedButton";
 import { Text, View } from "./Themed";
-import { updateProfileDataInDB } from "../firebase/api";
 
 function sharedOptions(colorScheme: string): NativeStackNavigationOptions {
   return {

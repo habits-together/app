@@ -585,18 +585,15 @@ export const settingAtom = atomFamily((settingKey: string) =>
 
 // export const profileFormDataAtom = () => {
 //   const userData = useAtomValue(currentUserAtom)
-//   return atom({ displayName: userData.displayName, username: userData.username })}; 
+//   return atom({ displayName: userData.displayName, username: userData.username })};
 
-export const profileFormDataAtom = atom(
-  { displayName: "", username: "" }
-)
+export const profileFormDataAtom = atom({ displayName: "", username: "" });
 
 profileFormDataAtom.onMount = (setAtom) => {
-  console.log("Profile Data Atom Mounted")
-  const userData = useAtomValue(currentUserAtom)
-  setAtom({ displayName: userData.displayName, username: userData.username })
+  console.log("Profile Data Atom Mounted");
+  const userData = useAtomValue(currentUserAtom);
+  setAtom({ displayName: userData.displayName, username: userData.username });
   return () => {
-    console.log("Profile Data Atom Unmounted")
-  }
-}
-
+    console.log("Profile Data Atom Unmounted");
+  };
+};
