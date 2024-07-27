@@ -3,7 +3,7 @@ import { Text, View } from "@/src/components/Themed";
 import DefaultColors from "@/src/constants/DefaultColors";
 import { fetchSingleUserThumbnail } from "@/src/lib/getRandomProfilePics";
 import { IconCirclePlus } from "@tabler/icons-react-native";
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom } from "jotai";
 import { useColorScheme } from "nativewind";
 import { useEffect, useRef, useState } from "react";
 import { Image, TextInput, TouchableOpacity } from "react-native";
@@ -14,7 +14,7 @@ export default function ProfileCreationBoxes({
 }: {
   editPage: boolean;
 }) {
-  const [formData, setFormData] = useAtom(profileFormDataAtom)
+  const [formData, setFormData] = useAtom(profileFormDataAtom);
   const { colorScheme } = useColorScheme();
   const [displayName, setDisplayName] = useState("");
   const [username, setUsername] = useState("");
@@ -58,8 +58,8 @@ export default function ProfileCreationBoxes({
           placeholderTextColor={DefaultColors[colorScheme].placeholder}
           value={displayName}
           onChangeText={(text) => {
-            setDisplayName(text)
-            setFormData({...formData,displayName:text})
+            setDisplayName(text);
+            setFormData({ ...formData, displayName: text });
           }}
           onSubmitEditing={() => {
             refUsernameInput.current?.focus();
@@ -102,6 +102,6 @@ export default function ProfileCreationBoxes({
           ></TextInput>
         </View>
       )} */}
-    </View >
+    </View>
   );
 }
