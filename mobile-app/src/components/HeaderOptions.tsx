@@ -11,6 +11,7 @@ import HeaderBackButton from "./HeaderBackButton";
 import Icon from "./Icon";
 import RoundedButton from "./RoundedButton";
 import { Text, View } from "./Themed";
+import { updateProfileDataInDB } from "../firebase/api";
 
 function sharedOptions(colorScheme: string): NativeStackNavigationOptions {
   return {
