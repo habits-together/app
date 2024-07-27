@@ -1,15 +1,11 @@
-import { collection, where } from "@firebase/firestore";
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import { IconCheck, IconEdit, IconX } from "@tabler/icons-react-native";
 import { router, useGlobalSearchParams } from "expo-router";
-import { doc, getDocs, query, setDoc } from "firebase/firestore";
 import { useAtom, useAtomValue } from "jotai";
 import { Pressable } from "react-native";
 import { getUserInfoAtom, profileFormDataAtom } from "../atoms/atoms";
 import { currentUserAtom } from "../atoms/currentUserAtom";
 import colors from "../constants/colors";
-import { firestore } from "../firebase/config";
-import { userT, userWithIdT } from "../lib/db_types";
 import DotsMenu from "./DotsMenu";
 import HeaderBackButton from "./HeaderBackButton";
 import Icon from "./Icon";
@@ -218,7 +214,9 @@ export function editProfileOptions(
       <RoundedButton
         text="Done"
         icon={IconCheck}
-        onPress={() => updateProfileDataInDB(profileFormDataAtom,currentUserAtom)}
+        onPress={() =>
+          updateProfileDataInDB(profileFormDataAtom, currentUserAtom)
+        }
       />
     ),
     headerTitleAlign: "center",
