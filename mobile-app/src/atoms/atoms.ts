@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import deepEquals from "fast-deep-equal";
-import { atom } from "jotai";
+import { atom, useAtom, useAtomValue } from "jotai";
 import {
   atomFamily,
   atomWithStorage,
@@ -583,4 +583,6 @@ export const settingAtom = atomFamily((settingKey: string) =>
   ),
 );
 
-export const profileFormDataAtom = atom({ displayName: "", username: "" }); //maybe change to use user atom data?
+export const profileFormDataAtom = () => {
+  const userData = useAtomValue(currentUserAtom)
+  atom({ displayName: userData.displayName, username: userData.username })}; 
