@@ -4,10 +4,10 @@ import {
   homeScreenHabitDisplayTypeAtom,
 } from "@/src/atoms/atoms";
 import colors from "@/src/constants/colors";
+import { HabitIdT } from "@/src/lib/db_types";
 import { useAtomValue } from "jotai";
 import React from "react";
 import HorizontalProfilePicsList from "../HorizontalProfilePicsList";
-import { HabitIdT } from "@/src/lib/db_types";
 
 export default function ParticipantProfilePictures({
   habitId,

@@ -1,10 +1,10 @@
 import { useAtomValue } from "jotai";
 import { notificationTypeAtom } from "../atoms/atoms";
+import { NotificationIdT } from "../lib/db_types";
 import { Text } from "./Themed";
 import { FriendRequest } from "./notification-components/FriendRequest";
 import { HabitInvite } from "./notification-components/HabitInvite";
 import { Nudge } from "./notification-components/Nudge";
-import { NotificationIdT } from "../lib/db_types";
 
 export default function NotificationComponent({
   notificationId,

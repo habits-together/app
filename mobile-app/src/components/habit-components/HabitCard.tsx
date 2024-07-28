@@ -1,5 +1,6 @@
 import { currentUserIdAtom } from "@/src/atoms/currentUserAtom";
 import colors from "@/src/constants/colors";
+import { HabitIdT } from "@/src/lib/db_types";
 import { Link } from "expo-router";
 import { useAtomValue } from "jotai";
 import { useColorScheme } from "nativewind";
@@ -14,7 +15,6 @@ import HabitCompletionsMonthlyView from "./HabitCompletionsMonthlyView";
 import HabitCompletionsWeeklyView from "./HabitCompletionsWeeklyView";
 import { HabitFriendCompletions } from "./HabitFriendCompletions";
 import { HabitHeader } from "./HabitHeader";
-import { HabitIdT } from "@/src/lib/db_types";
 
 export function HabitCard({
   habitId,

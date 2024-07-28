@@ -5,12 +5,12 @@ import { useAtomValue } from "jotai";
 import { Pressable } from "react-native";
 import { getUserInfoAtom } from "../atoms/atoms";
 import colors from "../constants/colors";
+import { HabitIdT, UserIdT } from "../lib/db_types";
 import DotsMenu from "./DotsMenu";
 import HeaderBackButton from "./HeaderBackButton";
 import Icon from "./Icon";
 import RoundedButton from "./RoundedButton";
 import { Text, View } from "./Themed";
-import { HabitIdT, UserIdT } from "../lib/db_types";
 
 function sharedOptions(colorScheme: string): NativeStackNavigationOptions {
   return {
@@ -28,7 +28,7 @@ export function viewHabitOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
   const { habitId } = useLocalSearchParams<{ habitId: HabitIdT }>();
-  console.log(useLocalSearchParams())
+  console.log(useLocalSearchParams());
   if (!habitId) {
     return sharedOptions(colorScheme);
   }
@@ -85,9 +85,7 @@ export function viewProfileOptions(
   if (!theirUserId) {
     return sharedOptions(colorScheme);
   }
-  const username = useAtomValue(
-    getUserInfoAtom(theirUserId),
-  ).username;
+  const username = useAtomValue(getUserInfoAtom(theirUserId)).username;
 
   return {
     presentation: "modal",

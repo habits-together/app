@@ -1,11 +1,11 @@
 import { habitColorAtom } from "@/src/atoms/atoms";
 import colors from "@/src/constants/colors";
+import { HabitIdT } from "@/src/lib/db_types";
 import { IconCheck } from "@tabler/icons-react-native";
 import { useAtomValue } from "jotai";
 import React from "react";
 import { View } from "react-native";
 import Icon from "../Icon";
-import { HabitIdT } from "@/src/lib/db_types";
 
 export default function WeekGoalMetCheckmark({
   habitId,

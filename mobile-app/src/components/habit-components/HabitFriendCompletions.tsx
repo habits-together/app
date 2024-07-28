@@ -3,13 +3,13 @@ import {
   homeScreenHabitDisplayTypeAtom,
 } from "@/src/atoms/atoms";
 import colors from "@/src/constants/colors";
+import { HabitIdT } from "@/src/lib/db_types";
 import { getTranslucentColor } from "@/src/lib/getTranslucentColor";
 import { useAtomValue } from "jotai";
 import React from "react";
 import { View } from "react-native";
 import HabitParticipantCompletedBadge from "./HabitParticipantCompletedBadge";
 import ParticipantProfilePictures from "./ParticipantProfilePictures";
-import { HabitIdT } from "@/src/lib/db_types";
 
 export function HabitFriendCompletions({ habitId }: { habitId: HabitIdT }) {
   const habitColor = useAtomValue(habitColorAtom(habitId));

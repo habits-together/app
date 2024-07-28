@@ -34,7 +34,10 @@ export const handleDatabaseLogin = async (): Promise<userWithIdT> => {
 
     if (docSnap.exists()) {
       const data: userT = userDataConverter.fromFirestore(docSnap);
-      const typed_data: userWithIdT = { ...data, id: auth.currentUser.uid as UserIdT};
+      const typed_data: userWithIdT = {
+        ...data,
+        id: auth.currentUser.uid as UserIdT,
+      };
       return typed_data;
     } else {
       console.log(

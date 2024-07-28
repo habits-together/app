@@ -3,7 +3,7 @@ import {
   targetNumberOfCompletionsPerDayAtom,
 } from "@/src/atoms/atoms";
 import colors from "@/src/constants/colors";
-import { habitCompletionWithDateInfoT, HabitIdT } from "@/src/lib/db_types";
+import { HabitIdT, habitCompletionWithDateInfoT } from "@/src/lib/db_types";
 import { IconCheck } from "@tabler/icons-react-native";
 import { Atom, useAtomValue } from "jotai";
 import { useColorScheme } from "nativewind";

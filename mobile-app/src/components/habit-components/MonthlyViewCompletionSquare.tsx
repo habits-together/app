@@ -4,7 +4,7 @@ import {
   targetNumberOfCompletionsPerDayAtom,
 } from "@/src/atoms/atoms";
 import colors from "@/src/constants/colors";
-import { habitCompletionWithDateInfoT, HabitIdT } from "@/src/lib/db_types";
+import { HabitIdT, habitCompletionWithDateInfoT } from "@/src/lib/db_types";
 import { Atom, useAtomValue } from "jotai";
 import { useColorScheme } from "nativewind";
 import React from "react";

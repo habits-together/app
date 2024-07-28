@@ -169,7 +169,8 @@ export async function fetchHabitCompletionsForAllParticipants({
     participantCompletionsRef,
   );
   allParticipantCompletionsSnapshot.forEach((doc) => {
-    allParticipantCompletions[doc.id as UserIdT] = doc.data() as habitCompletionsT;
+    allParticipantCompletions[doc.id as UserIdT] =
+      doc.data() as habitCompletionsT;
   });
   return allParticipantCompletions;
 }

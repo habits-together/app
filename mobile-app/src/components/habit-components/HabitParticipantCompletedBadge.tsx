@@ -4,13 +4,13 @@ import {
   homeScreenHabitDisplayTypeAtom,
 } from "@/src/atoms/atoms";
 import colors from "@/src/constants/colors";
+import { HabitIdT } from "@/src/lib/db_types";
 import { getTranslucentColor } from "@/src/lib/getTranslucentColor";
 import { IconActivity, IconCheck } from "@tabler/icons-react-native";
 import { useAtomValue } from "jotai";
 import React from "react";
 import { Text, View } from "react-native";
 import Icon from "../Icon";
-import { HabitIdT } from "@/src/lib/db_types";
 
 export default function HabitParticipantCompletedBadge({
   habitId,

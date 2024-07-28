@@ -5,13 +5,13 @@ import {
   homeScreenHabitDisplayTypeAtom,
 } from "@/src/atoms/atoms";
 import colors from "@/src/constants/colors";
+import { HabitIdT } from "@/src/lib/db_types";
 import { router } from "expo-router";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import React from "react";
 import { Text, View } from "react-native";
 import DotsMenu from "../DotsMenu";
 import { HabitIcon } from "../Icon";
-import { HabitIdT } from "@/src/lib/db_types";
 
 export function HabitHeader({ habitId }: { habitId: HabitIdT }) {
   const [displayType, setDisplayType] = useAtom(

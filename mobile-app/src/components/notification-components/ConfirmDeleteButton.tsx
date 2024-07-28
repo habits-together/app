@@ -1,14 +1,18 @@
 import colors from "@/src/constants/colors";
+import { NotificationIdT } from "@/src/lib/db_types";
 import { useSetAtom, WritableAtom } from "jotai";
 import { Pressable } from "react-native";
 import { Text } from "../Themed";
-import { NotificationIdT } from "@/src/lib/db_types";
 
 export function ConfirmButton({
   atomToSetOnClick,
   notificationId,
 }: {
-  atomToSetOnClick: WritableAtom<null, [notificationId: NotificationIdT], Promise<void>>;
+  atomToSetOnClick: WritableAtom<
+    null,
+    [notificationId: NotificationIdT],
+    Promise<void>
+  >;
   notificationId: NotificationIdT;
 }) {
   const onClick = useSetAtom(atomToSetOnClick);
@@ -28,7 +32,11 @@ export function DeleteButton({
   atomToSetOnClick,
   notificationId,
 }: {
-  atomToSetOnClick: WritableAtom<null, [notificationId: NotificationIdT], Promise<void>>;
+  atomToSetOnClick: WritableAtom<
+    null,
+    [notificationId: NotificationIdT],
+    Promise<void>
+  >;
   notificationId: NotificationIdT;
 }) {
   const onClick = useSetAtom(atomToSetOnClick);
@@ -50,7 +58,11 @@ export function DismissButton({
   atomToSetOnClick,
   notificationId,
 }: {
-  atomToSetOnClick: WritableAtom<null, [notificationId: NotificationIdT], Promise<void>>;
+  atomToSetOnClick: WritableAtom<
+    null,
+    [notificationId: NotificationIdT],
+    Promise<void>
+  >;
   notificationId: NotificationIdT;
 }) {
   const onClick = useSetAtom(atomToSetOnClick);

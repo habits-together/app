@@ -5,11 +5,11 @@ import {
   getUserInfoAtom,
   numberOfMutualFriendsAtom,
 } from "@/src/atoms/atoms";
+import { NotificationIdT } from "@/src/lib/db_types";
 import { useAtomValue } from "jotai";
 import { NotifProfilePicture } from "../ProfilePicture";
 import { Text, View } from "../Themed";
 import { ConfirmButton, DeleteButton } from "./ConfirmDeleteButton";
-import { NotificationIdT } from "@/src/lib/db_types";
 
 export function FriendRequest({ notifId }: { notifId: NotificationIdT }) {
   const notifData = useAtomValue(friendNotificationAtom(notifId));

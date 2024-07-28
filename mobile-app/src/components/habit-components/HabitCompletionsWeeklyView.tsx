@@ -1,11 +1,11 @@
 import { habitCompletionAtomsAtom } from "@/src/atoms/atoms";
 import { currentUserIdAtom } from "@/src/atoms/currentUserAtom";
+import { HabitIdT } from "@/src/lib/db_types";
 import { useAtomValue } from "jotai";
 import React from "react";
 import { View } from "react-native";
 import HabitCompletionButton from "./HabitCompletionButton";
 import WeeklyViewCompletionSquare from "./WeeklyViewCompletionSquare";
-import { HabitIdT } from "@/src/lib/db_types";
 
 export default function HabitCompletionsWeeklyView({
   habitId,
