@@ -2,6 +2,7 @@ import {
   addDoc,
   and,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -9,6 +10,7 @@ import {
   or,
   query,
   setDoc,
+  Timestamp,
   Unsubscribe,
   updateDoc,
   where,
@@ -21,6 +23,7 @@ import {
   allNotificationsT,
   allParticipantCompletionsT,
   allUsersInfoT,
+  friendNotificationT,
   friendshipT,
   habitCompletionsT,
   habitInfoT,
@@ -31,15 +34,10 @@ import {
   userWithIdT,
 } from "../lib/db_types";
 import { todayString } from "../lib/formatDateString";
-import {
-  mockFriendships,
-  mockHabitCompletions,
-  mockHabits,
-  mockNotifications,
-  mockUsers,
-} from "../lib/mockData";
 import { firestore } from "./config";
-import { userSnapToUserWithIdT } from "./helper";
+import { userSnapToUserWithIdT, userWithIdToUserT } from "./helper";
+
+type SetFunction<T> = (update: SetStateAction<T>) => void;
 
 // habit
 export async function fetchAllMyHabitsInfo(): Promise<allHabitsT> {
@@ -53,7 +51,11 @@ export async function fetchAllMyHabitsInfo(): Promise<allHabitsT> {
   const querySnapshot = await getDocs(q);
   const myHabits: allHabitsT = {};
   querySnapshot.forEach((doc) => {
-    myHabits[doc.id] = doc.data() as habitT;
+    const data = doc.data();
+    myHabits[doc.id] = {
+      ...data,
+      createdAt: data.createdAt.toDate(),
+    } as habitT;
   });
   return myHabits;
 }
@@ -68,7 +70,11 @@ export async function fetchHabitInfo({
   if (!habitDocSnap.exists()) {
     throw new Error(`No habit found with ID: ${habitId}`);
   }
-  return habitDocSnap.data() as habitT;
+  const data = habitDocSnap.data();
+  return {
+    ...data,
+    createdAt: data.createdAt.toDate(),
+  } as habitT;
 }
 
 export async function editHabitInDb({
@@ -101,10 +107,10 @@ export async function createNewHabitInDb({
       },
     },
   };
-  const newHabitDocRef = await addDoc(
-    collection(firestore, "habits"),
-    habitData,
-  );
+  const newHabitDocRef = await addDoc(collection(firestore, "habits"), {
+    ...habitData,
+    createdAt: Timestamp.fromDate(habitData.createdAt), // convert to Firestore Timestamp
+  });
   const newHabitId = newHabitDocRef.id;
   // add completion
   const completionData = { completions: { [todayString()]: 0 } };
@@ -211,13 +217,13 @@ export async function fetchFriendData({
     const userDocRef = doc(firestore, "users", friendId);
     const userDocSnap = await getDoc(userDocRef);
     if (userDocSnap.exists()) {
-      const userData = userDocSnap.data() as userT;
+      const userData = userDocSnap.data();
       allFriendData[friendId] = {
-        createdAt: userData.createdAt,
+        createdAt: userData.createdAt.toDate(),
         displayName: userData.displayName,
         username: userData.username,
         picture: userData.picture,
-      };
+      } as userT;
     } else {
       console.error(`No user found with ID: ${friendId}`);
     }
@@ -226,8 +232,9 @@ export async function fetchFriendData({
   return allFriendData;
 }
 
-type SetFunction = (update: SetStateAction<allUsersInfoT>) => void;
-export function subscribeToFriendList(setter: SetFunction): Unsubscribe {
+export function subscribeToFriendList(
+  setter: SetFunction<allUsersInfoT>,
+): Unsubscribe {
   const currentUserId = atomStore.get(currentUserIdAtom);
   const q = query(
     collection(firestore, "friendships"),
@@ -296,18 +303,53 @@ export async function searchFriendsInDb({
 
 // NOTIFICATIONS
 export async function fetchNotifications(): Promise<allNotificationsT> {
+  const myNotifications: allNotificationsT = {};
   const userId = atomStore.get(currentUserIdAtom);
-  return mockNotifications;
+  const notifCollection = collection(firestore, "notification");
+  const q = query(notifCollection, where("receiverId", "==", userId));
+
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    myNotifications[doc.id] = {
+      ...data,
+      sentAt: data.sentAt.toDate(),
+    } as notificationT;
+  });
+
+  return myNotifications;
+}
+
+export function subscribeToNotifications(
+  setter: SetFunction<allNotificationsT>,
+): Unsubscribe {
+  const currentUserId = atomStore.get(currentUserIdAtom);
+  const notifCollection = collection(firestore, "notification");
+  const q = query(notifCollection, where("receiverId", "==", currentUserId));
+
+  const unsub = onSnapshot(q, () => {
+    fetchNotifications().then(setter);
+  });
+
+  return unsub;
 }
 
 export async function fetchOutboundNotifications(): Promise<allNotificationsT> {
+  const myNotifications: allNotificationsT = {};
   const userId = atomStore.get(currentUserIdAtom);
-  return Object.fromEntries(
-    Object.entries(mockNotifications).filter(
-      ([, notification]) => notification.senderId === userId,
-    ),
-  );
+  const notifCollection = collection(firestore, "notification");
+  const q = query(notifCollection, where("senderId", "==", userId));
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    myNotifications[doc.id] = {
+      ...data,
+      sentAt: data.sentAt.toDate(),
+    } as notificationT;
+  });
+  return myNotifications;
 }
+
 export async function checkIfOutboundNotificationExistsInDb({
   type,
   receiverId,
@@ -316,12 +358,15 @@ export async function checkIfOutboundNotificationExistsInDb({
   receiverId: string;
 }): Promise<boolean> {
   const userId = atomStore.get(currentUserIdAtom);
-  return Object.values(mockNotifications).some(
-    (notification) =>
-      notification.type === type &&
-      notification.senderId === userId &&
-      notification.receiverId === receiverId,
+  const notifCollection = collection(firestore, "notification");
+  const q = query(
+    notifCollection,
+    where("type", "==", type),
+    where("senderId", "==", userId),
+    where("receiverId", "==", receiverId),
   );
+  const querySnapshot = await getDocs(q);
+  return !querySnapshot.empty;
 }
 
 export async function sendNotificationInDb({
@@ -329,10 +374,12 @@ export async function sendNotificationInDb({
 }: {
   info: notificationT;
 }): Promise<string> {
-  const mockId = Math.random().toString(36).substring(2, 15);
-  // replace with call to firebase
-  mockNotifications[mockId] = info;
-  return mockId;
+  const notifCollection = collection(firestore, "notification");
+  const docRef = await addDoc(notifCollection, {
+    ...info,
+    sentAt: Timestamp.fromDate(info.sentAt), // convert to Firestore Timestamp
+  });
+  return docRef.id;
 }
 
 export async function deleteNotificationInDb({
@@ -340,8 +387,9 @@ export async function deleteNotificationInDb({
 }: {
   notifId: string;
 }): Promise<void> {
-  // replace with call to firebase
-  delete mockNotifications[notifId];
+  const notifDocRef = doc(firestore, "notification", notifId);
+  await deleteDoc(notifDocRef);
+  console.log(`Notification with ID ${notifId} deleted successfully.`);
 }
 
 export async function acceptFriendRequestInDb({
@@ -350,16 +398,21 @@ export async function acceptFriendRequestInDb({
   notifId: string;
 }): Promise<void> {
   const userId = atomStore.get(currentUserIdAtom);
-  // replace with call to firebase
-  const notifData = mockNotifications[notifId];
-  const personData = mockUsers[notifData.senderId];
-  // mockFriends[notifData.senderId] = personData;
-  mockFriendships[notifData.senderId] = {
-    user1Id: userId,
-    user2Id: notifData.senderId,
-    friendsSince: new Date(),
-  };
-  delete mockNotifications[notifId];
+  const notifDocRef = doc(firestore, "notification", notifId);
+  const notifDocSnap = await getDoc(notifDocRef);
+  if (!notifDocSnap.exists()) {
+    throw new Error(`No notification found with ID: ${notifId}`);
+  }
+  const { senderId, receiverId } = notifDocSnap.data() as friendNotificationT;
+  const friendshipsCollection = collection(firestore, "friendships");
+  const [user1Id, user2Id] =
+    senderId < receiverId ? [senderId, receiverId] : [receiverId, senderId];
+  await addDoc(friendshipsCollection, {
+    user1Id,
+    user2Id,
+    friendsSince: Timestamp.fromDate(new Date()), // convert to Firestore Timestamp
+  });
+  await deleteNotificationInDb({ notifId });
 }
 
 export async function acceptHabitInviteInDb({
@@ -369,16 +422,34 @@ export async function acceptHabitInviteInDb({
 }): Promise<void> {
   // replace with call to firebase
   const userId = atomStore.get(currentUserIdAtom);
-  const notifData = mockNotifications[notifId] as habitNotificationT;
-  const habitData = mockHabits[notifData.habitId];
-  habitData.participants[userId] = {
-    mostRecentCompletionDate: new Date(),
-    ...mockUsers[userId],
-  };
-  mockHabitCompletions[notifData.habitId][userId].completions = {
-    [todayString()]: 0,
-  };
-  delete mockNotifications[notifId];
+  const notifDocRef = doc(firestore, "notification", notifId);
+  const notifDocSnap = await getDoc(notifDocRef);
+  if (!notifDocSnap.exists()) {
+    throw new Error(`No notification found with ID: ${notifId}`);
+  }
+  const { habitId, receiverId } = notifDocSnap.data() as habitNotificationT;
+  const habitDocRef = doc(firestore, "habits", habitId);
+
+  // get recivers data
+  const receiverDataWithId = await fetchUserInfo({ userId: receiverId });
+  const receiverData = userWithIdToUserT(receiverDataWithId);
+
+  // put them as a participant in the habit
+  await updateDoc(habitDocRef, {
+    [`participants.${userId}`]: {
+      ...receiverData,
+    },
+  });
+
+  // their habit completion
+  const completionData = { completions: { [todayString()]: 0 } };
+  await updatetHabitCompletionsInDb({
+    habitId,
+    participantId: receiverId,
+    completionData,
+  });
+
+  await deleteNotificationInDb({ notifId });
 }
 
 // USERS
@@ -425,7 +496,11 @@ export async function searchUsersInDb({
   const searchResultUsersInfo: allUsersInfoT = {};
 
   searchResultSnapshot.forEach((doc) => {
-    searchResultUsersInfo[doc.id] = doc.data() as userT;
+    const data = doc.data();
+    searchResultUsersInfo[doc.id] = {
+      ...data,
+      createdAt: data.createdAt.toDate(),
+    } as userT;
   });
 
   return searchResultUsersInfo;
