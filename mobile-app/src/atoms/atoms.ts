@@ -387,7 +387,8 @@ export const friendPictureAtom = atomFamily((friendId: string) =>
 );
 
 export const commonHabitIdsAtom = atomFamily((friendId: string) =>
-  atom(async () => {
+  atom(async (get) => {
+    get(allHabitsAtom);
     return await fetchCommonHabitIds({ participantId: friendId });
   }),
 );
