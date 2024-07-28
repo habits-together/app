@@ -34,9 +34,13 @@ export function FriendRequest({ notifId }: { notifId: string }) {
           </Text>
           <View className="mt-2 flex flex-row bg-transparent">
             <ConfirmButton
-              atomToSetOnClick={acceptFriendRequestAtom(notifId)}
+              atomToSetOnClick={acceptFriendRequestAtom}
+              notificationId={notifId}
             />
-            <DeleteButton atomToSetOnClick={deleteNotificationAtom(notifId)} />
+            <DeleteButton
+              atomToSetOnClick={deleteNotificationAtom}
+              notificationId={notifId}
+            />
           </View>
         </View>
       </View>

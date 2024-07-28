@@ -49,7 +49,10 @@ export function Nudge({ notifId }: { notifId: string }) {
             {notifData.sentAt.toLocaleString()}
           </Text>
           <View className="mt-2 flex flex-row bg-transparent">
-            <DismissButton atomToSetOnClick={deleteNotificationAtom(notifId)} />
+            <DismissButton
+              atomToSetOnClick={deleteNotificationAtom}
+              notificationId={notifId}
+            />
           </View>
         </View>
       </View>
