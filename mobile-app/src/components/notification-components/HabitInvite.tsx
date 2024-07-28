@@ -51,8 +51,14 @@ export function HabitInvite({ notifId }: { notifId: string }) {
             {notifData.numberOfParticipants > 1 ? "s" : ""}
           </Text>
           <View className="mt-2 flex flex-row bg-transparent">
-            <ConfirmButton atomToSetOnClick={acceptHabitInviteAtom(notifId)} />
-            <DeleteButton atomToSetOnClick={deleteNotificationAtom(notifId)} />
+            <ConfirmButton
+              atomToSetOnClick={acceptHabitInviteAtom}
+              notificationId={notifId}
+            />
+            <DeleteButton
+              atomToSetOnClick={deleteNotificationAtom}
+              notificationId={notifId}
+            />
           </View>
         </View>
       </View>

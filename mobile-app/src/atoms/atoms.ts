@@ -15,6 +15,7 @@ import {
   acceptFriendRequestInDb,
   acceptHabitInviteInDb,
   createNewHabitInDb,
+  deleteHabitInDb,
   deleteNotificationInDb,
   editHabitInDb,
   fetchAllMyHabitsInfo,
@@ -47,7 +48,7 @@ import {
 } from "../lib/db_types";
 import { todayString } from "../lib/formatDateString";
 import { getNumberOfDaysInLastWeek } from "../lib/getNumberOfDaysInLastWeek";
-import { generateMockId } from "../lib/mockData";
+import { generateMockId, mockNotifications } from "../lib/mockData";
 import { structureCompletionData } from "../lib/structureCompletionData";
 import { currentUserAtom, currentUserIdAtom } from "./currentUserAtom";
 
@@ -165,6 +166,29 @@ export const createNewHabitAtom = atom(
       };
     });
   },
+);
+
+export const deleteHabitAtom = atomFamily((habitId: string) =>
+  atom(null, async (get, set) => {
+    deleteHabitInDb({ habitId: habitId });
+    set(allHabitsAtom, (prev) => {
+      const { [habitId]: _, ...remaining } = prev;
+      return remaining;
+    });
+
+    // delete notifications related to this habit
+    for (const notificationId in mockNotifications) {
+      const notification = mockNotifications[notificationId];
+      if (
+        (notification.type === "nudge" ||
+          notification.type === "habitInvite") &&
+        notification.habitId === habitId
+      ) {
+        deleteNotificationInDb({ notifId: notificationId });
+        set(removeLocalCopyOfNotification, notificationId);
+      }
+    }
+  }),
 );
 
 export const habitCompletionsForAllParticipantsAtom = atomFamily(
@@ -363,7 +387,8 @@ export const friendPictureAtom = atomFamily((friendId: string) =>
 );
 
 export const commonHabitIdsAtom = atomFamily((friendId: string) =>
-  atom(async () => {
+  atom(async (get) => {
+    get(allHabitsAtom);
     return await fetchCommonHabitIds({ participantId: friendId });
   }),
 );
@@ -442,42 +467,46 @@ export const getUserInfoAtom = atomFamily((userId: string) =>
 /**
  * Does not remove in Db !
  */
-const removeLocalCopyOfNotification = atomFamily((notificationId: string) =>
-  atom(null, (get, set) => {
+const removeLocalCopyOfNotification = atom(
+  null,
+  (get, set, notificationId: string) => {
     set(notificationsAtom, (prev) => {
       const { [notificationId]: _, ...remaining } = prev;
       return remaining;
     });
-  }),
+  },
 );
 
-export const deleteNotificationAtom = atomFamily((notificationId: string) =>
-  atom(null, async (get, set) => {
+export const deleteNotificationAtom = atom(
+  null,
+  async (get, set, notificationId: string) => {
     deleteNotificationInDb({ notifId: notificationId });
-    set(removeLocalCopyOfNotification(notificationId));
-  }),
+    set(removeLocalCopyOfNotification, notificationId);
+  },
 );
 
-export const acceptFriendRequestAtom = atomFamily((notificationId: string) =>
-  atom(null, async (get, set) => {
-    set(removeLocalCopyOfNotification(notificationId));
+export const acceptFriendRequestAtom = atom(
+  null,
+  async (get, set, notificationId: string) => {
+    set(removeLocalCopyOfNotification, notificationId);
     acceptFriendRequestInDb({ notifId: notificationId }).then(() =>
       fetchFriendData({ userId: get(currentUserIdAtom) }).then((friends) =>
         set(allFriendsDataAtom, friends),
       ),
     );
-  }),
+  },
 );
 
-export const acceptHabitInviteAtom = atomFamily((notificationId: string) =>
-  atom(null, async (get, set) => {
-    set(removeLocalCopyOfNotification(notificationId));
+export const acceptHabitInviteAtom = atom(
+  null,
+  async (get, set, notificationId: string) => {
+    set(removeLocalCopyOfNotification, notificationId);
     acceptHabitInviteInDb({ notifId: notificationId }).then(() =>
       fetchAllMyHabitsInfo().then((allHabitsInfo) =>
         set(allHabitsAtom, allHabitsInfo),
       ),
     );
-  }),
+  },
 );
 
 // friend search

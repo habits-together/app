@@ -78,6 +78,14 @@ export async function createNewHabitInDb({
   };
   return habitId;
 }
+export async function deleteHabitInDb({
+  habitId,
+}: {
+  habitId: string;
+}): Promise<void> {
+  // replace with call to firebase
+  delete mockHabits[habitId];
+}
 
 export async function fetchHabitCompletionsForAllParticipants({
   habitId,
