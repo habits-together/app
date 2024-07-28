@@ -5,9 +5,10 @@ import { useLocalSearchParams } from "expo-router";
 import { useAtomValue } from "jotai";
 import React from "react";
 import { BigProfilePicture } from "../../components/ProfilePicture";
+import { UserIdT } from "@/src/lib/db_types";
 
 export default function Profile() {
-  const { theirUserId } = useLocalSearchParams<{ theirUserId: string }>();
+  const { theirUserId } = useLocalSearchParams<{ theirUserId: UserIdT }>();
   if (!theirUserId) {
     throw new Error("No theirUserId provided");
   }

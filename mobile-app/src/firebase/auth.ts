@@ -1,6 +1,6 @@
 import { auth, firestore } from "@/src/firebase/config";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { userT, userWithIdT } from "../lib/db_types";
+import { UserIdT, userT, userWithIdT } from "../lib/db_types";
 import { userDataConverter } from "./helper";
 export const handleDatabaseSignUp = async (data: {
   email: string;
@@ -34,7 +34,7 @@ export const handleDatabaseLogin = async (): Promise<userWithIdT> => {
 
     if (docSnap.exists()) {
       const data: userT = userDataConverter.fromFirestore(docSnap);
-      const typed_data: userWithIdT = { ...data, id: auth.currentUser.uid };
+      const typed_data: userWithIdT = { ...data, id: auth.currentUser.uid as UserIdT};
       return typed_data;
     } else {
       console.log(

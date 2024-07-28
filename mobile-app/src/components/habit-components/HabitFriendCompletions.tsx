@@ -9,8 +9,9 @@ import React from "react";
 import { View } from "react-native";
 import HabitParticipantCompletedBadge from "./HabitParticipantCompletedBadge";
 import ParticipantProfilePictures from "./ParticipantProfilePictures";
+import { HabitIdT } from "@/src/lib/db_types";
 
-export function HabitFriendCompletions({ habitId }: { habitId: string }) {
+export function HabitFriendCompletions({ habitId }: { habitId: HabitIdT }) {
   const habitColor = useAtomValue(habitColorAtom(habitId));
   const displayType = useAtomValue(homeScreenHabitDisplayTypeAtom(habitId));
 

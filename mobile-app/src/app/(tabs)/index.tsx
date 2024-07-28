@@ -6,7 +6,7 @@ import { Suspense } from "react";
 
 export default function HabitsTab() {
   const habitIds = useAtomValue(habitIdsAtom);
-
+  console.log(habitIds)
   return (
     <ScrollView
       className="flex-1 px-4 pt-2"

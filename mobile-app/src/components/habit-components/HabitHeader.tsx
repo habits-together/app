@@ -11,8 +11,9 @@ import React from "react";
 import { Text, View } from "react-native";
 import DotsMenu from "../DotsMenu";
 import { HabitIcon } from "../Icon";
+import { HabitIdT } from "@/src/lib/db_types";
 
-export function HabitHeader({ habitId }: { habitId: string }) {
+export function HabitHeader({ habitId }: { habitId: HabitIdT }) {
   const [displayType, setDisplayType] = useAtom(
     homeScreenHabitDisplayTypeAtom(habitId),
   );
@@ -52,7 +53,7 @@ export function HabitHeader({ habitId }: { habitId: string }) {
               action: () => {
                 router.push({
                   pathname: "/habits/edithabit",
-                  params: { habitidStr: habitId.toString() },
+                  params: { habitidStr: habitId },
                 });
               },
             },

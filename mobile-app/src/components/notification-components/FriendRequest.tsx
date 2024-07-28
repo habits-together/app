@@ -9,8 +9,9 @@ import { useAtomValue } from "jotai";
 import { NotifProfilePicture } from "../ProfilePicture";
 import { Text, View } from "../Themed";
 import { ConfirmButton, DeleteButton } from "./ConfirmDeleteButton";
+import { NotificationIdT } from "@/src/lib/db_types";
 
-export function FriendRequest({ notifId }: { notifId: string }) {
+export function FriendRequest({ notifId }: { notifId: NotificationIdT }) {
   const notifData = useAtomValue(friendNotificationAtom(notifId));
   const personData = useAtomValue(getUserInfoAtom(notifData.senderId));
   const numberOfMutualFriends = useAtomValue(

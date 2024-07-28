@@ -10,6 +10,7 @@ import HeaderBackButton from "./HeaderBackButton";
 import Icon from "./Icon";
 import RoundedButton from "./RoundedButton";
 import { Text, View } from "./Themed";
+import { HabitIdT, UserIdT } from "../lib/db_types";
 
 function sharedOptions(colorScheme: string): NativeStackNavigationOptions {
   return {
@@ -26,8 +27,9 @@ function sharedOptions(colorScheme: string): NativeStackNavigationOptions {
 export function viewHabitOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
-  const { id } = useLocalSearchParams<{ id: string }>();
-  if (!id) {
+  const { habitId } = useLocalSearchParams<{ habitId: HabitIdT }>();
+  console.log(useLocalSearchParams())
+  if (!habitId) {
     return sharedOptions(colorScheme);
   }
   return {
@@ -40,7 +42,7 @@ export function viewHabitOptions(
           onPress={() =>
             router.push({
               pathname: "/habits/edithabit",
-              params: { habitidStr: id },
+              params: { habitidStr: habitId },
             })
           }
         >
@@ -79,12 +81,12 @@ export function viewHabitOptions(
 export function viewProfileOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
-  const { theirUserId } = useLocalSearchParams<{ theirUserId: string }>();
+  const { theirUserId } = useLocalSearchParams<{ theirUserId: UserIdT }>();
   if (!theirUserId) {
     return sharedOptions(colorScheme);
   }
   const username = useAtomValue(
-    getUserInfoAtom(theirUserId as string),
+    getUserInfoAtom(theirUserId),
   ).username;
 
   return {

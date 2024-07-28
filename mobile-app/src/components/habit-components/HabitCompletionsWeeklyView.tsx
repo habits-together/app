@@ -5,11 +5,12 @@ import React from "react";
 import { View } from "react-native";
 import HabitCompletionButton from "./HabitCompletionButton";
 import WeeklyViewCompletionSquare from "./WeeklyViewCompletionSquare";
+import { HabitIdT } from "@/src/lib/db_types";
 
 export default function HabitCompletionsWeeklyView({
   habitId,
 }: {
-  habitId: string;
+  habitId: HabitIdT;
 }) {
   const userId = useAtomValue(currentUserIdAtom);
   const completionAtoms = useAtomValue(

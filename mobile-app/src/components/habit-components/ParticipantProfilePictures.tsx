@@ -7,11 +7,12 @@ import colors from "@/src/constants/colors";
 import { useAtomValue } from "jotai";
 import React from "react";
 import HorizontalProfilePicsList from "../HorizontalProfilePicsList";
+import { HabitIdT } from "@/src/lib/db_types";
 
 export default function ParticipantProfilePictures({
   habitId,
 }: {
-  habitId: string;
+  habitId: HabitIdT;
 }) {
   const displayType = useAtomValue(homeScreenHabitDisplayTypeAtom(habitId));
 

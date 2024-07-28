@@ -14,25 +14,25 @@ import HabitCompletionsMonthlyView from "./HabitCompletionsMonthlyView";
 import HabitCompletionsWeeklyView from "./HabitCompletionsWeeklyView";
 import { HabitFriendCompletions } from "./HabitFriendCompletions";
 import { HabitHeader } from "./HabitHeader";
+import { HabitIdT } from "@/src/lib/db_types";
 
 export function HabitCard({
   habitId,
   openAsModal = false,
 }: {
-  habitId: string;
+  habitId: HabitIdT;
   openAsModal?: boolean;
 }) {
   const { colorScheme } = useColorScheme();
   const displayType = useAtomValue(homeScreenHabitDisplayTypeAtom(habitId));
   const color = useAtomValue(habitColorAtom(habitId));
   const userId = useAtomValue(currentUserIdAtom);
-
   return (
     <Link
       push
       href={{
-        pathname: openAsModal ? "modals/viewhabit" : "viewhabit",
-        params: { id: habitId },
+        pathname: openAsModal ? "/modals/viewhabit" : "viewhabit",
+        params: { habitId: habitId },
       }}
       asChild
     >

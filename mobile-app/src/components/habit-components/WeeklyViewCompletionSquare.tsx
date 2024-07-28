@@ -3,7 +3,7 @@ import {
   targetNumberOfCompletionsPerDayAtom,
 } from "@/src/atoms/atoms";
 import colors from "@/src/constants/colors";
-import { habitCompletionWithDateInfoT } from "@/src/lib/db_types";
+import { habitCompletionWithDateInfoT, HabitIdT } from "@/src/lib/db_types";
 import { IconCheck } from "@tabler/icons-react-native";
 import { Atom, useAtomValue } from "jotai";
 import { useColorScheme } from "nativewind";
@@ -15,7 +15,7 @@ export default function WeeklyViewCompletionSquare({
   habitId,
   completionAtom,
 }: {
-  habitId: string;
+  habitId: HabitIdT;
   completionAtom: Atom<habitCompletionWithDateInfoT>;
 }) {
   const { colorScheme } = useColorScheme();

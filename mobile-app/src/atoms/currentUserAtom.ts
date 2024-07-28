@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { userWithIdT } from "../lib/db_types";
+import { UserIdT, userWithIdT } from "../lib/db_types";
 import { mockProfilePictures } from "../lib/mockBase64Images";
 
 // default user for now
@@ -9,7 +9,7 @@ const aliceData: userWithIdT = {
   displayName: "Alice",
   username: "alice3",
   picture: mockProfilePictures[3],
-  id: "1QsFUZQSFsV83tYNPnChFOwbhjK2",
+  id: "1QsFUZQSFsV83tYNPnChFOwbhjK2" as UserIdT,
 };
 // same email and pass -> alice3@gmail.com
 export const currentUserAtom = atom<userWithIdT>(aliceData);

@@ -4,7 +4,7 @@ import AuthInputField from "@/src/components/AuthInputField";
 import { Text, View } from "@/src/components/Themed";
 import { handleDatabaseSignUp } from "@/src/firebase/auth";
 import { auth } from "@/src/firebase/config";
-import { userWithIdT } from "@/src/lib/db_types";
+import { UserIdT, userWithIdT } from "@/src/lib/db_types";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { Link } from "expo-router";
 import { FirebaseError } from "firebase/app";
@@ -41,7 +41,7 @@ export default function emailsignup() {
             displayName: data.email,
             picture: "",
             username: user.email as string, //kinda hacky, under other login methods they may not have an email
-            id: user.uid,
+            id: user.uid as UserIdT,
           };
 
           setCurrentUserAtom(currentUserData);

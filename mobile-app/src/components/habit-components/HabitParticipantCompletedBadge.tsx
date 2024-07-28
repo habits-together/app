@@ -10,11 +10,12 @@ import { useAtomValue } from "jotai";
 import React from "react";
 import { Text, View } from "react-native";
 import Icon from "../Icon";
+import { HabitIdT } from "@/src/lib/db_types";
 
 export default function HabitParticipantCompletedBadge({
   habitId,
 }: {
-  habitId: string;
+  habitId: HabitIdT;
 }) {
   const goal = useAtomValue(habitGoalAtom(habitId));
   const color = useAtomValue(habitColorAtom(habitId));

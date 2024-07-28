@@ -5,12 +5,13 @@ import { useAtomValue } from "jotai";
 import React from "react";
 import { View } from "react-native";
 import Icon from "../Icon";
+import { HabitIdT } from "@/src/lib/db_types";
 
 export default function WeekGoalMetCheckmark({
   habitId,
   weekGoalMet,
 }: {
-  habitId: string;
+  habitId: HabitIdT;
   weekGoalMet: boolean;
 }) {
   const color = useAtomValue(habitColorAtom(habitId));
