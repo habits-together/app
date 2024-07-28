@@ -28,7 +28,6 @@ export function viewHabitOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
   const { habitId } = useLocalSearchParams<{ habitId: HabitIdT }>();
-  console.log(useLocalSearchParams());
   if (!habitId) {
     return sharedOptions(colorScheme);
   }
