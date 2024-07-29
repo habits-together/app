@@ -496,7 +496,7 @@ export async function fetchUserInfo({
 }
 
 export async function searchUsersInDb({
-  searchText, 
+  searchText,
 }: {
   searchText: string;
 }): Promise<allUsersInfoT> {
