@@ -402,7 +402,6 @@ export async function deleteNotificationInDb({
 }): Promise<void> {
   const notifDocRef = doc(firestore, "notification", notifId);
   await deleteDoc(notifDocRef);
-  console.log(`Notification with ID ${notifId} deleted successfully.`);
 }
 
 export async function deleteAllNotificationsOfHabitInDb({
@@ -426,7 +425,6 @@ export async function acceptFriendRequestInDb({
 }: {
   notifId: NotificationIdT;
 }): Promise<void> {
-  const userId = atomStore.get(currentUserIdAtom);
   const notifDocRef = doc(firestore, "notification", notifId);
   const notifDocSnap = await getDoc(notifDocRef);
   if (!notifDocSnap.exists()) {
@@ -498,7 +496,7 @@ export async function fetchUserInfo({
 }
 
 export async function searchUsersInDb({
-  searchText,
+  searchText, 
 }: {
   searchText: string;
 }): Promise<allUsersInfoT> {

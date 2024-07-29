@@ -177,13 +177,12 @@ export const createNewHabitAtom = atom(
 );
 
 export const deleteHabitAtom = atomFamily((habitId: HabitIdT) =>
-  atom(null, async (get, set) => {
-    await deleteHabitInDb({ habitId: habitId });
+  atom(null, async (_get, set) => {
     set(allHabitsAtom, (prev) => {
       const { [habitId]: _, ...remaining } = prev;
       return remaining;
     });
-
+    await deleteHabitInDb({ habitId: habitId });
     await deleteAllNotificationsOfHabitInDb({ habitId });
   }),
 );
