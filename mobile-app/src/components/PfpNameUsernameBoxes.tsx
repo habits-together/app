@@ -16,10 +16,7 @@ export default function ProfileCreationBoxes({
 }) {
   const [formData, setFormData] = useAtom(profileFormDataAtom);
   const { colorScheme } = useColorScheme();
-  const [displayName, setDisplayName] = useState("");
-  const [username, setUsername] = useState("");
   const [pfp, setPfp] = useState();
-  const [email, setEmail] = useState("");
   const refUsernameInput = useRef<TextInput>(null);
   const refEmailInput = useRef<TextInput>(null);
 
@@ -56,9 +53,8 @@ export default function ProfileCreationBoxes({
           }}
           placeholder="John Doe"
           placeholderTextColor={DefaultColors[colorScheme].placeholder}
-          value={displayName}
+          value={formData.displayName}
           onChangeText={(text) => {
-            setDisplayName(text);
             setFormData({ ...formData, displayName: text });
           }}
           onSubmitEditing={() => {
@@ -76,9 +72,8 @@ export default function ProfileCreationBoxes({
             color: DefaultColors[colorScheme].text,
           }}
           ref={refUsernameInput}
-          value={username}
+          value={formData.username}
           onChangeText={(text) => {
-            setUsername(text);
             setFormData({ ...formData, username: text });
           }}
           onSubmitEditing={() => {

@@ -3,6 +3,7 @@ import deepEquals from "fast-deep-equal";
 import { atom, useAtomValue } from "jotai";
 import {
   atomFamily,
+  atomWithDefault,
   atomWithStorage,
   createJSONStorage,
   selectAtom,
@@ -583,17 +584,16 @@ export const settingAtom = atomFamily((settingKey: string) =>
   ),
 );
 
-// export const profileFormDataAtom = () => {
-//   const userData = useAtomValue(currentUserAtom)
-//   return atom({ displayName: userData.displayName, username: userData.username })};
-
-export const profileFormDataAtom = atom({ displayName: "", username: "" });
+export const profileFormDataAtom = atomWithDefault( (get) => 
+  {
+    return {username: get(currentUserAtom).username, displayName: get(currentUserAtom).displayName}
+  }
+)
 
 profileFormDataAtom.onMount = (setAtom) => {
-  console.log("Profile Data Atom Mounted");
-  const userData = useAtomValue(currentUserAtom);
-  setAtom({ displayName: userData.displayName, username: userData.username });
+  console.log("Profile Data Atom Mounted")
   return () => {
-    console.log("Profile Data Atom Unmounted");
-  };
-};
+    console.log("Profile Data Atom Unmounted")
+  }
+}
+
