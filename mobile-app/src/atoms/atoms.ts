@@ -584,10 +584,9 @@ export const settingAtom = atomFamily((settingKey: string) =>
   ),
 );
 
-export const profileFormDataAtom = atomWithDefault( (get) => 
-  {
-    return {username: get(currentUserAtom).username, displayName: get(currentUserAtom).displayName}
-  }
+export const profileFormDataAtom = atomWithDefault((get) => {
+  return { username: get(currentUserAtom).username, displayName: get(currentUserAtom).displayName }
+}
 )
 
 profileFormDataAtom.onMount = (setAtom) => {
