@@ -13,6 +13,7 @@ import {
   habitTitleAtom,
   inviteUserToHabitAtom,
   mutualFriendsPfpsListAtom,
+  removeFriendAtom,
   sendFriendRequestAtom,
 } from "../atoms/atoms";
 
@@ -86,6 +87,7 @@ export default function UserCard({
   displayType: "friendsList" | "inviteFriendsToHabit" | "addFriends";
 }) {
   const { id: userId, displayName, username, picture } = userInfo;
+  const [, removeFriend] = useAtom(removeFriendAtom);
   return (
     <Link
       push
@@ -113,7 +115,9 @@ export default function UserCard({
                   {
                     label: "Remove Friend",
                     color: colors.black,
-                    action: () => alert(`Remove Friend`),
+                    action: () => {
+                      removeFriend(userId);
+                    },
                   },
                 ]}
               />

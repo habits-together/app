@@ -314,6 +314,23 @@ export async function searchFriendsInDb({
   return users;
 }
 
+export async function removeFriendInDb({ friendId }: { friendId: UserIdT }) {
+  const userId = atomStore.get(currentUserIdAtom);
+  const friendshipsCollection = collection(firestore, "friendships");
+  const q = query(
+    friendshipsCollection,
+    or(
+      and(where("user1Id", "==", userId), where("user2Id", "==", friendId)),
+      and(where("user1Id", "==", friendId), where("user2Id", "==", userId)),
+    ),
+  );
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach(async (doc) => {
+    // this should always be of length 1 but firebase does not know that
+    await deleteDoc(doc.ref);
+  });
+}
+
 // NOTIFICATIONS
 export async function fetchNotifications(): Promise<allNotificationsT> {
   const myNotifications: allNotificationsT = {};
