@@ -446,7 +446,7 @@ export async function newUsernameIsUnique(existing_username: string, new_usernam
     new_username !== existing_username &&
     !querySnapshot.empty
   ) {
-    console.log("Error: Username already taken"); // Display this on screen instead
+    console.error("Error: Username already taken"); // Display this on screen instead
     return false;
   }
   return true;
