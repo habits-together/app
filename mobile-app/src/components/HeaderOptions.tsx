@@ -6,12 +6,13 @@ import { Pressable } from "react-native";
 import { getUserInfoAtom, profileFormDataAtom } from "../atoms/atoms";
 import { currentUserAtom } from "../atoms/currentUserAtom";
 import colors from "../constants/colors";
-import { updateProfileDataInDB } from "../firebase/api";
+import { newUsernameIsUnique, updateProfileDataInDB } from "../firebase/api";
 import DotsMenu from "./DotsMenu";
 import HeaderBackButton from "./HeaderBackButton";
 import Icon from "./Icon";
 import RoundedButton from "./RoundedButton";
 import { Text, View } from "./Themed";
+import { userT, userWithIdT } from "../lib/db_types";
 
 function sharedOptions(colorScheme: string): NativeStackNavigationOptions {
   return {
@@ -215,8 +216,30 @@ export function editProfileOptions(
       <RoundedButton
         text="Done"
         icon={IconCheck}
-        onPress={() =>
-          updateProfileDataInDB(profileFormDataAtom, currentUserAtom)
+        onPress={async () => {
+          const cond = await newUsernameIsUnique(userData.username, profileFormData.username)
+          if (cond) {
+            //on success
+            const newDataForAtom: userWithIdT = {
+              ...userData,
+              ...profileFormData,
+            };
+
+            const newDataForDb: userT = {
+              username: profileFormData.username,
+              displayName: profileFormData.displayName,
+              picture: userData.picture,
+              createdAt: userData.createdAt,
+            };
+
+            updateProfileDataInDB(userData.id, newDataForDb)
+            setUserData(newDataForAtom); //update atom to match db
+            router.back();
+          }
+          else {
+            profileFormData.username = userData.username // reset their form data username
+          }
+        }
         }
       />
     ),
