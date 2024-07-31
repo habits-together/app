@@ -4,6 +4,7 @@ import {
   homeScreenHabitDisplayTypeAtom,
 } from "@/src/atoms/atoms";
 import colors from "@/src/constants/colors";
+import { HabitIdT } from "@/src/lib/db_types";
 import { useAtomValue } from "jotai";
 import React from "react";
 import HorizontalProfilePicsList from "../HorizontalProfilePicsList";
@@ -11,7 +12,7 @@ import HorizontalProfilePicsList from "../HorizontalProfilePicsList";
 export default function ParticipantProfilePictures({
   habitId,
 }: {
-  habitId: string;
+  habitId: HabitIdT;
 }) {
   const displayType = useAtomValue(homeScreenHabitDisplayTypeAtom(habitId));
 

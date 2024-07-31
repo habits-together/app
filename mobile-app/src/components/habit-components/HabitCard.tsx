@@ -1,5 +1,6 @@
 import { currentUserIdAtom } from "@/src/atoms/currentUserAtom";
 import colors from "@/src/constants/colors";
+import { HabitIdT } from "@/src/lib/db_types";
 import { Link } from "expo-router";
 import { useAtomValue } from "jotai";
 import { useColorScheme } from "nativewind";
@@ -19,20 +20,19 @@ export function HabitCard({
   habitId,
   openAsModal = false,
 }: {
-  habitId: string;
+  habitId: HabitIdT;
   openAsModal?: boolean;
 }) {
   const { colorScheme } = useColorScheme();
   const displayType = useAtomValue(homeScreenHabitDisplayTypeAtom(habitId));
   const color = useAtomValue(habitColorAtom(habitId));
   const userId = useAtomValue(currentUserIdAtom);
-
   return (
     <Link
       push
       href={{
-        pathname: openAsModal ? "modals/viewhabit" : "viewhabit",
-        params: { id: habitId },
+        pathname: openAsModal ? "/modals/viewhabit" : "viewhabit",
+        params: { habitId: habitId },
       }}
       asChild
     >

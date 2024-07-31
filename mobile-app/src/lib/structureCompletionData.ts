@@ -32,6 +32,7 @@ export function structureCompletionData({
         completionData?.completions?.[formatDateString(currentDate)] ?? 0,
       dayOfTheMonth: currentDate.getDate(),
       dayOfTheWeek: currentDate.toLocaleString("en-US", { weekday: "short" }),
+      date: "",
     });
     // move current date ahead 1 day
     currentDate.setDate(currentDate.getDate() + 1);

@@ -4,13 +4,14 @@ import {
   habitNotificationAtom,
 } from "@/src/atoms/atoms";
 import colors from "@/src/constants/colors";
+import { NotificationIdT } from "@/src/lib/db_types";
 import { useAtomValue } from "jotai";
 import { HabitIcon } from "../Icon";
 import { NotifProfilePicture } from "../ProfilePicture";
 import { Text, View } from "../Themed";
 import { DismissButton } from "./ConfirmDeleteButton";
 
-export function Nudge({ notifId }: { notifId: string }) {
+export function Nudge({ notifId }: { notifId: NotificationIdT }) {
   const notifData = useAtomValue(habitNotificationAtom(notifId));
   const personData = useAtomValue(getUserInfoAtom(notifData.senderId));
 

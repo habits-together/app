@@ -1,5 +1,6 @@
 import { habitColorAtom } from "@/src/atoms/atoms";
 import colors from "@/src/constants/colors";
+import { HabitIdT } from "@/src/lib/db_types";
 import { IconCheck } from "@tabler/icons-react-native";
 import { useAtomValue } from "jotai";
 import React from "react";
@@ -10,7 +11,7 @@ export default function WeekGoalMetCheckmark({
   habitId,
   weekGoalMet,
 }: {
-  habitId: string;
+  habitId: HabitIdT;
   weekGoalMet: boolean;
 }) {
   const color = useAtomValue(habitColorAtom(habitId));

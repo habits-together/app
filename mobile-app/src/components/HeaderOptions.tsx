@@ -1,10 +1,11 @@
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import { IconCheck, IconEdit, IconX } from "@tabler/icons-react-native";
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useGlobalSearchParams } from "expo-router";
 import { useAtomValue } from "jotai";
 import { Pressable } from "react-native";
 import { getUserInfoAtom } from "../atoms/atoms";
 import colors from "../constants/colors";
+import { HabitIdT, UserIdT } from "../lib/db_types";
 import DotsMenu from "./DotsMenu";
 import HeaderBackButton from "./HeaderBackButton";
 import Icon from "./Icon";
@@ -26,8 +27,8 @@ function sharedOptions(colorScheme: string): NativeStackNavigationOptions {
 export function viewHabitOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
-  const { id } = useLocalSearchParams<{ id: string }>();
-  if (!id) {
+  const { habitId } = useGlobalSearchParams<{ habitId: HabitIdT }>();
+  if (!habitId) {
     return sharedOptions(colorScheme);
   }
   return {
@@ -40,7 +41,7 @@ export function viewHabitOptions(
           onPress={() =>
             router.push({
               pathname: "/habits/edithabit",
-              params: { habitidStr: id },
+              params: { habitidStr: habitId },
             })
           }
         >
@@ -79,13 +80,11 @@ export function viewHabitOptions(
 export function viewProfileOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
-  const { theirUserId } = useLocalSearchParams<{ theirUserId: string }>();
+  const { theirUserId } = useGlobalSearchParams<{ theirUserId: UserIdT }>();
   if (!theirUserId) {
     return sharedOptions(colorScheme);
   }
-  const username = useAtomValue(
-    getUserInfoAtom(theirUserId as string),
-  ).username;
+  const username = useAtomValue(getUserInfoAtom(theirUserId)).username;
 
   return {
     presentation: "modal",

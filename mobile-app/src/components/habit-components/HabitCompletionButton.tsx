@@ -1,12 +1,13 @@
 import {
   habitColorAtom,
   homeScreenHabitDisplayTypeAtom,
-  incrementMyNumberOfCompletionsTodayAtom,
+  incrementNumberOfCompletionsTodayAtom,
+  numberOfCompletionsTodayAtom,
   targetNumberOfCompletionsPerDayAtom,
-  todaysCompletionAtom,
 } from "@/src/atoms/atoms";
 import { currentUserIdAtom } from "@/src/atoms/currentUserAtom";
 import colors from "@/src/constants/colors";
+import { HabitIdT } from "@/src/lib/db_types";
 import { IconCheck } from "@tabler/icons-react-native";
 import { useAtomValue, useSetAtom } from "jotai";
 import { useColorScheme } from "nativewind";
@@ -17,18 +18,18 @@ import Icon from "../Icon";
 export default function HabitCompletionButton({
   habitId,
 }: {
-  habitId: string;
+  habitId: HabitIdT;
 }) {
   const { colorScheme } = useColorScheme();
 
   const color = useAtomValue(habitColorAtom(habitId));
   const userId = useAtomValue(currentUserIdAtom);
   const numberOfCompletionsToday = useAtomValue(
-    todaysCompletionAtom({ habitId, participantId: userId }),
+    numberOfCompletionsTodayAtom({ habitId, participantId: userId }),
   ).numberOfCompletions;
 
   const incrementNumberOfCompletionsToday = useSetAtom(
-    incrementMyNumberOfCompletionsTodayAtom(habitId),
+    incrementNumberOfCompletionsTodayAtom(habitId),
   );
   const targetNumberOfCompletionsPerDay = useAtomValue(
     targetNumberOfCompletionsPerDayAtom(habitId),

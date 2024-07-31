@@ -5,13 +5,14 @@ import {
   habitNotificationAtom,
 } from "@/src/atoms/atoms";
 import colors from "@/src/constants/colors";
+import { NotificationIdT } from "@/src/lib/db_types";
 import { useAtomValue } from "jotai";
 import { HabitIcon } from "../Icon";
 import { NotifProfilePicture } from "../ProfilePicture";
 import { Text, View } from "../Themed";
 import { ConfirmButton, DeleteButton } from "./ConfirmDeleteButton";
 
-export function HabitInvite({ notifId }: { notifId: string }) {
+export function HabitInvite({ notifId }: { notifId: NotificationIdT }) {
   const notifData = useAtomValue(habitNotificationAtom(notifId));
   const personData = useAtomValue(getUserInfoAtom(notifData.senderId));
 

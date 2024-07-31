@@ -6,7 +6,7 @@ import {
   IconHistory,
   IconUserPlus,
 } from "@tabler/icons-react-native";
-import { Link, useLocalSearchParams } from "expo-router";
+import { Link, useGlobalSearchParams } from "expo-router";
 import { useAtom, useAtomValue } from "jotai";
 import { useColorScheme } from "nativewind";
 import { Suspense, useEffect, useState } from "react";
@@ -17,27 +17,27 @@ import {
   habitGoalAtom,
   habitInfoAtom,
   habitParticipantIdsAtom,
+  numberOfCompletionsTodayAtom,
   participantAtom,
-  todaysCompletionAtom,
   viewHabitDisplayTypeAtom,
 } from "../atoms/atoms";
 import { currentUserIdAtom } from "../atoms/currentUserAtom";
 import colors from "../constants/colors";
+import { HabitIdT, UserIdT } from "../lib/db_types";
 import DotsMenu from "./DotsMenu";
 import { MediumProfilePicture } from "./ProfilePicture";
 import HabitCompletionsMonthlyView from "./habit-components/HabitCompletionsMonthlyView";
 import WeeklyViewCompletionSquare from "./habit-components/WeeklyViewCompletionSquare";
 
 export default function ViewHabitComponent() {
-  const params = useLocalSearchParams();
-  const { id } = params;
-  if (typeof id !== "string") {
+  const { habitId: habitId } = useGlobalSearchParams<{ habitId: HabitIdT }>();
+  if (typeof habitId !== "string") {
     throw new Error("Invalid habit id provided in URL params");
   }
   // get habit based on id
-  const habit = useAtomValue(habitInfoAtom(id));
+  const habit = useAtomValue(habitInfoAtom(habitId as HabitIdT));
   if (!habit) {
-    throw new Error(`Habit with id ${id} not found`);
+    throw new Error(`Habit with id ${habitId} not found`);
   }
 
   return (
@@ -71,12 +71,12 @@ export default function ViewHabitComponent() {
           <Text className="ml-1 text-sm font-semibold">Full history</Text>
         </TouchableOpacity>
       </View>
-      <ParticipantsSection habitId={id} />
+      <ParticipantsSection habitId={habitId as HabitIdT} />
     </ScrollView>
   );
 }
 
-function ParticipantsSection({ habitId }: { habitId: string }) {
+function ParticipantsSection({ habitId }: { habitId: HabitIdT }) {
   const userId = useAtomValue(currentUserIdAtom);
   const participantIds = useAtomValue(habitParticipantIdsAtom(habitId));
 
@@ -122,8 +122,8 @@ function ActivityCard({
   habitId,
   participantId,
 }: {
-  habitId: string;
-  participantId: string;
+  habitId: HabitIdT;
+  participantId: UserIdT;
 }) {
   const { colorScheme } = useColorScheme();
   const participant = useAtomValue(participantAtom({ habitId, participantId }));
@@ -131,7 +131,7 @@ function ActivityCard({
   const viewType = useAtomValue(viewHabitDisplayTypeAtom(habitId));
   const habitGoalPeriod = useAtomValue(habitGoalAtom(habitId)).period;
   const numCompletionsToday = useAtomValue(
-    todaysCompletionAtom({ habitId, participantId }),
+    numberOfCompletionsTodayAtom({ habitId, participantId }),
   ).numberOfCompletions;
 
   return (
@@ -223,8 +223,8 @@ function ViewHabitWeeklyCompletions({
   habitId,
   participantId,
 }: {
-  habitId: string;
-  participantId: string;
+  habitId: HabitIdT;
+  participantId: UserIdT;
 }) {
   const { colorScheme } = useColorScheme();
   const habitColor = useAtomValue(habitColorAtom(habitId));
@@ -252,7 +252,7 @@ function ViewHabitWeeklyCompletions({
       {
         <WeeklyViewCompletionSquare
           habitId={habitId}
-          completionAtom={todaysCompletionAtom({
+          completionAtom={numberOfCompletionsTodayAtom({
             habitId,
             participantId,
           })}
@@ -267,7 +267,7 @@ function NudgeButton({
   participantId,
 }: {
   numberOfCompletionsToday: number | undefined;
-  participantId: string;
+  participantId: UserIdT;
 }) {
   const userId = useAtomValue(currentUserIdAtom);
   const [displayNudgeButton, setDisplayNudgeButton] = useState(false);
@@ -291,7 +291,7 @@ function NudgeButton({
   );
 }
 
-function WeeklyOrMonthlySwitcher({ habitId }: { habitId: string }) {
+function WeeklyOrMonthlySwitcher({ habitId }: { habitId: HabitIdT }) {
   const [selected, setSelected] = useAtom(viewHabitDisplayTypeAtom(habitId));
 
   return (

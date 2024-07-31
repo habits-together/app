@@ -17,7 +17,7 @@ import {
 } from "../atoms/atoms";
 
 import colors from "../constants/colors";
-import { userWithIdT } from "../lib/db_types";
+import { HabitIdT, UserIdT, userWithIdT } from "../lib/db_types";
 import DotsMenu from "./DotsMenu";
 import HorizontalProfilePicsList from "./HorizontalProfilePicsList";
 import Icon, { HabitIcon } from "./Icon";
@@ -25,12 +25,12 @@ import { MediumProfilePicture } from "./ProfilePicture";
 
 type InviteAddButtonProps =
   | {
-      theirUserId: string;
-      habitId: string;
+      theirUserId: UserIdT;
+      habitId: HabitIdT;
       type: "inviteFriendsToHabit";
     }
   | {
-      theirUserId: string;
+      theirUserId: UserIdT;
       type: "addFriends";
     };
 
@@ -65,7 +65,7 @@ export function FriendCard({
   friendId,
   displayType,
 }: {
-  friendId: string;
+  friendId: UserIdT;
   displayType: "friendsList" | "inviteFriendsToHabit";
 }) {
   const friend = useAtomValue(friendAtom(friendId));
@@ -122,7 +122,7 @@ export default function UserCard({
           {displayType === "inviteFriendsToHabit" && (
             <InviteAddButton
               theirUserId={userId}
-              habitId="habit1"
+              habitId={"habit1" as HabitIdT}
               type={displayType}
             />
           )}
@@ -164,7 +164,7 @@ function AddButton({ sendRequest }: { sendRequest: () => void }) {
   );
 }
 
-function CommonHabits({ friendId }: { friendId: string }) {
+function CommonHabits({ friendId }: { friendId: UserIdT }) {
   const { colorScheme } = useColorScheme();
   const commonHabitIds = useAtomValue(commonHabitIdsAtom(friendId));
 
@@ -198,7 +198,7 @@ function CommonHabits({ friendId }: { friendId: string }) {
   );
 }
 
-function MutualFriends({ userId }: { userId: string }) {
+function MutualFriends({ userId }: { userId: UserIdT }) {
   const maxPfps = 8;
   const mutualFriendsPictures = useAtomValue(mutualFriendsPfpsListAtom(userId));
   return (
@@ -222,7 +222,7 @@ function MutualFriends({ userId }: { userId: string }) {
   );
 }
 
-function HabitTag({ habitId }: { habitId: string }) {
+function HabitTag({ habitId }: { habitId: HabitIdT }) {
   const { colorScheme } = useColorScheme();
   const title = useAtomValue(habitTitleAtom(habitId));
   const icon = useAtomValue(habitIconAtom(habitId));

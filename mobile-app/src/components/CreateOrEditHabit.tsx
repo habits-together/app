@@ -24,7 +24,7 @@ import {
 } from "react-native-popup-menu";
 import { IconButton } from "../app/habits/icon-button";
 import { iconStrNameToTablerIcon } from "../app/habits/icons";
-import { habitInfoT } from "../lib/db_types";
+import { HabitIdT, habitInfoT } from "../lib/db_types";
 import Icon from "./Icon";
 
 export const tempIconAtom = atom<string>("default");
@@ -33,7 +33,7 @@ export default function CreateOrEditHabit({
   habitId = undefined,
   initialHabitInfoValues,
 }: {
-  habitId?: string;
+  habitId?: HabitIdT;
   initialHabitInfoValues: habitInfoT;
 }) {
   const { colorScheme } = useColorScheme();

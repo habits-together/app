@@ -26,10 +26,13 @@ import {
   friendNotificationT,
   friendshipT,
   habitCompletionsT,
+  HabitIdT,
   habitInfoT,
   habitNotificationT,
   habitT,
+  NotificationIdT,
   notificationT,
+  UserIdT,
   userT,
   userWithIdT,
 } from "../lib/db_types";
@@ -52,7 +55,7 @@ export async function fetchAllMyHabitsInfo(): Promise<allHabitsT> {
   const myHabits: allHabitsT = {};
   querySnapshot.forEach((doc) => {
     const data = doc.data();
-    myHabits[doc.id] = {
+    myHabits[doc.id as HabitIdT] = {
       ...data,
       createdAt: data.createdAt.toDate(),
     } as habitT;
@@ -63,7 +66,7 @@ export async function fetchAllMyHabitsInfo(): Promise<allHabitsT> {
 export async function fetchHabitInfo({
   habitId,
 }: {
-  habitId: string;
+  habitId: HabitIdT;
 }): Promise<habitT> {
   const habitDocRef = doc(firestore, "habits", habitId);
   const habitDocSnap = await getDoc(habitDocRef);
@@ -81,7 +84,7 @@ export async function editHabitInDb({
   habitId,
   habitInfo,
 }: {
-  habitId: string;
+  habitId: HabitIdT;
   habitInfo: habitInfoT;
 }): Promise<void> {
   const habitDocRef = doc(firestore, "habits", habitId);
@@ -91,7 +94,7 @@ export async function editHabitInDb({
 export async function deleteHabitInDb({
   habitId,
 }: {
-  habitId: string;
+  habitId: HabitIdT;
 }): Promise<void> {
   const habitDocRef = doc(firestore, "habits", habitId);
   await deleteDoc(habitDocRef);
@@ -101,7 +104,7 @@ export async function createNewHabitInDb({
   habitInfo,
 }: {
   habitInfo: habitInfoT;
-}): Promise<string> {
+}): Promise<HabitIdT> {
   const user = atomStore.get(currentUserAtom);
   // add new habit
   const habitData: habitT = {
@@ -120,7 +123,7 @@ export async function createNewHabitInDb({
     ...habitData,
     createdAt: Timestamp.fromDate(habitData.createdAt), // convert to Firestore Timestamp
   });
-  const newHabitId = newHabitDocRef.id;
+  const newHabitId = newHabitDocRef.id as HabitIdT;
   // add completion
   const completionData = { completions: { [todayString()]: 0 } };
   const participantCompletionsRef = collection(
@@ -138,8 +141,8 @@ export async function updatetHabitCompletionsInDb({
   participantId,
   completionData,
 }: {
-  habitId: string;
-  participantId: string;
+  habitId: HabitIdT;
+  participantId: UserIdT;
   completionData: habitCompletionsT;
 }): Promise<void> {
   const habitDocRef = doc(firestore, "habits", habitId);
@@ -154,7 +157,7 @@ export async function updatetHabitCompletionsInDb({
 export async function fetchHabitCompletionsForAllParticipants({
   habitId,
 }: {
-  habitId: string;
+  habitId: HabitIdT;
 }): Promise<allParticipantCompletionsT> {
   const allParticipantCompletions: allParticipantCompletionsT = {};
   const habitDocRef = doc(firestore, "habits", habitId);
@@ -166,7 +169,8 @@ export async function fetchHabitCompletionsForAllParticipants({
     participantCompletionsRef,
   );
   allParticipantCompletionsSnapshot.forEach((doc) => {
-    allParticipantCompletions[doc.id] = doc.data() as habitCompletionsT;
+    allParticipantCompletions[doc.id as UserIdT] =
+      doc.data() as habitCompletionsT;
   });
   return allParticipantCompletions;
 }
@@ -175,8 +179,8 @@ export async function fetchHabitCompletionsForParticipant({
   habitId,
   participantId,
 }: {
-  habitId: string;
-  participantId: string;
+  habitId: HabitIdT;
+  participantId: UserIdT;
 }): Promise<habitCompletionsT> {
   const habitDocRef = doc(firestore, "habits", habitId);
   const participantCompletionDocRef = doc(
@@ -194,15 +198,15 @@ export async function fetchHabitCompletionsForParticipant({
 export async function fetchFriendIds({
   userId,
 }: {
-  userId: string;
-}): Promise<string[]> {
+  userId: UserIdT;
+}): Promise<UserIdT[]> {
   const friendshipsCollection = collection(firestore, "friendships");
   const q = query(
     friendshipsCollection,
     or(where("user1Id", "==", userId), where("user2Id", "==", userId)),
   );
   const friendshipSnap = await getDocs(q);
-  const friendIds: string[] = [];
+  const friendIds: UserIdT[] = [];
   friendshipSnap.forEach((doc) => {
     const friendship = doc.data() as friendshipT;
     if (friendship.user1Id === userId) {
@@ -217,7 +221,7 @@ export async function fetchFriendIds({
 export async function fetchFriendData({
   userId,
 }: {
-  userId: string;
+  userId: UserIdT;
 }): Promise<allUsersInfoT> {
   const allFriendData: allUsersInfoT = {};
   const myFriendIds = await fetchFriendIds({ userId });
@@ -262,8 +266,8 @@ export function subscribeToFriendList(
 export async function fetchCommonHabitIds({
   participantId,
 }: {
-  participantId: string;
-}): Promise<string[]> {
+  participantId: UserIdT;
+}): Promise<HabitIdT[]> {
   const userId = atomStore.get(currentUserIdAtom);
   const habitsCollection = collection(firestore, "habits");
   const userQuery = query(
@@ -271,11 +275,11 @@ export async function fetchCommonHabitIds({
     where(`participants.${userId}`, "!=", null),
   );
   const userHabitsSnap = await getDocs(userQuery);
-  const commonHabitIds: string[] = [];
+  const commonHabitIds: HabitIdT[] = [];
   userHabitsSnap.forEach((doc) => {
     const habitData = doc.data();
     if (habitData.participants[participantId]) {
-      commonHabitIds.push(doc.id);
+      commonHabitIds.push(doc.id as HabitIdT);
     }
   });
   return commonHabitIds;
@@ -285,11 +289,11 @@ export async function fetchMutualFriends({
   friendId,
   myFriendIds,
 }: {
-  friendId: string;
-  myFriendIds: string[];
+  friendId: UserIdT;
+  myFriendIds: UserIdT[];
 }): Promise<allUsersInfoT> {
   const allMutualFriendData: allUsersInfoT = {};
-  const hisFriendIds: string[] = await fetchFriendIds({ userId: friendId });
+  const hisFriendIds: UserIdT[] = await fetchFriendIds({ userId: friendId });
 
   const mutualFriendIds = myFriendIds.filter((id) => hisFriendIds.includes(id));
   for (const mutualFriendId of mutualFriendIds) {
@@ -320,7 +324,7 @@ export async function fetchNotifications(): Promise<allNotificationsT> {
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
     const data = doc.data();
-    myNotifications[doc.id] = {
+    myNotifications[doc.id as NotificationIdT] = {
       ...data,
       sentAt: data.sentAt.toDate(),
     } as notificationT;
@@ -351,7 +355,7 @@ export async function fetchOutboundNotifications(): Promise<allNotificationsT> {
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
     const data = doc.data();
-    myNotifications[doc.id] = {
+    myNotifications[doc.id as NotificationIdT] = {
       ...data,
       sentAt: data.sentAt.toDate(),
     } as notificationT;
@@ -364,7 +368,7 @@ export async function checkIfOutboundNotificationExistsInDb({
   receiverId,
 }: {
   type: notificationT["type"];
-  receiverId: string;
+  receiverId: UserIdT;
 }): Promise<boolean> {
   const userId = atomStore.get(currentUserIdAtom);
   const notifCollection = collection(firestore, "notification");
@@ -382,31 +386,45 @@ export async function sendNotificationInDb({
   info,
 }: {
   info: notificationT;
-}): Promise<string> {
+}): Promise<NotificationIdT> {
   const notifCollection = collection(firestore, "notification");
   const docRef = await addDoc(notifCollection, {
     ...info,
     sentAt: Timestamp.fromDate(info.sentAt), // convert to Firestore Timestamp
   });
-  return docRef.id;
+  return docRef.id as NotificationIdT;
 }
 
 export async function deleteNotificationInDb({
   notifId,
 }: {
-  notifId: string;
+  notifId: NotificationIdT;
 }): Promise<void> {
   const notifDocRef = doc(firestore, "notification", notifId);
   await deleteDoc(notifDocRef);
-  console.log(`Notification with ID ${notifId} deleted successfully.`);
+}
+
+export async function deleteAllNotificationsOfHabitInDb({
+  habitId,
+}: {
+  habitId: HabitIdT;
+}): Promise<void> {
+  const notifCollection = collection(firestore, "notification");
+  const q = query(notifCollection, where("habitId", "==", habitId));
+
+  const querySnapshot = await getDocs(q);
+  const deletePromises = querySnapshot.docs.map((doc) => {
+    return deleteDoc(doc.ref);
+  });
+
+  await Promise.all(deletePromises);
 }
 
 export async function acceptFriendRequestInDb({
   notifId,
 }: {
-  notifId: string;
+  notifId: NotificationIdT;
 }): Promise<void> {
-  const userId = atomStore.get(currentUserIdAtom);
   const notifDocRef = doc(firestore, "notification", notifId);
   const notifDocSnap = await getDoc(notifDocRef);
   if (!notifDocSnap.exists()) {
@@ -427,7 +445,7 @@ export async function acceptFriendRequestInDb({
 export async function acceptHabitInviteInDb({
   notifId,
 }: {
-  notifId: string;
+  notifId: NotificationIdT;
 }): Promise<void> {
   // replace with call to firebase
   const userId = atomStore.get(currentUserIdAtom);
@@ -465,7 +483,7 @@ export async function acceptHabitInviteInDb({
 export async function fetchUserInfo({
   userId,
 }: {
-  userId: string;
+  userId: UserIdT;
 }): Promise<userWithIdT> {
   const userDocRef = doc(firestore, "users", userId);
   const userDocSnap = await getDoc(userDocRef);
@@ -506,7 +524,7 @@ export async function searchUsersInDb({
 
   searchResultSnapshot.forEach((doc) => {
     const data = doc.data();
-    searchResultUsersInfo[doc.id] = {
+    searchResultUsersInfo[doc.id as UserIdT] = {
       ...data,
       createdAt: data.createdAt.toDate(),
     } as userT;
