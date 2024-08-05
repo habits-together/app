@@ -3,16 +3,12 @@ import { IconCheck, IconEdit, IconX } from "@tabler/icons-react-native";
 import { router, useGlobalSearchParams } from "expo-router";
 import { useAtom, useAtomValue } from "jotai";
 import { Pressable } from "react-native";
-<<<<<<< HEAD
 import { getUserInfoAtom, profileFormDataAtom } from "../atoms/atoms";
 import { currentUserAtom } from "../atoms/currentUserAtom";
-import colors from "../constants/colors";
 import { newUsernameIsUnique, updateProfileDataInDB } from "../firebase/api";
-=======
-import { getUserInfoAtom, removeFriendAtom } from "../atoms/atoms";
+import { removeFriendAtom } from "../atoms/atoms";
 import colors from "../constants/colors";
 import { HabitIdT, UserIdT } from "../lib/db_types";
->>>>>>> main
 import DotsMenu from "./DotsMenu";
 import HeaderBackButton from "./HeaderBackButton";
 import Icon from "./Icon";
@@ -202,12 +198,9 @@ export function forgotPasswordOptions(
 export function editProfileOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
-<<<<<<< HEAD
   const { userName } = useGlobalSearchParams<{ userName: string }>();
   const [profileFormData, setProfileFormData] = useAtom(profileFormDataAtom);
   const [userData, setUserData] = useAtom(currentUserAtom);
-=======
->>>>>>> main
   return {
     headerLeft: () => (
       <RoundedButton

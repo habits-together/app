@@ -64,7 +64,7 @@ import { currentUserAtom, currentUserIdAtom } from "./currentUserAtom";
 const localStore = createJSONStorage(() => AsyncStorage);
 
 currentUserAtom.onMount = (set) => {
-  fetchUserInfo({ userId: "1QsFUZQSFsV83tYNPnChFOwbhjK2" as UserIdT }).then(
+  fetchUserInfo({ userId: "jwkcNPS3ynW7UlJKpKxqKIJHz3F2" as UserIdT }).then(
     set,
   );
   // curently settign the default user to Alice, if will change when auth state changes
@@ -707,3 +707,8 @@ export const profileFormDataAtom = atomWithDefault((get) => {
 }
 )
 
+
+// profileFormDataAtom.onMount = (setAtom) => {
+//   console.log("profile data atom mounted")
+//   return () => {console.log("profile data unmounted")}
+// }
