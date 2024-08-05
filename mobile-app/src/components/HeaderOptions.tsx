@@ -3,10 +3,16 @@ import { IconCheck, IconEdit, IconX } from "@tabler/icons-react-native";
 import { router, useGlobalSearchParams } from "expo-router";
 import { useAtom, useAtomValue } from "jotai";
 import { Pressable } from "react-native";
+<<<<<<< HEAD
 import { getUserInfoAtom, profileFormDataAtom } from "../atoms/atoms";
 import { currentUserAtom } from "../atoms/currentUserAtom";
 import colors from "../constants/colors";
 import { newUsernameIsUnique, updateProfileDataInDB } from "../firebase/api";
+=======
+import { getUserInfoAtom, removeFriendAtom } from "../atoms/atoms";
+import colors from "../constants/colors";
+import { HabitIdT, UserIdT } from "../lib/db_types";
+>>>>>>> main
 import DotsMenu from "./DotsMenu";
 import HeaderBackButton from "./HeaderBackButton";
 import Icon from "./Icon";
@@ -29,8 +35,10 @@ function sharedOptions(colorScheme: string): NativeStackNavigationOptions {
 export function viewHabitOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
-  const { id } = useGlobalSearchParams<{ id: string }>();
-
+  const { habitId } = useGlobalSearchParams<{ habitId: HabitIdT }>();
+  if (!habitId) {
+    return sharedOptions(colorScheme);
+  }
   return {
     headerLeft: () => <HeaderBackButton showText={true} />,
     headerTitle: () => <></>,
@@ -41,7 +49,7 @@ export function viewHabitOptions(
           onPress={() =>
             router.push({
               pathname: "/habits/edithabit",
-              params: { habitidStr: id },
+              params: { habitidStr: habitId },
             })
           }
         >
@@ -80,10 +88,12 @@ export function viewHabitOptions(
 export function viewProfileOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
-  const { theirUserId } = useGlobalSearchParams<{ theirUserId: string }>();
-  const username = useAtomValue(
-    getUserInfoAtom(theirUserId as string),
-  ).username;
+  const { theirUserId } = useGlobalSearchParams<{ theirUserId: UserIdT }>();
+  if (!theirUserId) {
+    return sharedOptions(colorScheme);
+  }
+  const username = useAtomValue(getUserInfoAtom(theirUserId)).username;
+  const [, removeFriend] = useAtom(removeFriendAtom);
 
   return {
     presentation: "modal",
@@ -99,7 +109,10 @@ export function viewProfileOptions(
           {
             label: "Remove friend",
             color: colors.black,
-            action: () => alert("Remove friend"),
+            action: () => {
+              removeFriend(theirUserId);
+              router.back();
+            },
           },
         ]}
       />
@@ -189,9 +202,12 @@ export function forgotPasswordOptions(
 export function editProfileOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
+<<<<<<< HEAD
   const { userName } = useGlobalSearchParams<{ userName: string }>();
   const [profileFormData, setProfileFormData] = useAtom(profileFormDataAtom);
   const [userData, setUserData] = useAtom(currentUserAtom);
+=======
+>>>>>>> main
   return {
     headerLeft: () => (
       <RoundedButton

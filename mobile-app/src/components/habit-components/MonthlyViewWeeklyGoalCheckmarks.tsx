@@ -1,8 +1,9 @@
 import {
+  numberOfCompletionsTodayAtom,
   structuredHabitCompletionsAtom,
   targetNumberOfCompletionsPerWeekAtom,
-  todaysCompletionAtom,
 } from "@/src/atoms/atoms";
+import { HabitIdT, UserIdT } from "@/src/lib/db_types";
 import { getNumberOfDaysInLastWeek } from "@/src/lib/getNumberOfDaysInLastWeek";
 import { useAtomValue } from "jotai";
 import React, { useEffect, useState } from "react";
@@ -14,8 +15,8 @@ export default function MonthlyViewWeeklyGoalCheckmarks({
   participantId,
   numWeeksToDisplay,
 }: {
-  habitId: string;
-  participantId: string;
+  habitId: HabitIdT;
+  participantId: UserIdT;
   numWeeksToDisplay: number;
 }) {
   const [previousWeeksGoalsMet, setPreviousWeeksGoalsMet] = useState<boolean[]>(
@@ -29,7 +30,7 @@ export default function MonthlyViewWeeklyGoalCheckmarks({
     targetNumberOfCompletionsPerWeekAtom(habitId),
   );
   const numCompletionsToday = useAtomValue(
-    todaysCompletionAtom({ habitId, participantId }),
+    numberOfCompletionsTodayAtom({ habitId, participantId }),
   ).numberOfCompletions;
 
   useEffect(() => {

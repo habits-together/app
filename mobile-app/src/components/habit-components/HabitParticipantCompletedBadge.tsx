@@ -4,6 +4,7 @@ import {
   homeScreenHabitDisplayTypeAtom,
 } from "@/src/atoms/atoms";
 import colors from "@/src/constants/colors";
+import { HabitIdT } from "@/src/lib/db_types";
 import { getTranslucentColor } from "@/src/lib/getTranslucentColor";
 import { IconActivity, IconCheck } from "@tabler/icons-react-native";
 import { useAtomValue } from "jotai";
@@ -14,7 +15,7 @@ import Icon from "../Icon";
 export default function HabitParticipantCompletedBadge({
   habitId,
 }: {
-  habitId: string;
+  habitId: HabitIdT;
 }) {
   const goal = useAtomValue(habitGoalAtom(habitId));
   const color = useAtomValue(habitColorAtom(habitId));

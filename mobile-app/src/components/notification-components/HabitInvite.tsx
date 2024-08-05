@@ -5,13 +5,14 @@ import {
   habitNotificationAtom,
 } from "@/src/atoms/atoms";
 import colors from "@/src/constants/colors";
+import { NotificationIdT } from "@/src/lib/db_types";
 import { useAtomValue } from "jotai";
 import { HabitIcon } from "../Icon";
 import { NotifProfilePicture } from "../ProfilePicture";
 import { Text, View } from "../Themed";
 import { ConfirmButton, DeleteButton } from "./ConfirmDeleteButton";
 
-export function HabitInvite({ notifId }: { notifId: string }) {
+export function HabitInvite({ notifId }: { notifId: NotificationIdT }) {
   const notifData = useAtomValue(habitNotificationAtom(notifId));
   const personData = useAtomValue(getUserInfoAtom(notifData.senderId));
 
@@ -51,8 +52,14 @@ export function HabitInvite({ notifId }: { notifId: string }) {
             {notifData.numberOfParticipants > 1 ? "s" : ""}
           </Text>
           <View className="mt-2 flex flex-row bg-transparent">
-            <ConfirmButton atomToSetOnClick={acceptHabitInviteAtom(notifId)} />
-            <DeleteButton atomToSetOnClick={deleteNotificationAtom(notifId)} />
+            <ConfirmButton
+              atomToSetOnClick={acceptHabitInviteAtom}
+              notificationId={notifId}
+            />
+            <DeleteButton
+              atomToSetOnClick={deleteNotificationAtom}
+              notificationId={notifId}
+            />
           </View>
         </View>
       </View>

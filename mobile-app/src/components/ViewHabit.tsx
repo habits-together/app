@@ -2,11 +2,12 @@ import Icon, { HabitIcon } from "@/src/components/Icon";
 import { ScrollView, Text, View } from "@/src/components/Themed";
 import {
   IconBell,
+  IconCheck,
   IconEye,
   IconHistory,
   IconUserPlus,
 } from "@tabler/icons-react-native";
-import { Link, useLocalSearchParams } from "expo-router";
+import { Link, useGlobalSearchParams } from "expo-router";
 import { useAtom, useAtomValue } from "jotai";
 import { useColorScheme } from "nativewind";
 import { Suspense, useEffect, useState } from "react";
@@ -17,27 +18,28 @@ import {
   habitGoalAtom,
   habitInfoAtom,
   habitParticipantIdsAtom,
+  numberOfCompletionsTodayAtom,
   participantAtom,
-  todaysCompletionAtom,
+  sendHabitNudgeAtom,
   viewHabitDisplayTypeAtom,
 } from "../atoms/atoms";
 import { currentUserIdAtom } from "../atoms/currentUserAtom";
 import colors from "../constants/colors";
+import { HabitIdT, UserIdT } from "../lib/db_types";
 import DotsMenu from "./DotsMenu";
 import { MediumProfilePicture } from "./ProfilePicture";
 import HabitCompletionsMonthlyView from "./habit-components/HabitCompletionsMonthlyView";
 import WeeklyViewCompletionSquare from "./habit-components/WeeklyViewCompletionSquare";
 
 export default function ViewHabitComponent() {
-  const params = useLocalSearchParams();
-  const { id } = params;
-  if (typeof id !== "string") {
+  const { habitId: habitId } = useGlobalSearchParams<{ habitId: HabitIdT }>();
+  if (typeof habitId !== "string") {
     throw new Error("Invalid habit id provided in URL params");
   }
   // get habit based on id
-  const habit = useAtomValue(habitInfoAtom(id));
+  const habit = useAtomValue(habitInfoAtom(habitId as HabitIdT));
   if (!habit) {
-    throw new Error(`Habit with id ${id} not found`);
+    throw new Error(`Habit with id ${habitId} not found`);
   }
 
   return (
@@ -71,12 +73,12 @@ export default function ViewHabitComponent() {
           <Text className="ml-1 text-sm font-semibold">Full history</Text>
         </TouchableOpacity>
       </View>
-      <ParticipantsSection habitId={id} />
+      <ParticipantsSection habitId={habitId as HabitIdT} />
     </ScrollView>
   );
 }
 
-function ParticipantsSection({ habitId }: { habitId: string }) {
+function ParticipantsSection({ habitId }: { habitId: HabitIdT }) {
   const userId = useAtomValue(currentUserIdAtom);
   const participantIds = useAtomValue(habitParticipantIdsAtom(habitId));
 
@@ -122,8 +124,8 @@ function ActivityCard({
   habitId,
   participantId,
 }: {
-  habitId: string;
-  participantId: string;
+  habitId: HabitIdT;
+  participantId: UserIdT;
 }) {
   const { colorScheme } = useColorScheme();
   const participant = useAtomValue(participantAtom({ habitId, participantId }));
@@ -131,7 +133,7 @@ function ActivityCard({
   const viewType = useAtomValue(viewHabitDisplayTypeAtom(habitId));
   const habitGoalPeriod = useAtomValue(habitGoalAtom(habitId)).period;
   const numCompletionsToday = useAtomValue(
-    todaysCompletionAtom({ habitId, participantId }),
+    numberOfCompletionsTodayAtom({ habitId, participantId }),
   ).numberOfCompletions;
 
   return (
@@ -160,6 +162,7 @@ function ActivityCard({
           <NudgeButton
             participantId={participantId}
             numberOfCompletionsToday={numCompletionsToday}
+            habitId={habitId}
           />
           <DotsMenu
             options={[
@@ -223,8 +226,8 @@ function ViewHabitWeeklyCompletions({
   habitId,
   participantId,
 }: {
-  habitId: string;
-  participantId: string;
+  habitId: HabitIdT;
+  participantId: UserIdT;
 }) {
   const { colorScheme } = useColorScheme();
   const habitColor = useAtomValue(habitColorAtom(habitId));
@@ -252,7 +255,7 @@ function ViewHabitWeeklyCompletions({
       {
         <WeeklyViewCompletionSquare
           habitId={habitId}
-          completionAtom={todaysCompletionAtom({
+          completionAtom={numberOfCompletionsTodayAtom({
             habitId,
             participantId,
           })}
@@ -265,33 +268,42 @@ function ViewHabitWeeklyCompletions({
 function NudgeButton({
   numberOfCompletionsToday,
   participantId,
+  habitId,
 }: {
   numberOfCompletionsToday: number | undefined;
-  participantId: string;
+  participantId: UserIdT;
+  habitId: HabitIdT;
 }) {
   const userId = useAtomValue(currentUserIdAtom);
   const [displayNudgeButton, setDisplayNudgeButton] = useState(false);
+  const [alreadySent, send] = useAtom(
+    sendHabitNudgeAtom({ habitId, theirUserId: participantId }),
+  );
   useEffect(() => {
     setDisplayNudgeButton(
       numberOfCompletionsToday === 0 && participantId !== userId,
     );
   }, [numberOfCompletionsToday, userId]);
 
-  return displayNudgeButton ? (
+  if (!displayNudgeButton) return <></>;
+  return alreadySent ? (
+    <View className="flex-row items-center self-start pt-2.5">
+      <Icon icon={IconCheck} size={16} strokeWidth={3} />
+      <Text className="ml-1 text-xs font-semibold">Sent</Text>
+    </View>
+  ) : (
     <Pressable
       className="flex flex-row items-center justify-center rounded-full border border-stone-300 px-4 py-2"
       android_ripple={{ color: colors.stone["300"], radius: 55 }}
-      onPress={() => alert("Nudge")}
+      onPress={send}
     >
       <Icon icon={IconBell} size={16} strokeWidth={2.5} />
       <Text className="ml-1 text-xs font-semibold">Nudge</Text>
     </Pressable>
-  ) : (
-    <></>
   );
 }
 
-function WeeklyOrMonthlySwitcher({ habitId }: { habitId: string }) {
+function WeeklyOrMonthlySwitcher({ habitId }: { habitId: HabitIdT }) {
   const [selected, setSelected] = useAtom(viewHabitDisplayTypeAtom(habitId));
 
   return (

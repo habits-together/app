@@ -1,6 +1,11 @@
+export type UserIdT = string & { readonly __brand: unique symbol };
+export type FriendshipIdT = string & { readonly __brand: unique symbol };
+export type HabitIdT = string & { readonly __brand: unique symbol };
+export type NotificationIdT = string & { readonly __brand: unique symbol };
+
 type dbT = {
   users: Record<
-    string, // userId
+    UserIdT,
     {
       createdAt: Date;
       displayName: string;
@@ -10,17 +15,17 @@ type dbT = {
   >;
 
   friendships: Record<
-    string, // friendshipId
+    FriendshipIdT,
     {
       // user1Id is always less than user2Id (just use frontend functions)
-      user1Id: string;
-      user2Id: string;
+      user1Id: UserIdT;
+      user2Id: UserIdT;
       friendsSince: Date;
     }
   >;
 
   habits: Record<
-    string, // habitId
+    HabitIdT,
     {
       color: string;
       createdAt: Date;
@@ -32,7 +37,7 @@ type dbT = {
       };
       icon: string;
       participants: Record<
-        string, // participantId
+        UserIdT,
         {
           displayName: string; // maintained by cloud function
           username: string; // maintained by cloud function
@@ -41,51 +46,53 @@ type dbT = {
           isOwner?: true; // only owner has this field
         }
       >;
-      // collection
       participantCompletions: Record<
-        string, // participantId
-        Record<string, number> // { date: numberOfCompletions }
+        UserIdT,
+        {
+          completions: Record<string, number>; // { date: numberOfCompletions }
+        }
       >;
     }
   >;
 
   notifications: Record<
-    string, // inviteId
+    NotificationIdT,
     habitNotificationT | friendNotificationT
   >;
 };
 
 export type friendNotificationT = {
   type: "friendRequest";
-  senderId: string;
-  receiverId: string;
+  senderId: UserIdT;
+  receiverId: UserIdT;
   sentAt: Date;
 };
+
 export type habitNotificationT = {
   type: "habitInvite" | "nudge";
-  habitId: string;
-  senderId: string;
-  receiverId: string;
+  habitId: HabitIdT;
+  senderId: UserIdT;
+  receiverId: UserIdT;
   sentAt: Date;
 };
 
 export type allUsersInfoT = dbT["users"];
-export type userT = allUsersInfoT[0];
-export type userWithIdT = userT & { id: string };
+export type userT = allUsersInfoT[UserIdT];
+export type userWithIdT = userT & { id: UserIdT };
 
 export type allFriendshipsT = dbT["friendships"];
-export type friendshipT = allFriendshipsT[0];
+export type friendshipT = allFriendshipsT[FriendshipIdT];
 
-export type habitT = Omit<dbT["habits"][0], "participantCompletions">;
-export type allHabitsT = Record<string, habitT>;
+export type habitT = Omit<dbT["habits"][HabitIdT], "participantCompletions">;
+export type allHabitsT = Record<HabitIdT, habitT>;
 export type habitInfoT = Omit<habitT, "participants">;
 
-export type habitParticipantsT = dbT["habits"][0]["participants"];
-export type habitParticipantT = habitParticipantsT[0];
+export type habitParticipantsT = dbT["habits"][HabitIdT]["participants"];
+export type habitParticipantT = habitParticipantsT[UserIdT];
 
 export type allParticipantCompletionsT =
-  dbT["habits"][0]["participantCompletions"];
-export type habitCompletionsT = allParticipantCompletionsT[0];
+  dbT["habits"][HabitIdT]["participantCompletions"];
+export type habitCompletionsT = allParticipantCompletionsT[UserIdT];
 export type habitCompletionT = number;
 export type habitCompletionWithDateInfoT = {
   date: string;
@@ -94,18 +101,18 @@ export type habitCompletionWithDateInfoT = {
   dayOfTheWeek: string;
 };
 export type allParticipantCompletionsForAllHabitsT = Record<
-  string,
+  HabitIdT,
   allParticipantCompletionsT
 >;
 
 export type allNotificationsT = dbT["notifications"];
-export type notificationT = allNotificationsT[0];
+export type notificationT = allNotificationsT[NotificationIdT];
 
-// more types
 export type friendCardDataT = {
   friendInfo: userT;
   commonHabits: commonHabitT[];
 };
+
 export type commonHabitT = {
   color: string;
   icon: string;

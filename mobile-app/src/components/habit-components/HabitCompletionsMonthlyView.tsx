@@ -1,9 +1,10 @@
 import {
   habitCompletionAtomsAtom,
   habitGoalAtom,
-  todaysCompletionAtom,
+  numberOfCompletionsTodayAtom,
 } from "@/src/atoms/atoms";
 import { maxNumWeeksToDisplay } from "@/src/constants/constants";
+import { HabitIdT, UserIdT } from "@/src/lib/db_types";
 import { getNumberOfDaysInLastWeek } from "@/src/lib/getNumberOfDaysInLastWeek";
 import { useAtomValue } from "jotai";
 import React from "react";
@@ -16,8 +17,8 @@ export default function HabitCompletionsMonthlyView({
   userId,
   currentScreen,
 }: {
-  habitId: string;
-  userId: string;
+  habitId: HabitIdT;
+  userId: UserIdT;
   currentScreen: "home" | "view-habit";
 }) {
   const goal = useAtomValue(habitGoalAtom(habitId));
@@ -61,7 +62,7 @@ export default function HabitCompletionsMonthlyView({
             ))}
         <MonthlyViewCompletionSquare
           habitId={habitId}
-          completionAtom={todaysCompletionAtom({
+          completionAtom={numberOfCompletionsTodayAtom({
             habitId,
             participantId: userId,
           })}
