@@ -344,7 +344,6 @@ export const numberOfCompletionsTodayAtom = atomFamily(
             [todayString()]: newValue,
           },
         };
-        // console.log(newCompletions);
         set(
           habitCompletionsForParticipantAtom({
             habitId,

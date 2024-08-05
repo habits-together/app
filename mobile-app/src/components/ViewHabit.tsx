@@ -279,7 +279,6 @@ function NudgeButton({
   const [alreadySent, send] = useAtom(
     sendHabitNudgeAtom({ habitId, theirUserId: participantId }),
   );
-  console.log(alreadySent);
   useEffect(() => {
     setDisplayNudgeButton(
       numberOfCompletionsToday === 0 && participantId !== userId,
