@@ -703,6 +703,7 @@ export const settingAtom = atomFamily((settingKey: string) =>
 );
 
 export const profileFormDataAtom = atomWithDefault((get) => {
+  console.log({ username: get(currentUserAtom).username, displayName: get(currentUserAtom).displayName })
   return { username: get(currentUserAtom).username, displayName: get(currentUserAtom).displayName }
 }
 )
@@ -710,5 +711,7 @@ export const profileFormDataAtom = atomWithDefault((get) => {
 
 // profileFormDataAtom.onMount = (setAtom) => {
 //   console.log("profile data atom mounted")
+//   console.log
+//   // console.log(currentUserAtom)
 //   return () => {console.log("profile data unmounted")}
 // }

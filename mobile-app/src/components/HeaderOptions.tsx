@@ -210,7 +210,7 @@ export function editProfileOptions(
           //change back to actual profile data
           setProfileFormData({
             displayName: userData.displayName,
-            username: userData.displayName,
+            username: userData.username,
           });
           router.back();
         }}
@@ -246,8 +246,8 @@ export function editProfileOptions(
             router.back();
           }
           else {
-            profileFormData.username = userData.username // reset their form data 
-            setProfileFormData(profileFormData)
+            const resetData = { username: userData.username, displayName: userData.displayName }
+            setProfileFormData(resetData)
           }
         }
         }
