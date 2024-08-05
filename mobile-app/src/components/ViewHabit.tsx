@@ -2,6 +2,7 @@ import Icon, { HabitIcon } from "@/src/components/Icon";
 import { ScrollView, Text, View } from "@/src/components/Themed";
 import {
   IconBell,
+  IconCheck,
   IconEye,
   IconHistory,
   IconUserPlus,
@@ -19,6 +20,7 @@ import {
   habitParticipantIdsAtom,
   numberOfCompletionsTodayAtom,
   participantAtom,
+  sendHabitNudgeAtom,
   viewHabitDisplayTypeAtom,
 } from "../atoms/atoms";
 import { currentUserIdAtom } from "../atoms/currentUserAtom";
@@ -160,6 +162,7 @@ function ActivityCard({
           <NudgeButton
             participantId={participantId}
             numberOfCompletionsToday={numCompletionsToday}
+            habitId={habitId}
           />
           <DotsMenu
             options={[
@@ -265,29 +268,38 @@ function ViewHabitWeeklyCompletions({
 function NudgeButton({
   numberOfCompletionsToday,
   participantId,
+  habitId,
 }: {
   numberOfCompletionsToday: number | undefined;
   participantId: UserIdT;
+  habitId: HabitIdT;
 }) {
   const userId = useAtomValue(currentUserIdAtom);
   const [displayNudgeButton, setDisplayNudgeButton] = useState(false);
+  const [alreadySent, send] = useAtom(
+    sendHabitNudgeAtom({ habitId, theirUserId: participantId }),
+  );
   useEffect(() => {
     setDisplayNudgeButton(
       numberOfCompletionsToday === 0 && participantId !== userId,
     );
   }, [numberOfCompletionsToday, userId]);
 
-  return displayNudgeButton ? (
+  if (!displayNudgeButton) return <></>;
+  return alreadySent ? (
+    <View className="flex-row items-center self-start pt-2.5">
+      <Icon icon={IconCheck} size={16} strokeWidth={3} />
+      <Text className="ml-1 text-xs font-semibold">Sent</Text>
+    </View>
+  ) : (
     <Pressable
       className="flex flex-row items-center justify-center rounded-full border border-stone-300 px-4 py-2"
       android_ripple={{ color: colors.stone["300"], radius: 55 }}
-      onPress={() => alert("Nudge")}
+      onPress={send}
     >
       <Icon icon={IconBell} size={16} strokeWidth={2.5} />
       <Text className="ml-1 text-xs font-semibold">Nudge</Text>
     </Pressable>
-  ) : (
-    <></>
   );
 }
 
