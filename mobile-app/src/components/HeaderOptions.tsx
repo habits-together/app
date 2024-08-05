@@ -1,9 +1,9 @@
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import { IconCheck, IconEdit, IconX } from "@tabler/icons-react-native";
 import { router, useGlobalSearchParams } from "expo-router";
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { Pressable } from "react-native";
-import { getUserInfoAtom } from "../atoms/atoms";
+import { getUserInfoAtom, removeFriendAtom } from "../atoms/atoms";
 import colors from "../constants/colors";
 import { HabitIdT, UserIdT } from "../lib/db_types";
 import DotsMenu from "./DotsMenu";
@@ -85,6 +85,7 @@ export function viewProfileOptions(
     return sharedOptions(colorScheme);
   }
   const username = useAtomValue(getUserInfoAtom(theirUserId)).username;
+  const [, removeFriend] = useAtom(removeFriendAtom);
 
   return {
     presentation: "modal",
@@ -100,7 +101,10 @@ export function viewProfileOptions(
           {
             label: "Remove friend",
             color: colors.black,
-            action: () => alert("Remove friend"),
+            action: () => {
+              removeFriend(theirUserId);
+              router.back();
+            },
           },
         ]}
       />

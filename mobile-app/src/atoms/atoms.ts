@@ -28,6 +28,7 @@ import {
   fetchMutualFriends,
   fetchOutboundNotifications,
   fetchUserInfo,
+  removeFriendInDb,
   searchFriendsInDb,
   sendNotificationInDb,
   subscribeToFriendList,
@@ -423,6 +424,14 @@ export const friendUsernameAtom = atomFamily((friendId: UserIdT) =>
 );
 export const friendPictureAtom = atomFamily((friendId: UserIdT) =>
   atom((get) => get(friendAtom(friendId)).picture),
+);
+
+export const removeFriendAtom = atom(
+  null,
+  async (_get, _set, friendId: UserIdT) => {
+    await removeFriendInDb({ friendId });
+    // The onSnapshot should take care of reseting allFriendsDataAtom
+  },
 );
 
 export const commonHabitIdsAtom = atomFamily((friendId: UserIdT) =>
