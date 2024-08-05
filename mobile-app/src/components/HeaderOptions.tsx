@@ -232,12 +232,13 @@ export function editProfileOptions(
               createdAt: userData.createdAt,
             };
 
-            updateProfileDataInDB(userData.id, newDataForDb)
+            await updateProfileDataInDB(userData.id, newDataForDb)
             setUserData(newDataForAtom); //update atom to match db
             router.back();
           }
           else {
-            profileFormData.username = userData.username // reset their form data username
+            profileFormData.username = userData.username // reset their form data 
+            setProfileFormData(profileFormData)
           }
         }
         }
