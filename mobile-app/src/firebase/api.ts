@@ -277,7 +277,7 @@ export async function fetchCommonHabitIds({
   const userHabitsSnap = await getDocs(userQuery);
   const commonHabitIds: HabitIdT[] = [];
   userHabitsSnap.forEach((doc) => {
-    const habitData = doc.data();
+    const habitData = doc.data() as habitT;
     if (habitData.participants[participantId]) {
       commonHabitIds.push(doc.id as HabitIdT);
     }

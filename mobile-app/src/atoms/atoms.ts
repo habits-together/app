@@ -214,12 +214,12 @@ export const habitCompletionsForParticipantAtom = atomFamily(
     >(
       (get) => get(completionsBaseAtom),
       async (_get, set, newCompletions) => {
-        set(completionsBaseAtom, newCompletions);
         await updatetHabitCompletionsInDb({
           habitId,
           participantId,
           completionData: newCompletions,
         });
+        set(completionsBaseAtom, newCompletions);
       },
     );
     completionsAtom.onMount = (set) => {
@@ -338,17 +338,19 @@ export const numberOfCompletionsTodayAtom = atomFamily(
             participantId: userId,
           }),
         );
+        const newCompletions = {
+          completions: {
+            ...habitCompletions.completions,
+            [todayString()]: newValue,
+          },
+        };
+        // console.log(newCompletions);
         set(
           habitCompletionsForParticipantAtom({
             habitId,
             participantId: userId,
           }),
-          {
-            completions: {
-              ...habitCompletions.completions,
-              [todayString()]: newValue,
-            },
-          },
+          newCompletions,
         );
       },
     ),
@@ -638,6 +640,38 @@ export const sendFriendRequestAtom = atomFamily((theirUserId: UserIdT) =>
       }));
     },
   ),
+);
+
+export const sendHabitNudgeAtom = atomFamily(
+  ({ habitId, theirUserId }: { habitId: HabitIdT; theirUserId: UserIdT }) =>
+    atom(
+      async (get) => {
+        const outboundNotifications = get(outboundNotificationsAtom);
+        const inviteExists = Object.values(outboundNotifications).some(
+          (notif) =>
+            notif.type === "nudge" &&
+            notif.receiverId === theirUserId &&
+            notif.habitId === habitId,
+        );
+        return inviteExists;
+      },
+      async (get, set) => {
+        const currentUserId = get(currentUserIdAtom);
+        const notificationInfo: notificationT = {
+          type: "nudge",
+          habitId,
+          senderId: currentUserId,
+          receiverId: theirUserId,
+          sentAt: new Date(),
+        };
+        const notifId = await sendNotificationInDb({ info: notificationInfo });
+        set(outboundNotificationsAtom, (prev) => ({
+          ...prev,
+          [notifId]: notificationInfo,
+        }));
+      },
+    ),
+  deepEquals,
 );
 
 // whether we should display the habit in weekly or monthly view
