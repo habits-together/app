@@ -1,10 +1,7 @@
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import { initializeApp } from "firebase/app";
-// authentication
 import { getReactNativePersistence, initializeAuth } from "firebase/auth";
-// firestore
 import { getFirestore } from "firebase/firestore";
-// cloud storage
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
@@ -16,7 +13,6 @@ const firebaseConfig = {
   appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
   measurementId: process.env.EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
-
 const app = initializeApp(firebaseConfig);
 
 // react native persistence should allow the app to remember the user's login state
