@@ -36,7 +36,6 @@
       "expo-secure-store",
       "expo-font",
       "expo-build-properties",
-      "expo-build-properties",
       {
         "ios": {
           "newArchEnabled": true
