@@ -50,8 +50,15 @@ function RootLayoutNav() {
     <Provider store={atomStore}>
       <MenuProvider>
         <ThemeProvider value={DefaultTheme}>
-          <Stack.Screen name="(auth)" />
-          <Stack.Screen name="(app)" />
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              animation: "ios",
+            }}
+          >
+            <Stack.Screen name="(auth)" />
+            <Stack.Screen name="(app)" />
+          </Stack>
         </ThemeProvider>
       </MenuProvider>
     </Provider>

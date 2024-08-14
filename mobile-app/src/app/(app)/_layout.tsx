@@ -5,10 +5,10 @@ import { useAtomValue } from "jotai";
 import { NativeWindStyleSheet, useColorScheme } from "nativewind";
 import { useEffect } from "react";
 
-export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: "(tab)",
-};
+// export const unstable_settings = {
+//   // Ensure that reloading on `/modal` keeps a back button present.
+//   initialRouteName: "(tab)",
+// };
 
 export default function AppLayout() {
   const { colorScheme } = useColorScheme();
@@ -23,26 +23,21 @@ export default function AppLayout() {
     }
   }, [themeSetting]);
   return (
-    <Stack>
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          animation: "ios",
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        animation: "ios",
+      }}
+    >
+      <Stack.Screen name="(tabs)" />
+      <Stack.Screen name="viewhabit" options={viewHabitOptions(colorScheme)} />
+      <Stack.Screen
+        name="modals"
+        options={{
+          presentation: "modal",
+          animation: "slide_from_bottom",
         }}
-      >
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen
-          name="viewhabit"
-          options={viewHabitOptions(colorScheme)}
-        />
-        <Stack.Screen
-          name="modals"
-          options={{
-            presentation: "modal",
-            animation: "slide_from_bottom",
-          }}
-        />
-      </Stack>
+      />
     </Stack>
   );
 }
