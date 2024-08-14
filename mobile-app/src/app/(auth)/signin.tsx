@@ -17,7 +17,6 @@ import {
 import { SlidingDot } from "react-native-animated-pagination-dots";
 import { colors } from "react-native-elements";
 
-
 export default function Signin() {
   const { colorScheme } = useColorScheme();
   const { width } = Dimensions.get("window");
@@ -65,7 +64,7 @@ export default function Signin() {
         <View className="flex-row items-center">
           {/* <Image
             className="h-6 w-6 rounded-[20px]"
-            source={require("../../../assets/images/Logo.svg")}
+            source={require("@/assets/images/Logo.svg")}
           /> */}
           <Logo height={24} width={24} />
           <Text className="ml-2 text-2xl font-bold">Habits Together</Text>
@@ -157,7 +156,7 @@ export default function Signin() {
       >
         <Image
           className="h-5 w-5 rounded-[20px]"
-          source={require("../../../assets/images/google.png")}
+          source={require("@/assets/images/google.png")}
         />
         <Text className="ml-2 text-xl font-semibold text-black">
           Continue with Google
@@ -174,7 +173,7 @@ export default function Signin() {
       >
         <Image
           className="h-5 w-5 rounded-[20px]"
-          source={require("../../../assets/images/apple.png")}
+          source={require("@/assets/images/apple.png")}
         />
         <Text className="ml-2 text-xl font-semibold text-black">
           Continue with Apple
