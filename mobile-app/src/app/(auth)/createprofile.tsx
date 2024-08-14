@@ -31,7 +31,7 @@ export default function createprofile() {
         <ProfileCreationBoxes editPage={false} />
         {/* Complete profile */}
         <TouchableOpacity
-          onPress={() => resetNavigationStack("/habit")}
+          onPress={() => resetNavigationStack("/habits")}
           className="mt-10 h-16 flex-row items-center justify-center rounded-lg border-2"
           style={{
             borderColor: DefaultColors[colorScheme].tint,

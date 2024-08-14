@@ -3,6 +3,7 @@ import FriendSearchBar from "@/src/components/FriendSearchBar";
 import ShareInviteLink from "@/src/components/ShareInviteLink";
 import { View } from "@/src/components/Themed";
 import UserCard from "@/src/components/UserCard";
+import { UserIdT } from "@/src/lib/db_types";
 import { useAtomValue } from "jotai";
 
 export default function AddFriends() {
@@ -19,7 +20,7 @@ export default function AddFriends() {
         Object.keys(searchResultUsers).map((userId) => (
           <UserCard
             key={userId}
-            userInfo={{ id: userId, ...searchResultUsers[userId] }}
+            userInfo={{ id: userId as UserIdT, ...searchResultUsers[userId as UserIdT] }}
             displayType="addFriends"
           />
         ))}
