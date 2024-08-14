@@ -46,7 +46,7 @@ export default function emailsignup() {
 
           setCurrentUserAtom(currentUserData);
 
-          resetNavigationStack("/");
+          resetNavigationStack("/habit");
         });
       },
       (error: FirebaseError) => {
@@ -90,13 +90,13 @@ export default function emailsignup() {
       />
       <Text className="mb-5 w-2/3 text-center text-xs text-stone-400">
         By continuing, I agree to the {"\n"}
-        <Link href="/">
+        <Link href="/habit">
           <Text className="text-xs text-stone-400 underline">
             Terms & Conditions
           </Text>
         </Link>{" "}
         and{" "}
-        <Link href="/">
+        <Link href="/habit">
           <Text className="text-xs text-stone-400 underline">
             Privacy Policy
           </Text>

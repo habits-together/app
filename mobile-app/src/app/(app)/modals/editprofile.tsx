@@ -26,7 +26,7 @@ export default function editprofile() {
         <ProfileCreationBoxes editPage={true} />
         {/* Delete Account */}
         <TouchableOpacity
-          onPress={() => resetNavigationStack("/")}
+          onPress={() => resetNavigationStack("/habit")}
           className="mt-10 h-12 flex-row items-center justify-center rounded-lg border-2 border-[#FF0000]"
         >
           <Icon lightColor="#FF0000" darkColor="#FF0000" icon={IconTrash} />

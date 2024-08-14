@@ -25,16 +25,16 @@ export default function Signin() {
   const [loading, setLoading] = useState(false);
 
   async function signInWithGoogle() {
-    resetNavigationStack("/");
+    resetNavigationStack("/habits");
   }
   async function signInWithApple() {
-    resetNavigationStack("/");
+    resetNavigationStack("/habits");
   }
   async function signInWithEmail() {
     router.push("/(auth)/emailsignup");
   }
   async function continueAsGuest() {
-    resetNavigationStack("/");
+    resetNavigationStack("/habits");
   }
 
   function TutorialItem({ item }: { item: { pageNum: string; text: string } }) {
@@ -112,13 +112,13 @@ export default function Signin() {
 
         <Text className="mb-3 w-2/3 text-center text-xs text-stone-400">
           By continuing, I agree to the {"\n"}
-          <Link href="/">
+          <Link href="/habit">
             <Text className="text-xs text-stone-400 underline">
               Terms & Conditions
             </Text>
           </Link>{" "}
           and{" "}
-          <Link href="/">
+          <Link href="/habit">
             <Text className="text-xs text-stone-400 underline">
               Privacy Policy
             </Text>
