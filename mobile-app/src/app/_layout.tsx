@@ -8,7 +8,7 @@ import { NativeWindStyleSheet, useColorScheme } from "nativewind";
 import { useEffect } from "react";
 import { MenuProvider } from "react-native-popup-menu";
 import "react-native-reanimated";
-import { settingAtom } from "../atoms/atoms";
+import { isAuthenticatedAtom, settingAtom } from "../atoms/atoms";
 import { atomStore } from "../atoms/store";
 import {
   emailLoginOptions,
@@ -55,6 +55,7 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
+  const isAuthenticated = useAtomValue(isAuthenticatedAtom);
   const { colorScheme } = useColorScheme();
   const themeSetting = useAtomValue(settingAtom("theme"));
   useEffect(() => {

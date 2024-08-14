@@ -2,6 +2,7 @@ import { auth, firestore } from "@/src/firebase/config";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { UserIdT, userT, userWithIdT } from "../lib/db_types";
 import { userDataConverter } from "./helper";
+
 export const handleDatabaseSignUp = async (data: {
   email: string;
   password: string;

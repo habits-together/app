@@ -48,7 +48,8 @@
     "react-native-url-polyfill": "^2.0.0",
     "react-native-web": "~0.19.6",
     "stacktrace-parser": "^0.1.10",
-    "tabler-react-native": "^1.1.0"
+    "tabler-react-native": "^1.1.0",
+    "expo-build-properties": "~0.12.5"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

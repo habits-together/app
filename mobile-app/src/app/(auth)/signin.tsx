@@ -17,27 +17,6 @@ import {
 import { SlidingDot } from "react-native-animated-pagination-dots";
 import { colors } from "react-native-elements";
 
-// // Import the functions you need from the SDKs you need
-// import { initializeApp } from "firebase/app";
-// import { getAnalytics } from "firebase/analytics";
-// // TODO: Add SDKs for Firebase products that you want to use
-// // https://firebase.google.com/docs/web/setup#available-libraries
-
-// // Your web app's Firebase configuration
-// // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-// const firebaseConfig = {
-//   apiKey: "AIzaSyDtBfjTfxG6KvP96yHH6qiJexeS-2-3rJA",
-//   authDomain: "habits-together.firebaseapp.com",
-//   projectId: "habits-together",
-//   storageBucket: "habits-together.appspot.com",
-//   messagingSenderId: "731859375504",
-//   appId: "1:731859375504:web:80b078f13a31b5d897cf15",
-//   measurementId: "G-46NX1BKJK8"
-// };
-
-// // Initialize Firebase
-// const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
 
 export default function Signin() {
   const { colorScheme } = useColorScheme();

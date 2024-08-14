@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import deepEquals from "fast-deep-equal";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { atom } from "jotai";
 import {
   atomFamily,
@@ -69,6 +70,19 @@ currentUserAtom.onMount = (set) => {
   // curently settign the default user to Alice, if will change when auth state changes
   // TODO: stop doing this at some point
   // change the defalut value to empty user and get this from auth
+};
+
+// Auth
+export const isAuthenticatedAtom = atom(false);
+isAuthenticatedAtom.onMount = (set) => {
+  const auth = getAuth();
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    set(!!user);
+  });
+
+  return () => {
+    unsubscribe();
+  };
 };
 
 const allHabitsAtom = atom<allHabitsT>({});
