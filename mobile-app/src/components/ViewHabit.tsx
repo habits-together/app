@@ -315,7 +315,7 @@ function WeeklyOrMonthlySwitcher({ habitId }: { habitId: HabitIdT }) {
         onPress={() => setSelected("weekly-view")}
         className={`flex-1 rounded-full ${selected === "weekly-view" ? "border border-stone-300 bg-white dark:bg-stone-800" : "bg-transparent p-[1px]"}`}
       >
-        <Text className="m-auto font-semibold text-center text-black dark:text-white">
+        <Text className="m-auto text-center font-semibold text-black dark:text-white">
           Weekly
         </Text>
       </Pressable>
@@ -323,7 +323,7 @@ function WeeklyOrMonthlySwitcher({ habitId }: { habitId: HabitIdT }) {
         onPress={() => setSelected("monthly-view")}
         className={`flex-1 rounded-full ${selected === "monthly-view" ? "border border-stone-300 bg-white dark:bg-stone-800" : "bg-transparent p-[1px]"}`}
       >
-        <Text className="m-auto font-semibold text-center text-black dark:text-white">
+        <Text className="m-auto text-center font-semibold text-black dark:text-white">
           Monthly
         </Text>
       </Pressable>
