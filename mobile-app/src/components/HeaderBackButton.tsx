@@ -11,8 +11,15 @@ export default function HeaderBackButton({
   showText?: boolean;
   chevronDirection?: "down" | "left";
 }) {
+  /** fixes error when trying to go back after
+   * entering signInWithEmail from landing page
+   */
+  const goBackOrHome = () => {
+    router.canGoBack() ? router.back() : router.replace("/");
+  };
+
   return (
-    <TouchableOpacity onPress={() => router.back()}>
+    <TouchableOpacity onPress={goBackOrHome}>
       <View className="flex flex-row items-center">
         <Icon
           icon={chevronDirection === "left" ? IconChevronLeft : IconChevronDown}

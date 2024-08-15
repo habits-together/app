@@ -11,9 +11,9 @@ export const unstable_settings = {
 };
 
 export default function AppLayout() {
+  // must be loggged in 
   const isAuthenticated = useAtomValue(isAuthenticatedAtom);
   if (!isAuthenticated) {
-    console.log("back off bitchhhh")
     return <Redirect href="/" />;
   }
   const { colorScheme } = useColorScheme();
