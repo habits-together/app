@@ -79,7 +79,6 @@ isAuthenticatedAtom.onMount = (set) => {
   const unsubscribe = onAuthStateChanged(auth, (user) => {
     set(!!user);
   });
-
   return () => {
     unsubscribe();
   };

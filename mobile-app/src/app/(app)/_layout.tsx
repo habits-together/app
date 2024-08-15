@@ -1,6 +1,6 @@
-import { settingAtom } from "@/src/atoms/atoms";
+import { isAuthenticatedAtom, settingAtom } from "@/src/atoms/atoms";
 import { viewHabitOptions } from "@/src/components/HeaderOptions";
-import { Stack } from "expo-router";
+import { Redirect, Stack } from "expo-router";
 import { useAtomValue } from "jotai";
 import { NativeWindStyleSheet, useColorScheme } from "nativewind";
 import { useEffect } from "react";
@@ -11,6 +11,11 @@ export const unstable_settings = {
 };
 
 export default function AppLayout() {
+  const isAuthenticated = useAtomValue(isAuthenticatedAtom);
+  if (!isAuthenticated) {
+    console.log("back off bitchhhh")
+    return <Redirect href="/" />;
+  }
   const { colorScheme } = useColorScheme();
   const themeSetting = useAtomValue(settingAtom("theme"));
   useEffect(() => {

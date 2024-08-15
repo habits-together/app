@@ -30,7 +30,7 @@ export default function emaillogin() {
       .then((userCredential) => {
         handleDatabaseLogin().then((success: userWithIdT) => {
           setCurrentUserAtom(success);
-          resetNavigationStack("/habit");
+          resetNavigationStack("/habits");
         });
       })
       .catch((error: FirebaseError) => {

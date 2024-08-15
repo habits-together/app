@@ -112,13 +112,13 @@ export default function Signin() {
 
         <Text className="mb-3 w-2/3 text-center text-xs text-stone-400">
           By continuing, I agree to the {"\n"}
-          <Link href="/habit">
+          <Link href="/habits">
             <Text className="text-xs text-stone-400 underline">
               Terms & Conditions
             </Text>
           </Link>{" "}
           and{" "}
-          <Link href="/habit">
+          <Link href="/habits">
             <Text className="text-xs text-stone-400 underline">
               Privacy Policy
             </Text>

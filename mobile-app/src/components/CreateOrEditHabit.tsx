@@ -89,7 +89,7 @@ export default function CreateOrEditHabit({
     {
       habitId ? editHabit(habitInfo) : createNewHabit(habitInfo);
     }
-    resetNavigationStack("/habit");
+    resetNavigationStack("/habits");
   }
 
   return (
