@@ -1,7 +1,7 @@
 import AuthButton from "@/src/components/AuthButton";
 import AuthInputField from "@/src/components/AuthInputField";
 import { Text, View } from "@/src/components/Themed";
-import { handleDatabaseSignUp } from "@/src/firebase/auth";
+import { handleFirebaseAuthSignUp } from "@/src/firebase/auth";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { Link } from "expo-router";
 import { useState } from "react";
@@ -20,10 +20,12 @@ export default function emailsignup() {
     setData({ ...data, password: password });
   };
 
-  const SignUp = async () => {
-    const success = await handleDatabaseSignUp(data);
+  const signUp = async () => {
+    const success = await handleFirebaseAuthSignUp(data);
     if (success) {
       resetNavigationStack("/createprofile");
+    } else {
+      resetNavigationStack("/");
     }
   };
 
@@ -53,7 +55,7 @@ export default function emailsignup() {
           </Text>
         </Link>
       </Text>
-      <AuthButton text="Sign Up" onPress={SignUp} />
+      <AuthButton text="Sign Up" onPress={signUp} />
       <View className="mt-2">
         <Link href="/(auth)/emaillogin">
           <Text className="text-base font-semibold">

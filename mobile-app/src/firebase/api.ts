@@ -497,7 +497,6 @@ export async function acceptHabitInviteInDb({
 }
 
 // USERS
-// Auth
 export async function checkifUserExistsInDb({
   userId,
 }: {
@@ -509,6 +508,27 @@ export async function checkifUserExistsInDb({
     return true;
   }
   return false;
+}
+
+export async function createUserInDb({
+  userWithId,
+}: {
+  userWithId: userWithIdT;
+}): Promise<boolean> {
+  try {
+    const userDocRef = doc(firestore, "users", userWithId.id);
+    await setDoc(userDocRef, {
+      id: userWithId.id,
+      createdAt: userWithId.createdAt,
+      displayName: userWithId.displayName,
+      username: userWithId.username,
+      picture: userWithId.picture,
+    });
+    return true;
+  } catch (error) {
+    console.error(`Error creating user: ${error}`);
+    return false;
+  }
 }
 
 export async function fetchUserInfo({

@@ -1,6 +1,10 @@
-import { isAuthenticatedAtom, settingAtom } from "@/src/atoms/atoms";
+import { settingAtom } from "@/src/atoms/atoms";
 import { viewHabitOptions } from "@/src/components/HeaderOptions";
-import { Redirect, Stack } from "expo-router";
+import { checkifUserExistsInDb } from "@/src/firebase/api";
+import { UserIdT } from "@/src/lib/db_types";
+import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
+import { Stack } from "expo-router";
+import { getAuth } from "firebase/auth";
 import { useAtomValue } from "jotai";
 import { NativeWindStyleSheet, useColorScheme } from "nativewind";
 import { useEffect } from "react";
@@ -11,11 +15,28 @@ export const unstable_settings = {
 };
 
 export default function AppLayout() {
-  // must be loggged in 
-  const isAuthenticated = useAtomValue(isAuthenticatedAtom);
-  if (!isAuthenticated) {
-    return <Redirect href="/" />;
-  }
+  // must be loggged in
+  const auth = getAuth();
+  /** If user is logged in and they don't exist in firestore
+   * (no profile) rediect them to /createprofile
+   */
+  useEffect(() => {
+    const checkAuth = async () => {
+      if (auth.currentUser) {
+        const userHasProfile = await checkifUserExistsInDb({
+          userId: auth.currentUser.uid as UserIdT,
+        });
+        if (!userHasProfile) {
+          resetNavigationStack("/createprofile");
+        }
+      } else {
+        // only authenticated users allowed here
+        resetNavigationStack("/");
+      }
+    };
+    checkAuth();
+  }, [auth]);
+
   const { colorScheme } = useColorScheme();
   const themeSetting = useAtomValue(settingAtom("theme"));
   useEffect(() => {
@@ -27,6 +48,7 @@ export default function AppLayout() {
       NativeWindStyleSheet.setColorScheme(colorScheme || "light");
     }
   }, [themeSetting]);
+
   return (
     <Stack
       screenOptions={{

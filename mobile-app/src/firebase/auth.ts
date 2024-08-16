@@ -10,7 +10,7 @@ import { Alert } from "react-native";
 import { UserIdT, userT, userWithIdT } from "../lib/db_types";
 import { userDataConverter } from "./helper";
 
-export const handleDatabaseSignUp = async (data: {
+export const handleFirebaseAuthSignUp = async (data: {
   email: string;
   password: string;
 }): Promise<boolean> => {
