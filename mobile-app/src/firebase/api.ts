@@ -497,6 +497,20 @@ export async function acceptHabitInviteInDb({
 }
 
 // USERS
+// Auth
+export async function checkifUserExistsInDb({
+  userId,
+}: {
+  userId: UserIdT;
+}): Promise<boolean> {
+  const userDocRef = doc(firestore, "users", userId);
+  const userDocSnap = await getDoc(userDocRef);
+  if (userDocSnap.exists()) {
+    return true;
+  }
+  return false;
+}
+
 export async function fetchUserInfo({
   userId,
 }: {

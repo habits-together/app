@@ -93,7 +93,7 @@ export default function Settings() {
             icon: <Icon icon={IconUserPlus} />,
             title: "Create account",
             onPress: () => {
-              resetNavigationStack("/(auth)/createprofile");
+              resetNavigationStack("/createprofile");
             },
           },
           {

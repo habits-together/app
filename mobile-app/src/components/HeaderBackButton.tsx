@@ -3,6 +3,7 @@ import { router } from "expo-router";
 import { TouchableOpacity } from "react-native";
 import Icon from "./Icon";
 import { Text, View } from "./Themed";
+import { resetNavigationStack } from "../lib/resetNavigationStack";
 
 export default function HeaderBackButton({
   showText = false,
@@ -15,7 +16,7 @@ export default function HeaderBackButton({
    * entering signInWithEmail from landing page
    */
   const goBackOrHome = () => {
-    router.canGoBack() ? router.back() : router.replace("/");
+    router.canGoBack() ? router.back() : resetNavigationStack("/");
   };
 
   return (

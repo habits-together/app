@@ -3,11 +3,15 @@ import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Provider } from "jotai";
 import { useEffect } from "react";
 import { MenuProvider } from "react-native-popup-menu";
 import "react-native-reanimated";
 import { atomStore } from "../atoms/store";
+import { checkifUserExistsInDb } from "../firebase/api";
+import { UserIdT } from "../lib/db_types";
+import { resetNavigationStack } from "../lib/resetNavigationStack";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -22,6 +26,7 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  const auth = getAuth();
   const [loaded, error] = useFonts({
     SpaceMono: require("@/assets/fonts/SpaceMono-Regular.ttf"),
     ...FontAwesome.font,
@@ -37,6 +42,23 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
+
+  /** If user is logged in and they don't exist in firestore
+   * (no profile) rediect them to /createprofile
+   */
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const userHasProfile = await checkifUserExistsInDb({
+          userId: user.uid as UserIdT,
+        });
+        if (!userHasProfile) {
+          resetNavigationStack("/createprofile");
+        }
+      }
+    });
+    return () => unsubscribe();
+  });
 
   if (!loaded) {
     return null;

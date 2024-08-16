@@ -1,34 +1,52 @@
-import { auth, firestore } from "@/src/firebase/config";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { firestore } from "@/src/firebase/config";
+import { FirebaseError } from "firebase/app";
+import {
+  AuthErrorCodes,
+  createUserWithEmailAndPassword,
+  getAuth,
+} from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { Alert } from "react-native";
 import { UserIdT, userT, userWithIdT } from "../lib/db_types";
 import { userDataConverter } from "./helper";
 
 export const handleDatabaseSignUp = async (data: {
   email: string;
   password: string;
-}) => {
-  // PUSH TO FIREBASE
-  if (auth.currentUser) {
-    // BASE DATA FOR NEW USER
-    const currentUserData: userT = {
-      createdAt: new Date(),
-      displayName: data.email,
-      picture: "",
-      username: auth.currentUser.email as string, //kinda hacky
-    };
-
-    // write regular user data doc
-    const accDocRef = doc(firestore, "users", auth.currentUser.uid);
-    await setDoc(accDocRef, currentUserData);
-
-    console.log("Added User Document written with ID: ", auth.currentUser.uid);
-  } else {
-    //potential issue: if user gets created but DB write fails
-    console.log("An error occurred. Please try again.");
+}): Promise<boolean> => {
+  try {
+    const auth = getAuth();
+    await createUserWithEmailAndPassword(auth, data.email, data.password);
+    return true;
+  } catch (error: unknown) {
+    if (error instanceof FirebaseError) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorCode, errorMessage);
+      switch (errorCode) {
+        case "auth/missing-email":
+          Alert.alert("Please enter an email");
+          break;
+        case AuthErrorCodes.EMAIL_EXISTS:
+          Alert.alert("Email already in use");
+        case AuthErrorCodes.INVALID_EMAIL:
+          Alert.alert("Invalid email");
+        case AuthErrorCodes.WEAK_PASSWORD:
+          Alert.alert("Weak password");
+        default:
+          Alert.alert(
+            `An error occurred. Please try again. ${errorMessage} "${errorCode}"`,
+          );
+      }
+    } else {
+      Alert.alert(`An error occurred. Please try again.`);
+    }
+    return false;
   }
 };
 
 export const handleDatabaseLogin = async (): Promise<userWithIdT> => {
+  const auth = getAuth();
   if (auth.currentUser) {
     const docRef = doc(firestore, "users", auth.currentUser.uid);
     const docSnap = await getDoc(docRef);
