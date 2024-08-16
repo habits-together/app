@@ -26,8 +26,15 @@ export default function createprofile() {
     picture: "",
     createdAt: new Date(),
   });
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // set default pic
+    setData({
+      ...data,
+      picture: "url",
+    });
+    // set id
     if (auth.currentUser) {
       setData({
         ...data,
@@ -38,12 +45,45 @@ export default function createprofile() {
     }
   }, [auth]);
 
+  const validateData = (): boolean => {
+    const { displayName, username, picture } = data;
+    if (!displayName.trim()) {
+      setError("Display name cannot be empty.");
+      return false;
+    }
+    if (!username.trim()) {
+      setError("Username cannot be empty.");
+      return false;
+    }
+    if (!picture.trim()) {
+      setError("Profile picture cannot be empty.");
+      return false;
+    }
+    const r = /^[a-zA-Z0-9_]{3,}$/;
+    if (!r.test(username)) {
+      setError(
+        "Username must be at least 3 characters long and can only contain letters, numbers, and underscores.",
+      );
+      return false;
+    }
+    if (!r.test(displayName)) {
+      setError(
+        "Displayname must be at least 3 characters long and can only contain letters, numbers, and underscores.",
+      );
+      return false;
+    }
+    // TODO: check if displaynem alr taken
+    return true;
+  };
+
   const createProfile = async () => {
-    const success = await createUserInDb({ userWithId: data });
-    if (success) {
-      resetNavigationStack("/habits");
-    } else {
-      resetNavigationStack("/");
+    if (validateData()) {
+      const success = await createUserInDb({ userWithId: data });
+      if (success) {
+        resetNavigationStack("/habits");
+      } else {
+        resetNavigationStack("/");
+      }
     }
   };
 
@@ -77,6 +117,7 @@ export default function createprofile() {
           <Text className="ml-2 text-lg font-bold">Complete profile</Text>
         </TouchableOpacity>
       </View>
+      {error ? <Text className="text-red-500 mt-2">{error}</Text> : null}
     </SafeAreaView>
   );
 }
