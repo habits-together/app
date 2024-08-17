@@ -1,7 +1,7 @@
-import { Atom, atom } from "jotai";
+import { atom } from "jotai";
+import { updateProfileDataInDB } from "../firebase/api";
 import { UserIdT, userWithIdT } from "../lib/db_types";
 import { mockProfilePictures } from "../lib/mockBase64Images";
-import { updateProfileDataInDB } from "../firebase/api";
 
 // default user for now
 // jwkcNPS3ynW7UlJKpKxqKIJHz3F2 (Alice)
@@ -17,16 +17,16 @@ export const currentUserAtom = atom(
   aliceData, // initial value
 
   async (get, set, newUserData: userWithIdT) => {
-
-    const newDataForDb = {createdAt: newUserData.createdAt,
+    const newDataForDb = {
+      createdAt: newUserData.createdAt,
       displayName: newUserData.displayName,
       username: newUserData.username,
-      picture: newUserData.picture} 
+      picture: newUserData.picture,
+    };
 
-    await updateProfileDataInDB(newUserData.id, newDataForDb)
+    await updateProfileDataInDB(newUserData.id, newDataForDb);
     set(currentUserAtom, newUserData);
-  }
-
+  },
 );
 
 export const currentUserIdAtom = atom((get) => get(currentUserAtom).id);

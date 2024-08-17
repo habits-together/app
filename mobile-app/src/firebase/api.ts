@@ -548,13 +548,11 @@ export async function searchUsersInDb({
   });
 
   return searchResultUsersInfo;
-
-
 }
 
 export async function updateProfileDataInDB(
   currentUserID: string,
-  newDataForDb: userT
+  newDataForDb: userT,
 ) {
   {
     // if (auth.currentUser == null) {
@@ -565,23 +563,20 @@ export async function updateProfileDataInDB(
     //Push Data to DB
     const userDocRef = doc(firestore, "users", currentUserID); //change to auth.currentUser.uid when auth is fixed
     await setDoc(userDocRef, newDataForDb);
-  };
+  }
 }
 
-export async function newUsernameIsUnique(existing_username: string, new_username: string): Promise<boolean> {
+export async function newUsernameIsUnique(
+  existing_username: string,
+  new_username: string,
+): Promise<boolean> {
   //Ensure user is unique
   const usersRef = collection(firestore, "users");
-  const q = query(
-    usersRef,
-    where("username", "==", new_username),
-  );
+  const q = query(usersRef, where("username", "==", new_username));
   const querySnapshot = await getDocs(q);
 
   // Check if were changing username, if so check if username already exist in DB
-  if (
-    new_username !== existing_username &&
-    !querySnapshot.empty
-  ) {
+  if (new_username !== existing_username && !querySnapshot.empty) {
     console.error("Error: Username already taken"); // Display this on screen instead
     return false;
   }

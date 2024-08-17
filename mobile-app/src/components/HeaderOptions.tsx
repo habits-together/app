@@ -3,18 +3,20 @@ import { IconCheck, IconEdit, IconX } from "@tabler/icons-react-native";
 import { router, useGlobalSearchParams } from "expo-router";
 import { useAtom, useAtomValue } from "jotai";
 import { Pressable } from "react-native";
-import { getUserInfoAtom, profileFormDataAtom } from "../atoms/atoms";
+import {
+  getUserInfoAtom,
+  profileFormDataAtom,
+  removeFriendAtom,
+} from "../atoms/atoms";
 import { currentUserAtom } from "../atoms/currentUserAtom";
-import { newUsernameIsUnique } from "../firebase/api";
-import { removeFriendAtom } from "../atoms/atoms";
 import colors from "../constants/colors";
-import { HabitIdT, UserIdT } from "../lib/db_types";
+import { newUsernameIsUnique } from "../firebase/api";
+import { HabitIdT, UserIdT, userWithIdT } from "../lib/db_types";
 import DotsMenu from "./DotsMenu";
 import HeaderBackButton from "./HeaderBackButton";
 import Icon from "./Icon";
 import RoundedButton from "./RoundedButton";
 import { Text, View } from "./Themed";
-import { userT, userWithIdT } from "../lib/db_types";
 
 function sharedOptions(colorScheme: string): NativeStackNavigationOptions {
   return {
@@ -226,7 +228,10 @@ export function editProfileOptions(
         text="Done"
         icon={IconCheck}
         onPress={async () => {
-          const cond = await newUsernameIsUnique(userData.username, profileFormData.username)
+          const cond = await newUsernameIsUnique(
+            userData.username,
+            profileFormData.username,
+          );
           if (cond) {
             //on success
             const newDataForAtom: userWithIdT = {
@@ -236,13 +241,14 @@ export function editProfileOptions(
 
             setUserData(newDataForAtom); //update atom to match db
             router.back();
+          } else {
+            const resetData = {
+              username: userData.username,
+              displayName: userData.displayName,
+            };
+            setProfileFormData(resetData);
           }
-          else {
-            const resetData = { username: userData.username, displayName: userData.displayName }
-            setProfileFormData(resetData)
-          }
-        }
-        }
+        }}
       />
     ),
     headerTitleAlign: "center",
