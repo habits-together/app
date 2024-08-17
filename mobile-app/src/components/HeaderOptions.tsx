@@ -5,7 +5,7 @@ import { useAtom, useAtomValue } from "jotai";
 import { Pressable } from "react-native";
 import { getUserInfoAtom, profileFormDataAtom } from "../atoms/atoms";
 import { currentUserAtom } from "../atoms/currentUserAtom";
-import { newUsernameIsUnique, updateProfileDataInDB } from "../firebase/api";
+import { newUsernameIsUnique } from "../firebase/api";
 import { removeFriendAtom } from "../atoms/atoms";
 import colors from "../constants/colors";
 import { HabitIdT, UserIdT } from "../lib/db_types";
@@ -234,14 +234,6 @@ export function editProfileOptions(
               ...profileFormData,
             };
 
-            const newDataForDb: userT = {
-              username: profileFormData.username,
-              displayName: profileFormData.displayName,
-              picture: userData.picture,
-              createdAt: userData.createdAt,
-            };
-
-            await updateProfileDataInDB(userData.id, newDataForDb)
             setUserData(newDataForAtom); //update atom to match db
             router.back();
           }
