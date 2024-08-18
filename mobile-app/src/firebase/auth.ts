@@ -1,14 +1,11 @@
-import { firestore } from "@/src/firebase/config";
 import { FirebaseError } from "firebase/app";
 import {
   AuthErrorCodes,
   createUserWithEmailAndPassword,
   getAuth,
+  signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { UserIdT, userT, userWithIdT } from "../lib/db_types";
-import { userDataConverter } from "./helper";
 
 export const handleFirebaseAuthSignUp = async (data: {
   email: string;
@@ -21,7 +18,6 @@ export const handleFirebaseAuthSignUp = async (data: {
     if (error instanceof FirebaseError) {
       const errorCode = error.code;
       const errorMessage = error.message;
-      console.log(errorCode, errorMessage);
       switch (errorCode) {
         case "auth/missing-email":
           throw new Error("Please enter an email");
@@ -42,29 +38,37 @@ export const handleFirebaseAuthSignUp = async (data: {
   }
 };
 
-export const handleDatabaseLogin = async (): Promise<userWithIdT> => {
+export const handleFirebaseAuthLogIn = async (data: {
+  email: string;
+  password: string;
+}) => {
   const auth = getAuth();
-  if (auth.currentUser) {
-    const docRef = doc(firestore, "users", auth.currentUser.uid);
-    const docSnap = await getDoc(docRef);
 
-    if (docSnap.exists()) {
-      const data: userT = userDataConverter.fromFirestore(docSnap);
-      const typed_data: userWithIdT = {
-        ...data,
-        id: auth.currentUser.uid as UserIdT,
-      };
-      return typed_data;
+  try {
+    const auth = getAuth();
+    await signInWithEmailAndPassword(auth, data.email, data.password);
+  } catch (error: unknown) {
+    if (error instanceof FirebaseError) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      switch (errorCode) {
+        case "auth/missing-email":
+          throw new Error("Please enter an email");
+        case AuthErrorCodes.INVALID_EMAIL:
+          throw new Error("User does not exist");
+        case AuthErrorCodes.INVALID_PASSWORD:
+          throw new Error("Wrong password please try again");
+        case AuthErrorCodes.INVALID_IDP_RESPONSE:
+          throw new Error("Wrong email or password please try again");
+        default:
+          throw new Error(
+            `An error occurred. Please try again. ${errorMessage} "${errorCode}"`,
+          );
+      }
     } else {
-      console.log(
-        "Critical error: user is authenticated but does not exist in database",
-      );
+      throw new Error(`An error occurred. Please try again.`);
     }
-  } else {
-    console.log("An error has occured during fetching data during login");
   }
-
-  return {} as userWithIdT;
 };
 
 export const signoutUserFirebase = async () => {

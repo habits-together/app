@@ -33,7 +33,7 @@ export default function Signin() {
   async function signInWithEmail() {
     router.push("/(auth)/emailsignup");
   }
-  // TODO: maybe in future???? 
+  // TODO: maybe in future????
   // async function continueAsGuest() {
   //   resetNavigationStack("/habits");
   // }
@@ -63,10 +63,6 @@ export default function Signin() {
     <View className="flex-1 items-center pt-14">
       <View className="w-full flex-row items-center justify-between px-4 pb-5">
         <View className="flex-row items-center">
-          {/* <Image
-            className="h-6 w-6 rounded-[20px]"
-            source={require("@/assets/images/Logo.svg")}
-          /> */}
           <Logo height={24} width={24} />
           <Text className="ml-2 text-2xl font-bold">Habits Together</Text>
         </View>

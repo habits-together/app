@@ -33,14 +33,12 @@ export default function AppLayout() {
         } else {
           // if current user atom does not have current users data, fetch data
           if (currentUser.id !== user.uid) {
-            console.log("no data");
             const userInfo = await fetchUserInfo({
               userId: user.uid as UserIdT,
             });
             console.log(userInfo);
             setCurrentUser(userInfo);
           } else {
-            console.log("data");
             console.log(currentUser);
           }
         }

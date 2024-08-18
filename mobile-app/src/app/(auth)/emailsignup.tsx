@@ -35,6 +35,7 @@ export default function emailsignup() {
   };
 
   const signUp = async () => {
+    setError("");
     if (validateData()) {
       try {
         await handleFirebaseAuthSignUp(data);
