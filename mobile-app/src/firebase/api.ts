@@ -510,25 +510,43 @@ export async function checkifUserExistsInDb({
   return false;
 }
 
+export async function checkIfDisplayNameTaken({
+  displayName,
+}: {
+  displayName: string;
+}): Promise<boolean> {
+  const usersCollection = collection(firestore, "users");
+  const q = query(usersCollection, where("displayName", "==", displayName));
+  const querySnapshot = await getDocs(q);
+
+  return !querySnapshot.empty;
+}
+
 export async function createUserInDb({
   userWithId,
 }: {
   userWithId: userWithIdT;
-}): Promise<boolean> {
-  try {
-    const userDocRef = doc(firestore, "users", userWithId.id);
-    await setDoc(userDocRef, {
-      id: userWithId.id,
-      createdAt: userWithId.createdAt,
-      displayName: userWithId.displayName,
-      username: userWithId.username,
-      picture: userWithId.picture,
-    });
-    return true;
-  } catch (error) {
-    console.error(`Error creating user: ${error}`);
-    return false;
+}) {
+  const userExists = await checkifUserExistsInDb({ userId: userWithId.id });
+  if (userExists) {
+    throw new Error(`User with ID ${userWithId.id} already exists.`);
   }
+  const displayNameTaken = await checkIfDisplayNameTaken({
+    displayName: userWithId.displayName,
+  });
+  if (displayNameTaken) {
+    throw new Error(
+      `Display name "${userWithId.displayName}" is already taken.`,
+    );
+  }
+  const userDocRef = doc(firestore, "users", userWithId.id);
+  await setDoc(userDocRef, {
+    id: userWithId.id,
+    createdAt: userWithId.createdAt,
+    displayName: userWithId.displayName,
+    username: userWithId.username,
+    picture: userWithId.picture,
+  });
 }
 
 export async function fetchUserInfo({

@@ -43,9 +43,6 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
-  /** If user is logged in and they don't exist in firestore
-   * (no profile) rediect them to /createprofile
-   */
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -53,12 +50,21 @@ export default function RootLayout() {
           userId: user.uid as UserIdT,
         });
         if (!userHasProfile) {
+          /** If user is logged in and they don't exist in firestore
+           * (no profile) rediect them to /createprofile
+           */
           resetNavigationStack("/createprofile");
+        } else {
+          /** user is logged in and exists
+           * so the auth pages are only usable
+           * when a user is logged out. (idk if we want this???)
+           */
+          resetNavigationStack("/habits");
         }
       }
     });
     return () => unsubscribe();
-  });
+  }, [auth]);
 
   if (!loaded) {
     return null;

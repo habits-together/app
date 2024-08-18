@@ -4,20 +4,19 @@ import {
   AuthErrorCodes,
   createUserWithEmailAndPassword,
   getAuth,
+  signOut,
 } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import { Alert } from "react-native";
 import { UserIdT, userT, userWithIdT } from "../lib/db_types";
 import { userDataConverter } from "./helper";
 
 export const handleFirebaseAuthSignUp = async (data: {
   email: string;
   password: string;
-}): Promise<boolean> => {
+}) => {
   try {
     const auth = getAuth();
     await createUserWithEmailAndPassword(auth, data.email, data.password);
-    return true;
   } catch (error: unknown) {
     if (error instanceof FirebaseError) {
       const errorCode = error.code;
@@ -25,23 +24,21 @@ export const handleFirebaseAuthSignUp = async (data: {
       console.log(errorCode, errorMessage);
       switch (errorCode) {
         case "auth/missing-email":
-          Alert.alert("Please enter an email");
-          break;
+          throw new Error("Please enter an email");
         case AuthErrorCodes.EMAIL_EXISTS:
-          Alert.alert("Email already in use");
+          throw new Error("Email already in use");
         case AuthErrorCodes.INVALID_EMAIL:
-          Alert.alert("Invalid email");
+          throw new Error("Invalid email");
         case AuthErrorCodes.WEAK_PASSWORD:
-          Alert.alert("Weak password");
+          throw new Error("Weak password");
         default:
-          Alert.alert(
+          throw new Error(
             `An error occurred. Please try again. ${errorMessage} "${errorCode}"`,
           );
       }
     } else {
-      Alert.alert(`An error occurred. Please try again.`);
+      throw new Error(`An error occurred. Please try again.`);
     }
-    return false;
   }
 };
 
@@ -68,4 +65,13 @@ export const handleDatabaseLogin = async (): Promise<userWithIdT> => {
   }
 
   return {} as userWithIdT;
+};
+
+export const signoutUserFirebase = async () => {
+  const auth = getAuth();
+  try {
+    await signOut(auth);
+  } catch (error) {
+    console.log(error);
+  }
 };

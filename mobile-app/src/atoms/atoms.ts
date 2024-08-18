@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import deepEquals from "fast-deep-equal";
+import { getAuth } from "firebase/auth";
 import { atom } from "jotai";
 import {
   atomFamily,
@@ -14,6 +15,7 @@ import { maxNumWeeksToDisplay } from "../constants/constants";
 import {
   acceptFriendRequestInDb,
   acceptHabitInviteInDb,
+  checkifUserExistsInDb,
   createNewHabitInDb,
   deleteAllNotificationsOfHabitInDb,
   deleteHabitInDb,
@@ -58,17 +60,30 @@ import { structureCompletionData } from "../lib/structureCompletionData";
 import { currentUserAtom, currentUserIdAtom } from "./currentUserAtom";
 
 // using Jotai atoms: https://jotai.org/docs/introduction
-// we especially use the atomFamily atom: https://jotai.org/docs/utilities/family
+// we especially use the atomFamily atom: https://jotai.org/docs/utilities`/family
 
 const localStore = createJSONStorage(() => AsyncStorage);
 
 currentUserAtom.onMount = (set) => {
-  fetchUserInfo({ userId: "1QsFUZQSFsV83tYNPnChFOwbhjK2" as UserIdT }).then(
-    set,
-  );
-  // curently settign the default user to Alice, if will change when auth state changes
-  // TODO: stop doing this at some point
-  // change the defalut value to empty user and get this from auth
+  console.log(1);
+  const auth = getAuth();
+  const user = auth.currentUser;
+  // fetch current user data if logged in and user exists
+  if (user) {
+    console.log(2);
+    checkifUserExistsInDb({
+      userId: user.uid as UserIdT,
+    }).then((exists) => {
+      console.log(3);
+      if (exists) {
+        console.log(4);
+        fetchUserInfo({ userId: user.uid as UserIdT }).then((data) => {
+          console.log(5);
+          set(data);
+        });
+      }
+    });
+  }
 };
 
 const allHabitsAtom = atom<allHabitsT>({});

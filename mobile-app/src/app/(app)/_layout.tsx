@@ -4,7 +4,7 @@ import { checkifUserExistsInDb } from "@/src/firebase/api";
 import { UserIdT } from "@/src/lib/db_types";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { Stack } from "expo-router";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useAtomValue } from "jotai";
 import { NativeWindStyleSheet, useColorScheme } from "nativewind";
 import { useEffect } from "react";
@@ -17,24 +17,24 @@ export const unstable_settings = {
 export default function AppLayout() {
   // must be loggged in
   const auth = getAuth();
-  /** If user is logged in and they don't exist in firestore
-   * (no profile) rediect them to /createprofile
-   */
   useEffect(() => {
-    const checkAuth = async () => {
-      if (auth.currentUser) {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
         const userHasProfile = await checkifUserExistsInDb({
-          userId: auth.currentUser.uid as UserIdT,
+          userId: user.uid as UserIdT,
         });
         if (!userHasProfile) {
+          /** If user is logged in and they don't exist in firestore
+           * (no profile) rediect them to /createprofile
+           */
           resetNavigationStack("/createprofile");
         }
       } else {
         // only authenticated users allowed here
         resetNavigationStack("/");
       }
-    };
-    checkAuth();
+    });
+    return () => unsubscribe();
   }, [auth]);
 
   const { colorScheme } = useColorScheme();

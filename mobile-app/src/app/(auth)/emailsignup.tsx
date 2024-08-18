@@ -11,6 +11,7 @@ export default function emailsignup() {
     email: "",
     password: "",
   });
+  const [error, setError] = useState<string | null>(null);
 
   const handleEmailChange = (email: string) => {
     setData({ ...data, email: email });
@@ -20,12 +21,29 @@ export default function emailsignup() {
     setData({ ...data, password: password });
   };
 
+  const validateData = (): boolean => {
+    const { email, password } = data;
+    if (!email.trim()) {
+      setError("Email cannot be empty.");
+      return false;
+    }
+    if (!password.trim()) {
+      setError("Password cannot be empty.");
+      return false;
+    }
+    return true;
+  };
+
   const signUp = async () => {
-    const success = await handleFirebaseAuthSignUp(data);
-    if (success) {
-      resetNavigationStack("/createprofile");
-    } else {
-      resetNavigationStack("/");
+    if (validateData()) {
+      try {
+        await handleFirebaseAuthSignUp(data);
+        resetNavigationStack("/createprofile");
+      } catch (error) {
+        if (error instanceof Error) {
+          setError(error.message);
+        }
+      }
     }
   };
 
@@ -63,6 +81,11 @@ export default function emailsignup() {
           </Text>
         </Link>
       </View>
+      {error ? (
+        <Text className="w-10/12 py-5 text-center text-habitColors-red-base">
+          {error}
+        </Text>
+      ) : null}
     </View>
   );
 }

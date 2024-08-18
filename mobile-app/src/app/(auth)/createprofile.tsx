@@ -1,3 +1,4 @@
+import { currentUserAtom } from "@/src/atoms/currentUserAtom";
 import Icon from "@/src/components/Icon";
 import ProfileCreationBoxes from "@/src/components/PfpNameUsernameBoxes";
 import { Text, View } from "@/src/components/Themed";
@@ -7,6 +8,7 @@ import { UserIdT, userWithIdT } from "@/src/lib/db_types";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { IconCheck } from "@tabler/icons-react-native";
 import { getAuth } from "firebase/auth";
+import { useSetAtom } from "jotai";
 import { useColorScheme } from "nativewind";
 import { useEffect, useState } from "react";
 import {
@@ -18,23 +20,17 @@ import {
 
 export default function createprofile() {
   const { colorScheme } = useColorScheme();
+  const setCurrentUser = useSetAtom(currentUserAtom);
   const auth = getAuth();
   const [data, setData] = useState<userWithIdT>({
     id: "" as UserIdT,
     displayName: "",
     username: "",
-    picture: "",
+    picture: "https://i.sstatic.net/l60Hf.png",
     createdAt: new Date(),
   });
   const [error, setError] = useState<string | null>(null);
-
   useEffect(() => {
-    // set default pic
-    setData({
-      ...data,
-      picture: "url",
-    });
-    // set id
     if (auth.currentUser) {
       setData({
         ...data,
@@ -66,23 +62,19 @@ export default function createprofile() {
       );
       return false;
     }
-    if (!r.test(displayName)) {
-      setError(
-        "Displayname must be at least 3 characters long and can only contain letters, numbers, and underscores.",
-      );
-      return false;
-    }
-    // TODO: check if displaynem alr taken
     return true;
   };
 
   const createProfile = async () => {
     if (validateData()) {
-      const success = await createUserInDb({ userWithId: data });
-      if (success) {
+      try {
+        await createUserInDb({ userWithId: data });
+        setCurrentUser(data);
         resetNavigationStack("/habits");
-      } else {
-        resetNavigationStack("/");
+      } catch (error) {
+        if (error instanceof Error) {
+          setError(error.message);
+        }
       }
     }
   };
@@ -117,7 +109,11 @@ export default function createprofile() {
           <Text className="ml-2 text-lg font-bold">Complete profile</Text>
         </TouchableOpacity>
       </View>
-      {error ? <Text className="text-red-500 mt-2">{error}</Text> : null}
+      {error ? (
+        <Text className="w-10/12 py-5 text-center text-habitColors-red-base">
+          {error}
+        </Text>
+      ) : null}
     </SafeAreaView>
   );
 }
