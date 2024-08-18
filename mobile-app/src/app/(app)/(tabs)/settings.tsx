@@ -3,6 +3,7 @@ import {
   SettingsContainer,
   SettingsList,
 } from "@/src/components/SettingsComponents";
+import { signoutUserFirebase } from "@/src/firebase/auth";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import {
   IconAward,
@@ -84,16 +85,9 @@ export default function Settings() {
         settings={[
           {
             icon: <Icon icon={IconKey} />,
-            title: "Go to sign in",
-            onPress: () => {
-              router.push("/(auth)");
-            },
-          },
-          {
-            icon: <Icon icon={IconUserPlus} />,
-            title: "Create account",
-            onPress: () => {
-              resetNavigationStack("/createprofile");
+            title: "Sign out",
+            onPress: async () => {
+              await signoutUserFirebase();
             },
           },
           {

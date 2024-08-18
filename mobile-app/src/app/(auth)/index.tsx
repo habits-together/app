@@ -33,9 +33,10 @@ export default function Signin() {
   async function signInWithEmail() {
     router.push("/(auth)/emailsignup");
   }
-  async function continueAsGuest() {
-    resetNavigationStack("/habits");
-  }
+  // TODO: maybe in future???? 
+  // async function continueAsGuest() {
+  //   resetNavigationStack("/habits");
+  // }
 
   function TutorialItem({ item }: { item: { pageNum: string; text: string } }) {
     return (
@@ -69,12 +70,12 @@ export default function Signin() {
           <Logo height={24} width={24} />
           <Text className="ml-2 text-2xl font-bold">Habits Together</Text>
         </View>
-        <Pressable
+        {/* <Pressable
           className="rounded-2xl bg-stone-200 px-4 py-1 dark:bg-stone-700"
           onPress={continueAsGuest}
         >
           <Text className="text-base font-semibold">Skip</Text>
-        </Pressable>
+        </Pressable> */}
       </View>
 
       <View className="flex w-full flex-1 items-center justify-center pb-3">
