@@ -18,9 +18,6 @@ export {
   ErrorBoundary,
 } from "expo-router";
 
-export const unstable_settings = {
-  initialRouteName: "(auth)",
-};
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -84,8 +81,8 @@ function RootLayoutNav() {
               animation: "ios",
             }}
           >
-            <Stack.Screen name="(auth)" />
             <Stack.Screen name="(app)" />
+            <Stack.Screen name="(auth)" />
           </Stack>
         </ThemeProvider>
       </MenuProvider>

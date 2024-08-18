@@ -4,12 +4,10 @@ import { getAuth } from "firebase/auth";
 import { atom } from "jotai";
 import {
   atomFamily,
-  atomWithStorage,
   createJSONStorage,
   selectAtom,
   splitAtom,
 } from "jotai/utils";
-import { AsyncStorage as AsyncStorageType } from "jotai/vanilla/utils/atomWithStorage";
 import colors from "../constants/colors";
 import { maxNumWeeksToDisplay } from "../constants/constants";
 import {
@@ -37,6 +35,7 @@ import {
   subscribeToNotifications,
   updatetHabitCompletionsInDb,
 } from "../firebase/api";
+import { betterAtomWithStorage } from "../lib/betterAtomWithStorage";
 import {
   HabitDisplayType,
   HabitIdT,
@@ -61,30 +60,6 @@ import { currentUserAtom, currentUserIdAtom } from "./currentUserAtom";
 
 // using Jotai atoms: https://jotai.org/docs/introduction
 // we especially use the atomFamily atom: https://jotai.org/docs/utilities`/family
-
-const localStore = createJSONStorage(() => AsyncStorage);
-
-currentUserAtom.onMount = (set) => {
-  console.log(1);
-  const auth = getAuth();
-  const user = auth.currentUser;
-  // fetch current user data if logged in and user exists
-  if (user) {
-    console.log(2);
-    checkifUserExistsInDb({
-      userId: user.uid as UserIdT,
-    }).then((exists) => {
-      console.log(3);
-      if (exists) {
-        console.log(4);
-        fetchUserInfo({ userId: user.uid as UserIdT }).then((data) => {
-          console.log(5);
-          set(data);
-        });
-      }
-    });
-  }
-};
 
 const allHabitsAtom = atom<allHabitsT>({});
 allHabitsAtom.onMount = (set) => {
@@ -690,28 +665,19 @@ export const sendHabitNudgeAtom = atomFamily(
 
 // whether we should display the habit in weekly or monthly view
 export const homeScreenHabitDisplayTypeAtom = atomFamily((habitId: HabitIdT) =>
-  atomWithStorage<HabitDisplayType>(
+  betterAtomWithStorage<HabitDisplayType>(
     `homeScreenHabitDisplayTypeAtom-${habitId}`,
     "weekly-view",
-    localStore as AsyncStorageType<HabitDisplayType>,
-    { getOnInit: true },
   ),
 );
 
 export const viewHabitDisplayTypeAtom = atomFamily((habitId: HabitIdT) =>
-  atomWithStorage<HabitDisplayType>(
+  betterAtomWithStorage<HabitDisplayType>(
     `viewHabitDisplayTypeAtom-${habitId}`,
     "weekly-view",
-    localStore as AsyncStorageType<HabitDisplayType>,
-    { getOnInit: true },
   ),
 );
 
 export const settingAtom = atomFamily((settingKey: string) =>
-  atomWithStorage<number>(
-    settingKey,
-    0,
-    localStore as AsyncStorageType<number>,
-    { getOnInit: true },
-  ),
+  betterAtomWithStorage<number>(settingKey, 0),
 );

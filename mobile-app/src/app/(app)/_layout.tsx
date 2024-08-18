@@ -1,11 +1,12 @@
 import { settingAtom } from "@/src/atoms/atoms";
+import { currentUserAtom } from "@/src/atoms/currentUserAtom";
 import { viewHabitOptions } from "@/src/components/HeaderOptions";
-import { checkifUserExistsInDb } from "@/src/firebase/api";
+import { checkifUserExistsInDb, fetchUserInfo } from "@/src/firebase/api";
 import { UserIdT } from "@/src/lib/db_types";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { Stack } from "expo-router";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { NativeWindStyleSheet, useColorScheme } from "nativewind";
 import { useEffect } from "react";
 
@@ -17,6 +18,7 @@ export const unstable_settings = {
 export default function AppLayout() {
   // must be loggged in
   const auth = getAuth();
+  const [currentUser, setCurrentUser] = useAtom(currentUserAtom);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -28,12 +30,26 @@ export default function AppLayout() {
            * (no profile) rediect them to /createprofile
            */
           resetNavigationStack("/createprofile");
+        } else {
+          // if current user atom does not have current users data, fetch data
+          if (currentUser.id !== user.uid) {
+            console.log("no data");
+            const userInfo = await fetchUserInfo({
+              userId: user.uid as UserIdT,
+            });
+            console.log(userInfo);
+            setCurrentUser(userInfo);
+          } else {
+            console.log("data");
+            console.log(currentUser);
+          }
         }
       } else {
         // only authenticated users allowed here
         resetNavigationStack("/");
       }
     });
+
     return () => unsubscribe();
   }, [auth]);
 
