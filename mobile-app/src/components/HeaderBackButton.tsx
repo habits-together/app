@@ -1,9 +1,9 @@
 import { IconChevronDown, IconChevronLeft } from "@tabler/icons-react-native";
 import { router } from "expo-router";
 import { TouchableOpacity } from "react-native";
+import { resetNavigationStack } from "../lib/resetNavigationStack";
 import Icon from "./Icon";
 import { Text, View } from "./Themed";
-import { resetNavigationStack } from "../lib/resetNavigationStack";
 
 export default function HeaderBackButton({
   showText = false,

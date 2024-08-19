@@ -1,19 +1,11 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import deepEquals from "fast-deep-equal";
-import { getAuth } from "firebase/auth";
 import { atom } from "jotai";
-import {
-  atomFamily,
-  createJSONStorage,
-  selectAtom,
-  splitAtom,
-} from "jotai/utils";
+import { atomFamily, selectAtom, splitAtom } from "jotai/utils";
 import colors from "../constants/colors";
 import { maxNumWeeksToDisplay } from "../constants/constants";
 import {
   acceptFriendRequestInDb,
   acceptHabitInviteInDb,
-  checkifUserExistsInDb,
   createNewHabitInDb,
   deleteAllNotificationsOfHabitInDb,
   deleteHabitInDb,

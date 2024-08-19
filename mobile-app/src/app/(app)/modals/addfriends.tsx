@@ -20,7 +20,10 @@ export default function AddFriends() {
         Object.keys(searchResultUsers).map((userId) => (
           <UserCard
             key={userId}
-            userInfo={{ id: userId as UserIdT, ...searchResultUsers[userId as UserIdT] }}
+            userInfo={{
+              id: userId as UserIdT,
+              ...searchResultUsers[userId as UserIdT],
+            }}
             displayType="addFriends"
           />
         ))}

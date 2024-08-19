@@ -4,7 +4,6 @@ import {
   SettingsList,
 } from "@/src/components/SettingsComponents";
 import { signoutUserFirebase } from "@/src/firebase/auth";
-import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import {
   IconAward,
   IconCategory2,
