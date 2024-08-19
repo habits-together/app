@@ -1,7 +1,7 @@
 import { Icon as TablerIcon } from "@tabler/icons-react-native";
 import { useColorScheme } from "nativewind";
 import { colors } from "react-native-elements";
-import { iconStrNameToTablerIcon } from "../app/habits/icons";
+import { iconStrNameToTablerIcon } from "../app/(app)/habits/icons";
 
 export default function Icon({
   icon: DisplayedIcon,

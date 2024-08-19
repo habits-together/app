@@ -1,16 +1,23 @@
 import { atom } from "jotai";
-import { UserIdT, userWithIdT } from "../lib/db_types";
-import { mockProfilePictures } from "../lib/mockBase64Images";
+import { betterAtomWithStorage } from "../lib/betterAtomWithStorage";
+import { UserIdT } from "../lib/db_types";
 
-// default user for now
-// 1QsFUZQSFsV83tYNPnChFOwbhjK2 (Alice)
-const aliceData: userWithIdT = {
+// export const currentUserAtom = atom<userWithIdT>({
+//   createdAt: new Date(),
+//   displayName: "",
+//   username: "",
+//   picture: "",
+//   id: "" as UserIdT,
+// });
+
+export const currentUserAtom = betterAtomWithStorage("current-user-data", {
   createdAt: new Date(),
-  displayName: "Alice",
-  username: "alice3",
-  picture: mockProfilePictures[3],
-  id: "1QsFUZQSFsV83tYNPnChFOwbhjK2" as UserIdT,
-};
-// same email and pass -> alice3@gmail.com
-export const currentUserAtom = atom<userWithIdT>(aliceData);
-export const currentUserIdAtom = atom((get) => get(currentUserAtom).id);
+  displayName: "",
+  username: "",
+  picture: "",
+  id: "" as UserIdT,
+});
+
+export const currentUserIdAtom = atom((get) => {
+  return get(currentUserAtom).id;
+});

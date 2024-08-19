@@ -22,8 +22,8 @@ import {
   MenuOptions,
   MenuTrigger,
 } from "react-native-popup-menu";
-import { IconButton } from "../app/habits/icon-button";
-import { iconStrNameToTablerIcon } from "../app/habits/icons";
+import { IconButton } from "../app/(app)/habits/icon-button";
+import { iconStrNameToTablerIcon } from "../app/(app)/habits/icons";
 import { HabitIdT, habitInfoT } from "../lib/db_types";
 import Icon from "./Icon";
 
@@ -89,7 +89,7 @@ export default function CreateOrEditHabit({
     {
       habitId ? editHabit(habitInfo) : createNewHabit(habitInfo);
     }
-    resetNavigationStack("/");
+    resetNavigationStack("/habits");
   }
 
   return (

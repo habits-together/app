@@ -1,62 +1,51 @@
-import { currentUserAtom } from "@/src/atoms/currentUserAtom";
 import AuthButton from "@/src/components/AuthButton";
 import AuthInputField from "@/src/components/AuthInputField";
 import { Text, View } from "@/src/components/Themed";
-import { handleDatabaseLogin } from "@/src/firebase/auth";
-import { userWithIdT } from "@/src/lib/db_types";
+import { handleFirebaseAuthLogIn } from "@/src/firebase/auth";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { Link } from "expo-router";
-import { FirebaseError } from "firebase/app";
-import {
-  AuthErrorCodes,
-  getAuth,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
-import { useAtom } from "jotai";
 import { useState } from "react";
-import { Alert } from "react-native";
 
 export default function emaillogin() {
-  const [data, setData] = useState({ email: "", password: "" });
-  const [val, setCurrentUserAtom] = useAtom(currentUserAtom);
+  const [data, setData] = useState({
+    email: "",
+    password: "",
+  });
+  const [error, setError] = useState<string | null>(null);
+
   const handleEmailChange = (email: string) => {
     setData({ ...data, email: email });
   };
+
   const handlePasswordChange = (password: string) => {
     setData({ ...data, password: password });
   };
-  const Login = () => {
-    signInWithEmailAndPassword(getAuth(), data.email, data.password)
-      .then((userCredential) => {
-        handleDatabaseLogin().then((success: userWithIdT) => {
-          setCurrentUserAtom(success);
-          resetNavigationStack("/");
-        });
-      })
-      .catch((error: FirebaseError) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-        switch (errorCode) {
-          case "auth/missing-email":
-            Alert.alert("Please enter an email");
-            break;
-          case AuthErrorCodes.INVALID_EMAIL:
-            Alert.alert("User does not exist");
-            break;
-          case AuthErrorCodes.INVALID_PASSWORD:
-            Alert.alert("Wrong password please try again");
-            break;
-          case AuthErrorCodes.INVALID_IDP_RESPONSE:
-            Alert.alert("Wrong email or password please try again");
-            break;
-          default:
-            Alert.alert(
-              `An error occurred. Please try again. ${errorMessage} "${errorCode}"`,
-            );
-            break;
+
+  const validateData = (): boolean => {
+    const { email, password } = data;
+    if (!email.trim()) {
+      setError("Email cannot be empty.");
+      return false;
+    }
+    if (!password.trim()) {
+      setError("Password cannot be empty.");
+      return false;
+    }
+    return true;
+  };
+
+  const login = async () => {
+    setError("");
+    if (validateData()) {
+      try {
+        await handleFirebaseAuthLogIn(data);
+        resetNavigationStack("/habits");
+      } catch (error) {
+        if (error instanceof Error) {
+          setError(error.message);
         }
-      });
+      }
+    }
   };
   return (
     <View className="flex-1 items-center px-3 pt-5">
@@ -77,7 +66,7 @@ export default function emaillogin() {
           </Text>
         </Link>
       </Text>
-      <AuthButton text="Login" onPress={Login} />
+      <AuthButton text="Login" onPress={login} />
       <View className="mt-2">
         <Link href="/(auth)/emailsignup">
           <Text className="text-base font-semibold">
@@ -85,6 +74,11 @@ export default function emaillogin() {
           </Text>
         </Link>
       </View>
+      {error ? (
+        <Text className="w-10/12 py-5 text-center text-habitColors-red-base">
+          {error}
+        </Text>
+      ) : null}
     </View>
   );
 }

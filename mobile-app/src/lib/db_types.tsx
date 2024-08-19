@@ -79,6 +79,9 @@ export type habitNotificationT = {
 export type allUsersInfoT = dbT["users"];
 export type userT = allUsersInfoT[UserIdT];
 export type userWithIdT = userT & { id: UserIdT };
+export type userWithIdEmailT = userWithIdT & {
+  email?: string;
+};
 
 export type allFriendshipsT = dbT["friendships"];
 export type friendshipT = allFriendshipsT[FriendshipIdT];

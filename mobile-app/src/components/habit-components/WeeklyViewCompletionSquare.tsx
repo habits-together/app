@@ -42,7 +42,7 @@ export default function WeeklyViewCompletionSquare({
         {/* day of the month text */}
         {numberOfCompletions === 0 && (
           <Text
-            className="mx-auto my-auto text-xs font-semibold"
+            className="mx-auto my-auto text-center text-xs font-semibold"
             style={{
               color:
                 colorScheme === "dark"
