@@ -90,6 +90,7 @@ export default function UserCard({
   const [, removeFriend] = useAtom(removeFriendAtom);
   return (
     <Link
+      disabled={displayType === "inviteFriendsToHabit"}
       push
       href={{
         pathname: "/modals/viewprofile",

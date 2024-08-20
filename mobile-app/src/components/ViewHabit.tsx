@@ -7,7 +7,7 @@ import {
   IconHistory,
   IconUserPlus,
 } from "@tabler/icons-react-native";
-import { Link, useGlobalSearchParams } from "expo-router";
+import { Link, useLocalSearchParams } from "expo-router";
 import { useAtom, useAtomValue } from "jotai";
 import { useColorScheme } from "nativewind";
 import { Suspense, useEffect, useState } from "react";
@@ -32,7 +32,7 @@ import HabitCompletionsMonthlyView from "./habit-components/HabitCompletionsMont
 import WeeklyViewCompletionSquare from "./habit-components/WeeklyViewCompletionSquare";
 
 export default function ViewHabitComponent() {
-  const { habitId: habitId } = useGlobalSearchParams<{ habitId: HabitIdT }>();
+  const { habitId: habitId } = useLocalSearchParams<{ habitId: HabitIdT }>();
   if (typeof habitId !== "string") {
     throw new Error("Invalid habit id provided in URL params");
   }
