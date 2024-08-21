@@ -11,12 +11,12 @@ import { profileFormDataAtom } from "../atoms/atoms";
 
 export default function ProfileCreationBoxes({
   editPage,
-  formData,
-  setFormData,
+  // formData,
+  // setFormData,
 }: {
   editPage: boolean;
-  formData: userWithIdEmailT;
-  setFormData: React.Dispatch<React.SetStateAction<userWithIdEmailT>>;
+  // formData: userWithIdEmailT;
+  // setFormData: React.Dispatch<React.SetStateAction<userWithIdEmailT>>;
 }) {
   const [formData, setFormData] = useAtom(profileFormDataAtom);
   const { colorScheme } = useColorScheme();

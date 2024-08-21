@@ -8,7 +8,7 @@ import {
   profileFormDataAtom,
   removeFriendAtom,
 } from "../atoms/atoms";
-import { currentUserAtom } from "../atoms/currentUserAtom";
+import { currentUserAtom, currentUserAtomWithDB } from "../atoms/currentUserAtom";
 import colors from "../constants/colors";
 import { newUsernameIsUnique } from "../firebase/api";
 import { HabitIdT, UserIdT, userWithIdT } from "../lib/db_types";
@@ -202,7 +202,12 @@ export function editProfileOptions(
 ): NativeStackNavigationOptions {
   const { userName } = useGlobalSearchParams<{ userName: string }>();
   const [profileFormData, setProfileFormData] = useAtom(profileFormDataAtom);
-  const [userData, setUserData] = useAtom(currentUserAtom);
+  const [userData, setUserData] = useAtom(currentUserAtomWithDB);
+  const resetData = {
+    displayName: userData.displayName,
+    username: userData.username,
+    picture: userData.picture
+  }
   return {
     headerLeft: () => (
       <RoundedButton
@@ -210,10 +215,7 @@ export function editProfileOptions(
         icon={IconX}
         onPress={() => {
           //change back to actual profile data
-          setProfileFormData({
-            displayName: userData.displayName,
-            username: userData.username,
-          });
+          setProfileFormData(resetData);
           router.back();
         }}
       />
@@ -242,10 +244,6 @@ export function editProfileOptions(
             setUserData(newDataForAtom); //update atom to match db
             router.back();
           } else {
-            const resetData = {
-              username: userData.username,
-              displayName: userData.displayName,
-            };
             setProfileFormData(resetData);
           }
         }}

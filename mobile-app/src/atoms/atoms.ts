@@ -57,6 +57,7 @@ import { todayString } from "../lib/formatDateString";
 import { getNumberOfDaysInLastWeek } from "../lib/getNumberOfDaysInLastWeek";
 import { structureCompletionData } from "../lib/structureCompletionData";
 import { currentUserAtom, currentUserIdAtom } from "./currentUserAtom";
+import { auth } from "../firebase/config";
 
 // using Jotai atoms: https://jotai.org/docs/introduction
 // we especially use the atomFamily atom: https://jotai.org/docs/utilities`/family
@@ -686,14 +687,23 @@ export const settingAtom = atomFamily((settingKey: string) =>
 );
 
 export const profileFormDataAtom = atomWithDefault((get) => {
-  console.log({
-    username: get(currentUserAtom).username,
-    displayName: get(currentUserAtom).displayName,
-  });
-  return {
-    username: get(currentUserAtom).username,
-    displayName: get(currentUserAtom).displayName,
-  };
+  let data = {
+    displayName: "",
+    username: "",
+    picture: "https://i.sstatic.net/l60Hf.png",
+  }
+
+  if (auth.currentUser){
+    data = {
+      username: get(currentUserAtom).username,
+      displayName: get(currentUserAtom).displayName,
+      picture: get(currentUserAtom).picture,
+    }
+  }
+
+
+  console.log(data);
+  return data
 });
 
 // profileFormDataAtom.onMount = (setAtom) => {
