@@ -8,7 +8,7 @@ import {
   profileFormDataAtom,
   removeFriendAtom,
 } from "../atoms/atoms";
-import { currentUserAtom, currentUserAtomWithDB } from "../atoms/currentUserAtom";
+import { currentUserAtomWithDB } from "../atoms/currentUserAtom";
 import colors from "../constants/colors";
 import { newUsernameIsUnique } from "../firebase/api";
 import { HabitIdT, UserIdT, userWithIdT } from "../lib/db_types";
@@ -206,8 +206,8 @@ export function editProfileOptions(
   const resetData = {
     displayName: userData.displayName,
     username: userData.username,
-    picture: userData.picture
-  }
+    picture: userData.picture,
+  };
   return {
     headerLeft: () => (
       <RoundedButton

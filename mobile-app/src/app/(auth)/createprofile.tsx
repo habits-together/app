@@ -22,12 +22,12 @@ import {
 export default function createprofile() {
   const { colorScheme } = useColorScheme();
   const setCurrentUser = useSetAtom(currentUserAtom);
-  const [profileFormData, setProfileFormData] = useAtom(profileFormDataAtom)
+  const [profileFormData, setProfileFormData] = useAtom(profileFormDataAtom);
   const auth = getAuth();
   const [data, setData] = useState<userWithIdT>({
     id: "" as UserIdT,
     createdAt: new Date(),
-    ...profileFormData
+    ...profileFormData,
   });
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
@@ -92,9 +92,7 @@ export default function createprofile() {
       {/* Form */}
       <View className="flex w-screen flex-col px-5">
         <Text className="text-3xl font-bold">Create profile</Text>
-        <ProfileCreationBoxes
-          editPage={false}
-        />
+        <ProfileCreationBoxes editPage={false} />
         {/* Complete profile */}
         <TouchableOpacity
           onPress={createProfile}

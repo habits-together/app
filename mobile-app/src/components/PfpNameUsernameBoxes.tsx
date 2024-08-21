@@ -6,7 +6,6 @@ import { useAtom } from "jotai";
 import { useColorScheme } from "nativewind";
 import { useRef } from "react";
 import { Image, TextInput, TouchableOpacity } from "react-native";
-import { userWithIdEmailT } from "../lib/db_types";
 import { profileFormDataAtom } from "../atoms/atoms";
 
 export default function ProfileCreationBoxes({

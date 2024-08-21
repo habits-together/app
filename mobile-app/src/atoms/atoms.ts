@@ -3,12 +3,9 @@ import { atom } from "jotai";
 import {
   atomFamily,
   atomWithDefault,
-  atomWithStorage,
-  createJSONStorage,
   selectAtom,
   splitAtom,
 } from "jotai/utils";
-import { AsyncStorage as AsyncStorageType } from "jotai/vanilla/utils/atomWithStorage";
 import colors from "../constants/colors";
 import { maxNumWeeksToDisplay } from "../constants/constants";
 import {
@@ -35,6 +32,7 @@ import {
   subscribeToNotifications,
   updatetHabitCompletionsInDb,
 } from "../firebase/api";
+import { auth } from "../firebase/config";
 import { betterAtomWithStorage } from "../lib/betterAtomWithStorage";
 import {
   HabitDisplayType,
@@ -57,7 +55,6 @@ import { todayString } from "../lib/formatDateString";
 import { getNumberOfDaysInLastWeek } from "../lib/getNumberOfDaysInLastWeek";
 import { structureCompletionData } from "../lib/structureCompletionData";
 import { currentUserAtom, currentUserIdAtom } from "./currentUserAtom";
-import { auth } from "../firebase/config";
 
 // using Jotai atoms: https://jotai.org/docs/introduction
 // we especially use the atomFamily atom: https://jotai.org/docs/utilities`/family
@@ -680,10 +677,7 @@ export const viewHabitDisplayTypeAtom = atomFamily((habitId: HabitIdT) =>
 );
 
 export const settingAtom = atomFamily((settingKey: string) =>
-  betterAtomWithStorage<number>(
-    settingKey,
-    0
-),
+  betterAtomWithStorage<number>(settingKey, 0),
 );
 
 export const profileFormDataAtom = atomWithDefault((get) => {
@@ -691,19 +685,18 @@ export const profileFormDataAtom = atomWithDefault((get) => {
     displayName: "",
     username: "",
     picture: "https://i.sstatic.net/l60Hf.png",
-  }
+  };
 
-  if (auth.currentUser){
+  if (auth.currentUser) {
     data = {
       username: get(currentUserAtom).username,
       displayName: get(currentUserAtom).displayName,
       picture: get(currentUserAtom).picture,
-    }
+    };
   }
 
-
   console.log(data);
-  return data
+  return data;
 });
 
 // profileFormDataAtom.onMount = (setAtom) => {
