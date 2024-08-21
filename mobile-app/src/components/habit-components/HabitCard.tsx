@@ -31,7 +31,7 @@ export function HabitCard({
     <Link
       push
       href={{
-        pathname: openAsModal ? "/modals/viewhabit" : "viewhabit",
+        pathname: "/habits/viewhabit",
         params: { habitId: habitId },
       }}
       asChild

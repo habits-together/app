@@ -1,6 +1,5 @@
 import { settingAtom } from "@/src/atoms/atoms";
 import { currentUserAtom } from "@/src/atoms/currentUserAtom";
-import { viewHabitOptions } from "@/src/components/HeaderOptions";
 import { checkifUserExistsInDb, fetchUserInfo } from "@/src/firebase/api";
 import { UserIdT } from "@/src/lib/db_types";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
@@ -71,14 +70,6 @@ export default function AppLayout() {
       }}
     >
       <Stack.Screen name="(tabs)" />
-      <Stack.Screen name="viewhabit" options={viewHabitOptions(colorScheme)} />
-      <Stack.Screen
-        name="modals"
-        options={{
-          presentation: "modal",
-          animation: "slide_from_bottom",
-        }}
-      />
     </Stack>
   );
 }

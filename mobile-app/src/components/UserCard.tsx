@@ -93,7 +93,7 @@ export default function UserCard({
       disabled={displayType === "inviteFriendsToHabit"}
       push
       href={{
-        pathname: "/modals/viewprofile",
+        pathname: "/friends/viewprofile",
         params: {
           theirUserId: userId,
         },

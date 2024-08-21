@@ -93,7 +93,7 @@ export default function Settings() {
             icon: <Icon icon={IconUserPlus} />,
             title: "Edit profile",
             onPress: () => {
-              router.push("/modals/editprofile");
+              router.push("/friends/editprofile");
             },
           },
         ]}
