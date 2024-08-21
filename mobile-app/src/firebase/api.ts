@@ -57,7 +57,7 @@ export async function fetchAllMyHabitsInfo(): Promise<allHabitsT> {
     const data = doc.data();
     myHabits[doc.id as HabitIdT] = {
       ...data,
-      createdAt: data.createdAt.toDate(),
+      createdAt: data.createdAt,
     } as habitT;
   });
   return myHabits;
@@ -76,7 +76,7 @@ export async function fetchHabitInfo({
   const data = habitDocSnap.data();
   return {
     ...data,
-    createdAt: data.createdAt.toDate(),
+    createdAt: data.createdAt,
   } as habitT;
 }
 
@@ -232,7 +232,7 @@ export async function fetchFriendData({
     if (userDocSnap.exists()) {
       const userData = userDocSnap.data();
       allFriendData[friendId] = {
-        createdAt: userData.createdAt.toDate(),
+        createdAt: userData.createdAt,
         displayName: userData.displayName,
         username: userData.username,
         picture: userData.picture,
@@ -343,7 +343,7 @@ export async function fetchNotifications(): Promise<allNotificationsT> {
     const data = doc.data();
     myNotifications[doc.id as NotificationIdT] = {
       ...data,
-      sentAt: data.sentAt.toDate(),
+      sentAt: data.sentAt,
     } as notificationT;
   });
 
@@ -374,7 +374,7 @@ export async function fetchOutboundNotifications(): Promise<allNotificationsT> {
     const data = doc.data();
     myNotifications[doc.id as NotificationIdT] = {
       ...data,
-      sentAt: data.sentAt.toDate(),
+      sentAt: data.sentAt,
     } as notificationT;
   });
   return myNotifications;
@@ -497,6 +497,58 @@ export async function acceptHabitInviteInDb({
 }
 
 // USERS
+export async function checkifUserExistsInDb({
+  userId,
+}: {
+  userId: UserIdT;
+}): Promise<boolean> {
+  const userDocRef = doc(firestore, "users", userId);
+  const userDocSnap = await getDoc(userDocRef);
+  if (userDocSnap.exists()) {
+    return true;
+  }
+  return false;
+}
+
+export async function checkIfDisplayNameTaken({
+  displayName,
+}: {
+  displayName: string;
+}): Promise<boolean> {
+  const usersCollection = collection(firestore, "users");
+  const q = query(usersCollection, where("displayName", "==", displayName));
+  const querySnapshot = await getDocs(q);
+
+  return !querySnapshot.empty;
+}
+
+export async function createUserInDb({
+  userWithId,
+}: {
+  userWithId: userWithIdT;
+}) {
+  const userExists = await checkifUserExistsInDb({ userId: userWithId.id });
+  if (userExists) {
+    throw new Error(`User with ID ${userWithId.id} already exists.`);
+  }
+  const displayNameTaken = await checkIfDisplayNameTaken({
+    displayName: userWithId.displayName,
+  });
+  if (displayNameTaken) {
+    throw new Error(
+      `Display name "${userWithId.displayName}" is already taken.`,
+    );
+  }
+  const userDocRef = doc(firestore, "users", userWithId.id);
+  await setDoc(userDocRef, {
+    id: userWithId.id,
+    createdAt: userWithId.createdAt,
+    displayName: userWithId.displayName,
+    username: userWithId.username,
+    picture: userWithId.picture,
+  });
+}
+
 export async function fetchUserInfo({
   userId,
 }: {
@@ -543,7 +595,7 @@ export async function searchUsersInDb({
     const data = doc.data();
     searchResultUsersInfo[doc.id as UserIdT] = {
       ...data,
-      createdAt: data.createdAt.toDate(),
+      createdAt: data.createdAt,
     } as userT;
   });
 

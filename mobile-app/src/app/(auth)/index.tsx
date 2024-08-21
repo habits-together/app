@@ -17,28 +17,6 @@ import {
 import { SlidingDot } from "react-native-animated-pagination-dots";
 import { colors } from "react-native-elements";
 
-// // Import the functions you need from the SDKs you need
-// import { initializeApp } from "firebase/app";
-// import { getAnalytics } from "firebase/analytics";
-// // TODO: Add SDKs for Firebase products that you want to use
-// // https://firebase.google.com/docs/web/setup#available-libraries
-
-// // Your web app's Firebase configuration
-// // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-// const firebaseConfig = {
-//   apiKey: "AIzaSyDtBfjTfxG6KvP96yHH6qiJexeS-2-3rJA",
-//   authDomain: "habits-together.firebaseapp.com",
-//   projectId: "habits-together",
-//   storageBucket: "habits-together.appspot.com",
-//   messagingSenderId: "731859375504",
-//   appId: "1:731859375504:web:80b078f13a31b5d897cf15",
-//   measurementId: "G-46NX1BKJK8"
-// };
-
-// // Initialize Firebase
-// const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
-
 export default function Signin() {
   const { colorScheme } = useColorScheme();
   const { width } = Dimensions.get("window");
@@ -47,17 +25,18 @@ export default function Signin() {
   const [loading, setLoading] = useState(false);
 
   async function signInWithGoogle() {
-    resetNavigationStack("/");
+    resetNavigationStack("/habits");
   }
   async function signInWithApple() {
-    resetNavigationStack("/");
+    resetNavigationStack("/habits");
   }
   async function signInWithEmail() {
     router.push("/(auth)/emailsignup");
   }
-  async function continueAsGuest() {
-    resetNavigationStack("/");
-  }
+  // TODO: maybe in future????
+  // async function continueAsGuest() {
+  //   resetNavigationStack("/habits");
+  // }
 
   function TutorialItem({ item }: { item: { pageNum: string; text: string } }) {
     return (
@@ -84,19 +63,15 @@ export default function Signin() {
     <View className="flex-1 items-center pt-14">
       <View className="w-full flex-row items-center justify-between px-4 pb-5">
         <View className="flex-row items-center">
-          {/* <Image
-            className="h-6 w-6 rounded-[20px]"
-            source={require("../../../assets/images/Logo.svg")}
-          /> */}
           <Logo height={24} width={24} />
           <Text className="ml-2 text-2xl font-bold">Habits Together</Text>
         </View>
-        <Pressable
+        {/* <Pressable
           className="rounded-2xl bg-stone-200 px-4 py-1 dark:bg-stone-700"
           onPress={continueAsGuest}
         >
           <Text className="text-base font-semibold">Skip</Text>
-        </Pressable>
+        </Pressable> */}
       </View>
 
       <View className="flex w-full flex-1 items-center justify-center pb-3">
@@ -134,13 +109,13 @@ export default function Signin() {
 
         <Text className="mb-3 w-2/3 text-center text-xs text-stone-400">
           By continuing, I agree to the {"\n"}
-          <Link href="/">
+          <Link href="/habits">
             <Text className="text-xs text-stone-400 underline">
               Terms & Conditions
             </Text>
           </Link>{" "}
           and{" "}
-          <Link href="/">
+          <Link href="/habits">
             <Text className="text-xs text-stone-400 underline">
               Privacy Policy
             </Text>
@@ -178,7 +153,7 @@ export default function Signin() {
       >
         <Image
           className="h-5 w-5 rounded-[20px]"
-          source={require("../../../assets/images/google.png")}
+          source={require("@/assets/images/google.png")}
         />
         <Text className="ml-2 text-xl font-semibold text-black">
           Continue with Google
@@ -195,7 +170,7 @@ export default function Signin() {
       >
         <Image
           className="h-5 w-5 rounded-[20px]"
-          source={require("../../../assets/images/apple.png")}
+          source={require("@/assets/images/apple.png")}
         />
         <Text className="ml-2 text-xl font-semibold text-black">
           Continue with Apple

@@ -1,11 +1,11 @@
 import { commonHabitIdsAtom, getUserInfoAtom } from "@/src/atoms/atoms";
+import { BigProfilePicture } from "@/src/components/ProfilePicture";
 import { ScrollView, Text, View } from "@/src/components/Themed";
 import { HabitCard } from "@/src/components/habit-components/HabitCard";
 import { UserIdT } from "@/src/lib/db_types";
 import { useGlobalSearchParams } from "expo-router";
 import { useAtomValue } from "jotai";
 import React from "react";
-import { BigProfilePicture } from "../../components/ProfilePicture";
 
 export default function Profile() {
   const { theirUserId } = useGlobalSearchParams<{ theirUserId: UserIdT }>();

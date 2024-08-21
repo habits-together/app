@@ -1,30 +1,27 @@
 import Icon from "@/src/components/Icon";
 import { Text, View } from "@/src/components/Themed";
 import DefaultColors from "@/src/constants/DefaultColors";
-import { fetchSingleUserThumbnail } from "@/src/lib/getRandomProfilePics";
 import { IconCirclePlus } from "@tabler/icons-react-native";
 import { useAtom } from "jotai";
 import { useColorScheme } from "nativewind";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { Image, TextInput, TouchableOpacity } from "react-native";
+import { userWithIdEmailT } from "../lib/db_types";
 import { profileFormDataAtom } from "../atoms/atoms";
 
 export default function ProfileCreationBoxes({
   editPage,
+  formData,
+  setFormData,
 }: {
   editPage: boolean;
+  formData: userWithIdEmailT;
+  setFormData: React.Dispatch<React.SetStateAction<userWithIdEmailT>>;
 }) {
   const [formData, setFormData] = useAtom(profileFormDataAtom);
   const { colorScheme } = useColorScheme();
-  const [pfp, setPfp] = useState();
   const refUsernameInput = useRef<TextInput>(null);
   const refEmailInput = useRef<TextInput>(null);
-
-  useEffect(() => {
-    fetchSingleUserThumbnail().then((user) => {
-      setPfp(user.imgurl);
-    });
-  }, []);
 
   return (
     <View className="mt-10 flex flex-col">
@@ -35,8 +32,11 @@ export default function ProfileCreationBoxes({
           // Logic for picking picture
         }}
       >
-        {pfp && (
-          <Image className="h-24 w-24 rounded-3xl" source={{ uri: pfp }} />
+        {formData.picture && (
+          <Image
+            className="h-24 w-24 rounded-3xl"
+            source={{ uri: formData.picture }}
+          />
         )}
         <View className="absolute -bottom-2 -right-2 rounded-full">
           <Icon icon={IconCirclePlus} size={36} />
@@ -54,9 +54,9 @@ export default function ProfileCreationBoxes({
           placeholder="John Doe"
           placeholderTextColor={DefaultColors[colorScheme].placeholder}
           value={formData.displayName}
-          onChangeText={(text) => {
-            setFormData({ ...formData, displayName: text });
-          }}
+          onChangeText={(text) =>
+            setFormData({ ...formData, displayName: text })
+          }
           onSubmitEditing={() => {
             refUsernameInput.current?.focus();
           }}
@@ -73,9 +73,7 @@ export default function ProfileCreationBoxes({
           }}
           ref={refUsernameInput}
           value={formData.username}
-          onChangeText={(text) => {
-            setFormData({ ...formData, username: text });
-          }}
+          onChangeText={(text) => setFormData({ ...formData, username: text })}
           onSubmitEditing={() => {
             refEmailInput.current?.focus();
           }}
@@ -92,8 +90,8 @@ export default function ProfileCreationBoxes({
               color: DefaultColors[colorScheme].text,
             }}
             ref={refEmailInput}
-            value={email}
-            onChangeText={(text) => setEmail(text)}
+            value={formData.email}
+            onChangeText={(text) => setFormData({ ...formData, email: text })}
           ></TextInput>
         </View>
       )} */}

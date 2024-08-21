@@ -1,52 +1,81 @@
-import { auth, firestore } from "@/src/firebase/config";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { UserIdT, userT, userWithIdT } from "../lib/db_types";
-import { userDataConverter } from "./helper";
-export const handleDatabaseSignUp = async (data: {
+import { FirebaseError } from "firebase/app";
+import {
+  AuthErrorCodes,
+  createUserWithEmailAndPassword,
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
+
+export const handleFirebaseAuthSignUp = async (data: {
   email: string;
   password: string;
 }) => {
-  // PUSH TO FIREBASE
-  if (auth.currentUser) {
-    // BASE DATA FOR NEW USER
-    const currentUserData: userT = {
-      createdAt: new Date(),
-      displayName: data.email,
-      picture: "",
-      username: auth.currentUser.email as string, //kinda hacky
-    };
-
-    // write regular user data doc
-    const accDocRef = doc(firestore, "users", auth.currentUser.uid);
-    await setDoc(accDocRef, currentUserData);
-
-    console.log("Added User Document written with ID: ", auth.currentUser.uid);
-  } else {
-    //potential issue: if user gets created but DB write fails
-    console.log("An error occurred. Please try again.");
+  try {
+    const auth = getAuth();
+    await createUserWithEmailAndPassword(auth, data.email, data.password);
+  } catch (error: unknown) {
+    if (error instanceof FirebaseError) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      switch (errorCode) {
+        case "auth/missing-email":
+          throw new Error("Please enter an email");
+        case AuthErrorCodes.EMAIL_EXISTS:
+          throw new Error("Email already in use");
+        case AuthErrorCodes.INVALID_EMAIL:
+          throw new Error("Invalid email");
+        case AuthErrorCodes.WEAK_PASSWORD:
+          throw new Error("Weak password");
+        default:
+          throw new Error(
+            `An error occurred. Please try again. ${errorMessage} "${errorCode}"`,
+          );
+      }
+    } else {
+      throw new Error(`An error occurred. Please try again.`);
+    }
   }
 };
 
-export const handleDatabaseLogin = async (): Promise<userWithIdT> => {
-  if (auth.currentUser) {
-    const docRef = doc(firestore, "users", auth.currentUser.uid);
-    const docSnap = await getDoc(docRef);
+export const handleFirebaseAuthLogIn = async (data: {
+  email: string;
+  password: string;
+}) => {
+  const auth = getAuth();
 
-    if (docSnap.exists()) {
-      const data: userT = userDataConverter.fromFirestore(docSnap);
-      const typed_data: userWithIdT = {
-        ...data,
-        id: auth.currentUser.uid as UserIdT,
-      };
-      return typed_data;
+  try {
+    const auth = getAuth();
+    await signInWithEmailAndPassword(auth, data.email, data.password);
+  } catch (error: unknown) {
+    if (error instanceof FirebaseError) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      switch (errorCode) {
+        case "auth/missing-email":
+          throw new Error("Please enter an email");
+        case AuthErrorCodes.INVALID_EMAIL:
+          throw new Error("User does not exist");
+        case AuthErrorCodes.INVALID_PASSWORD:
+          throw new Error("Wrong password please try again");
+        case AuthErrorCodes.INVALID_IDP_RESPONSE:
+          throw new Error("Wrong email or password please try again");
+        default:
+          throw new Error(
+            `An error occurred. Please try again. ${errorMessage} "${errorCode}"`,
+          );
+      }
     } else {
-      console.log(
-        "Critical error: user is authenticated but does not exist in database",
-      );
+      throw new Error(`An error occurred. Please try again.`);
     }
-  } else {
-    console.log("An error has occured during fetching data during login");
   }
+};
 
-  return {} as userWithIdT;
+export const signoutUserFirebase = async () => {
+  const auth = getAuth();
+  try {
+    await signOut(auth);
+  } catch (error) {
+    console.log(error);
+  }
 };

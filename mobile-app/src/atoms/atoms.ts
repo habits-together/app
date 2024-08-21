@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import deepEquals from "fast-deep-equal";
 import { atom } from "jotai";
 import {
@@ -36,6 +35,7 @@ import {
   subscribeToNotifications,
   updatetHabitCompletionsInDb,
 } from "../firebase/api";
+import { betterAtomWithStorage } from "../lib/betterAtomWithStorage";
 import {
   HabitDisplayType,
   HabitIdT,
@@ -59,18 +59,7 @@ import { structureCompletionData } from "../lib/structureCompletionData";
 import { currentUserAtom, currentUserIdAtom } from "./currentUserAtom";
 
 // using Jotai atoms: https://jotai.org/docs/introduction
-// we especially use the atomFamily atom: https://jotai.org/docs/utilities/family
-
-const localStore = createJSONStorage(() => AsyncStorage);
-
-currentUserAtom.onMount = (set) => {
-  fetchUserInfo({ userId: "jwkcNPS3ynW7UlJKpKxqKIJHz3F2" as UserIdT }).then(
-    set,
-  );
-  // curently settign the default user to Alice, if will change when auth state changes
-  // TODO: stop doing this at some point
-  // change the defalut value to empty user and get this from auth
-};
+// we especially use the atomFamily atom: https://jotai.org/docs/utilities`/family
 
 const allHabitsAtom = atom<allHabitsT>({});
 allHabitsAtom.onMount = (set) => {
@@ -676,30 +665,24 @@ export const sendHabitNudgeAtom = atomFamily(
 
 // whether we should display the habit in weekly or monthly view
 export const homeScreenHabitDisplayTypeAtom = atomFamily((habitId: HabitIdT) =>
-  atomWithStorage<HabitDisplayType>(
+  betterAtomWithStorage<HabitDisplayType>(
     `homeScreenHabitDisplayTypeAtom-${habitId}`,
     "weekly-view",
-    localStore as AsyncStorageType<HabitDisplayType>,
-    { getOnInit: true },
   ),
 );
 
 export const viewHabitDisplayTypeAtom = atomFamily((habitId: HabitIdT) =>
-  atomWithStorage<HabitDisplayType>(
+  betterAtomWithStorage<HabitDisplayType>(
     `viewHabitDisplayTypeAtom-${habitId}`,
     "weekly-view",
-    localStore as AsyncStorageType<HabitDisplayType>,
-    { getOnInit: true },
   ),
 );
 
 export const settingAtom = atomFamily((settingKey: string) =>
-  atomWithStorage<number>(
+  betterAtomWithStorage<number>(
     settingKey,
-    0,
-    localStore as AsyncStorageType<number>,
-    { getOnInit: true },
-  ),
+    0
+),
 );
 
 export const profileFormDataAtom = atomWithDefault((get) => {

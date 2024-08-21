@@ -31,24 +31,30 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "plugins": ["expo-router", "expo-secure-store", "expo-font"],
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "expo-font",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "newArchEnabled": true
+          },
+          "android": {
+            "newArchEnabled": true
+          }
+        }
+      ]
+    ],
     "experiments": {
       "typedRoutes": true
     },
     "extra": {
       "router": {
         "origin": false
-      },
-      "eas": {
-        "projectId": "73bf25e3-20c8-4f4f-9b32-17cef96c0740"
       }
     },
-    "jsEngine": "hermes",
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
-    "updates": {
-      "url": "https://u.expo.dev/73bf25e3-20c8-4f4f-9b32-17cef96c0740"
-    }
+    "jsEngine": "hermes"
   }
 }
