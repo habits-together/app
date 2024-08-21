@@ -144,11 +144,7 @@ function Setting({
       className="flex-row items-center bg-white p-4 dark:bg-grey-800"
     >
       {icon}
-      <Text
-        numberOfLines={1}
-        adjustsFontSizeToFit={true}
-        className="flex-1 pl-2 text-base font-medium dark:text-white"
-      >
+      <Text className="flex-1 pl-2 text-base font-medium dark:text-white">
         {title}
       </Text>
       {rightSideContent}
