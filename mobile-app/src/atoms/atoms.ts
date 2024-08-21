@@ -196,7 +196,7 @@ export const habitCompletionsForParticipantAtom = atomFamily(
     >(
       (get) => get(completionsBaseAtom),
       async (_get, set, newCompletions) => {
-        set(completionsBaseAtom, JSON.parse(JSON.stringify(newCompletions)));
+        set(completionsBaseAtom, { ...newCompletions });
         await updatetHabitCompletionsInDb({
           habitId,
           participantId,
