@@ -88,7 +88,6 @@ export function viewProfileOptions(
   const [, removeFriend] = useAtom(removeFriendAtom);
 
   return {
-    presentation: "modal",
     headerLeft: () => <HeaderBackButton chevronDirection="down" />,
     headerTitle: () => (
       <Text className="text-base font-semibold text-black dark:text-white">
@@ -118,7 +117,6 @@ export function inviteFriendsOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
   return {
-    presentation: "modal",
     headerLeft: () => <HeaderBackButton chevronDirection="down" />,
     headerTitle: () => (
       <Text className="text-base font-semibold text-black dark:text-white">
@@ -227,7 +225,6 @@ export function addFriendsOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
   return {
-    presentation: "modal",
     headerLeft: () => <HeaderBackButton chevronDirection="down" />,
     headerTitle: () => (
       <Text className="text-base font-semibold text-black dark:text-white">

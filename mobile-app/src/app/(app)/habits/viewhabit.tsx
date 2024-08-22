@@ -1,5 +1,23 @@
+import {
+  habitColorAtom,
+  habitCompletionAtomsAtom,
+  habitGoalAtom,
+  habitInfoAtom,
+  habitParticipantIdsAtom,
+  numberOfCompletionsTodayAtom,
+  participantAtom,
+  sendHabitNudgeAtom,
+  viewHabitDisplayTypeAtom,
+} from "@/src/atoms/atoms";
+import { currentUserIdAtom } from "@/src/atoms/currentUserAtom";
+import DotsMenu from "@/src/components/DotsMenu";
 import Icon, { HabitIcon } from "@/src/components/Icon";
+import { MediumProfilePicture } from "@/src/components/ProfilePicture";
 import { ScrollView, Text, View } from "@/src/components/Themed";
+import HabitCompletionsMonthlyView from "@/src/components/habit-components/HabitCompletionsMonthlyView";
+import WeeklyViewCompletionSquare from "@/src/components/habit-components/WeeklyViewCompletionSquare";
+import colors from "@/src/constants/colors";
+import { HabitIdT, UserIdT } from "@/src/lib/db_types";
 import {
   IconBell,
   IconCheck,
@@ -12,26 +30,8 @@ import { useAtom, useAtomValue } from "jotai";
 import { useColorScheme } from "nativewind";
 import { Suspense, useEffect, useState } from "react";
 import { Pressable, TouchableOpacity } from "react-native";
-import {
-  habitColorAtom,
-  habitCompletionAtomsAtom,
-  habitGoalAtom,
-  habitInfoAtom,
-  habitParticipantIdsAtom,
-  numberOfCompletionsTodayAtom,
-  participantAtom,
-  sendHabitNudgeAtom,
-  viewHabitDisplayTypeAtom,
-} from "../atoms/atoms";
-import { currentUserIdAtom } from "../atoms/currentUserAtom";
-import colors from "../constants/colors";
-import { HabitIdT, UserIdT } from "../lib/db_types";
-import DotsMenu from "./DotsMenu";
-import { MediumProfilePicture } from "./ProfilePicture";
-import HabitCompletionsMonthlyView from "./habit-components/HabitCompletionsMonthlyView";
-import WeeklyViewCompletionSquare from "./habit-components/WeeklyViewCompletionSquare";
 
-export default function ViewHabitComponent() {
+export default function ViewHabit() {
   const { habitId: habitId } = useLocalSearchParams<{ habitId: HabitIdT }>();
   if (typeof habitId !== "string") {
     throw new Error("Invalid habit id provided in URL params");
@@ -339,7 +339,7 @@ function InviteFriendsButton() {
       <Link
         push
         href={{
-          pathname: "/modals/invitefriends",
+          pathname: "/friends/invitefriends",
         }}
         asChild
       >

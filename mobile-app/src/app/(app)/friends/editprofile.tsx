@@ -1,5 +1,4 @@
 import Icon from "@/src/components/Icon";
-import ProfileCreationBoxes from "@/src/components/PfpNameUsernameBoxes";
 import { Text, View } from "@/src/components/Themed";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { IconTrash } from "@tabler/icons-react-native";
@@ -23,7 +22,7 @@ export default function editprofile() {
     >
       {/* Form */}
       <View className="flex w-screen flex-col px-5">
-        <ProfileCreationBoxes editPage={true} />
+        {/* <ProfileCreationBoxes editPage={true} /> there was an error here; missing props */}
         {/* Delete Account */}
         <TouchableOpacity
           onPress={() => resetNavigationStack("/habits")}

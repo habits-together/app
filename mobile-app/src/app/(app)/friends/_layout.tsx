@@ -2,7 +2,6 @@ import {
   addFriendsOptions,
   editProfileOptions,
   inviteFriendsOptions,
-  viewHabitOptions,
   viewProfileOptions,
 } from "@/src/components/HeaderOptions";
 import colors from "@/src/constants/colors";
@@ -35,10 +34,6 @@ export default function ModalLayout() {
           <Stack.Screen
             name="viewprofile"
             options={viewProfileOptions(colorScheme)}
-          />
-          <Stack.Screen
-            name="viewhabit"
-            options={viewHabitOptions(colorScheme)}
           />
           <Stack.Screen
             name="invitefriends"
