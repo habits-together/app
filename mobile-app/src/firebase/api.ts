@@ -29,6 +29,7 @@ import {
   HabitIdT,
   habitInfoT,
   habitNotificationT,
+  habitParticipantsT,
   habitT,
   NotificationIdT,
   notificationT,
@@ -80,7 +81,7 @@ export async function fetchHabitInfo({
   } as habitT;
 }
 
-export async function editHabitInDb({
+export async function editHabitInfoInDb({
   habitId,
   habitInfo,
 }: {
@@ -89,6 +90,21 @@ export async function editHabitInDb({
 }): Promise<void> {
   const habitDocRef = doc(firestore, "habits", habitId);
   await updateDoc(habitDocRef, habitInfo);
+}
+
+export async function editHabitParticipantInfoInDb({
+  habitId,
+  habitParticipantsInfo,
+}: {
+  habitId: HabitIdT;
+  habitParticipantsInfo: habitParticipantsT;
+}): Promise<void> {
+  const currentUserId = atomStore.get(currentUserIdAtom);
+  const habitDocRef = doc(firestore, "habits", habitId);
+  await updateDoc(habitDocRef, {
+    [`participants.${currentUserId}`]: habitParticipantsInfo[currentUserId],
+  });
+  console.log(habitParticipantsInfo[currentUserId].visibility);
 }
 
 export async function deleteHabitInDb({
@@ -111,6 +127,7 @@ export async function createNewHabitInDb({
     ...habitInfo,
     participants: {
       [user.id]: {
+        visibility: "PUBLIC",
         displayName: user.displayName,
         username: user.username,
         picture: user.picture,

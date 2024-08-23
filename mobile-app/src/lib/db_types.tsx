@@ -1,3 +1,5 @@
+import { HabitVisibilitiesDict } from "../constants/constants";
+
 export type UserIdT = string & { readonly __brand: unique symbol };
 export type FriendshipIdT = string & { readonly __brand: unique symbol };
 export type HabitIdT = string & { readonly __brand: unique symbol };
@@ -39,6 +41,7 @@ type dbT = {
       participants: Record<
         UserIdT,
         {
+          visibility: HabitVisibilityType;
           displayName: string; // maintained by cloud function
           username: string; // maintained by cloud function
           picture: string; // maintained by cloud function
@@ -89,6 +92,10 @@ export type friendshipT = allFriendshipsT[FriendshipIdT];
 export type habitT = Omit<dbT["habits"][HabitIdT], "participantCompletions">;
 export type allHabitsT = Record<HabitIdT, habitT>;
 export type habitInfoT = Omit<habitT, "participants">;
+
+export type HabitVisibilityType = keyof typeof HabitVisibilitiesDict;
+export type HabitVisibilityStringsType =
+  (typeof HabitVisibilitiesDict)[keyof typeof HabitVisibilitiesDict];
 
 export type habitParticipantsT = dbT["habits"][HabitIdT]["participants"];
 export type habitParticipantT = habitParticipantsT[UserIdT];

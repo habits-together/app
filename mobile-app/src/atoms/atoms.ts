@@ -10,7 +10,8 @@ import {
   deleteAllNotificationsOfHabitInDb,
   deleteHabitInDb,
   deleteNotificationInDb,
-  editHabitInDb,
+  editHabitInfoInDb,
+  editHabitParticipantInfoInDb,
   fetchAllMyHabitsInfo,
   fetchCommonHabitIds,
   fetchFriendData,
@@ -31,6 +32,7 @@ import { betterAtomWithStorage } from "../lib/betterAtomWithStorage";
 import {
   HabitDisplayType,
   HabitIdT,
+  HabitVisibilityType,
   NotificationIdT,
   UserIdT,
   allHabitsT,
@@ -43,6 +45,7 @@ import {
   habitInfoT,
   habitNotificationT,
   habitParticipantT,
+  habitParticipantsT,
   notificationT,
 } from "../lib/db_types";
 import { todayString } from "../lib/formatDateString";
@@ -67,16 +70,18 @@ export const habitInfoAtom = atomFamily((habitId: HabitIdT) =>
   }),
 );
 export const habitParticipantIdsAtom = atomFamily((habitId: HabitIdT) =>
-  atom((get) => Object.keys(get(habitParticipantsAtom(habitId))) as UserIdT[]),
+  atom(
+    (get) => Object.keys(get(habitParticipantsInfoAtom(habitId))) as UserIdT[],
+  ),
 );
-export const habitParticipantsAtom = atomFamily((habitId: HabitIdT) =>
+export const habitParticipantsInfoAtom = atomFamily((habitId: HabitIdT) =>
   atom((get) => {
     return get(allHabitsAtom)[habitId].participants;
   }),
 );
 export const habitParticipantPfpsListAtom = atomFamily((habitId: HabitIdT) =>
   atom((get) => {
-    const habitParticipants = get(habitParticipantsAtom(habitId));
+    const habitParticipants = get(habitParticipantsInfoAtom(habitId));
     return Object.values(habitParticipants).map(
       (participant) => participant.picture,
     );
@@ -119,10 +124,10 @@ export const targetNumberOfCompletionsPerWeekAtom = atomFamily(
     }),
 );
 
-export const editHabitAtom = atomFamily((habitId: HabitIdT) =>
+export const editHabitInfoAtom = atomFamily((habitId: HabitIdT) =>
   atom(null, async (get, set, newHabitInfo: habitInfoT) => {
-    await editHabitInDb({ habitId, habitInfo: newHabitInfo });
-    const habitParticipantInfo = get(habitParticipantsAtom(habitId));
+    await editHabitInfoInDb({ habitId, habitInfo: newHabitInfo });
+    const habitParticipantInfo = get(habitParticipantsInfoAtom(habitId));
     set(allHabitsAtom, (prev) => {
       return {
         ...prev,
@@ -134,6 +139,50 @@ export const editHabitAtom = atomFamily((habitId: HabitIdT) =>
     });
   }),
 );
+
+export const editHabitParticipantInfoAtom = atomFamily((habitId: HabitIdT) =>
+  atom(null, async (get, set, newHabitParticipantsInfo: habitParticipantsT) => {
+    const habitInfo = get(habitInfoAtom(habitId));
+    const currentUserId = get(currentUserIdAtom);
+
+    await editHabitParticipantInfoInDb({
+      habitId,
+      habitParticipantsInfo: newHabitParticipantsInfo,
+    });
+
+    set(allHabitsAtom, (prev) => {
+      return {
+        ...prev,
+        [habitId]: {
+          ...habitInfo,
+          participants: {
+            [currentUserId]: { ...newHabitParticipantsInfo[currentUserId] },
+          },
+        },
+      };
+    });
+  }),
+);
+
+export const editHabitVisibilityAtom = atomFamily((habitId: HabitIdT) =>
+  atom(null, async (get, set, newVisibility: HabitVisibilityType) => {
+    const currentHabitParticipantsInfo = get(
+      habitParticipantsInfoAtom(habitId),
+    );
+    const currentUserId = get(currentUserIdAtom);
+
+    const updatedParticipantInfo = {
+      ...currentHabitParticipantsInfo[currentUserId],
+      visibility: newVisibility,
+    };
+
+    set(editHabitParticipantInfoAtom(habitId), {
+      ...currentHabitParticipantsInfo,
+      [currentUserId]: updatedParticipantInfo,
+    });
+  }),
+);
+
 export const createNewHabitAtom = atom(
   null,
   async (get, set, newHabitInfo: habitInfoT) => {
@@ -362,7 +411,7 @@ export const incrementNumberOfCompletionsTodayAtom = atomFamily(
 export const participantAtom = atomFamily(
   ({ habitId, participantId }: { habitId: HabitIdT; participantId: UserIdT }) =>
     atom<habitParticipantT>(
-      (get) => get(habitParticipantsAtom(habitId))[participantId],
+      (get) => get(habitParticipantsInfoAtom(habitId))[participantId],
     ),
   deepEquals,
 );

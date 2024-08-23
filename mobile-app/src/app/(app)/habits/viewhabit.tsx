@@ -1,4 +1,5 @@
 import {
+  editHabitVisibilityAtom,
   habitColorAtom,
   habitCompletionAtomsAtom,
   habitGoalAtom,
@@ -17,7 +18,13 @@ import { ScrollView, Text, View } from "@/src/components/Themed";
 import HabitCompletionsMonthlyView from "@/src/components/habit-components/HabitCompletionsMonthlyView";
 import WeeklyViewCompletionSquare from "@/src/components/habit-components/WeeklyViewCompletionSquare";
 import colors from "@/src/constants/colors";
-import { HabitIdT, UserIdT } from "@/src/lib/db_types";
+import { HabitVisibilitiesDict } from "@/src/constants/constants";
+import {
+  HabitIdT,
+  HabitVisibilityStringsType,
+  HabitVisibilityType,
+  UserIdT,
+} from "@/src/lib/db_types";
 import {
   IconBell,
   IconCheck,
@@ -26,7 +33,7 @@ import {
   IconUserPlus,
 } from "@tabler/icons-react-native";
 import { Link, useLocalSearchParams } from "expo-router";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useColorScheme } from "nativewind";
 import { Suspense, useEffect, useState } from "react";
 import { Pressable, TouchableOpacity } from "react-native";
@@ -81,6 +88,25 @@ export default function ViewHabit() {
 function ParticipantsSection({ habitId }: { habitId: HabitIdT }) {
   const userId = useAtomValue(currentUserIdAtom);
   const participantIds = useAtomValue(habitParticipantIdsAtom(habitId));
+  const editHabitVisibility = useSetAtom(editHabitVisibilityAtom(habitId));
+
+  const [currentVisibility, setCurrenVisibility] =
+    useState<HabitVisibilityStringsType>(HabitVisibilitiesDict.PUBLIC);
+
+  const HabitVisibilityStrings = Object.values(
+    HabitVisibilitiesDict,
+  ) as HabitVisibilityStringsType[];
+
+  const HabitVisibilities = Object.keys(
+    HabitVisibilitiesDict,
+  ) as HabitVisibilityType[];
+
+  const changeVisibility = async () => {
+    const currentIndex = HabitVisibilityStrings.indexOf(currentVisibility);
+    const nextIndex = (currentIndex + 1) % HabitVisibilityStrings.length;
+    setCurrenVisibility(HabitVisibilityStrings[nextIndex]);
+    await editHabitVisibility(HabitVisibilities[nextIndex]);
+  };
 
   return (
     <View className="flex flex-1 flex-col" style={{ gap: 20 }}>
@@ -100,10 +126,13 @@ function ParticipantsSection({ habitId }: { habitId: HabitIdT }) {
           <Suspense fallback={<></>}>
             <ActivityCard habitId={habitId} participantId={userId} />
           </Suspense>
-          <TouchableOpacity className="my-2 flex w-full flex-row items-center justify-center">
+          <TouchableOpacity
+            onPress={changeVisibility}
+            className="my-2 flex w-full flex-row items-center justify-center"
+          >
             <Icon icon={IconEye} />
             <Text className="ml-1 text-sm font-semibold">
-              My friends can see my progress
+              {currentVisibility}
             </Text>
           </TouchableOpacity>
         </View>
