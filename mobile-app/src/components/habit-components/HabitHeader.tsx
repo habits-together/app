@@ -13,7 +13,13 @@ import { Text, View } from "react-native";
 import DotsMenu from "../DotsMenu";
 import { HabitIcon } from "../Icon";
 
-export function HabitHeader({ habitId }: { habitId: HabitIdT }) {
+export function HabitHeader({
+  habitId,
+  isOwner = true,
+}: {
+  habitId: HabitIdT;
+  isOwner?: boolean;
+}) {
   const [displayType, setDisplayType] = useAtom(
     homeScreenHabitDisplayTypeAtom(habitId),
   );
@@ -34,38 +40,40 @@ export function HabitHeader({ habitId }: { habitId: HabitIdT }) {
       </View>
 
       <View className="">
-        <DotsMenu
-          options={[
-            // change to other view
-            {
-              label: `Change to ${displayType === "weekly-view" ? "monthly" : "weekly"} view`,
-              color: colors.black,
-              action: () =>
-                setDisplayType(
-                  displayType === "weekly-view"
-                    ? "monthly-view"
-                    : "weekly-view",
-                ),
-            },
-            {
-              label: "Edit",
-              color: colors.black,
-              action: () => {
-                router.push({
-                  pathname: "/habits/edithabit",
-                  params: { habitidStr: habitId },
-                });
+        {isOwner && (
+          <DotsMenu
+            options={[
+              // change to other view
+              {
+                label: `Change to ${displayType === "weekly-view" ? "monthly" : "weekly"} view`,
+                color: colors.black,
+                action: () =>
+                  setDisplayType(
+                    displayType === "weekly-view"
+                      ? "monthly-view"
+                      : "weekly-view",
+                  ),
               },
-            },
-            {
-              label: "Delete",
-              color: colors.black,
-              action: () => {
-                deleteHabit();
+              {
+                label: "Edit",
+                color: colors.black,
+                action: () => {
+                  router.push({
+                    pathname: "/habits/edithabit",
+                    params: { habitidStr: habitId },
+                  });
+                },
               },
-            },
-          ]}
-        />
+              {
+                label: "Delete",
+                color: colors.black,
+                action: () => {
+                  deleteHabit();
+                },
+              },
+            ]}
+          />
+        )}
       </View>
     </View>
   );

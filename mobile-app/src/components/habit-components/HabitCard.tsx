@@ -18,13 +18,15 @@ import { HabitHeader } from "./HabitHeader";
 
 export function HabitCard({
   habitId,
-  openAsModal = false,
+  isOwner = true,
 }: {
   habitId: HabitIdT;
-  openAsModal?: boolean;
+  isOwner?: boolean;
 }) {
   const { colorScheme } = useColorScheme();
-  const displayType = useAtomValue(homeScreenHabitDisplayTypeAtom(habitId));
+  const displayTypeValue = useAtomValue(
+    homeScreenHabitDisplayTypeAtom(habitId),
+  );
   const color = useAtomValue(habitColorAtom(habitId));
   const userId = useAtomValue(currentUserIdAtom);
   return (
@@ -45,16 +47,16 @@ export function HabitCard({
               : colors.habitColors[color].light,
         }}
       >
-        <HabitHeader habitId={habitId} />
-        {displayType === "weekly-view" && (
+        <HabitHeader habitId={habitId} isOwner={isOwner} />
+        {displayTypeValue === "weekly-view" && (
           <>
             <View className="h-[10px]" />
-            <HabitFriendCompletions habitId={habitId} />
+            {isOwner && <HabitFriendCompletions habitId={habitId} />}
             <View className="h-[10px]" />
-            <HabitCompletionsWeeklyView habitId={habitId} />
+            <HabitCompletionsWeeklyView habitId={habitId} isOwner={isOwner} />
           </>
         )}
-        {displayType === "monthly-view" && (
+        {displayTypeValue === "monthly-view" && (
           <>
             <View className="h-[10px]" />
             <View className="flex w-full flex-1 flex-row">
@@ -63,11 +65,15 @@ export function HabitCard({
                 userId={userId}
                 currentScreen="home"
               />
-              <View className="w-[10px]" />
-              <View className="flex flex-1 flex-col items-end justify-between">
-                <HabitFriendCompletions habitId={habitId} />
-                <HabitCompletionButton habitId={habitId} />
-              </View>
+              {isOwner && (
+                <>
+                  <View className="w-[10px]" />
+                  <View className="flex flex-1 flex-col items-end justify-between">
+                    <HabitFriendCompletions habitId={habitId} />
+                    <HabitCompletionButton habitId={habitId} />
+                  </View>
+                </>
+              )}
             </View>
           </>
         )}

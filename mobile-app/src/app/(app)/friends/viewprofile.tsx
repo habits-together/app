@@ -36,14 +36,18 @@ export default function Profile() {
           </View>
 
           {/* Habits */}
-          <View className="space-y-4 pb-32 pt-4">
+          <View className="space-y-4 pt-4">
             <Text className="text-xl font-semibold">Habits Together</Text>
-            {commonHabitIds.map((habitId) => (
-              <HabitCard key={habitId} habitId={habitId} openAsModal={true} />
-            ))}
+            <View className="">
+              {commonHabitIds.map((habitId) => (
+                <HabitCard key={habitId} habitId={habitId} isOwner={false}/>
+              ))}
+            </View>
           </View>
-          <View className="space-y-4">
-            <Text className="text-xl font-semibold">Shared & public habits</Text>
+          <View className="space-y-4 pt-4">
+            <Text className="text-xl font-semibold">
+              Shared & public habits
+            </Text>
           </View>
         </ScrollView>
       </View>
