@@ -42,6 +42,9 @@ export default function Profile() {
               <HabitCard key={habitId} habitId={habitId} openAsModal={true} />
             ))}
           </View>
+          <View className="space-y-4">
+            <Text className="text-xl font-semibold">Shared & public habits</Text>
+          </View>
         </ScrollView>
       </View>
     </View>

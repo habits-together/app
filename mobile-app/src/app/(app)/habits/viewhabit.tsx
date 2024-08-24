@@ -144,7 +144,7 @@ function ParticipantsSection({ habitId }: { habitId: HabitIdT }) {
             </Suspense>
           ))}
       </View>
-      <InviteFriendsButton />
+      <InviteFriendsButton habitId={habitId} />
     </View>
   );
 }
@@ -360,7 +360,7 @@ function WeeklyOrMonthlySwitcher({ habitId }: { habitId: HabitIdT }) {
   );
 }
 
-function InviteFriendsButton() {
+function InviteFriendsButton({ habitId }: { habitId: HabitIdT }) {
   const { colorScheme } = useColorScheme();
 
   return (
@@ -369,6 +369,7 @@ function InviteFriendsButton() {
         push
         href={{
           pathname: "/friends/invitefriends",
+          params: { habitidStr: habitId },
         }}
         asChild
       >
