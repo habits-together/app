@@ -347,9 +347,7 @@ export async function fetchOtherHabitIds({
 
   userHabitsSnap.forEach((doc) => {
     const habitData = doc.data() as habitT;
-    // console.log(habitData);
     const participantData = habitData.participants[participantId];
-    // console.log(participantData);
     if (participantData && !commonHabitIds.includes(doc.id as HabitIdT)) {
       const isPublic = participantData.visibility === "PUBLIC";
       const isFriendVisible =
@@ -357,8 +355,7 @@ export async function fetchOtherHabitIds({
       console.log(isPublic, isFriendVisible);
 
       if (isPublic || isFriendVisible) {
-        console.log(doc.id);
-        // otherHabitIds.push(doc.id as HabitIdT);
+        otherHabitIds.push(doc.id as HabitIdT);
       }
     }
   });
