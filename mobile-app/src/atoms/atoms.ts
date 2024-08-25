@@ -56,7 +56,7 @@ import { currentUserAtom, currentUserIdAtom } from "./currentUserAtom";
 // using Jotai atoms: https://jotai.org/docs/introduction
 // we especially use the atomFamily atom: https://jotai.org/docs/utilities`/family
 
-const allHabitsAtom = atom<allHabitsT>({});
+export const allHabitsAtom = atom<allHabitsT>({});
 allHabitsAtom.onMount = (set) => {
   fetchAllMyHabitsInfo().then(set);
 };
@@ -476,7 +476,6 @@ export const otherHabitIdsAtom = atomFamily((friendId: UserIdT) =>
   atom(async (get) => {
     const myFriendIds = get(friendIdsAtom);
     const commonHabitIds = await get(commonHabitIdsAtom(friendId));
-    // get(updateAllHabitsAtomWithOtherHabits);
     return fetchOtherHabitIds({
       participantId: friendId,
       myFriendIds,
@@ -487,7 +486,6 @@ export const otherHabitIdsAtom = atomFamily((friendId: UserIdT) =>
 
 // // side effect to update allHabits atom to include these habits
 // const updateAllHabitsAtomWithOtherHabits = atomEffect((get, set) => {
-//   // Watch for changes in `otherHabitIdsAtom`
 //   const friendIds = get(friendIdsAtom);
 //   friendIds.forEach(async (friendId) => {
 //     const otherHabitIds = await get(otherHabitIdsAtom(friendId));
