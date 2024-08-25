@@ -5,6 +5,7 @@ import { habitColorAtom } from "../atoms/atoms";
 import colors from "../constants/colors";
 import { SmallProfilePicture } from "./ProfilePicture";
 import { Text, View } from "./Themed";
+import { HabitIdT } from "../lib/db_types";
 
 export default function HorizontalProfilePicsList({
   profilePics,
@@ -41,9 +42,9 @@ export default function HorizontalProfilePicsList({
           habitId={habitId}
         />
       )}
-      {profilePics.slice(0, numPfpsToDisplay).map((picBase64String) => (
+      {profilePics.slice(0, numPfpsToDisplay).map((picBase64String, index) => (
         <View
-          key={picBase64String}
+          key={`${picBase64String}-${index}`}
           className="-mr-[7px] rounded-full border"
           style={{ borderColor }}
         >
@@ -68,7 +69,7 @@ function ExtraHiddenPfpsCircle({
     colorScheme === "dark" ? colors.stone.faded : colors.stone[300];
   let color = colors.stone.text;
   if (habitId != undefined) {
-    const habitColor = useAtomValue(habitColorAtom(habitId));
+    const habitColor = useAtomValue(habitColorAtom(habitId as HabitIdT));
     backgroundColor =
       colorScheme === "dark"
         ? colors.stone.faded

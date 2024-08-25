@@ -64,6 +64,29 @@ export async function fetchAllMyHabitsInfo(): Promise<allHabitsT> {
   return myHabits;
 }
 
+export async function fetchMultipleHabitsInfo(
+  habitIds: HabitIdT[],
+): Promise<allHabitsT> {
+  const habitsInfo: allHabitsT = {};
+
+  await Promise.all(
+    habitIds.map(async (habitId) => {
+      const habitDocRef = doc(firestore, "habits", habitId);
+      const habitDocSnap = await getDoc(habitDocRef);
+
+      if (habitDocSnap.exists()) {
+        const data = habitDocSnap.data();
+        habitsInfo[habitId] = {
+          ...data,
+          createdAt: data.createdAt,
+        } as habitT;
+      }
+    }),
+  );
+
+  return habitsInfo;
+}
+
 export async function fetchHabitInfo({
   habitId,
 }: {
@@ -287,12 +310,13 @@ export async function fetchCommonHabitIds({
 }): Promise<HabitIdT[]> {
   const userId = atomStore.get(currentUserIdAtom);
   const habitsCollection = collection(firestore, "habits");
-  const userQuery = query(
+  const commonHabitIds: HabitIdT[] = [];
+  const q = query(
     habitsCollection,
     where(`participants.${userId}`, "!=", null),
   );
-  const userHabitsSnap = await getDocs(userQuery);
-  const commonHabitIds: HabitIdT[] = [];
+  const userHabitsSnap = await getDocs(q);
+
   userHabitsSnap.forEach((doc) => {
     const habitData = doc.data() as habitT;
     if (habitData.participants[participantId]) {
@@ -300,6 +324,45 @@ export async function fetchCommonHabitIds({
     }
   });
   return commonHabitIds;
+}
+
+export async function fetchOtherHabitIds({
+  participantId,
+  myFriendIds,
+  commonHabitIds,
+}: {
+  participantId: UserIdT;
+  myFriendIds: UserIdT[];
+  commonHabitIds: HabitIdT[];
+}): Promise<HabitIdT[]> {
+  // gets PUBLIC or FRIENDS (if is a friend) visibility habits (no common habits)
+  const isFriend = myFriendIds.includes(participantId);
+  const habitsCollection = collection(firestore, "habits");
+  const otherHabitIds: HabitIdT[] = [];
+  const q = query(
+    habitsCollection,
+    where(`participants.${participantId}`, "!=", null),
+  );
+  const userHabitsSnap = await getDocs(q);
+
+  userHabitsSnap.forEach((doc) => {
+    const habitData = doc.data() as habitT;
+    // console.log(habitData);
+    const participantData = habitData.participants[participantId];
+    // console.log(participantData);
+    if (participantData && !commonHabitIds.includes(doc.id as HabitIdT)) {
+      const isPublic = participantData.visibility === "PUBLIC";
+      const isFriendVisible =
+        participantData.visibility === "FRIENDS" && isFriend;
+      console.log(isPublic, isFriendVisible);
+
+      if (isPublic || isFriendVisible) {
+        console.log(doc.id);
+        // otherHabitIds.push(doc.id as HabitIdT);
+      }
+    }
+  });
+  return otherHabitIds;
 }
 
 export async function fetchMutualFriends({

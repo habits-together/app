@@ -1,4 +1,8 @@
-import { commonHabitIdsAtom, getUserInfoAtom } from "@/src/atoms/atoms";
+import {
+  commonHabitIdsAtom,
+  getUserInfoAtom,
+  otherHabitIdsAtom,
+} from "@/src/atoms/atoms";
 import { BigProfilePicture } from "@/src/components/ProfilePicture";
 import { ScrollView, Text, View } from "@/src/components/Themed";
 import { HabitCard } from "@/src/components/habit-components/HabitCard";
@@ -15,7 +19,7 @@ export default function Profile() {
 
   const { picture, displayName } = useAtomValue(getUserInfoAtom(theirUserId));
   const commonHabitIds = useAtomValue(commonHabitIdsAtom(theirUserId));
-
+  const otherHabitIds = useAtomValue(otherHabitIdsAtom(theirUserId));
   return (
     <View className="flex-1">
       <View className="flex-column flex">
@@ -37,17 +41,16 @@ export default function Profile() {
 
           {/* Habits */}
           <View className="space-y-4 pt-4">
-            <Text className="text-xl font-semibold">Habits Together</Text>
-            <View className="">
-              {commonHabitIds.map((habitId) => (
-                <HabitCard key={habitId} habitId={habitId} isOwner={false}/>
-              ))}
-            </View>
+            <Text className="pb-4 text-xl font-semibold">Habits Together</Text>
+            {commonHabitIds.map((habitId) => (
+              <HabitCard key={habitId} habitId={habitId} isOwner={false} />
+            ))}
           </View>
           <View className="space-y-4 pt-4">
-            <Text className="text-xl font-semibold">
-              Shared & public habits
-            </Text>
+            <Text className="pb-4 text-xl font-semibold">Other Habits</Text>
+            {otherHabitIds.map((habitId) => (
+              <HabitCard key={habitId} habitId={habitId} isOwner={false} />
+            ))}
           </View>
         </ScrollView>
       </View>

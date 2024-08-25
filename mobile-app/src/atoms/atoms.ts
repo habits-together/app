@@ -1,5 +1,6 @@
 import deepEquals from "fast-deep-equal";
 import { atom } from "jotai";
+import { atomEffect } from "jotai-effect";
 import { atomFamily, selectAtom, splitAtom } from "jotai/utils";
 import colors from "../constants/colors";
 import { maxNumWeeksToDisplay } from "../constants/constants";
@@ -18,7 +19,9 @@ import {
   fetchHabitCompletionsForAllParticipants,
   fetchHabitCompletionsForParticipant,
   fetchHabitInfo,
+  fetchMultipleHabitsInfo,
   fetchMutualFriends,
+  fetchOtherHabitIds,
   fetchOutboundNotifications,
   fetchUserInfo,
   removeFriendInDb,
@@ -52,7 +55,6 @@ import { todayString } from "../lib/formatDateString";
 import { getNumberOfDaysInLastWeek } from "../lib/getNumberOfDaysInLastWeek";
 import { structureCompletionData } from "../lib/structureCompletionData";
 import { currentUserAtom, currentUserIdAtom } from "./currentUserAtom";
-
 // using Jotai atoms: https://jotai.org/docs/introduction
 // we especially use the atomFamily atom: https://jotai.org/docs/utilities`/family
 
@@ -467,11 +469,40 @@ export const removeFriendAtom = atom(
 );
 
 export const commonHabitIdsAtom = atomFamily((friendId: UserIdT) =>
-  atom(async (get) => {
-    get(allHabitsAtom);
+  atom(async () => {
     return await fetchCommonHabitIds({ participantId: friendId });
   }),
 );
+
+export const otherHabitIdsAtom = atomFamily((friendId: UserIdT) =>
+  atom(async (get) => {
+    const myFriendIds = get(friendIdsAtom);
+    const commonHabitIds = await get(commonHabitIdsAtom(friendId));
+    // get(updateAllHabitsAtomWithOtherHabits);
+    return fetchOtherHabitIds({
+      participantId: friendId,
+      myFriendIds,
+      commonHabitIds,
+    });
+  }),
+);
+
+// // side effect to update allHabits atom to include these habits
+// const updateAllHabitsAtomWithOtherHabits = atomEffect((get, set) => {
+//   // Watch for changes in `otherHabitIdsAtom`
+//   const friendIds = get(friendIdsAtom);
+//   friendIds.forEach(async (friendId) => {
+//     const otherHabitIds = await get(otherHabitIdsAtom(friendId));
+
+//     if (otherHabitIds) {
+//       const newHabits = await fetchMultipleHabitsInfo(otherHabitIds);
+//       set(allHabitsAtom, (prevHabits) => ({
+//         ...prevHabits,
+//         ...newHabits,
+//       }));
+//     }
+//   });
+// });
 
 export const mutualFriendsAtom = atomFamily((friendId: UserIdT) =>
   atom(async (get) => {
