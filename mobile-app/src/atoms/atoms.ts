@@ -1,6 +1,5 @@
 import deepEquals from "fast-deep-equal";
 import { atom } from "jotai";
-import { atomEffect } from "jotai-effect";
 import { atomFamily, selectAtom, splitAtom } from "jotai/utils";
 import colors from "../constants/colors";
 import { maxNumWeeksToDisplay } from "../constants/constants";
@@ -19,7 +18,6 @@ import {
   fetchHabitCompletionsForAllParticipants,
   fetchHabitCompletionsForParticipant,
   fetchHabitInfo,
-  fetchMultipleHabitsInfo,
   fetchMutualFriends,
   fetchOtherHabitIds,
   fetchOutboundNotifications,
