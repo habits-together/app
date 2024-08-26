@@ -3,9 +3,9 @@ import { useColorScheme } from "nativewind";
 import { useEffect, useState } from "react";
 import { habitColorAtom } from "../atoms/atoms";
 import colors from "../constants/colors";
+import { HabitIdT } from "../lib/db_types";
 import { SmallProfilePicture } from "./ProfilePicture";
 import { Text, View } from "./Themed";
-import { HabitIdT } from "../lib/db_types";
 
 export default function HorizontalProfilePicsList({
   profilePics,
