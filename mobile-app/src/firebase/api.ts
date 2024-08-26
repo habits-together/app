@@ -127,7 +127,6 @@ export async function editHabitParticipantInfoInDb({
   await updateDoc(habitDocRef, {
     [`participants.${currentUserId}`]: habitParticipantsInfo[currentUserId],
   });
-  console.log(habitParticipantsInfo[currentUserId].visibility);
 }
 
 export async function deleteHabitInDb({
@@ -185,12 +184,16 @@ export async function updatetHabitCompletionsInDb({
   participantId: UserIdT;
   completionData: habitCompletionsT;
 }): Promise<void> {
+  if (completionData === undefined) return;
   const habitDocRef = doc(firestore, "habits", habitId);
   const participantCompletionDocRef = doc(
     habitDocRef,
     "participantCompletions",
     participantId,
   );
+  // console.log("hit")
+  // console.log(habitId, participantId)
+  // console.log(completionData)
   await setDoc(participantCompletionDocRef, completionData);
 }
 
@@ -231,6 +234,8 @@ export async function fetchHabitCompletionsForParticipant({
   const participantCompletionSnapshot = await getDoc(
     participantCompletionDocRef,
   );
+  if (participantCompletionSnapshot.data() === undefined)
+    return { completions: {} };
   return participantCompletionSnapshot.data() as habitCompletionsT;
 }
 
@@ -352,8 +357,6 @@ export async function fetchOtherHabitIds({
       const isPublic = participantData.visibility === "PUBLIC";
       const isFriendVisible =
         participantData.visibility === "FRIENDS" && isFriend;
-      console.log(isPublic, isFriendVisible);
-
       if (isPublic || isFriendVisible) {
         otherHabitIds.push(doc.id as HabitIdT);
       }

@@ -18,6 +18,7 @@ import {
   fetchHabitCompletionsForAllParticipants,
   fetchHabitCompletionsForParticipant,
   fetchHabitInfo,
+  fetchMultipleHabitsInfo,
   fetchMutualFriends,
   fetchOtherHabitIds,
   fetchOutboundNotifications,
@@ -484,21 +485,19 @@ export const otherHabitIdsAtom = atomFamily((friendId: UserIdT) =>
   }),
 );
 
-// // side effect to update allHabits atom to include these habits
-// const updateAllHabitsAtomWithOtherHabits = atomEffect((get, set) => {
-//   const friendIds = get(friendIdsAtom);
-//   friendIds.forEach(async (friendId) => {
-//     const otherHabitIds = await get(otherHabitIdsAtom(friendId));
-
-//     if (otherHabitIds) {
-//       const newHabits = await fetchMultipleHabitsInfo(otherHabitIds);
-//       set(allHabitsAtom, (prevHabits) => ({
-//         ...prevHabits,
-//         ...newHabits,
-//       }));
-//     }
-//   });
-// });
+export const updateAllHabitsWithOtherHabitsAtom = atom(
+  null,
+  async (get, set, friendId: UserIdT) => {
+    const otherHabitIds = await get(otherHabitIdsAtom(friendId));
+    const newHabits = await fetchMultipleHabitsInfo(otherHabitIds);
+    const allHabits = get(allHabitsAtom);
+    const newAllHabits: allHabitsT = {
+      ...(newHabits ?? {}),
+      ...(allHabits ?? {}),
+    };
+    set(allHabitsAtom, newAllHabits);
+  },
+);
 
 export const mutualFriendsAtom = atomFamily((friendId: UserIdT) =>
   atom(async (get) => {

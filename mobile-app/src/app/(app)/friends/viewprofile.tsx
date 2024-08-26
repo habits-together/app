@@ -1,37 +1,36 @@
 import {
-  allHabitsAtom,
   commonHabitIdsAtom,
   getUserInfoAtom,
   otherHabitIdsAtom,
+  updateAllHabitsWithOtherHabitsAtom,
 } from "@/src/atoms/atoms";
 import { BigProfilePicture } from "@/src/components/ProfilePicture";
 import { ScrollView, Text, View } from "@/src/components/Themed";
 import { HabitCard } from "@/src/components/habit-components/HabitCard";
-import { fetchMultipleHabitsInfo } from "@/src/firebase/api";
 import { UserIdT } from "@/src/lib/db_types";
 import { useGlobalSearchParams } from "expo-router";
-import { useAtom, useAtomValue } from "jotai";
-import React, { useEffect } from "react";
+import { useAtomValue, useSetAtom } from "jotai";
+import React, { useEffect, useState } from "react";
 
 export default function Profile() {
   const { theirUserId } = useGlobalSearchParams<{ theirUserId: UserIdT }>();
   if (!theirUserId) {
     throw new Error("No theirUserId provided");
   }
-  const [allHabits, setAllHabits] = useAtom(allHabitsAtom);
   const { picture, displayName } = useAtomValue(getUserInfoAtom(theirUserId));
   const commonHabitIds = useAtomValue(commonHabitIdsAtom(theirUserId));
-  // const otherHabitIds = useAtomValue(otherHabitIdsAtom(theirUserId));
-  // useEffect(() => {
-  //   if (otherHabitIds.length !== 0) {
-  //     fetchMultipleHabitsInfo(otherHabitIds).then((newHabitData) => {
-  //       setAllHabits({
-  //         ...allHabits,
-  //         ...newHabitData,
-  //       });
-  //     });
-  //   }
-  // }, [otherHabitIds]);
+  const otherHabitIds = useAtomValue(otherHabitIdsAtom(theirUserId));
+  const updateAllHabitsWithOtherHabits = useSetAtom(
+    updateAllHabitsWithOtherHabitsAtom,
+  );
+  const [hasOtherHabitData, setHasOtherHabitData] = useState(false);
+  useEffect(() => {
+    if (otherHabitIds.length !== 0) {
+      updateAllHabitsWithOtherHabits(theirUserId).then(() => {
+        setHasOtherHabitData(true);
+      });
+    }
+  }, [otherHabitIds]);
   return (
     <View className="flex-1">
       <View className="flex-column flex">
@@ -60,9 +59,10 @@ export default function Profile() {
           </View>
           <View className="space-y-4 pt-4">
             <Text className="pb-4 text-xl font-semibold">Other Habits</Text>
-            {/* {otherHabitIds.map((habitId) => (
-              <HabitCard key={habitId} habitId={habitId} isOwner={false} />
-            ))} */}
+            {hasOtherHabitData &&
+              otherHabitIds.map((habitId) => (
+                <HabitCard key={habitId} habitId={habitId} isOwner={false} />
+              ))}
           </View>
         </ScrollView>
       </View>
