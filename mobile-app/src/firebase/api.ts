@@ -191,9 +191,6 @@ export async function updatetHabitCompletionsInDb({
     "participantCompletions",
     participantId,
   );
-  // console.log("hit")
-  // console.log(habitId, participantId)
-  // console.log(completionData)
   await setDoc(participantCompletionDocRef, completionData);
 }
 
