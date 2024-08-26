@@ -57,7 +57,7 @@ import { currentUserAtom, currentUserIdAtom } from "./currentUserAtom";
 // using Jotai atoms: https://jotai.org/docs/introduction
 // we especially use the atomFamily atom: https://jotai.org/docs/utilities`/family
 
-export const allHabitsAtom = atom<allHabitsT>({});
+const allHabitsAtom = atom<allHabitsT>({});
 allHabitsAtom.onMount = (set) => {
   fetchAllMyHabitsInfo().then(set);
 };
