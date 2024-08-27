@@ -53,7 +53,10 @@ export function HabitCard({
             <View className="h-[10px]" />
             {isInteractive && <HabitFriendCompletions habitId={habitId} />}
             <View className="h-[10px]" />
-            <HabitCompletionsWeeklyView habitId={habitId} isInteractive={isInteractive} />
+            <HabitCompletionsWeeklyView
+              habitId={habitId}
+              isInteractive={isInteractive}
+            />
           </>
         )}
         {displayTypeValue === "monthly-view" && (
