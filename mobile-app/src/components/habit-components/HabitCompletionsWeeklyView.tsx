@@ -9,10 +9,10 @@ import WeeklyViewCompletionSquare from "./WeeklyViewCompletionSquare";
 
 export default function HabitCompletionsWeeklyView({
   habitId,
-  isOwner = true,
+  isInteractive = true,
 }: {
   habitId: HabitIdT;
-  isOwner?: boolean;
+  isInteractive?: boolean;
 }) {
   const userId = useAtomValue(currentUserIdAtom);
   const completionAtoms = useAtomValue(
@@ -28,7 +28,7 @@ export default function HabitCompletionsWeeklyView({
           completionAtom={completionAtom}
         />
       ))}
-      {isOwner && <HabitCompletionButton habitId={habitId} />}
+      {isInteractive && <HabitCompletionButton habitId={habitId} />}
     </View>
   );
 }

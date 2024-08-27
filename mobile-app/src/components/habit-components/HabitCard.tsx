@@ -18,10 +18,10 @@ import { HabitHeader } from "./HabitHeader";
 
 export function HabitCard({
   habitId,
-  isOwner = true,
+  isInteractive = true,
 }: {
   habitId: HabitIdT;
-  isOwner?: boolean;
+  isInteractive?: boolean;
 }) {
   const { colorScheme } = useColorScheme();
   const displayTypeValue = useAtomValue(
@@ -47,13 +47,13 @@ export function HabitCard({
               : colors.habitColors[color].light,
         }}
       >
-        <HabitHeader habitId={habitId} isOwner={isOwner} />
+        <HabitHeader habitId={habitId} isInteractive={isInteractive} />
         {displayTypeValue === "weekly-view" && (
           <>
             <View className="h-[10px]" />
-            {isOwner && <HabitFriendCompletions habitId={habitId} />}
+            {isInteractive && <HabitFriendCompletions habitId={habitId} />}
             <View className="h-[10px]" />
-            <HabitCompletionsWeeklyView habitId={habitId} isOwner={isOwner} />
+            <HabitCompletionsWeeklyView habitId={habitId} isInteractive={isInteractive} />
           </>
         )}
         {displayTypeValue === "monthly-view" && (
@@ -65,7 +65,7 @@ export function HabitCard({
                 userId={userId}
                 currentScreen="home"
               />
-              {isOwner && (
+              {isInteractive && (
                 <>
                   <View className="w-[10px]" />
                   <View className="flex flex-1 flex-col items-end justify-between">

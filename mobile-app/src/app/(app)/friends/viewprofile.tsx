@@ -54,14 +54,22 @@ export default function Profile() {
           <View className="space-y-4 pt-4">
             <Text className="pb-4 text-xl font-semibold">Habits Together</Text>
             {commonHabitIds.map((habitId) => (
-              <HabitCard key={habitId} habitId={habitId} isOwner={false} />
+              <HabitCard
+                key={habitId}
+                habitId={habitId}
+                isInteractive={false}
+              />
             ))}
           </View>
           <View className="space-y-4 pt-4">
             <Text className="pb-4 text-xl font-semibold">Other Habits</Text>
             {hasOtherHabitData &&
               otherHabitIds.map((habitId) => (
-                <HabitCard key={habitId} habitId={habitId} isOwner={false} />
+                <HabitCard
+                  key={habitId}
+                  habitId={habitId}
+                  isInteractive={false}
+                />
               ))}
           </View>
         </ScrollView>

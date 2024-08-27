@@ -15,10 +15,10 @@ import { HabitIcon } from "../Icon";
 
 export function HabitHeader({
   habitId,
-  isOwner = true,
+  isInteractive = true,
 }: {
   habitId: HabitIdT;
-  isOwner?: boolean;
+  isInteractive?: boolean;
 }) {
   const [displayType, setDisplayType] = useAtom(
     homeScreenHabitDisplayTypeAtom(habitId),
@@ -40,7 +40,7 @@ export function HabitHeader({
       </View>
 
       <View className="">
-        {isOwner && (
+        {isInteractive && (
           <DotsMenu
             options={[
               // change to other view
