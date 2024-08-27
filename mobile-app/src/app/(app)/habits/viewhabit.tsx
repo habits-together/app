@@ -18,7 +18,7 @@ import { ScrollView, Text, View } from "@/src/components/Themed";
 import HabitCompletionsMonthlyView from "@/src/components/habit-components/HabitCompletionsMonthlyView";
 import WeeklyViewCompletionSquare from "@/src/components/habit-components/WeeklyViewCompletionSquare";
 import colors from "@/src/constants/colors";
-import { HabitVisibilitiesDict } from "@/src/constants/constants";
+import { HabitVisibilityExplanations } from "@/src/constants/constants";
 import {
   HabitIdT,
   HabitVisibilityStringsType,
@@ -88,25 +88,6 @@ export default function ViewHabit() {
 function ParticipantsSection({ habitId }: { habitId: HabitIdT }) {
   const userId = useAtomValue(currentUserIdAtom);
   const participantIds = useAtomValue(habitParticipantIdsAtom(habitId));
-  const editHabitVisibility = useSetAtom(editHabitVisibilityAtom(habitId));
-
-  const [currentVisibility, setCurrenVisibility] =
-    useState<HabitVisibilityStringsType>(HabitVisibilitiesDict.PUBLIC);
-
-  const HabitVisibilityStrings = Object.values(
-    HabitVisibilitiesDict,
-  ) as HabitVisibilityStringsType[];
-
-  const HabitVisibilities = Object.keys(
-    HabitVisibilitiesDict,
-  ) as HabitVisibilityType[];
-
-  const changeVisibility = async () => {
-    const currentIndex = HabitVisibilityStrings.indexOf(currentVisibility);
-    const nextIndex = (currentIndex + 1) % HabitVisibilityStrings.length;
-    setCurrenVisibility(HabitVisibilityStrings[nextIndex]);
-    await editHabitVisibility(HabitVisibilities[nextIndex]);
-  };
 
   return (
     <View className="flex flex-1 flex-col" style={{ gap: 20 }}>
@@ -126,15 +107,7 @@ function ParticipantsSection({ habitId }: { habitId: HabitIdT }) {
           <Suspense fallback={<></>}>
             <ActivityCard habitId={habitId} participantId={userId} />
           </Suspense>
-          <TouchableOpacity
-            onPress={changeVisibility}
-            className="my-2 flex w-full flex-row items-center justify-center"
-          >
-            <Icon icon={IconEye} />
-            <Text className="ml-1 text-sm font-semibold">
-              {currentVisibility}
-            </Text>
-          </TouchableOpacity>
+          <HabitVisibilityToggle habitId={habitId} />
         </View>
         {participantIds
           .filter((participantId) => participantId != userId)
@@ -146,6 +119,37 @@ function ParticipantsSection({ habitId }: { habitId: HabitIdT }) {
       </View>
       <InviteFriendsButton habitId={habitId} />
     </View>
+  );
+}
+
+function HabitVisibilityToggle({ habitId }: { habitId: HabitIdT }) {
+  const editHabitVisibility = useSetAtom(editHabitVisibilityAtom(habitId));
+
+  const [currentVisibility, setCurrentVisibility] =
+    useState<HabitVisibilityStringsType>(HabitVisibilityExplanations.PUBLIC);
+
+  const HabitVisibilityStrings = Object.values(
+    HabitVisibilityExplanations,
+  ) as HabitVisibilityStringsType[];
+
+  const HabitVisibilities = Object.keys(
+    HabitVisibilityExplanations,
+  ) as HabitVisibilityType[];
+
+  const changeVisibility = async () => {
+    const currentIndex = HabitVisibilityStrings.indexOf(currentVisibility);
+    const nextIndex = (currentIndex + 1) % HabitVisibilityStrings.length;
+    setCurrentVisibility(HabitVisibilityStrings[nextIndex]);
+    await editHabitVisibility(HabitVisibilities[nextIndex]);
+  };
+  return (
+    <TouchableOpacity
+      onPress={changeVisibility}
+      className="my-2 flex w-full flex-row items-center justify-center"
+    >
+      <Icon icon={IconEye} />
+      <Text className="ml-1 text-sm font-semibold">{currentVisibility}</Text>
+    </TouchableOpacity>
   );
 }
 

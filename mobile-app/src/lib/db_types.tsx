@@ -1,4 +1,4 @@
-import { HabitVisibilitiesDict } from "../constants/constants";
+import { HabitVisibilityExplanations } from "../constants/constants";
 
 export type UserIdT = string & { readonly __brand: unique symbol };
 export type FriendshipIdT = string & { readonly __brand: unique symbol };
@@ -93,9 +93,9 @@ export type habitT = Omit<dbT["habits"][HabitIdT], "participantCompletions">;
 export type allHabitsT = Record<HabitIdT, habitT>;
 export type habitInfoT = Omit<habitT, "participants">;
 
-export type HabitVisibilityType = keyof typeof HabitVisibilitiesDict;
+export type HabitVisibilityType = keyof typeof HabitVisibilityExplanations;
 export type HabitVisibilityStringsType =
-  (typeof HabitVisibilitiesDict)[keyof typeof HabitVisibilitiesDict];
+  (typeof HabitVisibilityExplanations)[keyof typeof HabitVisibilityExplanations];
 
 export type habitParticipantsT = dbT["habits"][HabitIdT]["participants"];
 export type habitParticipantT = habitParticipantsT[UserIdT];
