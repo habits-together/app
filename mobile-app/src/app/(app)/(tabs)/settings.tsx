@@ -4,6 +4,7 @@ import {
   SettingsList,
 } from "@/src/components/SettingsComponents";
 import { signoutUserFirebase } from "@/src/firebase/auth";
+import { clearNavigationStack } from "@/src/lib/resetNavigationStack";
 import {
   IconAward,
   IconCategory2,
@@ -87,6 +88,7 @@ export default function Settings() {
             title: "Sign out",
             onPress: async () => {
               await signoutUserFirebase();
+              clearNavigationStack();
             },
           },
           {

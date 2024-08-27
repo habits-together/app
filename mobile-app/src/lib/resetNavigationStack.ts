@@ -8,3 +8,9 @@ export function resetNavigationStack(
   }
   router.replace(newPath);
 }
+
+export function clearNavigationStack() {
+  while (router.canGoBack()) {
+    router.back();
+  }
+}
