@@ -30,7 +30,9 @@ import {
   IconCheck,
   IconEye,
   IconHistory,
+  IconLock,
   IconUserPlus,
+  IconUsers,
 } from "@tabler/icons-react-native";
 import { Link, useLocalSearchParams } from "expo-router";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
@@ -142,12 +144,25 @@ function HabitVisibilityToggle({ habitId }: { habitId: HabitIdT }) {
     setCurrentVisibility(HabitVisibilityStrings[nextIndex]);
     await editHabitVisibility(HabitVisibilities[nextIndex]);
   };
+
+  const getIconForVisibility = () => {
+    switch (currentVisibility) {
+      case HabitVisibilityExplanations.PUBLIC:
+        return IconEye;
+      case HabitVisibilityExplanations.FRIENDS:
+        return IconUsers;
+      case HabitVisibilityExplanations.PARTICIPANTS:
+        return IconLock;
+      default:
+        return IconEye;
+    }
+  };
   return (
     <TouchableOpacity
       onPress={changeVisibility}
       className="my-2 flex w-full flex-row items-center justify-center"
     >
-      <Icon icon={IconEye} />
+      <Icon icon={getIconForVisibility()} />
       <Text className="ml-1 text-sm font-semibold">{currentVisibility}</Text>
     </TouchableOpacity>
   );
