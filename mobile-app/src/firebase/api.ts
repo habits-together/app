@@ -58,7 +58,7 @@ export async function fetchAllMyHabitsInfo(): Promise<allHabitsT> {
     const data = doc.data();
     myHabits[doc.id as HabitIdT] = {
       ...data,
-      createdAt: data.createdAt,
+      createdAt: new Date(data.createdAt),
     } as habitT;
   });
   return myHabits;
@@ -78,7 +78,7 @@ export async function fetchMultipleHabitsInfo(
         const data = habitDocSnap.data();
         habitsInfo[habitId] = {
           ...data,
-          createdAt: data.createdAt,
+          createdAt: new Date(data.createdAt),
         } as habitT;
       }
     }),
@@ -100,7 +100,7 @@ export async function fetchHabitInfo({
   const data = habitDocSnap.data();
   return {
     ...data,
-    createdAt: data.createdAt,
+    createdAt: new Date(data.createdAt),
   } as habitT;
 }
 
@@ -274,7 +274,7 @@ export async function fetchFriendData({
     if (userDocSnap.exists()) {
       const userData = userDocSnap.data();
       allFriendData[friendId] = {
-        createdAt: userData.createdAt,
+        createdAt: new Date(userData.createdAt),
         displayName: userData.displayName,
         username: userData.username,
         picture: userData.picture,
@@ -420,7 +420,7 @@ export async function fetchNotifications(): Promise<allNotificationsT> {
     const data = doc.data();
     myNotifications[doc.id as NotificationIdT] = {
       ...data,
-      sentAt: data.sentAt,
+      sentAt: new Date(data.sentAt),
     } as notificationT;
   });
 
@@ -451,7 +451,7 @@ export async function fetchOutboundNotifications(): Promise<allNotificationsT> {
     const data = doc.data();
     myNotifications[doc.id as NotificationIdT] = {
       ...data,
-      sentAt: data.sentAt,
+      sentAt: new Date(data.sentAt),
     } as notificationT;
   });
   return myNotifications;
@@ -672,7 +672,7 @@ export async function searchUsersInDb({
     const data = doc.data();
     searchResultUsersInfo[doc.id as UserIdT] = {
       ...data,
-      createdAt: data.createdAt,
+      createdAt: new Date(data.createdAt),
     } as userT;
   });
 
