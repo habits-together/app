@@ -1,4 +1,4 @@
-import { createNewHabitAtom, editHabitAtom } from "@/src/atoms/atoms";
+import { createNewHabitAtom, editHabitInfoAtom } from "@/src/atoms/atoms";
 import Divider from "@/src/components/Divider";
 import RoundedButton from "@/src/components/RoundedButton";
 import { Text, View } from "@/src/components/Themed";
@@ -58,7 +58,7 @@ export default function CreateOrEditHabit({
   const needsName = habitName === "";
   const canCreateHabit = !needsTag && !needsName;
 
-  const editHabit = habitId ? useSetAtom(editHabitAtom(habitId)) : () => {};
+  const editHabit = habitId ? useSetAtom(editHabitInfoAtom(habitId)) : () => {};
   const createNewHabit = useSetAtom(createNewHabitAtom);
 
   // generate plural texts

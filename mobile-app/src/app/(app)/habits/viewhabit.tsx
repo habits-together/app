@@ -1,4 +1,5 @@
 import {
+  editHabitVisibilityAtom,
   habitColorAtom,
   habitCompletionAtomsAtom,
   habitGoalAtom,
@@ -17,16 +18,24 @@ import { ScrollView, Text, View } from "@/src/components/Themed";
 import HabitCompletionsMonthlyView from "@/src/components/habit-components/HabitCompletionsMonthlyView";
 import WeeklyViewCompletionSquare from "@/src/components/habit-components/WeeklyViewCompletionSquare";
 import colors from "@/src/constants/colors";
-import { HabitIdT, UserIdT } from "@/src/lib/db_types";
+import { HabitVisibilityExplanations } from "@/src/constants/constants";
+import {
+  HabitIdT,
+  HabitVisibilityStringsType,
+  HabitVisibilityType,
+  UserIdT,
+} from "@/src/lib/db_types";
 import {
   IconBell,
   IconCheck,
   IconEye,
   IconHistory,
+  IconLock,
   IconUserPlus,
+  IconUsers,
 } from "@tabler/icons-react-native";
 import { Link, useLocalSearchParams } from "expo-router";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useColorScheme } from "nativewind";
 import { Suspense, useEffect, useState } from "react";
 import { Pressable, TouchableOpacity } from "react-native";
@@ -100,12 +109,7 @@ function ParticipantsSection({ habitId }: { habitId: HabitIdT }) {
           <Suspense fallback={<></>}>
             <ActivityCard habitId={habitId} participantId={userId} />
           </Suspense>
-          <TouchableOpacity className="my-2 flex w-full flex-row items-center justify-center">
-            <Icon icon={IconEye} />
-            <Text className="ml-1 text-sm font-semibold">
-              My friends can see my progress
-            </Text>
-          </TouchableOpacity>
+          <HabitVisibilityToggle habitId={habitId} />
         </View>
         {participantIds
           .filter((participantId) => participantId != userId)
@@ -115,8 +119,52 @@ function ParticipantsSection({ habitId }: { habitId: HabitIdT }) {
             </Suspense>
           ))}
       </View>
-      <InviteFriendsButton />
+      <InviteFriendsButton habitId={habitId} />
     </View>
+  );
+}
+
+function HabitVisibilityToggle({ habitId }: { habitId: HabitIdT }) {
+  const editHabitVisibility = useSetAtom(editHabitVisibilityAtom(habitId));
+
+  const [currentVisibility, setCurrentVisibility] =
+    useState<HabitVisibilityStringsType>(HabitVisibilityExplanations.PUBLIC);
+
+  const HabitVisibilityStrings = Object.values(
+    HabitVisibilityExplanations,
+  ) as HabitVisibilityStringsType[];
+
+  const HabitVisibilities = Object.keys(
+    HabitVisibilityExplanations,
+  ) as HabitVisibilityType[];
+
+  const changeVisibility = async () => {
+    const currentIndex = HabitVisibilityStrings.indexOf(currentVisibility);
+    const nextIndex = (currentIndex + 1) % HabitVisibilityStrings.length;
+    setCurrentVisibility(HabitVisibilityStrings[nextIndex]);
+    await editHabitVisibility(HabitVisibilities[nextIndex]);
+  };
+
+  const getIconForVisibility = () => {
+    switch (currentVisibility) {
+      case HabitVisibilityExplanations.PUBLIC:
+        return IconEye;
+      case HabitVisibilityExplanations.FRIENDS:
+        return IconUsers;
+      case HabitVisibilityExplanations.PARTICIPANTS:
+        return IconLock;
+      default:
+        return IconEye;
+    }
+  };
+  return (
+    <TouchableOpacity
+      onPress={changeVisibility}
+      className="my-2 flex w-full flex-row items-center justify-center"
+    >
+      <Icon icon={getIconForVisibility()} />
+      <Text className="ml-1 text-sm font-semibold">{currentVisibility}</Text>
+    </TouchableOpacity>
   );
 }
 
@@ -331,7 +379,7 @@ function WeeklyOrMonthlySwitcher({ habitId }: { habitId: HabitIdT }) {
   );
 }
 
-function InviteFriendsButton() {
+function InviteFriendsButton({ habitId }: { habitId: HabitIdT }) {
   const { colorScheme } = useColorScheme();
 
   return (
@@ -340,6 +388,7 @@ function InviteFriendsButton() {
         push
         href={{
           pathname: "/friends/invitefriends",
+          params: { habitidStr: habitId },
         }}
         asChild
       >

@@ -1,6 +1,6 @@
 import { Text, View } from "@/src/components/Themed";
 import { IconCheck, IconPlus } from "@tabler/icons-react-native";
-import { Link } from "expo-router";
+import { Link, useGlobalSearchParams } from "expo-router";
 import { useAtom, useAtomValue } from "jotai";
 import { useColorScheme } from "nativewind";
 import React from "react";
@@ -88,9 +88,17 @@ export default function UserCard({
 }) {
   const { id: userId, displayName, username, picture } = userInfo;
   const [, removeFriend] = useAtom(removeFriendAtom);
+
+  const { habitidStr } = useGlobalSearchParams<{ habitidStr: HabitIdT }>();
+  if (
+    displayType === "inviteFriendsToHabit" &&
+    typeof habitidStr !== "string"
+  ) {
+    throw new Error("Invalid habit id provided in URL params");
+  }
+
   return (
     <Link
-      // disabled={displayType === "inviteFriendsToHabit"}
       push
       href={{
         pathname: "/friends/viewprofile",
@@ -127,7 +135,7 @@ export default function UserCard({
           {displayType === "inviteFriendsToHabit" && (
             <InviteAddButton
               theirUserId={userId}
-              habitId={"habit1" as HabitIdT}
+              habitId={habitidStr as HabitIdT}
               type={displayType}
             />
           )}

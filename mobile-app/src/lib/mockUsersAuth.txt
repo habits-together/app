@@ -2,3 +2,7 @@ email - somehoe@something.com
 password - playboicarti
 username - carti
 
+email - user2@email.com
+password - password
+username - auser
+

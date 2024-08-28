@@ -29,6 +29,7 @@ import {
   HabitIdT,
   habitInfoT,
   habitNotificationT,
+  habitParticipantsT,
   habitT,
   NotificationIdT,
   notificationT,
@@ -57,10 +58,33 @@ export async function fetchAllMyHabitsInfo(): Promise<allHabitsT> {
     const data = doc.data();
     myHabits[doc.id as HabitIdT] = {
       ...data,
-      createdAt: data.createdAt,
+      createdAt: new Date(data.createdAt),
     } as habitT;
   });
   return myHabits;
+}
+
+export async function fetchMultipleHabitsInfo(
+  habitIds: HabitIdT[],
+): Promise<allHabitsT> {
+  const habitsInfo: allHabitsT = {};
+
+  await Promise.all(
+    habitIds.map(async (habitId) => {
+      const habitDocRef = doc(firestore, "habits", habitId);
+      const habitDocSnap = await getDoc(habitDocRef);
+
+      if (habitDocSnap.exists()) {
+        const data = habitDocSnap.data();
+        habitsInfo[habitId] = {
+          ...data,
+          createdAt: new Date(data.createdAt),
+        } as habitT;
+      }
+    }),
+  );
+
+  return habitsInfo;
 }
 
 export async function fetchHabitInfo({
@@ -76,11 +100,11 @@ export async function fetchHabitInfo({
   const data = habitDocSnap.data();
   return {
     ...data,
-    createdAt: data.createdAt,
+    createdAt: new Date(data.createdAt),
   } as habitT;
 }
 
-export async function editHabitInDb({
+export async function editHabitInfoInDb({
   habitId,
   habitInfo,
 }: {
@@ -89,6 +113,20 @@ export async function editHabitInDb({
 }): Promise<void> {
   const habitDocRef = doc(firestore, "habits", habitId);
   await updateDoc(habitDocRef, habitInfo);
+}
+
+export async function editHabitParticipantInfoInDb({
+  habitId,
+  habitParticipantsInfo,
+}: {
+  habitId: HabitIdT;
+  habitParticipantsInfo: habitParticipantsT;
+}): Promise<void> {
+  const currentUserId = atomStore.get(currentUserIdAtom);
+  const habitDocRef = doc(firestore, "habits", habitId);
+  await updateDoc(habitDocRef, {
+    [`participants.${currentUserId}`]: habitParticipantsInfo[currentUserId],
+  });
 }
 
 export async function deleteHabitInDb({
@@ -111,6 +149,7 @@ export async function createNewHabitInDb({
     ...habitInfo,
     participants: {
       [user.id]: {
+        visibility: "PUBLIC",
         displayName: user.displayName,
         username: user.username,
         picture: user.picture,
@@ -145,6 +184,7 @@ export async function updatetHabitCompletionsInDb({
   participantId: UserIdT;
   completionData: habitCompletionsT;
 }): Promise<void> {
+  if (completionData === undefined) return;
   const habitDocRef = doc(firestore, "habits", habitId);
   const participantCompletionDocRef = doc(
     habitDocRef,
@@ -191,6 +231,8 @@ export async function fetchHabitCompletionsForParticipant({
   const participantCompletionSnapshot = await getDoc(
     participantCompletionDocRef,
   );
+  if (participantCompletionSnapshot.data() === undefined)
+    return { completions: {} };
   return participantCompletionSnapshot.data() as habitCompletionsT;
 }
 
@@ -232,7 +274,7 @@ export async function fetchFriendData({
     if (userDocSnap.exists()) {
       const userData = userDocSnap.data();
       allFriendData[friendId] = {
-        createdAt: userData.createdAt,
+        createdAt: new Date(userData.createdAt),
         displayName: userData.displayName,
         username: userData.username,
         picture: userData.picture,
@@ -270,12 +312,13 @@ export async function fetchCommonHabitIds({
 }): Promise<HabitIdT[]> {
   const userId = atomStore.get(currentUserIdAtom);
   const habitsCollection = collection(firestore, "habits");
-  const userQuery = query(
+  const commonHabitIds: HabitIdT[] = [];
+  const q = query(
     habitsCollection,
     where(`participants.${userId}`, "!=", null),
   );
-  const userHabitsSnap = await getDocs(userQuery);
-  const commonHabitIds: HabitIdT[] = [];
+  const userHabitsSnap = await getDocs(q);
+
   userHabitsSnap.forEach((doc) => {
     const habitData = doc.data() as habitT;
     if (habitData.participants[participantId]) {
@@ -283,6 +326,40 @@ export async function fetchCommonHabitIds({
     }
   });
   return commonHabitIds;
+}
+
+export async function fetchOtherHabitIds({
+  participantId,
+  myFriendIds,
+  commonHabitIds,
+}: {
+  participantId: UserIdT;
+  myFriendIds: UserIdT[];
+  commonHabitIds: HabitIdT[];
+}): Promise<HabitIdT[]> {
+  // gets PUBLIC or FRIENDS (if is a friend) visibility habits (no common habits)
+  const isFriend = myFriendIds.includes(participantId);
+  const habitsCollection = collection(firestore, "habits");
+  const otherHabitIds: HabitIdT[] = [];
+  const q = query(
+    habitsCollection,
+    where(`participants.${participantId}`, "!=", null),
+  );
+  const userHabitsSnap = await getDocs(q);
+
+  userHabitsSnap.forEach((doc) => {
+    const habitData = doc.data() as habitT;
+    const participantData = habitData.participants[participantId];
+    if (participantData && !commonHabitIds.includes(doc.id as HabitIdT)) {
+      const isPublic = participantData.visibility === "PUBLIC";
+      const isFriendVisible =
+        participantData.visibility === "FRIENDS" && isFriend;
+      if (isPublic || isFriendVisible) {
+        otherHabitIds.push(doc.id as HabitIdT);
+      }
+    }
+  });
+  return otherHabitIds;
 }
 
 export async function fetchMutualFriends({
@@ -343,7 +420,7 @@ export async function fetchNotifications(): Promise<allNotificationsT> {
     const data = doc.data();
     myNotifications[doc.id as NotificationIdT] = {
       ...data,
-      sentAt: data.sentAt,
+      sentAt: new Date(data.sentAt),
     } as notificationT;
   });
 
@@ -374,7 +451,7 @@ export async function fetchOutboundNotifications(): Promise<allNotificationsT> {
     const data = doc.data();
     myNotifications[doc.id as NotificationIdT] = {
       ...data,
-      sentAt: data.sentAt,
+      sentAt: new Date(data.sentAt),
     } as notificationT;
   });
   return myNotifications;
@@ -595,7 +672,7 @@ export async function searchUsersInDb({
     const data = doc.data();
     searchResultUsersInfo[doc.id as UserIdT] = {
       ...data,
-      createdAt: data.createdAt,
+      createdAt: new Date(data.createdAt),
     } as userT;
   });
 
