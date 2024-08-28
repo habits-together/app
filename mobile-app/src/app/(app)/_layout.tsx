@@ -1,11 +1,12 @@
 import { settingAtom } from "@/src/atoms/atoms";
-import { currentUserAtom } from "@/src/atoms/currentUserAtom";
-import { checkifUserExistsInDb, fetchUserInfo } from "@/src/firebase/api";
-import { UserIdT } from "@/src/lib/db_types";
+import {
+  currentUserAtom,
+  refreshCurrentUserAtom,
+} from "@/src/atoms/currentUserAtom";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { Stack } from "expo-router";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { NativeWindStyleSheet, useColorScheme } from "nativewind";
 import { useEffect } from "react";
 
@@ -15,38 +16,16 @@ export const unstable_settings = {
 };
 
 export default function AppLayout() {
-  // must be loggged in
+  // if the user is not logged in, redirect them to auth
   const auth = getAuth();
-  const [currentUser, setCurrentUser] = useAtom(currentUserAtom);
+  const refreshCurrentUser = useSetAtom(refreshCurrentUserAtom);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const userHasProfile = await checkifUserExistsInDb({
-          userId: user.uid as UserIdT,
-        });
-        if (!userHasProfile) {
-          /** If user is logged in and they don't exist in firestore
-           * (no profile) rediect them to /createprofile
-           */
-          resetNavigationStack("/createprofile");
-        } else {
-          // if current user atom does not have current users data, fetch data
-          if (currentUser.id !== user.uid) {
-            const userInfo = await fetchUserInfo({
-              userId: user.uid as UserIdT,
-            });
-            console.log(userInfo);
-            setCurrentUser(userInfo);
-          } else {
-            console.log(currentUser);
-          }
-        }
-      } else {
-        // only authenticated users allowed here
+      if (!user) {
+        refreshCurrentUser();
         resetNavigationStack("/");
       }
     });
-
     return () => unsubscribe();
   }, [auth]);
 
@@ -61,6 +40,12 @@ export default function AppLayout() {
       NativeWindStyleSheet.setColorScheme(colorScheme || "light");
     }
   }, [themeSetting]);
+
+  // the current user atom can take a moment to update
+  const currentUser = useAtomValue(currentUserAtom);
+  if (!currentUser.id) {
+    return null;
+  }
 
   return (
     <Stack

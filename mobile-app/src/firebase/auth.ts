@@ -76,6 +76,6 @@ export const signoutUserFirebase = async () => {
   try {
     await signOut(auth);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };

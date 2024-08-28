@@ -86,7 +86,7 @@ export const usePushNotifications = (): PushNotificationState => {
          * This listener is fired whenever a user taps on or interacts with a
          * notification (works when an app is foregrounded, backgrounded, or killed).
          */
-        console.log(response);
+        // console.log(response);
       });
 
     return () => {
