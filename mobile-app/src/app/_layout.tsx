@@ -3,10 +3,11 @@ import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { Provider } from "jotai";
+import { Provider, useAtomValue } from "jotai";
 import { useEffect } from "react";
 import { MenuProvider } from "react-native-popup-menu";
 import "react-native-reanimated";
+import { currentUserAtom } from "../atoms/currentUserAtom";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -59,8 +60,9 @@ function LoadingHandler({ children }: { children: React.ReactNode }) {
 }
 
 function ProvidersHandler({ children }: { children: React.ReactNode }) {
+  const currentUser = useAtomValue(currentUserAtom);
   return (
-    <Provider>
+    <Provider key={currentUser.id}>
       <MenuProvider>
         <ThemeProvider value={DefaultTheme}>{children}</ThemeProvider>
       </MenuProvider>
