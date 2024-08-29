@@ -6,9 +6,10 @@ import {
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { Stack } from "expo-router";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { Provider, useAtomValue, useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { NativeWindStyleSheet, useColorScheme } from "nativewind";
 import { useEffect } from "react";
+import { useMMKVString } from "react-native-mmkv";
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
@@ -43,12 +44,16 @@ export default function AppLayout() {
 
   // the current user atom can take a moment to update
   const currentUser = useAtomValue(currentUserAtom);
-  if (!currentUser.id) {
+  const [currentUserMMKV] = useMMKVString("current-user-data");
+  if (!currentUser.id || (currentUserMMKV && !JSON.parse(currentUserMMKV).id)) {
+    console.log("returning null");
     return null;
+  } else {
+    console.log("returning stack");
   }
 
   return (
-    <Provider>
+    <>
       <Stack
         screenOptions={{
           headerShown: false,
@@ -57,6 +62,6 @@ export default function AppLayout() {
       >
         <Stack.Screen name="(tabs)" />
       </Stack>
-    </Provider>
+    </>
   );
 }
