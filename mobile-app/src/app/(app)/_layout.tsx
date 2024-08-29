@@ -6,7 +6,7 @@ import {
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { Stack } from "expo-router";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useAtomValue, useSetAtom } from "jotai";
+import { Provider, useAtomValue, useSetAtom } from "jotai";
 import { NativeWindStyleSheet, useColorScheme } from "nativewind";
 import { useEffect } from "react";
 
@@ -48,13 +48,15 @@ export default function AppLayout() {
   }
 
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-        animation: "ios",
-      }}
-    >
-      <Stack.Screen name="(tabs)" />
-    </Stack>
+    <Provider>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          animation: "ios",
+        }}
+      >
+        <Stack.Screen name="(tabs)" />
+      </Stack>
+    </Provider>
   );
 }
