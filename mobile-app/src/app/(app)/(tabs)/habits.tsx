@@ -2,7 +2,7 @@ import { habitIdsAtom } from "@/src/atoms/atoms";
 import { HabitCard } from "@/src/components/habit-components/HabitCard";
 import { ScrollView, View } from "@/src/components/Themed";
 import { useAtomValue } from "jotai";
-import { Suspense, useEffect } from "react";
+import { Suspense } from "react";
 
 export default function HabitsTab() {
   const habitIds = useAtomValue(habitIdsAtom);
