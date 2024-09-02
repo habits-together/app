@@ -4,7 +4,8 @@ import DefaultColors from "@/src/constants/DefaultColors";
 import { IconCirclePlus } from "@tabler/icons-react-native";
 import { useColorScheme } from "nativewind";
 import { useRef } from "react";
-import { Image, TextInput, TouchableOpacity } from "react-native";
+import { Image } from "expo-image";
+import { TextInput, TouchableOpacity } from "react-native";
 import { userWithIdEmailT } from "../lib/db_types";
 
 export default function ProfileCreationBoxes({

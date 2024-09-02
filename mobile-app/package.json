@@ -51,7 +51,8 @@
     "react-native-url-polyfill": "^2.0.0",
     "react-native-web": "~0.19.6",
     "stacktrace-parser": "^0.1.10",
-    "tabler-react-native": "^1.1.0"
+    "tabler-react-native": "^1.1.0",
+    "expo-image": "~1.12.15"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
