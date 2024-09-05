@@ -12,7 +12,6 @@ type dbT = {
       createdAt: Date;
       displayName: string;
       username: string;
-      picture: string;
     }
   >;
 
@@ -44,7 +43,6 @@ type dbT = {
           visibility: HabitVisibilityType;
           displayName: string; // maintained by cloud function
           username: string; // maintained by cloud function
-          picture: string; // maintained by cloud function
           mostRecentCompletionDate: Date; // maintained by cloud function
           isOwner?: true; // only owner has this field
         }

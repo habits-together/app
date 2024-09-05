@@ -1,7 +1,12 @@
+import { currentUserAtom } from "@/src/atoms/currentUserAtom";
 import Icon from "@/src/components/Icon";
+import ProfileCreationBoxes from "@/src/components/PfpNameUsernameBoxes";
 import { Text, View } from "@/src/components/Themed";
+import { userWithIdT } from "@/src/lib/db_types";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { IconTrash } from "@tabler/icons-react-native";
+import { useAtomValue } from "jotai";
+import { useState } from "react";
 import {
   Platform,
   SafeAreaView,
@@ -10,6 +15,10 @@ import {
 } from "react-native";
 
 export default function editprofile() {
+  // get current user data
+  const currentUserData = useAtomValue(currentUserAtom);
+  const [formData, setFormData] = useState<userWithIdT>(currentUserData);
+
   return (
     <SafeAreaView
       className={`flex flex-1 flex-col items-center bg-white dark:bg-stone-800`}
@@ -22,7 +31,11 @@ export default function editprofile() {
     >
       {/* Form */}
       <View className="flex w-screen flex-col px-5">
-        {/* <ProfileCreationBoxes editPage={true} /> there was an error here; missing props */}
+        <ProfileCreationBoxes
+          editPage={true}
+          formData={formData}
+          setFormData={setFormData}
+        />
         {/* Delete Account */}
         <TouchableOpacity
           onPress={() => resetNavigationStack("/habits")}

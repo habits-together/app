@@ -45,6 +45,12 @@
             "newArchEnabled": true
           }
         }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app needs to access your photos."
+        }
       ]
     ],
     "experiments": {

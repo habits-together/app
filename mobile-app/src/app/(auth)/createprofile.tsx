@@ -2,6 +2,7 @@ import { currentUserAtom } from "@/src/atoms/currentUserAtom";
 import Icon from "@/src/components/Icon";
 import ProfileCreationBoxes from "@/src/components/PfpNameUsernameBoxes";
 import { Text, View } from "@/src/components/Themed";
+import { defaultProfilePicUrl } from "@/src/constants/constants";
 import DefaultColors from "@/src/constants/DefaultColors";
 import { createUserInDb } from "@/src/firebase/api";
 import { UserIdT, userWithIdT } from "@/src/lib/db_types";
@@ -22,18 +23,18 @@ export default function createprofile() {
   const { colorScheme } = useColorScheme();
   const setCurrentUser = useSetAtom(currentUserAtom);
   const auth = getAuth();
-  const [data, setData] = useState<userWithIdT>({
+  const [formData, setFormData] = useState({
     id: "" as UserIdT,
     displayName: "",
     username: "",
-    picture: "https://i.sstatic.net/l60Hf.png",
+    picture: defaultProfilePicUrl,
     createdAt: new Date(),
   });
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
     if (auth.currentUser) {
-      setData({
-        ...data,
+      setFormData({
+        ...formData,
         id: auth.currentUser.uid as UserIdT,
       });
     } else {
@@ -42,7 +43,7 @@ export default function createprofile() {
   }, [auth]);
 
   const validateData = (): boolean => {
-    const { displayName, username, picture } = data;
+    const { displayName, username, picture } = formData;
     if (!displayName.trim()) {
       setError("Display name cannot be empty.");
       return false;
@@ -68,8 +69,8 @@ export default function createprofile() {
   const createProfile = async () => {
     if (validateData()) {
       try {
-        await createUserInDb({ userWithId: data });
-        setCurrentUser(data);
+        await createUserInDb({ userWithId: formData });
+        setCurrentUser(formData);
         resetNavigationStack("/habits");
       } catch (error) {
         if (error instanceof Error) {
@@ -94,8 +95,8 @@ export default function createprofile() {
         <Text className="text-3xl font-bold">Create profile</Text>
         <ProfileCreationBoxes
           editPage={false}
-          formData={data}
-          setFormData={setData}
+          formData={formData}
+          setFormData={setFormData}
         />
         {/* Complete profile */}
         <TouchableOpacity

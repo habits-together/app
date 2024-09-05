@@ -2,11 +2,12 @@ import Icon from "@/src/components/Icon";
 import { Text, View } from "@/src/components/Themed";
 import DefaultColors from "@/src/constants/DefaultColors";
 import { IconCirclePlus } from "@tabler/icons-react-native";
+import { Image } from "expo-image";
+import * as ImagePicker from "expo-image-picker";
 import { useColorScheme } from "nativewind";
 import { useRef } from "react";
-import { Image } from "expo-image";
 import { TextInput, TouchableOpacity } from "react-native";
-import { userWithIdEmailT } from "../lib/db_types";
+import { uploadProfilePic } from "../firebase/api";
 
 export default function ProfileCreationBoxes({
   editPage,
@@ -14,21 +15,42 @@ export default function ProfileCreationBoxes({
   setFormData,
 }: {
   editPage: boolean;
-  formData: userWithIdEmailT;
-  setFormData: React.Dispatch<React.SetStateAction<userWithIdEmailT>>;
+  formData: any;
+  setFormData: React.Dispatch<React.SetStateAction<any>>;
 }) {
   const { colorScheme } = useColorScheme();
   const refUsernameInput = useRef<TextInput>(null);
   const refEmailInput = useRef<TextInput>(null);
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All, // for file types
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    handleImagePicked(result);
+  };
+
+  const handleImagePicked = async (result: ImagePicker.ImagePickerResult) => {
+    try {
+      if (!result.canceled) {
+        // console.log(result.assets[0].uri);
+        // const uploadUrl = await uploadProfilePic(result.assets[0].uri);
+        setFormData({ ...formData, picture: result.assets[0].uri });
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   return (
     <View className="mt-10 flex flex-col">
       {/* Profile Picture */}
       <TouchableOpacity
         className="h-24 w-24 self-center rounded-3xl bg-stone-400"
-        onPress={() => {
-          // Logic for picking picture
-        }}
+        onPress={pickImage}
       >
         {formData.picture && (
           <Image

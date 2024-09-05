@@ -1,3 +1,4 @@
+import { FirebaseError } from "firebase/app";
 import {
   addDoc,
   and,
@@ -15,9 +16,11 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { SetStateAction } from "jotai";
 import { currentUserAtom, currentUserIdAtom } from "../atoms/currentUserAtom";
 import { atomStore } from "../atoms/store";
+import { defaultProfilePicUrl } from "../constants/constants";
 import {
   allHabitsT,
   allNotificationsT,
@@ -152,7 +155,6 @@ export async function createNewHabitInDb({
         visibility: "PUBLIC",
         displayName: user.displayName,
         username: user.username,
-        picture: user.picture,
         mostRecentCompletionDate: new Date(),
         isOwner: true,
       },
@@ -277,7 +279,6 @@ export async function fetchFriendData({
         createdAt: new Date(userData.createdAt),
         displayName: userData.displayName,
         username: userData.username,
-        picture: userData.picture,
       } as userT;
     } else {
       console.error(`No user found with ID: ${friendId}`);
@@ -622,7 +623,6 @@ export async function createUserInDb({
     createdAt: userWithId.createdAt,
     displayName: userWithId.displayName,
     username: userWithId.username,
-    picture: userWithId.picture,
   });
 }
 
@@ -677,4 +677,63 @@ export async function searchUsersInDb({
   });
 
   return searchResultUsersInfo;
+}
+
+// Images (Storage)
+// https://github.com/expo/examples/tree/master/with-firebase-storage-upload
+
+export async function uploadProfilePic(uri: string): Promise<string> {
+  const userId = atomStore.get(currentUserIdAtom);
+  const blob = await new Promise<Blob>((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+      resolve(xhr.response);
+    };
+    xhr.onerror = function (e) {
+      console.log(e);
+      reject(new TypeError("Network request failed"));
+    };
+    xhr.responseType = "blob";
+    xhr.open("GET", uri, true);
+    xhr.send(null);
+  });
+
+  const fileRef = ref(getStorage(), `profilePics/${userId}`);
+  await uploadBytes(fileRef, blob);
+  return await getDownloadURL(fileRef);
+}
+
+export async function getCurrentUserProfilePicUrl(): Promise<string> {
+  const userId = atomStore.get(currentUserIdAtom);
+  const fileRef = ref(getStorage(), `profilePics/${userId}`);
+  try {
+    const downloadUrl = await getDownloadURL(fileRef);
+    return downloadUrl;
+  } catch (error: any) {
+    if (error instanceof FirebaseError) {
+      if (error.code === "storage/object-not-found") {
+        console.log("User has no profile pic.");
+        return defaultProfilePicUrl;
+      }
+    }
+    console.error("Error fetching profile pic:", error.message || error);
+    return defaultProfilePicUrl;
+  }
+}
+
+export async function getUserProfilePicUrl(userId: UserIdT): Promise<string> {
+  const fileRef = ref(getStorage(), `profilePics/${userId}`);
+  try {
+    const downloadUrl = await getDownloadURL(fileRef);
+    return downloadUrl;
+  } catch (error: any) {
+    if (error instanceof FirebaseError) {
+      if (error.code === "storage/object-not-found") {
+        console.log(userId, " has no profile pic.");
+        return defaultProfilePicUrl;
+      }
+    }
+    console.error("Error fetching profile pic:", error.message || error);
+    return defaultProfilePicUrl;
+  }
 }

@@ -1,6 +1,13 @@
 import { settingAtom } from "@/src/atoms/atoms";
-import { currentUserAtom } from "@/src/atoms/currentUserAtom";
-import { checkifUserExistsInDb, fetchUserInfo } from "@/src/firebase/api";
+import {
+  currentUserAtom,
+  currentUserProfilePicAtom,
+} from "@/src/atoms/currentUserAtom";
+import {
+  checkifUserExistsInDb,
+  fetchUserInfo,
+  getCurrentUserProfilePicUrl,
+} from "@/src/firebase/api";
 import { UserIdT } from "@/src/lib/db_types";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { Stack } from "expo-router";
@@ -18,6 +25,9 @@ export default function AppLayout() {
   // must be loggged in
   const auth = getAuth();
   const [currentUser, setCurrentUser] = useAtom(currentUserAtom);
+  const [currentUserProfilePic, setCurrentUserProfilePic] = useAtom(
+    currentUserProfilePicAtom,
+  );
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -35,11 +45,13 @@ export default function AppLayout() {
             const userInfo = await fetchUserInfo({
               userId: user.uid as UserIdT,
             });
-            console.log(userInfo);
             setCurrentUser(userInfo);
-          } else {
-            console.log(currentUser);
+            // fetch profile pic
+            const pic = await getCurrentUserProfilePicUrl();
+            setCurrentUserProfilePic(pic);
           }
+          console.log(currentUserProfilePic);
+          console.log(currentUser);
         }
       } else {
         // only authenticated users allowed here
