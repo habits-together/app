@@ -722,7 +722,7 @@ export async function getCurrentUserProfilePicUrl(): Promise<string> {
 }
 
 export async function getUserProfilePicUrl(userId: UserIdT): Promise<string> {
-  const fileRef = ref(getStorage(), `profilePics/${userId}`);
+  const fileRef = ref(getStorage(), `profilePics/${userId}.jpg`);
   try {
     const downloadUrl = await getDownloadURL(fileRef);
     return downloadUrl;

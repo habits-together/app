@@ -3,7 +3,7 @@ import { Text, View } from "@/src/components/Themed";
 import DefaultColors from "@/src/constants/DefaultColors";
 import { IconCirclePlus } from "@tabler/icons-react-native";
 import { Image } from "expo-image";
-import { manipulateAsync } from "expo-image-manipulator";
+import { SaveFormat, manipulateAsync } from "expo-image-manipulator";
 import * as ImagePicker from "expo-image-picker";
 import { useColorScheme } from "nativewind";
 import { useRef } from "react";
@@ -24,7 +24,6 @@ export default function ProfileCreationBoxes({
   const refEmailInput = useRef<TextInput>(null);
 
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All, // for file types
       allowsEditing: true,
@@ -34,9 +33,11 @@ export default function ProfileCreationBoxes({
     if (!result.canceled) {
       const picUrl = result.assets[0].uri;
       // resize the image
-      const resizedPic = await manipulateAsync(picUrl, [
-        { resize: { height: 72, width: 72 } },
-      ]);
+      const resizedPic = await manipulateAsync(
+        picUrl,
+        [{ resize: { height: 72, width: 72 } }],
+        { format: SaveFormat.JPEG },
+      );
       setFormData({ ...formData, picture: resizedPic.uri });
     }
   };
