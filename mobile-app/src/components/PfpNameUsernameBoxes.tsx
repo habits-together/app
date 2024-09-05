@@ -8,6 +8,7 @@ import * as ImagePicker from "expo-image-picker";
 import { useColorScheme } from "nativewind";
 import { useRef } from "react";
 import { TextInput, TouchableOpacity } from "react-native";
+import { ProfileFormData } from "../lib/db_types";
 
 export default function ProfileCreationBoxes({
   editPage,
@@ -15,8 +16,8 @@ export default function ProfileCreationBoxes({
   setFormData,
 }: {
   editPage: boolean;
-  formData: any;
-  setFormData: React.Dispatch<React.SetStateAction<any>>;
+  formData: ProfileFormData;
+  setFormData: React.Dispatch<React.SetStateAction<ProfileFormData>>;
 }) {
   const { colorScheme } = useColorScheme();
   const refUsernameInput = useRef<TextInput>(null);

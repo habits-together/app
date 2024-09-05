@@ -128,3 +128,11 @@ export type commonHabitT = {
 };
 
 export type HabitDisplayType = "weekly-view" | "monthly-view";
+export type ProfileFormData = {
+  id: UserIdT;
+  displayName: string;
+  username: string;
+  picture: string;
+  email?: string;
+  createdAt: Date;
+};

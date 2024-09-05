@@ -8,7 +8,7 @@ import { Text, View } from "@/src/components/Themed";
 import { defaultProfilePicUrl } from "@/src/constants/constants";
 import DefaultColors from "@/src/constants/DefaultColors";
 import { createUserInDb, uploadProfilePic } from "@/src/firebase/api";
-import { UserIdT } from "@/src/lib/db_types";
+import { ProfileFormData, UserIdT } from "@/src/lib/db_types";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { IconCheck } from "@tabler/icons-react-native";
 import { getAuth } from "firebase/auth";
@@ -27,7 +27,7 @@ export default function createprofile() {
   const setCurrentUser = useSetAtom(currentUserAtom);
   const setCurrentUserProfilePic = useSetAtom(currentUserProfilePicAtom);
   const auth = getAuth();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ProfileFormData>({
     id: "" as UserIdT,
     displayName: "",
     username: "",

@@ -5,6 +5,7 @@ import {
 import Icon from "@/src/components/Icon";
 import ProfileCreationBoxes from "@/src/components/PfpNameUsernameBoxes";
 import { Text, View } from "@/src/components/Themed";
+import { ProfileFormData } from "@/src/lib/db_types";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { IconTrash } from "@tabler/icons-react-native";
 import { useAtomValue } from "jotai";
@@ -21,7 +22,7 @@ export default function editprofile() {
   const currentUserData = useAtomValue(currentUserAtom);
   const currentUserProfilePic = useAtomValue(currentUserProfilePicAtom);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ProfileFormData>({
     id: currentUserData.id,
     displayName: currentUserData.displayName,
     username: currentUserData.username,
