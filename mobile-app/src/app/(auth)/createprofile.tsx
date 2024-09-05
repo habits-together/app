@@ -1,11 +1,14 @@
-import { currentUserAtom } from "@/src/atoms/currentUserAtom";
+import {
+  currentUserAtom,
+  currentUserProfilePicAtom,
+} from "@/src/atoms/currentUserAtom";
 import Icon from "@/src/components/Icon";
 import ProfileCreationBoxes from "@/src/components/PfpNameUsernameBoxes";
 import { Text, View } from "@/src/components/Themed";
 import { defaultProfilePicUrl } from "@/src/constants/constants";
 import DefaultColors from "@/src/constants/DefaultColors";
-import { createUserInDb } from "@/src/firebase/api";
-import { UserIdT, userWithIdT } from "@/src/lib/db_types";
+import { createUserInDb, uploadProfilePic } from "@/src/firebase/api";
+import { UserIdT } from "@/src/lib/db_types";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { IconCheck } from "@tabler/icons-react-native";
 import { getAuth } from "firebase/auth";
@@ -22,6 +25,7 @@ import {
 export default function createprofile() {
   const { colorScheme } = useColorScheme();
   const setCurrentUser = useSetAtom(currentUserAtom);
+  const setCurrentUserProfilePic = useSetAtom(currentUserProfilePicAtom);
   const auth = getAuth();
   const [formData, setFormData] = useState({
     id: "" as UserIdT,
@@ -69,8 +73,11 @@ export default function createprofile() {
   const createProfile = async () => {
     if (validateData()) {
       try {
-        await createUserInDb({ userWithId: formData });
-        setCurrentUser(formData);
+        const { picture, ...userWithId } = formData;
+        await createUserInDb({ userWithId });
+        await uploadProfilePic(picture);
+        setCurrentUser(userWithId);
+        setCurrentUserProfilePic(picture);
         resetNavigationStack("/habits");
       } catch (error) {
         if (error instanceof Error) {

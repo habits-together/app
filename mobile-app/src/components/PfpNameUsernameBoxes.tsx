@@ -3,11 +3,11 @@ import { Text, View } from "@/src/components/Themed";
 import DefaultColors from "@/src/constants/DefaultColors";
 import { IconCirclePlus } from "@tabler/icons-react-native";
 import { Image } from "expo-image";
+import { manipulateAsync } from "expo-image-manipulator";
 import * as ImagePicker from "expo-image-picker";
 import { useColorScheme } from "nativewind";
 import { useRef } from "react";
 import { TextInput, TouchableOpacity } from "react-native";
-import { uploadProfilePic } from "../firebase/api";
 
 export default function ProfileCreationBoxes({
   editPage,
@@ -30,18 +30,13 @@ export default function ProfileCreationBoxes({
       aspect: [4, 3],
       quality: 1,
     });
-    handleImagePicked(result);
-  };
-
-  const handleImagePicked = async (result: ImagePicker.ImagePickerResult) => {
-    try {
-      if (!result.canceled) {
-        // console.log(result.assets[0].uri);
-        // const uploadUrl = await uploadProfilePic(result.assets[0].uri);
-        setFormData({ ...formData, picture: result.assets[0].uri });
-      }
-    } catch (e) {
-      console.error(e);
+    if (!result.canceled) {
+      const picUrl = result.assets[0].uri;
+      // resize the image
+      const resizedPic = await manipulateAsync(picUrl, [
+        { resize: { height: 72, width: 72 } },
+      ]);
+      setFormData({ ...formData, picture: resizedPic.uri });
     }
   };
 

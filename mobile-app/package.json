@@ -54,7 +54,8 @@
     "react-native-web": "~0.19.6",
     "stacktrace-parser": "^0.1.10",
     "tabler-react-native": "^1.1.0",
-    "uuid": "^10.0.0"
+    "uuid": "^10.0.0",
+    "expo-image-manipulator": "~12.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
