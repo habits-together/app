@@ -6,7 +6,7 @@ import {
 import {
   checkifUserExistsInDb,
   fetchUserInfo,
-  getCurrentUserProfilePicUrl,
+  getUserProfilePicUrl,
 } from "@/src/firebase/api";
 import { UserIdT } from "@/src/lib/db_types";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
@@ -45,10 +45,10 @@ export default function AppLayout() {
             const userInfo = await fetchUserInfo({
               userId: user.uid as UserIdT,
             });
-            setCurrentUser(userInfo);
             // fetch profile pic
-            const pic = await getCurrentUserProfilePicUrl();
+            const pic = await getUserProfilePicUrl(currentUser.id);
             setCurrentUserProfilePic(pic);
+            setCurrentUser(userInfo);
           }
           console.log(currentUserProfilePic);
           console.log(currentUser);

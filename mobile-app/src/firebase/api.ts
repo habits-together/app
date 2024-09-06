@@ -698,33 +698,16 @@ export async function uploadProfilePic(uri: string): Promise<string> {
     xhr.send(null);
   });
 
-  const fileRef = ref(getStorage(), `profilePics/${userId}`);
+  const fileRef = ref(getStorage(), `profilePics/${userId}.jpg`);
   await uploadBytes(fileRef, blob);
   return await getDownloadURL(fileRef);
-}
-
-export async function getCurrentUserProfilePicUrl(): Promise<string> {
-  const userId = atomStore.get(currentUserIdAtom);
-  const fileRef = ref(getStorage(), `profilePics/${userId}`);
-  try {
-    const downloadUrl = await getDownloadURL(fileRef);
-    return downloadUrl;
-  } catch (error: any) {
-    if (error instanceof FirebaseError) {
-      if (error.code === "storage/object-not-found") {
-        console.log("User has no profile pic.");
-        return defaultProfilePicUrl;
-      }
-    }
-    console.error("Error fetching profile pic:", error.message || error);
-    return defaultProfilePicUrl;
-  }
 }
 
 export async function getUserProfilePicUrl(userId: UserIdT): Promise<string> {
   const fileRef = ref(getStorage(), `profilePics/${userId}.jpg`);
   try {
     const downloadUrl = await getDownloadURL(fileRef);
+    console.log(downloadUrl);
     return downloadUrl;
   } catch (error: any) {
     if (error instanceof FirebaseError) {
