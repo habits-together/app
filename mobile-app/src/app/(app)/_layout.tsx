@@ -45,11 +45,11 @@ export default function AppLayout() {
             const userInfo = await fetchUserInfo({
               userId: user.uid as UserIdT,
             });
-            // fetch profile pic
-            const pic = await getUserProfilePicUrl(currentUser.id);
-            setCurrentUserProfilePic(pic);
             setCurrentUser(userInfo);
           }
+          // fetch profile pic
+          const pic = await getUserProfilePicUrl(currentUser.id);
+          setCurrentUserProfilePic(pic);
           console.log(currentUserProfilePic);
           console.log(currentUser);
         }
