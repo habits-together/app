@@ -552,7 +552,7 @@ export const habitNotificationAtom = atomFamily(
 );
 
 export const getUserInfoAtom = atomFamily((userId: UserIdT) =>
-  atom(async (get) => fetchUserInfo({ userId })),
+  atom(async () => fetchUserInfo({ userId })),
 );
 
 /**
