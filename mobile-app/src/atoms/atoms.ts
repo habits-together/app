@@ -728,15 +728,13 @@ export const settingAtom = atomFamily((settingKey: string) =>
 
 // Images
 export const userPictureAtom = atomFamily(
-  ({ userId }: { userId: UserIdT }) =>
-    atom(async () => await getUserProfilePicUrl(userId)),
+  (userId: UserIdT) => atom(async () => await getUserProfilePicUrl(userId)),
   deepEquals,
 );
 
 export const habitParticipantPfpsListAtom = atomFamily((habitId: HabitIdT) =>
   atom(async (get) => {
-    const habitParticipants = get(habitParticipantsInfoAtom(habitId));
-    const habitParticipantsIds = Object.keys(habitParticipants) as UserIdT[];
+    const habitParticipantsIds = get(habitParticipantIdsAtom(habitId));
     const profilePicUrls = await Promise.all(
       habitParticipantsIds.map((userId) => getUserProfilePicUrl(userId)),
     );

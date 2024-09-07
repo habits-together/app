@@ -178,9 +178,7 @@ function ActivityCard({
 }) {
   const { colorScheme } = useColorScheme();
   const participant = useAtomValue(participantAtom({ habitId, participantId }));
-  const participantImage = useAtomValue(
-    userPictureAtom({ userId: participantId }),
-  );
+  const participantImage = useAtomValue(userPictureAtom(participantId));
   const habitColor = useAtomValue(habitColorAtom(habitId));
   const viewType = useAtomValue(viewHabitDisplayTypeAtom(habitId));
   const habitGoalPeriod = useAtomValue(habitGoalAtom(habitId)).period;

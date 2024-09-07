@@ -15,7 +15,7 @@ import { ConfirmButton, DeleteButton } from "./ConfirmDeleteButton";
 export function FriendRequest({ notifId }: { notifId: NotificationIdT }) {
   const notifData = useAtomValue(friendNotificationAtom(notifId));
   const personData = useAtomValue(getUserInfoAtom(notifData.senderId));
-  const personImage = useAtomValue(userPictureAtom({ userId: personData.id }));
+  const personImage = useAtomValue(userPictureAtom(personData.id));
   const numberOfMutualFriends = useAtomValue(
     numberOfMutualFriendsAtom(notifData.senderId),
   );

@@ -16,7 +16,7 @@ import { ConfirmButton, DeleteButton } from "./ConfirmDeleteButton";
 export function HabitInvite({ notifId }: { notifId: NotificationIdT }) {
   const notifData = useAtomValue(habitNotificationAtom(notifId));
   const personData = useAtomValue(getUserInfoAtom(notifData.senderId));
-  const personImage = useAtomValue(userPictureAtom({ userId: personData.id }));
+  const personImage = useAtomValue(userPictureAtom(personData.id));
 
   return (
     <View className="mt-2 flex grow-0 flex-row items-center rounded-3xl px-0 py-2">

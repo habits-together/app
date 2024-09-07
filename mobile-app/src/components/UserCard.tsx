@@ -88,7 +88,7 @@ export default function UserCard({
   displayType: "friendsList" | "inviteFriendsToHabit" | "addFriends";
 }) {
   const { id: userId, displayName, username } = userInfo;
-  const profilePicture = useAtomValue(userPictureAtom({ userId }));
+  const profilePicture = useAtomValue(userPictureAtom(userId));
   const [, removeFriend] = useAtom(removeFriendAtom);
 
   const { habitidStr } = useGlobalSearchParams<{ habitidStr: HabitIdT }>();
