@@ -2,10 +2,13 @@ import Icon from "@/src/components/Icon";
 import { Text, View } from "@/src/components/Themed";
 import DefaultColors from "@/src/constants/DefaultColors";
 import { IconCirclePlus } from "@tabler/icons-react-native";
+import { Image } from "expo-image";
+import { SaveFormat, manipulateAsync } from "expo-image-manipulator";
+import * as ImagePicker from "expo-image-picker";
 import { useColorScheme } from "nativewind";
 import { useRef } from "react";
-import { Image, TextInput, TouchableOpacity } from "react-native";
-import { userWithIdEmailT } from "../lib/db_types";
+import { TextInput, TouchableOpacity } from "react-native";
+import { ProfileFormData } from "../lib/db_types";
 
 export default function ProfileCreationBoxes({
   editPage,
@@ -13,21 +16,38 @@ export default function ProfileCreationBoxes({
   setFormData,
 }: {
   editPage: boolean;
-  formData: userWithIdEmailT;
-  setFormData: React.Dispatch<React.SetStateAction<userWithIdEmailT>>;
+  formData: ProfileFormData;
+  setFormData: React.Dispatch<React.SetStateAction<ProfileFormData>>;
 }) {
   const { colorScheme } = useColorScheme();
   const refUsernameInput = useRef<TextInput>(null);
   const refEmailInput = useRef<TextInput>(null);
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All, // for file types
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.canceled) {
+      const picUrl = result.assets[0].uri;
+      // resize the image
+      const resizedPic = await manipulateAsync(
+        picUrl,
+        [{ resize: { height: 72, width: 72 } }],
+        { format: SaveFormat.JPEG },
+      );
+      setFormData({ ...formData, picture: resizedPic.uri });
+    }
+  };
 
   return (
     <View className="mt-10 flex flex-col">
       {/* Profile Picture */}
       <TouchableOpacity
         className="h-24 w-24 self-center rounded-3xl bg-stone-400"
-        onPress={() => {
-          // Logic for picking picture
-        }}
+        onPress={pickImage}
       >
         {formData.picture && (
           <Image

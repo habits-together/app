@@ -4,6 +4,7 @@ import {
   friendNotificationAtom,
   getUserInfoAtom,
   numberOfMutualFriendsAtom,
+  userPictureAtom,
 } from "@/src/atoms/atoms";
 import { NotificationIdT } from "@/src/lib/db_types";
 import { useAtomValue } from "jotai";
@@ -14,6 +15,7 @@ import { ConfirmButton, DeleteButton } from "./ConfirmDeleteButton";
 export function FriendRequest({ notifId }: { notifId: NotificationIdT }) {
   const notifData = useAtomValue(friendNotificationAtom(notifId));
   const personData = useAtomValue(getUserInfoAtom(notifData.senderId));
+  const personImage = useAtomValue(userPictureAtom(personData.id));
   const numberOfMutualFriends = useAtomValue(
     numberOfMutualFriendsAtom(notifData.senderId),
   );
@@ -21,7 +23,7 @@ export function FriendRequest({ notifId }: { notifId: NotificationIdT }) {
   return (
     <View className="mt-2 flex grow-0 flex-row items-center rounded-3xl px-0 py-2">
       <View className="items-top flex flex-row">
-        <NotifProfilePicture picUrl={personData.picture} />
+        <NotifProfilePicture picUrl={personImage} />
         <View className="ml-4 flex flex-1 flex-col">
           <Text className="flex-row">
             <Text className="text-base font-semibold">

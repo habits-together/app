@@ -48,7 +48,7 @@ export default function HorizontalProfilePicsList({
           className="-mr-[7px] rounded-full border"
           style={{ borderColor }}
         >
-          <SmallProfilePicture picUrl={picBase64String} isLocalImage={true} />
+          <SmallProfilePicture picUrl={picBase64String} />
         </View>
       ))}
     </View>

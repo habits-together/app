@@ -3,6 +3,7 @@ import Icon from "@/src/components/Icon";
 import { Text, View } from "@/src/components/Themed";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { IconMail, IconPhotoScan } from "@tabler/icons-react-native";
+import { Image } from "expo-image";
 import { Link, router } from "expo-router";
 import { useColorScheme } from "nativewind";
 import { useRef, useState } from "react";
@@ -10,7 +11,6 @@ import {
   Animated,
   Dimensions,
   FlatList,
-  Image,
   Platform,
   Pressable,
 } from "react-native";

@@ -2,6 +2,7 @@ import {
   deleteNotificationAtom,
   getUserInfoAtom,
   habitNotificationAtom,
+  userPictureAtom,
 } from "@/src/atoms/atoms";
 import colors from "@/src/constants/colors";
 import { NotificationIdT } from "@/src/lib/db_types";
@@ -14,12 +15,13 @@ import { DismissButton } from "./ConfirmDeleteButton";
 export function Nudge({ notifId }: { notifId: NotificationIdT }) {
   const notifData = useAtomValue(habitNotificationAtom(notifId));
   const personData = useAtomValue(getUserInfoAtom(notifData.senderId));
+  const personImage = useAtomValue(userPictureAtom(personData.id));
 
   return (
     <View className="mt-2 flex grow-0 flex-row items-center rounded-3xl px-0 py-2">
       <View className="items-top flex flex-row">
         <View>
-          <NotifProfilePicture picUrl={personData.picture} />
+          <NotifProfilePicture picUrl={personImage} />
           <View
             className="absolute -right-[8px] -top-[-44px] h-9 w-9 rounded-full "
             style={{

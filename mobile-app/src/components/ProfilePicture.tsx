@@ -1,22 +1,9 @@
-import { Image } from "react-native";
+import { Image } from "expo-image";
 
-export function SmallProfilePicture({
-  picUrl,
-  isLocalImage = false,
-}: {
-  picUrl: string;
-  isLocalImage?: boolean;
-}) {
+export function SmallProfilePicture({ picUrl }: { picUrl: string }) {
   return (
     <Image
       className="h-[30px] w-[30px] rounded-full"
-      // source={
-      //   isLocalImage
-      //     ? picUrl
-      //     : picUrl
-      //       ? { uri: picUrl }
-      //       : require("../../assets/images/default_user.png")
-      // }
       source={{ uri: picUrl }}
     />
   );

@@ -8,6 +8,7 @@ import {
   numberOfCompletionsTodayAtom,
   participantAtom,
   sendHabitNudgeAtom,
+  userPictureAtom,
   viewHabitDisplayTypeAtom,
 } from "@/src/atoms/atoms";
 import { currentUserIdAtom } from "@/src/atoms/currentUserAtom";
@@ -177,6 +178,7 @@ function ActivityCard({
 }) {
   const { colorScheme } = useColorScheme();
   const participant = useAtomValue(participantAtom({ habitId, participantId }));
+  const participantImage = useAtomValue(userPictureAtom(participantId));
   const habitColor = useAtomValue(habitColorAtom(habitId));
   const viewType = useAtomValue(viewHabitDisplayTypeAtom(habitId));
   const habitGoalPeriod = useAtomValue(habitGoalAtom(habitId)).period;
@@ -194,7 +196,7 @@ function ActivityCard({
         <View className="flex flex-row" style={{ gap: 10 }}>
           {/* image */}
           <View className="">
-            <MediumProfilePicture picUrl={participant.picture} />
+            <MediumProfilePicture picUrl={participantImage} />
           </View>
           {/* text */}
           <View className="flex flex-col justify-center">
