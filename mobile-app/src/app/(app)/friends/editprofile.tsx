@@ -41,7 +41,8 @@ export default function editprofile() {
       }}
     >
       {/* Form */}
-      <View className="flex w-screen flex-col px-5">f
+      <View className="flex w-screen flex-col px-5">
+        f
         <ProfileCreationBoxes
           editPage={true}
           formData={formData}
