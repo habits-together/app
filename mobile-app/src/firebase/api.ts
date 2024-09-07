@@ -704,6 +704,8 @@ export async function uploadProfilePic(uri: string): Promise<string> {
 }
 
 export async function getUserProfilePicUrl(userId: UserIdT): Promise<string> {
+  const userData = await fetchUserInfo({ userId });
+  const defaultProfilePicUrl = await getDefaultProfilePicUrl(userData.username);
   const fileRef = ref(getStorage(), `profilePics/${userId}.jpg`);
   try {
     const downloadUrl = await getDownloadURL(fileRef);
@@ -718,5 +720,20 @@ export async function getUserProfilePicUrl(userId: UserIdT): Promise<string> {
     }
     console.error("Error fetching profile pic:", error.message || error);
     return defaultProfilePicUrl;
+  }
+}
+
+export async function getDefaultProfilePicUrl(
+  username: string,
+): Promise<string> {
+  const fallBackUrl = "https://i.sstatic.net/l60Hf.png";
+  try {
+    const response = await fetch(
+      `https://ui-avatars.com/api/?name=${username}`,
+    );
+    return response.url;
+  } catch (error) {
+    console.error("Error fetching default profile pic:", error);
+    return fallBackUrl;
   }
 }
