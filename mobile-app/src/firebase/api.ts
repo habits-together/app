@@ -742,10 +742,15 @@ export async function getDefaultProfilePicUrl(
   const textCol = (
     colorScheme === "dark" ? colors.stone.base : colors.white
   ).replace(/^#/, "");
-  const fontSize = 0.7; // b.w 0.1 and 1
   try {
     const response = await fetch(
-      `https://ui-avatars.com/api/?name=${username}&size=${size || 72}&length=1&bold=true&background=${backgroundCol}&color=${textCol}&font-size=${fontSize}`,
+      `https://ui-avatars.com/api/?name=${username}` +
+        `&size=${size || 72}` +
+        `&length=1` + // number of letter in the pic
+        `&bold=true` +
+        `&background=${backgroundCol}` +
+        `&color=${textCol}` +
+        `&font-size=${0.7}`, // b.w 0.1 and 1
     );
     return response.url;
   } catch (error) {
