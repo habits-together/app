@@ -87,8 +87,9 @@ export default function UserCard({
   userInfo: userWithIdT;
   displayType: "friendsList" | "inviteFriendsToHabit" | "addFriends";
 }) {
+  const { colorScheme } = useColorScheme();
   const { id: userId, displayName, username } = userInfo;
-  const profilePicture = useAtomValue(userPictureAtom(userId));
+  const profilePicture = useAtomValue(userPictureAtom({ userId, colorScheme }));
   const [, removeFriend] = useAtom(removeFriendAtom);
 
   const { habitidStr } = useGlobalSearchParams<{ habitidStr: HabitIdT }>();
@@ -214,8 +215,11 @@ function CommonHabits({ friendId }: { friendId: UserIdT }) {
 }
 
 function MutualFriends({ userId }: { userId: UserIdT }) {
+  const { colorScheme } = useColorScheme();
   const maxPfps = 8;
-  const mutualFriendsPictures = useAtomValue(mutualFriendsPfpsListAtom(userId));
+  const mutualFriendsPictures = useAtomValue(
+    mutualFriendsPfpsListAtom({ userId, colorScheme }),
+  );
   return (
     <View className="ml-1 mr-auto mt-2 flex flex-row">
       <HorizontalProfilePicsList

@@ -8,14 +8,18 @@ import {
 } from "@/src/atoms/atoms";
 import { NotificationIdT } from "@/src/lib/db_types";
 import { useAtomValue } from "jotai";
+import { useColorScheme } from "nativewind";
 import { NotifProfilePicture } from "../ProfilePicture";
 import { Text, View } from "../Themed";
 import { ConfirmButton, DeleteButton } from "./ConfirmDeleteButton";
 
 export function FriendRequest({ notifId }: { notifId: NotificationIdT }) {
+  const { colorScheme } = useColorScheme();
   const notifData = useAtomValue(friendNotificationAtom(notifId));
   const personData = useAtomValue(getUserInfoAtom(notifData.senderId));
-  const personImage = useAtomValue(userPictureAtom(personData.id));
+  const personImage = useAtomValue(
+    userPictureAtom({ userId: personData.id, colorScheme }),
+  );
   const numberOfMutualFriends = useAtomValue(
     numberOfMutualFriendsAtom(notifData.senderId),
   );

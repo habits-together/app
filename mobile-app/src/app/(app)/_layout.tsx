@@ -23,6 +23,8 @@ export const unstable_settings = {
 
 export default function AppLayout() {
   // must be loggged in
+  const { colorScheme } = useColorScheme();
+  const themeSetting = useAtomValue(settingAtom("theme"));
   const auth = getAuth();
   const [currentUser, setCurrentUser] = useAtom(currentUserAtom);
   const [currentUserProfilePic, setCurrentUserProfilePic] = useAtom(
@@ -48,7 +50,7 @@ export default function AppLayout() {
             setCurrentUser(userInfo);
           }
           // fetch profile pic
-          const pic = await getUserProfilePicUrl(currentUser.id);
+          const pic = await getUserProfilePicUrl(currentUser.id, colorScheme);
           setCurrentUserProfilePic(pic);
           console.log(currentUserProfilePic);
           console.log(currentUser);
@@ -62,8 +64,6 @@ export default function AppLayout() {
     return () => unsubscribe();
   }, [auth]);
 
-  const { colorScheme } = useColorScheme();
-  const themeSetting = useAtomValue(settingAtom("theme"));
   useEffect(() => {
     if (themeSetting === 1) {
       NativeWindStyleSheet.setColorScheme("light");
