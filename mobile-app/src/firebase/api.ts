@@ -1,3 +1,4 @@
+import colors from "@/src/constants/colors";
 import { FirebaseError } from "firebase/app";
 import {
   addDoc,
@@ -18,9 +19,9 @@ import {
 } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { SetStateAction } from "jotai";
+import { ColorSchemeName } from "nativewind/dist/style-sheet/color-scheme";
 import { currentUserAtom, currentUserIdAtom } from "../atoms/currentUserAtom";
 import { atomStore } from "../atoms/store";
-import { defaultProfilePicUrl } from "../constants/constants";
 import {
   allHabitsT,
   allNotificationsT,
@@ -703,7 +704,15 @@ export async function uploadProfilePic(uri: string): Promise<string> {
   return await getDownloadURL(fileRef);
 }
 
-export async function getUserProfilePicUrl(userId: UserIdT): Promise<string> {
+export async function getUserProfilePicUrl(
+  userId: UserIdT,
+  colorScheme: ColorSchemeName,
+): Promise<string> {
+  const userData = await fetchUserInfo({ userId });
+  const defaultProfilePicUrl = await getDefaultProfilePicUrl(
+    userData.username,
+    colorScheme,
+  );
   const fileRef = ref(getStorage(), `profilePics/${userId}.jpg`);
   try {
     const downloadUrl = await getDownloadURL(fileRef);
@@ -718,5 +727,34 @@ export async function getUserProfilePicUrl(userId: UserIdT): Promise<string> {
     }
     console.error("Error fetching profile pic:", error.message || error);
     return defaultProfilePicUrl;
+  }
+}
+
+export async function getDefaultProfilePicUrl(
+  username: string,
+  colorScheme: ColorSchemeName,
+  size?: number,
+): Promise<string> {
+  const fallBackUrl = "https://i.sstatic.net/l60Hf.png";
+  const backgroundCol = (
+    colorScheme === "dark" ? colors.white : colors.stone.base
+  ).replace(/^#/, "");
+  const textCol = (
+    colorScheme === "dark" ? colors.stone.base : colors.white
+  ).replace(/^#/, "");
+  try {
+    const response = await fetch(
+      `https://ui-avatars.com/api/?name=${username}` +
+        `&size=${size || 72}` +
+        `&length=1` + // number of letter in the pic
+        `&bold=true` +
+        `&background=${backgroundCol}` +
+        `&color=${textCol}` +
+        `&font-size=${0.7}`, // b.w 0.1 and 1
+    );
+    return response.url;
+  } catch (error) {
+    console.error("Error fetching default profile pic:", error);
+    return fallBackUrl;
   }
 }

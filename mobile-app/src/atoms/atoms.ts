@@ -1,6 +1,7 @@
 import deepEquals from "fast-deep-equal";
 import { atom } from "jotai";
 import { atomFamily, selectAtom, splitAtom } from "jotai/utils";
+import { ColorSchemeName } from "nativewind/dist/style-sheet/color-scheme";
 import colors from "../constants/colors";
 import { maxNumWeeksToDisplay } from "../constants/constants";
 import {
@@ -728,27 +729,59 @@ export const settingAtom = atomFamily((settingKey: string) =>
 
 // Images
 export const userPictureAtom = atomFamily(
-  (userId: UserIdT) => atom(async () => await getUserProfilePicUrl(userId)),
+  ({
+    userId,
+    colorScheme,
+  }: {
+    userId: UserIdT;
+    colorScheme: ColorSchemeName;
+  }) => atom(async () => await getUserProfilePicUrl(userId, colorScheme)),
   deepEquals,
 );
 
-export const habitParticipantPfpsListAtom = atomFamily((habitId: HabitIdT) =>
-  atom(async (get) => {
-    const habitParticipantsIds = get(habitParticipantIdsAtom(habitId));
-    const profilePicUrls = await Promise.all(
-      habitParticipantsIds.map((userId) => getUserProfilePicUrl(userId)),
-    );
-    return profilePicUrls;
-  }),
+export const habitParticipantPfpsListAtom = atomFamily(
+  ({
+    habitId,
+    colorScheme,
+  }: {
+    habitId: HabitIdT;
+    colorScheme: ColorSchemeName;
+  }) =>
+    atom(async (get) => {
+      console.log("hit");
+      const habitParticipantsIds = get(habitParticipantIdsAtom(habitId));
+      const profilePicUrls = await Promise.all(
+        habitParticipantsIds.map((userId) =>
+          get(
+            userPictureAtom({
+              userId,
+              colorScheme,
+            }),
+          ),
+        ),
+      );
+      return profilePicUrls;
+    }),
+  deepEquals,
 );
 
-export const mutualFriendsPfpsListAtom = atomFamily((friendId: UserIdT) =>
-  atom(async (get) => {
-    const mutualFriends = await get(mutualFriendsAtom(friendId));
-    const mutualFriendIds = Object.keys(mutualFriends) as UserIdT[];
-    const profilePicUrls = await Promise.all(
-      mutualFriendIds.map((userId) => getUserProfilePicUrl(userId)),
-    );
-    return profilePicUrls;
-  }),
+export const mutualFriendsPfpsListAtom = atomFamily(
+  ({
+    userId,
+    colorScheme,
+  }: {
+    userId: UserIdT;
+    colorScheme: ColorSchemeName;
+  }) =>
+    atom(async (get) => {
+      const mutualFriends = await get(mutualFriendsAtom(userId));
+      const mutualFriendIds = Object.keys(mutualFriends) as UserIdT[];
+      const profilePicUrls = await Promise.all(
+        mutualFriendIds.map((userId) =>
+          getUserProfilePicUrl(userId, colorScheme),
+        ),
+      );
+      return profilePicUrls;
+    }),
+  deepEquals,
 );
