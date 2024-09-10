@@ -2,20 +2,22 @@ import Icon from "@/src/components/Icon";
 import { Text, View } from "@/src/components/Themed";
 import DefaultColors from "@/src/constants/DefaultColors";
 import { IconCirclePlus } from "@tabler/icons-react-native";
+import { useAtom } from "jotai";
 import { useColorScheme } from "nativewind";
 import { useRef } from "react";
 import { Image, TextInput, TouchableOpacity } from "react-native";
-import { userWithIdEmailT } from "../lib/db_types";
+import { profileFormDataAtom } from "../atoms/atoms";
 
 export default function ProfileCreationBoxes({
   editPage,
-  formData,
-  setFormData,
+  // formData,
+  // setFormData,
 }: {
   editPage: boolean;
-  formData: userWithIdEmailT;
-  setFormData: React.Dispatch<React.SetStateAction<userWithIdEmailT>>;
+  // formData: userWithIdEmailT;
+  // setFormData: React.Dispatch<React.SetStateAction<userWithIdEmailT>>;
 }) {
+  const [formData, setFormData] = useAtom(profileFormDataAtom);
   const { colorScheme } = useColorScheme();
   const refUsernameInput = useRef<TextInput>(null);
   const refEmailInput = useRef<TextInput>(null);
@@ -77,7 +79,7 @@ export default function ProfileCreationBoxes({
         ></TextInput>
       </View>
       {/* Email */}
-      {editPage == true && (
+      {/* {editPage == true && (
         <View className="mt-5 flex flex-col">
           <Text className="text-base font-semibold">Email</Text>
           <TextInput
@@ -91,7 +93,7 @@ export default function ProfileCreationBoxes({
             onChangeText={(text) => setFormData({ ...formData, email: text })}
           ></TextInput>
         </View>
-      )}
+      )} */}
     </View>
   );
 }

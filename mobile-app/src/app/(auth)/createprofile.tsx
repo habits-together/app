@@ -1,3 +1,4 @@
+import { profileFormDataAtom } from "@/src/atoms/atoms";
 import { currentUserAtom } from "@/src/atoms/currentUserAtom";
 import Icon from "@/src/components/Icon";
 import ProfileCreationBoxes from "@/src/components/PfpNameUsernameBoxes";
@@ -8,7 +9,7 @@ import { UserIdT, userWithIdT } from "@/src/lib/db_types";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { IconCheck } from "@tabler/icons-react-native";
 import { getAuth } from "firebase/auth";
-import { useSetAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { useColorScheme } from "nativewind";
 import { useEffect, useState } from "react";
 import {
@@ -21,13 +22,12 @@ import {
 export default function createprofile() {
   const { colorScheme } = useColorScheme();
   const setCurrentUser = useSetAtom(currentUserAtom);
+  const [profileFormData, setProfileFormData] = useAtom(profileFormDataAtom);
   const auth = getAuth();
   const [data, setData] = useState<userWithIdT>({
     id: "" as UserIdT,
-    displayName: "",
-    username: "",
-    picture: "https://i.sstatic.net/l60Hf.png",
     createdAt: new Date(),
+    ...profileFormData,
   });
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
@@ -92,11 +92,7 @@ export default function createprofile() {
       {/* Form */}
       <View className="flex w-screen flex-col px-5">
         <Text className="text-3xl font-bold">Create profile</Text>
-        <ProfileCreationBoxes
-          editPage={false}
-          formData={data}
-          setFormData={setData}
-        />
+        <ProfileCreationBoxes editPage={false} />
         {/* Complete profile */}
         <TouchableOpacity
           onPress={createProfile}

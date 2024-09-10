@@ -1,6 +1,11 @@
 import deepEquals from "fast-deep-equal";
 import { atom } from "jotai";
-import { atomFamily, selectAtom, splitAtom } from "jotai/utils";
+import {
+  atomFamily,
+  atomWithDefault,
+  selectAtom,
+  splitAtom,
+} from "jotai/utils";
 import colors from "../constants/colors";
 import { maxNumWeeksToDisplay } from "../constants/constants";
 import {
@@ -30,6 +35,7 @@ import {
   subscribeToNotifications,
   updatetHabitCompletionsInDb,
 } from "../firebase/api";
+import { auth } from "../firebase/config";
 import { betterAtomWithStorage } from "../lib/betterAtomWithStorage";
 import {
   HabitDisplayType,
@@ -748,3 +754,29 @@ export const viewHabitDisplayTypeAtom = atomFamily((habitId: HabitIdT) =>
 export const settingAtom = atomFamily((settingKey: string) =>
   betterAtomWithStorage<number>(settingKey, 0),
 );
+
+export const profileFormDataAtom = atomWithDefault((get) => {
+  let data = {
+    displayName: "",
+    username: "",
+    picture: "https://i.sstatic.net/l60Hf.png",
+  };
+
+  if (auth.currentUser) {
+    data = {
+      username: get(currentUserAtom).username,
+      displayName: get(currentUserAtom).displayName,
+      picture: get(currentUserAtom).picture,
+    };
+  }
+
+  console.log(data);
+  return data;
+});
+
+// profileFormDataAtom.onMount = (setAtom) => {
+//   console.log("profile data atom mounted")
+//   console.log
+//   // console.log(currentUserAtom)
+//   return () => {console.log("profile data unmounted")}
+// }
