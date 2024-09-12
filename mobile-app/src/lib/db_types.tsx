@@ -1,3 +1,4 @@
+import colors from "../constants/colors";
 import { HabitVisibilityExplanations } from "../constants/constants";
 
 export type UserIdT = string & { readonly __brand: unique symbol };
@@ -28,7 +29,7 @@ type dbT = {
   habits: Record<
     HabitIdT,
     {
-      color: string;
+      color: keyof typeof colors.habitColors;
       createdAt: Date;
       description: string;
       title: string;

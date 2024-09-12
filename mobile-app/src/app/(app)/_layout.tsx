@@ -52,8 +52,8 @@ export default function AppLayout() {
           // fetch profile pic
           const pic = await getUserProfilePicUrl(currentUser.id, colorScheme);
           setCurrentUserProfilePic(pic);
-          console.log(currentUserProfilePic);
-          console.log(currentUser);
+          // console.log(currentUserProfilePic);
+          // console.log(currentUser);
         }
       } else {
         // only authenticated users allowed here

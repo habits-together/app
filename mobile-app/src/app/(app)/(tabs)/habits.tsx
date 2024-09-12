@@ -1,23 +1,28 @@
 import { habitIdsAtom } from "@/src/atoms/atoms";
-import { HabitCard } from "@/src/components/habit-components/HabitCard";
-import { ScrollView, View } from "@/src/components/Themed";
+import { ScrollView, Text, View } from "@/src/components/Themed";
+import { HabitCard } from "@/src/features/habits/components/HabitCard/HabitCard";
+import useMyHabitsQuery from "@/src/features/habits/query-hooks/useMyHabitsQuery";
+import { HabitIdT } from "@/src/lib/db_types";
 import { useAtomValue } from "jotai";
-import { Suspense } from "react";
 
 export default function HabitsTab() {
   const habitIds = useAtomValue(habitIdsAtom);
+  const { isPending, error, data, isFetching } = useMyHabitsQuery();
+
   return (
     <ScrollView
       className="flex-1 px-4 pt-2"
       contentContainerStyle={{ paddingBottom: 100 }}
     >
-      {habitIds.map((id) => (
-        <Suspense key={id} fallback={<></>}>
-          <View className="mb-5">
-            <HabitCard habitId={id} />
+      {isPending && <Text>Loading...</Text>}
+      {isFetching && <Text>Fetching...</Text>}
+      {error && <Text>Error: {error.message}</Text>}
+      {data &&
+        (Object.keys(data) as HabitIdT[]).map((id) => (
+          <View className="mb-5" key={id}>
+            <HabitCard habit={{ ...data[id], id }} />
           </View>
-        </Suspense>
-      ))}
+        ))}
     </ScrollView>
   );
 }
