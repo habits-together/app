@@ -60,30 +60,6 @@ export default function CreateOrEditHabit({
 
   return (
     <View className="flex flex-1 flex-col gap-y-5 px-5 pt-2">
-      {/* Header
-      <View className="flex flex-row items-center justify-between">
-        {
-          <RoundedButton
-            text="Cancel"
-            icon={IconX}
-            onPress={() => {
-              router.back();
-            }}
-          />
-        }
-        <Text className="text-base font-semibold">
-          {habitId ? "Edit" : "New"} habit
-        </Text>
-        {
-          <RoundedButton
-            text={habitId ? "Done" : "Next"}
-            icon={habitId ? IconCheck : IconArrowForwardUp}
-            isDisabled={!canCreateHabit}
-            onPress={handleCreateOrEditHabit}
-          />
-        }
-      </View> */}
-
       {/* Icon & Name */}
       <View className="flex flex-col">
         <Text className="mb-1 text-base font-semibold">Icon & Name</Text>

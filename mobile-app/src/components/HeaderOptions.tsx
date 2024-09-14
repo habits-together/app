@@ -2,12 +2,13 @@ import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import {
   IconArrowForwardUp,
   IconCheck,
+  IconChevronLeft,
   IconEdit,
   IconX,
 } from "@tabler/icons-react-native";
 import { router, useGlobalSearchParams } from "expo-router";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { Pressable } from "react-native";
+import { Pressable, TouchableOpacity } from "react-native";
 import {
   createNewHabitAtom,
   createOrEditHabitFormAtom,
@@ -89,11 +90,30 @@ export function viewHabitOptions(
   };
 }
 
-// export function habitIconsOptions(
-//   colorScheme: string,
-// ): NativeStackNavigationOptions {
-
-// }
+export function habitIconsOptions(
+  colorScheme: string,
+): NativeStackNavigationOptions {
+  return {
+    headerLeft: () => (
+      <TouchableOpacity
+          className="absolute -left-1 flex flex-row items-center justify-center px-2 py-1"
+          onPress={() => {
+            router.back();
+          }}
+        >
+          <Icon icon={IconChevronLeft} size={20} />
+          <Text className="ml-1 text-base font-semibold">Back</Text>
+      </TouchableOpacity>
+    ),
+    headerTitle: () => (
+      <Text className="text-base font-semibold text-black dark:text-white">
+        Select Icon
+      </Text>
+    ),
+    headerTitleAlign: "center",
+    ...sharedOptions(colorScheme),
+  };
+}
 
 export function createHabitOptions(
   colorScheme: string,

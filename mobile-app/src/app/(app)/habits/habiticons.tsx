@@ -1,11 +1,9 @@
 import { createOrEditHabitFormAtom } from "@/src/atoms/atoms";
-import Icon from "@/src/components/Icon";
 import { Text, View } from "@/src/components/Themed";
-import { IconChevronLeft } from "@tabler/icons-react-native";
 import { router } from "expo-router";
 import { useAtom } from "jotai";
 import { useMemo } from "react";
-import { FlatList, TouchableOpacity } from "react-native";
+import { FlatList } from "react-native";
 import { IconButton } from "./icon-button";
 import { iconStrNameToTablerIcon } from "./icons";
 
@@ -183,21 +181,7 @@ export default function HabitIcons() {
   };
 
   return (
-    <View className="flex flex-1 flex-col gap-y-5 px-5 pt-12">
-      {/* Header */}
-      <View className="relative flex flex-row items-center justify-center">
-        <TouchableOpacity
-          className="absolute -left-1 flex flex-row items-center justify-center px-2 py-1"
-          onPress={() => {
-            router.back();
-          }}
-        >
-          <Icon icon={IconChevronLeft} size={20} />
-          <Text className="ml-1 text-base font-semibold">Back</Text>
-        </TouchableOpacity>
-        <Text className="text-base font-semibold">Select Icon</Text>
-      </View>
-
+    <View className="flex flex-1 flex-col gap-y-5 px-5 pt-1">
       {/* Content */}
       <FlatList
         data={habitIcons}

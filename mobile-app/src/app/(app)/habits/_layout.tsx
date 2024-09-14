@@ -1,6 +1,7 @@
 import {
   createHabitOptions,
   editHabitOptions,
+  habitIconsOptions,
   viewHabitOptions,
 } from "@/src/components/HeaderOptions";
 import { Stack } from "expo-router";
@@ -16,7 +17,10 @@ export default function HabitsLayout() {
         options={createHabitOptions(colorScheme)}
       />
       <Stack.Screen name="edithabit" options={editHabitOptions(colorScheme)} />
-      <Stack.Screen name="habiticons" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="habiticons"
+        options={habitIconsOptions(colorScheme)}
+      />
       <Stack.Screen name="viewhabit" options={viewHabitOptions(colorScheme)} />
     </Stack>
   );
