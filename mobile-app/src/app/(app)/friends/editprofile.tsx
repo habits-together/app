@@ -1,3 +1,4 @@
+import { profileFormDataAtom } from "@/src/atoms/atoms";
 import {
   currentUserAtom,
   currentUserProfilePicAtom,
@@ -8,7 +9,7 @@ import { Text, View } from "@/src/components/Themed";
 import { ProfileFormData } from "@/src/lib/db_types";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
 import { IconTrash } from "@tabler/icons-react-native";
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { useState } from "react";
 import {
   Platform,
@@ -21,14 +22,7 @@ export default function editprofile() {
   // get current user data
   const currentUserData = useAtomValue(currentUserAtom);
   const currentUserProfilePic = useAtomValue(currentUserProfilePicAtom);
-
-  const [formData, setFormData] = useState<ProfileFormData>({
-    id: currentUserData.id,
-    displayName: currentUserData.displayName,
-    username: currentUserData.username,
-    picture: currentUserProfilePic,
-    createdAt: currentUserData.createdAt,
-  });
+  const [formData, setFormData] = useAtom(profileFormDataAtom);
 
   return (
     <SafeAreaView

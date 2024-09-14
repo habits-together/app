@@ -1,6 +1,6 @@
 import deepEquals from "fast-deep-equal";
 import { atom } from "jotai";
-import { atomFamily, selectAtom, splitAtom } from "jotai/utils";
+import { atomFamily, atomWithDefault, selectAtom, splitAtom } from "jotai/utils";
 import { ColorSchemeName } from "nativewind/dist/style-sheet/color-scheme";
 import colors from "../constants/colors";
 import { maxNumWeeksToDisplay } from "../constants/constants";
@@ -38,6 +38,7 @@ import {
   HabitIdT,
   HabitVisibilityType,
   NotificationIdT,
+  ProfileFormData,
   UserIdT,
   allHabitsT,
   allNotificationsT,
@@ -55,7 +56,8 @@ import {
 import { todayString } from "../lib/formatDateString";
 import { getNumberOfDaysInLastWeek } from "../lib/getNumberOfDaysInLastWeek";
 import { structureCompletionData } from "../lib/structureCompletionData";
-import { currentUserAtom, currentUserIdAtom } from "./currentUserAtom";
+import { currentUserAtom, currentUserIdAtom, currentUserProfilePicAtom } from "./currentUserAtom";
+import { auth } from "../firebase/config";
 // using Jotai atoms: https://jotai.org/docs/introduction
 // we especially use the atomFamily atom: https://jotai.org/docs/utilities`/family
 
@@ -785,3 +787,34 @@ export const mutualFriendsPfpsListAtom = atomFamily(
     }),
   deepEquals,
 );
+
+export const profileFormDataAtom = atomWithDefault((get) => {
+  let data = {
+    displayName: "Display name not initalized",
+    username: "Username not initialized",
+    picture: "https://i.sstatic.net/l60Hf.png",
+    id: "id not initialized",
+    createdAt: new Date()
+  };
+
+  if (auth.currentUser) {
+    data = {
+      username: get(currentUserAtom).username,
+      displayName: get(currentUserAtom).displayName,
+      picture: get(currentUserProfilePicAtom),
+      id: get(currentUserAtom).id,
+      createdAt: get(currentUserAtom).createdAt
+    };
+  }
+
+  console.log(data);
+  return data as ProfileFormData;
+}
+);
+
+// profileFormDataAtom.onMount = (setAtom) => {
+//   console.log("profile data atom mounted")
+//   console.log
+//   // console.log(currentUserAtom)
+//   return () => {console.log("profile data unmounted")}
+// }
