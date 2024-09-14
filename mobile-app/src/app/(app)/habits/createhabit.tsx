@@ -3,7 +3,7 @@ import CreateOrEditHabit from "@/src/components/CreateOrEditHabit";
 export default function Createhabit() {
   return (
     <CreateOrEditHabit
-      initialHabitInfoValues={{
+      initialHabitInfo={{
         createdAt: new Date(),
         title: "",
         description: "",

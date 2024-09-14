@@ -1,5 +1,10 @@
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
-import { IconCheck, IconEdit, IconX } from "@tabler/icons-react-native";
+import {
+  IconArrowForwardUp,
+  IconCheck,
+  IconEdit,
+  IconX,
+} from "@tabler/icons-react-native";
 import { router, useGlobalSearchParams } from "expo-router";
 import { useAtom, useAtomValue } from "jotai";
 import { Pressable } from "react-native";
@@ -77,6 +82,50 @@ export function viewHabitOptions(
   };
 }
 
+// export function habitIconsOptions(
+//   colorScheme: string,
+// ): NativeStackNavigationOptions {
+
+// }
+
+// export function editHabitOptions(
+//   colorScheme: string,
+// ): NativeStackNavigationOptions {
+//   function handleCreateHabit() {}
+//   return {
+//     headerLeft: () => (
+//       <RoundedButton
+//         text="Cancel"
+//         icon={IconX}
+//         onPress={() => {
+//           router.back();
+//         }}
+//       />
+//     ),
+//     headerTitle: () => (
+//       <Text className="text-base font-semibold text-black dark:text-white">
+//         New habit
+//       </Text>
+//     ),
+//     headerRight: () => (
+//       <RoundedButton
+//         text={"Done"}
+//         icon={IconArrowForwardUp}
+//         isDisabled={!canCreateHabit}
+//         onPress={handleCreateHabit}
+//       />
+//     ),
+//     headerTitleAlign: "center",
+//     ...sharedOptions(colorScheme),
+//   };
+// }
+
+// export function createHabitOptions(
+//   colorScheme: string,
+// ): NativeStackNavigationOptions {
+
+// }
+
 export function viewProfileOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
@@ -88,7 +137,7 @@ export function viewProfileOptions(
   const [, removeFriend] = useAtom(removeFriendAtom);
 
   return {
-    headerLeft: () => <HeaderBackButton chevronDirection="down" />,
+    headerLeft: () => <HeaderBackButton />,
     headerTitle: () => (
       <Text className="text-base font-semibold text-black dark:text-white">
         {username}
@@ -117,7 +166,7 @@ export function inviteFriendsOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
   return {
-    headerLeft: () => <HeaderBackButton chevronDirection="down" />,
+    headerLeft: () => <HeaderBackButton />,
     headerTitle: () => (
       <Text className="text-base font-semibold text-black dark:text-white">
         Invite friends
@@ -225,7 +274,7 @@ export function addFriendsOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
   return {
-    headerLeft: () => <HeaderBackButton chevronDirection="down" />,
+    headerLeft: () => <HeaderBackButton />,
     headerTitle: () => (
       <Text className="text-base font-semibold text-black dark:text-white">
         Add friends

@@ -202,6 +202,14 @@ export const createNewHabitAtom = atom(
   },
 );
 
+export const createOrEditHabitFormAtom = atomFamily(
+  (initialHabitInfo: habitInfoT) =>
+    atom<habitInfoT>({
+      ...initialHabitInfo,
+    }),
+  deepEquals,
+);
+
 export const deleteHabitAtom = atomFamily((habitId: HabitIdT) =>
   atom(null, async (_get, set) => {
     set(allHabitsAtom, (prev) => {

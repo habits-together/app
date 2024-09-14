@@ -14,7 +14,7 @@ export default function EditHabit() {
   return (
     <CreateOrEditHabit
       habitId={habitidStr as HabitIdT}
-      initialHabitInfoValues={habitInfo}
+      initialHabitInfo={habitInfo}
     />
   );
 }
