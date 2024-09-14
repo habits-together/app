@@ -96,13 +96,13 @@ export function habitIconsOptions(
   return {
     headerLeft: () => (
       <TouchableOpacity
-          className="absolute -left-1 flex flex-row items-center justify-center px-2 py-1"
-          onPress={() => {
-            router.back();
-          }}
-        >
-          <Icon icon={IconChevronLeft} size={20} />
-          <Text className="ml-1 text-base font-semibold">Back</Text>
+        className="absolute -left-1 flex flex-row items-center justify-center px-2 py-1"
+        onPress={() => {
+          router.back();
+        }}
+      >
+        <Icon icon={IconChevronLeft} size={20} />
+        <Text className="ml-1 text-base font-semibold">Back</Text>
       </TouchableOpacity>
     ),
     headerTitle: () => (

@@ -4,17 +4,11 @@ import {
   editHabitInfoAtom,
 } from "@/src/atoms/atoms";
 import Divider from "@/src/components/Divider";
-import RoundedButton from "@/src/components/RoundedButton";
 import { Text, View } from "@/src/components/Themed";
 import DefaultColors from "@/src/constants/DefaultColors";
 import colors from "@/src/constants/colors";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
-import {
-  IconArrowForwardUp,
-  IconCheck,
-  IconSelector,
-  IconX,
-} from "@tabler/icons-react-native";
+import { IconCheck, IconSelector } from "@tabler/icons-react-native";
 import { router } from "expo-router";
 import { atom, useAtom, useSetAtom } from "jotai";
 import { useColorScheme } from "nativewind";
