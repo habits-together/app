@@ -2,7 +2,7 @@ import { atom } from "jotai";
 import { defaultProfilePicUrl } from "../constants/constants";
 import { updateOwnProfileDataInDB } from "../firebase/api";
 import { betterAtomWithStorage } from "../lib/betterAtomWithStorage";
-import { UserIdT, userT, userWithIdT } from "../lib/db_types";
+import { UserIdT, userWithIdT } from "../lib/db_types";
 
 export const currentUserAtom = betterAtomWithStorage("current-user-data", {
   createdAt: new Date(),
