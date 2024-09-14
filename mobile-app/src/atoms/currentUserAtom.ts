@@ -24,8 +24,7 @@ export const currentUserAtomWithDB = atom(
   (get) => get(currentUserAtom),
 
   async (get, set, newUserData: userWithIdT) => {
-    const newDataForDb:userT = {
-      createdAt: newUserData.createdAt,
+    const newDataForDb = {
       displayName: newUserData.displayName,
       username: newUserData.username,
     };
