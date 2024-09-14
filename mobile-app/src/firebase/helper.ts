@@ -2,6 +2,7 @@ import {
   DocumentData,
   DocumentSnapshot,
   QueryDocumentSnapshot,
+  Timestamp,
 } from "firebase/firestore";
 import { userT, userWithIdT } from "../lib/db_types";
 
@@ -30,4 +31,13 @@ export const userSnapToUserWithIdT = (
 export const userWithIdToUserT = (user: userWithIdT): userT => {
   const { id, ...userWithoutId } = user;
   return userWithoutId;
+};
+
+export const convertTimestampToJSDate = (
+  timestamp?: Timestamp | null,
+): Date | null => {
+  if (timestamp && timestamp instanceof Timestamp) {
+    return timestamp.toDate();
+  }
+  return null;
 };

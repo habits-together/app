@@ -1,8 +1,8 @@
-import { habitInfoAtom } from "@/src/atoms/atoms";
+import { createOrEditHabitFormAtom, habitInfoAtom } from "@/src/atoms/atoms";
 import CreateOrEditHabit from "@/src/components/CreateOrEditHabit";
 import { HabitIdT } from "@/src/lib/db_types";
 import { useGlobalSearchParams } from "expo-router";
-import { useAtomValue } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 
 export default function EditHabit() {
   const { habitidStr } = useGlobalSearchParams<{ habitidStr: HabitIdT }>();
@@ -11,10 +11,11 @@ export default function EditHabit() {
   }
 
   const habitInfo = useAtomValue(habitInfoAtom(habitidStr as HabitIdT));
+  const setForm = useSetAtom(createOrEditHabitFormAtom);
+  setForm(habitInfo);
   return (
     <CreateOrEditHabit
       habitId={habitidStr as HabitIdT}
-      initialHabitInfo={habitInfo}
     />
   );
 }

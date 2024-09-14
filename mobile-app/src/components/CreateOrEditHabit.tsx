@@ -28,22 +28,18 @@ import {
 } from "react-native-popup-menu";
 import { IconButton } from "../app/(app)/habits/icon-button";
 import { iconStrNameToTablerIcon } from "../app/(app)/habits/icons";
-import { HabitIdT, habitInfoT } from "../lib/db_types";
+import { HabitIdT } from "../lib/db_types";
 import Icon from "./Icon";
 
 export const tempIconAtom = atom<string>("default");
 
 export default function CreateOrEditHabit({
-  habitId = undefined,
-  initialHabitInfo,
+  habitId = null,
 }: {
-  habitId?: HabitIdT;
-  initialHabitInfo: habitInfoT;
+  habitId?: HabitIdT | null;
 }) {
   const { colorScheme } = useColorScheme();
-  const [habitInfoForm, setHabitInfoForm] = useAtom(
-    createOrEditHabitFormAtom(initialHabitInfo),
-  );
+  const [habitInfoForm, setHabitInfoForm] = useAtom(createOrEditHabitFormAtom);
   const setTempIcon = useSetAtom(tempIconAtom);
   useEffect(() => {
     setTempIcon(habitInfoForm.icon);

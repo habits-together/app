@@ -156,7 +156,7 @@ const categories: HabitIconsTuple[] = [
 
 export default function HabitIcons() {
   const [icon, setIcon] = useAtom(tempIconAtom);
-
+  // const { icon } = useGlobalSearchParams<{ iconStr: string }>();
   const habitIcons: HabitIconsTuple[] = useMemo(() => {
     return categories;
   }, []);
