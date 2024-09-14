@@ -1,8 +1,8 @@
 import { atom } from "jotai";
 import { defaultProfilePicUrl } from "../constants/constants";
+import { updateOwnProfileDataInDB } from "../firebase/api";
 import { betterAtomWithStorage } from "../lib/betterAtomWithStorage";
 import { UserIdT, userT, userWithIdT } from "../lib/db_types";
-import { updateOwnProfileDataInDB } from "../firebase/api";
 
 export const currentUserAtom = betterAtomWithStorage("current-user-data", {
   createdAt: new Date(),
@@ -24,7 +24,7 @@ export const currentUserAtomWithDB = atom(
   (get) => get(currentUserAtom),
 
   async (get, set, newUserData: userWithIdT) => {
-    const newDataForDb:userT = {
+    const newDataForDb: userT = {
       createdAt: newUserData.createdAt,
       displayName: newUserData.displayName,
       username: newUserData.username,

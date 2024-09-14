@@ -1,6 +1,11 @@
 import deepEquals from "fast-deep-equal";
 import { atom } from "jotai";
-import { atomFamily, atomWithDefault, selectAtom, splitAtom } from "jotai/utils";
+import {
+  atomFamily,
+  atomWithDefault,
+  selectAtom,
+  splitAtom,
+} from "jotai/utils";
 import { ColorSchemeName } from "nativewind/dist/style-sheet/color-scheme";
 import colors from "../constants/colors";
 import { maxNumWeeksToDisplay } from "../constants/constants";
@@ -32,6 +37,7 @@ import {
   subscribeToNotifications,
   updatetHabitCompletionsInDb,
 } from "../firebase/api";
+import { auth } from "../firebase/config";
 import { betterAtomWithStorage } from "../lib/betterAtomWithStorage";
 import {
   HabitDisplayType,
@@ -56,8 +62,11 @@ import {
 import { todayString } from "../lib/formatDateString";
 import { getNumberOfDaysInLastWeek } from "../lib/getNumberOfDaysInLastWeek";
 import { structureCompletionData } from "../lib/structureCompletionData";
-import { currentUserAtom, currentUserIdAtom, currentUserProfilePicAtom } from "./currentUserAtom";
-import { auth } from "../firebase/config";
+import {
+  currentUserAtom,
+  currentUserIdAtom,
+  currentUserProfilePicAtom,
+} from "./currentUserAtom";
 // using Jotai atoms: https://jotai.org/docs/introduction
 // we especially use the atomFamily atom: https://jotai.org/docs/utilities`/family
 
@@ -794,7 +803,7 @@ export const profileFormDataAtom = atomWithDefault((get) => {
     username: "Username not initialized",
     picture: "https://i.sstatic.net/l60Hf.png",
     id: "id not initialized",
-    createdAt: new Date()
+    createdAt: new Date(),
   };
 
   if (auth.currentUser) {
@@ -803,14 +812,13 @@ export const profileFormDataAtom = atomWithDefault((get) => {
       displayName: get(currentUserAtom).displayName,
       picture: get(currentUserProfilePicAtom),
       id: get(currentUserAtom).id,
-      createdAt: get(currentUserAtom).createdAt
+      createdAt: get(currentUserAtom).createdAt,
     };
   }
 
   console.log(data);
   return data as ProfileFormData;
-}
-);
+});
 
 // profileFormDataAtom.onMount = (setAtom) => {
 //   console.log("profile data atom mounted")

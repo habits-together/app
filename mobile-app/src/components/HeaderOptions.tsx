@@ -3,16 +3,23 @@ import { IconCheck, IconEdit, IconX } from "@tabler/icons-react-native";
 import { router, useGlobalSearchParams } from "expo-router";
 import { useAtom, useAtomValue } from "jotai";
 import { Pressable } from "react-native";
-import { getUserInfoAtom, profileFormDataAtom, removeFriendAtom } from "../atoms/atoms";
+import {
+  getUserInfoAtom,
+  profileFormDataAtom,
+  removeFriendAtom,
+} from "../atoms/atoms";
+import {
+  currentUserAtomWithDB,
+  currentUserProfilePicAtom,
+} from "../atoms/currentUserAtom";
 import colors from "../constants/colors";
-import { HabitIdT, ProfileFormData, UserIdT, userWithIdT } from "../lib/db_types";
+import { newUsernameIsUnique } from "../firebase/api";
+import { HabitIdT, UserIdT, userWithIdT } from "../lib/db_types";
 import DotsMenu from "./DotsMenu";
 import HeaderBackButton from "./HeaderBackButton";
 import Icon from "./Icon";
 import RoundedButton from "./RoundedButton";
 import { Text, View } from "./Themed";
-import { currentUserAtomWithDB, currentUserProfilePicAtom } from "../atoms/currentUserAtom";
-import { newUsernameIsUnique } from "../firebase/api";
 
 function sharedOptions(colorScheme: string): NativeStackNavigationOptions {
   return {
@@ -203,9 +210,8 @@ export function editProfileOptions(
     username: userData.username,
     picture: userPfp,
     id: userData.id,
-    createdAt: userData.createdAt
+    createdAt: userData.createdAt,
   };
-
 
   return {
     headerLeft: () => (
@@ -230,7 +236,7 @@ export function editProfileOptions(
         onPress={async () => {
           const cond = await newUsernameIsUnique(
             userData.username, //existing
-            profileFormData.username, //new 
+            profileFormData.username, //new
           );
 
           if (cond) {
@@ -239,15 +245,13 @@ export function editProfileOptions(
               createdAt: profileFormData.createdAt,
               displayName: profileFormData.displayName,
               username: profileFormData.username,
-              id: profileFormData.id as UserIdT
+              id: profileFormData.id as UserIdT,
             };
             setUserDataWithDbChanges(newDataForAtom); //update atom to match db
             router.back();
-          }
-          else {
+          } else {
             setProfileFormData(resetData);
           }
-          
         }}
       />
     ),

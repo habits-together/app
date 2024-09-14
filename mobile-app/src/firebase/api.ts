@@ -745,12 +745,12 @@ export async function getDefaultProfilePicUrl(
   try {
     const response = await fetch(
       `https://ui-avatars.com/api/?name=${username}` +
-      `&size=${size || 72}` +
-      `&length=1` + // number of letter in the pic
-      `&bold=true` +
-      `&background=${backgroundCol}` +
-      `&color=${textCol}` +
-      `&font-size=${0.7}`, // b.w 0.1 and 1
+        `&size=${size || 72}` +
+        `&length=1` + // number of letter in the pic
+        `&bold=true` +
+        `&background=${backgroundCol}` +
+        `&color=${textCol}` +
+        `&font-size=${0.7}`, // b.w 0.1 and 1
     );
     return response.url;
   } catch (error) {
@@ -759,40 +759,36 @@ export async function getDefaultProfilePicUrl(
   }
 }
 
-
-export async function updateOwnProfileDataInDB(
-  newProfileData: userT
-) {
-  if (auth.currentUser == null) { throw new Error("Cannot edit profile - user not logged in") }
-  const docRef = doc(firestore, "users", auth.currentUser.uid)
-  try {
-    await updateDoc(docRef, newProfileData)
+export async function updateOwnProfileDataInDB(newProfileData: userT) {
+  if (auth.currentUser == null) {
+    throw new Error("Cannot edit profile - user not logged in");
   }
-  catch (error){
+  const docRef = doc(firestore, "users", auth.currentUser.uid);
+  try {
+    await updateDoc(docRef, newProfileData);
+  } catch (error) {
     throw new Error(`Failed to update profile: ${(error as Error).message}`);
   }
 }
 
-
 export async function newUsernameIsUnique(
   existing_username: string,
-  new_username: string
+  new_username: string,
 ) {
-  if (existing_username == new_username){ 
+  if (existing_username == new_username) {
     return true; //old name was unique, so if we dont change name it remains unique
   }
-  
+
   const usersRef = collection(firestore, "users");
   const q = query(usersRef, where("username", "==", new_username));
   const querySnapshot = await getDocs(q);
-  
+
   //username is unique
-  if (querySnapshot.empty){
-    console.log("Username change successful")
+  if (querySnapshot.empty) {
+    console.log("Username change successful");
+  } else {
+    console.log("Username change unsuccessful - username must be unique");
   }
-  else {
-    console.log("Username change unsuccessful - username must be unique")
-  }
-  
+
   return querySnapshot.empty;
 }
