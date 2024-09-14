@@ -15,6 +15,7 @@ import {
   mutualFriendsPfpsListAtom,
   removeFriendAtom,
   sendFriendRequestAtom,
+  userPictureAtom,
 } from "../atoms/atoms";
 
 import colors from "../constants/colors";
@@ -86,7 +87,9 @@ export default function UserCard({
   userInfo: userWithIdT;
   displayType: "friendsList" | "inviteFriendsToHabit" | "addFriends";
 }) {
-  const { id: userId, displayName, username, picture } = userInfo;
+  const { colorScheme } = useColorScheme();
+  const { id: userId, displayName, username } = userInfo;
+  const profilePicture = useAtomValue(userPictureAtom({ userId, colorScheme }));
   const [, removeFriend] = useAtom(removeFriendAtom);
 
   const { habitidStr } = useGlobalSearchParams<{ habitidStr: HabitIdT }>();
@@ -110,7 +113,7 @@ export default function UserCard({
     >
       <Pressable className="my-1 flex grow-0 flex-col rounded-3xl border border-stone-300 p-2">
         <View className="flex flex-row items-center">
-          <MediumProfilePicture picUrl={picture} />
+          <MediumProfilePicture picUrl={profilePicture} />
           <View className="ml-2 flex flex-1 flex-col">
             <Text className="text-base font-semibold">{displayName}</Text>
             <Text className="text-xs font-semibold text-stone-400">
@@ -212,8 +215,11 @@ function CommonHabits({ friendId }: { friendId: UserIdT }) {
 }
 
 function MutualFriends({ userId }: { userId: UserIdT }) {
+  const { colorScheme } = useColorScheme();
   const maxPfps = 8;
-  const mutualFriendsPictures = useAtomValue(mutualFriendsPfpsListAtom(userId));
+  const mutualFriendsPictures = useAtomValue(
+    mutualFriendsPfpsListAtom({ userId, colorScheme }),
+  );
   return (
     <View className="ml-1 mr-auto mt-2 flex flex-row">
       <HorizontalProfilePicsList

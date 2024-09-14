@@ -1,3 +1,5 @@
+import colors from "@/src/constants/colors";
+import { FirebaseError } from "firebase/app";
 import {
   addDoc,
   and,
@@ -15,7 +17,9 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { SetStateAction } from "jotai";
+import { ColorSchemeName } from "nativewind/dist/style-sheet/color-scheme";
 import { currentUserAtom, currentUserIdAtom } from "../atoms/currentUserAtom";
 import { atomStore } from "../atoms/store";
 import {
@@ -152,7 +156,6 @@ export async function createNewHabitInDb({
         visibility: "PUBLIC",
         displayName: user.displayName,
         username: user.username,
-        picture: user.picture,
         mostRecentCompletionDate: new Date(),
         isOwner: true,
       },
@@ -277,7 +280,6 @@ export async function fetchFriendData({
         createdAt: new Date(userData.createdAt),
         displayName: userData.displayName,
         username: userData.username,
-        picture: userData.picture,
       } as userT;
     } else {
       console.error(`No user found with ID: ${friendId}`);
@@ -622,7 +624,6 @@ export async function createUserInDb({
     createdAt: userWithId.createdAt,
     displayName: userWithId.displayName,
     username: userWithId.username,
-    picture: userWithId.picture,
   });
 }
 
@@ -679,35 +680,81 @@ export async function searchUsersInDb({
   return searchResultUsersInfo;
 }
 
-export async function updateProfileDataInDB(
-  currentUserID: string,
-  newDataForDb: userT,
-) {
-  {
-    // if (auth.currentUser == null) {
-    //   console.log("Cannot edit profile: User not logged in")
-    //   return;
-    // }
+// Images (Storage)
+// https://github.com/expo/examples/tree/master/with-firebase-storage-upload
 
-    //Push Data to DB
-    const userDocRef = doc(firestore, "users", currentUserID); //change to auth.currentUser.uid when auth is fixed
-    await setDoc(userDocRef, newDataForDb);
+export async function uploadProfilePic(uri: string): Promise<string> {
+  const userId = atomStore.get(currentUserIdAtom);
+  const blob = await new Promise<Blob>((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+      resolve(xhr.response);
+    };
+    xhr.onerror = function (e) {
+      console.log(e);
+      reject(new TypeError("Network request failed"));
+    };
+    xhr.responseType = "blob";
+    xhr.open("GET", uri, true);
+    xhr.send(null);
+  });
+
+  const fileRef = ref(getStorage(), `profilePics/${userId}.jpg`);
+  await uploadBytes(fileRef, blob);
+  return await getDownloadURL(fileRef);
+}
+
+export async function getUserProfilePicUrl(
+  userId: UserIdT,
+  colorScheme: ColorSchemeName,
+): Promise<string> {
+  const userData = await fetchUserInfo({ userId });
+  const defaultProfilePicUrl = await getDefaultProfilePicUrl(
+    userData.username,
+    colorScheme,
+  );
+  const fileRef = ref(getStorage(), `profilePics/${userId}.jpg`);
+  try {
+    const downloadUrl = await getDownloadURL(fileRef);
+    console.log(downloadUrl);
+    return downloadUrl;
+  } catch (error: any) {
+    if (error instanceof FirebaseError) {
+      if (error.code === "storage/object-not-found") {
+        console.log(userId, " has no profile pic.");
+        return defaultProfilePicUrl;
+      }
+    }
+    console.error("Error fetching profile pic:", error.message || error);
+    return defaultProfilePicUrl;
   }
 }
 
-export async function newUsernameIsUnique(
-  existing_username: string,
-  new_username: string,
-): Promise<boolean> {
-  //Ensure user is unique
-  const usersRef = collection(firestore, "users");
-  const q = query(usersRef, where("username", "==", new_username));
-  const querySnapshot = await getDocs(q);
-
-  // Check if were changing username, if so check if username already exist in DB
-  if (new_username !== existing_username && !querySnapshot.empty) {
-    console.error("Error: Username already taken"); // Display this on screen instead
-    return false;
+export async function getDefaultProfilePicUrl(
+  username: string,
+  colorScheme: ColorSchemeName,
+  size?: number,
+): Promise<string> {
+  const fallBackUrl = "https://i.sstatic.net/l60Hf.png";
+  const backgroundCol = (
+    colorScheme === "dark" ? colors.white : colors.stone.base
+  ).replace(/^#/, "");
+  const textCol = (
+    colorScheme === "dark" ? colors.stone.base : colors.white
+  ).replace(/^#/, "");
+  try {
+    const response = await fetch(
+      `https://ui-avatars.com/api/?name=${username}` +
+        `&size=${size || 72}` +
+        `&length=1` + // number of letter in the pic
+        `&bold=true` +
+        `&background=${backgroundCol}` +
+        `&color=${textCol}` +
+        `&font-size=${0.7}`, // b.w 0.1 and 1
+    );
+    return response.url;
+  } catch (error) {
+    console.error("Error fetching default profile pic:", error);
+    return fallBackUrl;
   }
-  return true;
 }

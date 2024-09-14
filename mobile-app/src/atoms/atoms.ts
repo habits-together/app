@@ -6,6 +6,7 @@ import {
   selectAtom,
   splitAtom,
 } from "jotai/utils";
+import { ColorSchemeName } from "nativewind/dist/style-sheet/color-scheme";
 import colors from "../constants/colors";
 import { maxNumWeeksToDisplay } from "../constants/constants";
 import {
@@ -28,6 +29,7 @@ import {
   fetchOtherHabitIds,
   fetchOutboundNotifications,
   fetchUserInfo,
+  getUserProfilePicUrl,
   removeFriendInDb,
   searchFriendsInDb,
   sendNotificationInDb,
@@ -84,14 +86,6 @@ export const habitParticipantIdsAtom = atomFamily((habitId: HabitIdT) =>
 export const habitParticipantsInfoAtom = atomFamily((habitId: HabitIdT) =>
   atom((get) => {
     return get(allHabitsAtom)[habitId].participants;
-  }),
-);
-export const habitParticipantPfpsListAtom = atomFamily((habitId: HabitIdT) =>
-  atom((get) => {
-    const habitParticipants = get(habitParticipantsInfoAtom(habitId));
-    return Object.values(habitParticipants).map(
-      (participant) => participant.picture,
-    );
   }),
 );
 
@@ -204,7 +198,6 @@ export const createNewHabitAtom = atom(
             [currentUserInfo.id]: {
               displayName: currentUserInfo.displayName,
               username: currentUserInfo.username,
-              picture: currentUserInfo.picture,
               mostRecentCompletionDate: new Date(),
               isOwner: true,
             },
@@ -252,7 +245,7 @@ export const habitCompletionsForParticipantAtom = atomFamily(
     >(
       (get) => get(completionsBaseAtom),
       async (_get, set, newCompletions) => {
-        set(completionsBaseAtom, { ...newCompletions });
+        set(completionsBaseAtom, JSON.parse(JSON.stringify(newCompletions)));
         await updatetHabitCompletionsInDb({
           habitId,
           participantId,
@@ -432,11 +425,6 @@ export const participantUsernameAtom = atomFamily(
     atom((get) => get(participantAtom({ habitId, participantId })).username),
   deepEquals,
 );
-export const participantPictureAtom = atomFamily(
-  ({ habitId, participantId }: { habitId: HabitIdT; participantId: UserIdT }) =>
-    atom((get) => get(participantAtom({ habitId, participantId })).picture),
-  deepEquals,
-);
 
 // Friends
 export const allFriendsDataAtom = atom<allUsersInfoT>({});
@@ -460,9 +448,6 @@ export const friendDisplayNameAtom = atomFamily((friendId: UserIdT) =>
 );
 export const friendUsernameAtom = atomFamily((friendId: UserIdT) =>
   atom((get) => get(friendAtom(friendId)).username),
-);
-export const friendPictureAtom = atomFamily((friendId: UserIdT) =>
-  atom((get) => get(friendAtom(friendId)).picture),
 );
 
 export const removeFriendAtom = atom(
@@ -510,13 +495,6 @@ export const mutualFriendsAtom = atomFamily((friendId: UserIdT) =>
     const myFriendIds = get(friendIdsAtom);
     const mutualFriends = await fetchMutualFriends({ friendId, myFriendIds });
     return mutualFriends;
-  }),
-);
-
-export const mutualFriendsPfpsListAtom = atomFamily((friendId: UserIdT) =>
-  atom(async (get) => {
-    const mutualFriends = await get(mutualFriendsAtom(friendId));
-    return Object.values(mutualFriends).map((friend) => friend.picture);
   }),
 );
 
@@ -753,6 +731,65 @@ export const viewHabitDisplayTypeAtom = atomFamily((habitId: HabitIdT) =>
 
 export const settingAtom = atomFamily((settingKey: string) =>
   betterAtomWithStorage<number>(settingKey, 0),
+);
+
+// Images
+export const userPictureAtom = atomFamily(
+  ({
+    userId,
+    colorScheme,
+  }: {
+    userId: UserIdT;
+    colorScheme: ColorSchemeName;
+  }) => atom(async () => await getUserProfilePicUrl(userId, colorScheme)),
+  deepEquals,
+);
+
+export const habitParticipantPfpsListAtom = atomFamily(
+  ({
+    habitId,
+    colorScheme,
+  }: {
+    habitId: HabitIdT;
+    colorScheme: ColorSchemeName;
+  }) =>
+    atom(async (get) => {
+      console.log("hit");
+      const habitParticipantsIds = get(habitParticipantIdsAtom(habitId));
+      const profilePicUrls = await Promise.all(
+        habitParticipantsIds.map((userId) =>
+          get(
+            userPictureAtom({
+              userId,
+              colorScheme,
+            }),
+          ),
+        ),
+      );
+      return profilePicUrls;
+    }),
+  deepEquals,
+);
+
+export const mutualFriendsPfpsListAtom = atomFamily(
+  ({
+    userId,
+    colorScheme,
+  }: {
+    userId: UserIdT;
+    colorScheme: ColorSchemeName;
+  }) =>
+    atom(async (get) => {
+      const mutualFriends = await get(mutualFriendsAtom(userId));
+      const mutualFriendIds = Object.keys(mutualFriends) as UserIdT[];
+      const profilePicUrls = await Promise.all(
+        mutualFriendIds.map((userId) =>
+          getUserProfilePicUrl(userId, colorScheme),
+        ),
+      );
+      return profilePicUrls;
+    }),
+  deepEquals,
 );
 
 export const profileFormDataAtom = atomWithDefault((get) => {

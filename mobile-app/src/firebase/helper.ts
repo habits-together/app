@@ -12,7 +12,6 @@ export const userDataConverter = {
       createdAt: data?.createdAt,
       displayName: data?.displayName,
       id: data?.id,
-      picture: data?.picture,
       username: data?.username,
     };
     return typedData;
@@ -25,7 +24,7 @@ export const userSnapToUserWithIdT = (
   return {
     ...(userDocSnap.data() as userT),
     id: userDocSnap.id,
-  };
+  } as userWithIdT;
 };
 
 export const userWithIdToUserT = (user: userWithIdT): userT => {
