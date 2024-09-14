@@ -59,8 +59,8 @@ export default function CreateOrEditHabit({
   }
 
   return (
-    <View className="flex flex-1 flex-col gap-y-5 px-5 pt-11">
-      {/* Header */}
+    <View className="flex flex-1 flex-col gap-y-5 px-5 pt-2">
+      {/* Header
       <View className="flex flex-row items-center justify-between">
         {
           <RoundedButton
@@ -82,7 +82,7 @@ export default function CreateOrEditHabit({
             onPress={handleCreateOrEditHabit}
           />
         }
-      </View>
+      </View> */}
 
       {/* Icon & Name */}
       <View className="flex flex-col">

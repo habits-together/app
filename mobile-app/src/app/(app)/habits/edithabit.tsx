@@ -13,9 +13,5 @@ export default function EditHabit() {
   const habitInfo = useAtomValue(habitInfoAtom(habitidStr as HabitIdT));
   const setForm = useSetAtom(createOrEditHabitFormAtom);
   setForm(habitInfo);
-  return (
-    <CreateOrEditHabit
-      habitId={habitidStr as HabitIdT}
-    />
-  );
+  return <CreateOrEditHabit habitId={habitidStr as HabitIdT} />;
 }

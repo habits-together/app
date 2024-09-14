@@ -1,4 +1,4 @@
-import { tempIconAtom } from "@/src/components/CreateOrEditHabit";
+import { createOrEditHabitFormAtom } from "@/src/atoms/atoms";
 import Icon from "@/src/components/Icon";
 import { Text, View } from "@/src/components/Themed";
 import { IconChevronLeft } from "@tabler/icons-react-native";
@@ -155,8 +155,7 @@ const categories: HabitIconsTuple[] = [
 ];
 
 export default function HabitIcons() {
-  const [icon, setIcon] = useAtom(tempIconAtom);
-  // const { icon } = useGlobalSearchParams<{ iconStr: string }>();
+  const [form, setForm] = useAtom(createOrEditHabitFormAtom);
   const habitIcons: HabitIconsTuple[] = useMemo(() => {
     return categories;
   }, []);
@@ -171,10 +170,10 @@ export default function HabitIcons() {
               <IconButton
                 icon={iconStrNameToTablerIcon(key)}
                 onPress={() => {
-                  setIcon(key);
+                  setForm((prev) => ({ ...prev, icon: key }));
                   router.back();
                 }}
-                selected={icon === key}
+                selected={form.icon === key}
               />
             </View>
           ))}

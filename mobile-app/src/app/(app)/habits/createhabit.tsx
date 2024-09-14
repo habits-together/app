@@ -15,8 +15,5 @@ export default function Createhabit() {
       completionsPerPeriod: 1,
     },
   });
-  return (
-    <CreateOrEditHabit
-    />
-  );
+  return <CreateOrEditHabit />;
 }

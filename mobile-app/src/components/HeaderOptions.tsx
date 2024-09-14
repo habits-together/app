@@ -6,11 +6,18 @@ import {
   IconX,
 } from "@tabler/icons-react-native";
 import { router, useGlobalSearchParams } from "expo-router";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { Pressable } from "react-native";
-import { getUserInfoAtom, removeFriendAtom } from "../atoms/atoms";
+import {
+  createNewHabitAtom,
+  createOrEditHabitFormAtom,
+  editHabitInfoAtom,
+  getUserInfoAtom,
+  removeFriendAtom,
+} from "../atoms/atoms";
 import colors from "../constants/colors";
 import { HabitIdT, UserIdT } from "../lib/db_types";
+import { resetNavigationStack } from "../lib/resetNavigationStack";
 import DotsMenu from "./DotsMenu";
 import HeaderBackButton from "./HeaderBackButton";
 import Icon from "./Icon";
@@ -88,43 +95,89 @@ export function viewHabitOptions(
 
 // }
 
-// export function editHabitOptions(
-//   colorScheme: string,
-// ): NativeStackNavigationOptions {
-//   function handleCreateHabit() {}
-//   return {
-//     headerLeft: () => (
-//       <RoundedButton
-//         text="Cancel"
-//         icon={IconX}
-//         onPress={() => {
-//           router.back();
-//         }}
-//       />
-//     ),
-//     headerTitle: () => (
-//       <Text className="text-base font-semibold text-black dark:text-white">
-//         New habit
-//       </Text>
-//     ),
-//     headerRight: () => (
-//       <RoundedButton
-//         text={"Done"}
-//         icon={IconArrowForwardUp}
-//         isDisabled={!canCreateHabit}
-//         onPress={handleCreateHabit}
-//       />
-//     ),
-//     headerTitleAlign: "center",
-//     ...sharedOptions(colorScheme),
-//   };
-// }
+export function createHabitOptions(
+  colorScheme: string,
+): NativeStackNavigationOptions {
+  const habitInfoForm = useAtomValue(createOrEditHabitFormAtom);
+  const needsTag = habitInfoForm.icon === "default";
+  const needsName = habitInfoForm.title === "";
+  const canCreateHabit = !needsTag && !needsName;
+  const createNewHabit = useSetAtom(createNewHabitAtom);
+  function handleCreateHabit() {
+    createNewHabit(habitInfoForm);
+    resetNavigationStack("/habits");
+  }
+  return {
+    headerLeft: () => (
+      <RoundedButton
+        text="Cancel"
+        icon={IconX}
+        onPress={() => {
+          router.back();
+        }}
+      />
+    ),
+    headerTitle: () => (
+      <Text className="text-base font-semibold text-black dark:text-white">
+        New habit
+      </Text>
+    ),
+    headerRight: () => (
+      <RoundedButton
+        text={"Next"}
+        icon={IconArrowForwardUp}
+        isDisabled={!canCreateHabit}
+        onPress={handleCreateHabit}
+      />
+    ),
+    headerTitleAlign: "center",
+    ...sharedOptions(colorScheme),
+  };
+}
 
-// export function createHabitOptions(
-//   colorScheme: string,
-// ): NativeStackNavigationOptions {
-
-// }
+export function editHabitOptions(
+  colorScheme: string,
+): NativeStackNavigationOptions {
+  const { habitidStr } = useGlobalSearchParams<{ habitidStr: HabitIdT }>();
+  if (!habitidStr) {
+    return sharedOptions(colorScheme);
+  }
+  const habitInfoForm = useAtomValue(createOrEditHabitFormAtom);
+  const needsTag = habitInfoForm.icon === "default";
+  const needsName = habitInfoForm.title === "";
+  const canCreateHabit = !needsTag && !needsName;
+  const editHabit = useSetAtom(editHabitInfoAtom(habitidStr));
+  function handleEditHabit() {
+    editHabit(habitInfoForm);
+    resetNavigationStack("/habits");
+  }
+  return {
+    headerLeft: () => (
+      <RoundedButton
+        text="Cancel"
+        icon={IconX}
+        onPress={() => {
+          router.back();
+        }}
+      />
+    ),
+    headerTitle: () => (
+      <Text className="text-base font-semibold text-black dark:text-white">
+        Edit habit
+      </Text>
+    ),
+    headerRight: () => (
+      <RoundedButton
+        text={"Done"}
+        icon={IconCheck}
+        isDisabled={!canCreateHabit}
+        onPress={handleEditHabit}
+      />
+    ),
+    headerTitleAlign: "center",
+    ...sharedOptions(colorScheme),
+  };
+}
 
 export function viewProfileOptions(
   colorScheme: string,
