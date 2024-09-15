@@ -831,4 +831,3 @@ export const profileFormDataAtom = atomWithDefault((get) => {
   console.log(data);
   return data as ProfileFormData;
 });
-
