@@ -832,9 +832,3 @@ export const profileFormDataAtom = atomWithDefault((get) => {
   return data as ProfileFormData;
 });
 
-// profileFormDataAtom.onMount = (setAtom) => {
-//   console.log("profile data atom mounted")
-//   console.log
-//   // console.log(currentUserAtom)
-//   return () => {console.log("profile data unmounted")}
-// }
