@@ -1,20 +1,18 @@
-import { createNewHabitAtom, editHabitInfoAtom } from "@/src/atoms/atoms";
+import {
+  createNewHabitAtom,
+  createOrEditHabitFormAtom,
+  editHabitInfoAtom,
+} from "@/src/atoms/atoms";
 import Divider from "@/src/components/Divider";
-import RoundedButton from "@/src/components/RoundedButton";
 import { Text, View } from "@/src/components/Themed";
 import DefaultColors from "@/src/constants/DefaultColors";
 import colors from "@/src/constants/colors";
 import { resetNavigationStack } from "@/src/lib/resetNavigationStack";
-import {
-  IconArrowForwardUp,
-  IconCheck,
-  IconSelector,
-  IconX,
-} from "@tabler/icons-react-native";
+import { IconCheck, IconSelector } from "@tabler/icons-react-native";
 import { router } from "expo-router";
 import { atom, useAtom, useSetAtom } from "jotai";
 import { useColorScheme } from "nativewind";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { TextInput, TouchableOpacity } from "react-native";
 import {
   Menu,
@@ -24,106 +22,44 @@ import {
 } from "react-native-popup-menu";
 import { IconButton } from "../app/(app)/habits/icon-button";
 import { iconStrNameToTablerIcon } from "../app/(app)/habits/icons";
-import { HabitIdT, habitInfoT } from "../lib/db_types";
+import { HabitIdT } from "../lib/db_types";
 import Icon from "./Icon";
 
 export const tempIconAtom = atom<string>("default");
 
 export default function CreateOrEditHabit({
-  habitId = undefined,
-  initialHabitInfoValues,
+  habitId = null,
 }: {
-  habitId?: HabitIdT;
-  initialHabitInfoValues: habitInfoT;
+  habitId?: HabitIdT | null;
 }) {
   const { colorScheme } = useColorScheme();
-  const borderColor = DefaultColors[colorScheme].tint;
-
-  const [icon, setIcon] = useAtom(tempIconAtom);
+  const [habitInfoForm, setHabitInfoForm] = useAtom(createOrEditHabitFormAtom);
+  const setTempIcon = useSetAtom(tempIconAtom);
   useEffect(() => {
-    setIcon(initialHabitInfoValues.icon);
-  }, [initialHabitInfoValues.icon]);
+    setTempIcon(habitInfoForm.icon);
+  }, [habitInfoForm.icon]);
 
-  const [habitName, setHabitName] = useState(initialHabitInfoValues.title);
-  const [description, setDescription] = useState(
-    initialHabitInfoValues.description,
-  );
-  const [color, setColor] = useState(initialHabitInfoValues.color);
-  const [goalType, setGoalType] = useState(initialHabitInfoValues.goal.period);
-  const [completion, setCompletion] = useState(
-    initialHabitInfoValues.goal.completionsPerPeriod,
-  );
-
-  const needsTag = icon === "default";
-  const needsName = habitName === "";
+  const borderColor = DefaultColors[colorScheme].tint;
+  const needsTag = habitInfoForm.icon === "default";
+  const needsName = habitInfoForm.title === "";
   const canCreateHabit = !needsTag && !needsName;
 
   const editHabit = habitId ? useSetAtom(editHabitInfoAtom(habitId)) : () => {};
   const createNewHabit = useSetAtom(createNewHabitAtom);
 
-  // generate plural texts
-  const pluralize = (
-    count: number,
-    singularText: string,
-    pluralText: string,
-  ) => {
-    if (count === 1) {
-      return `${count} ${singularText}`;
-    } else {
-      return `${count} ${pluralText}`;
-    }
-  };
-
   function handleCreateOrEditHabit() {
-    const habitInfo: habitInfoT = {
-      createdAt: new Date(),
-      title: habitName,
-      description: description,
-      color: color as keyof typeof colors.habitColors,
-      icon: icon,
-      goal: {
-        period: goalType,
-        completionsPerPeriod: completion,
-      },
-    };
-    {
-      habitId ? editHabit(habitInfo) : createNewHabit(habitInfo);
-    }
+    habitId ? editHabit(habitInfoForm) : createNewHabit(habitInfoForm);
     resetNavigationStack("/habits");
   }
 
   return (
-    <View className="flex flex-1 flex-col gap-y-5 px-5 pt-11">
-      {/* Header */}
-      <View className="flex flex-row items-center justify-between">
-        {
-          <RoundedButton
-            text="Cancel"
-            icon={IconX}
-            onPress={() => {
-              router.back();
-            }}
-          />
-        }
-        <Text className="text-base font-semibold">
-          {habitId ? "Edit" : "New"} habit
-        </Text>
-        {
-          <RoundedButton
-            text={habitId ? "Done" : "Next"}
-            icon={habitId ? IconCheck : IconArrowForwardUp}
-            isDisabled={!canCreateHabit}
-            onPress={handleCreateOrEditHabit}
-          />
-        }
-      </View>
-
+    <View className="flex flex-1 flex-col gap-y-5 px-5 pt-2">
       {/* Icon & Name */}
       <View className="flex flex-col">
         <Text className="mb-1 text-base font-semibold">Icon & Name</Text>
         <View className="flex flex-row">
           <IconButton
-            icon={iconStrNameToTablerIcon(icon)}
+            icon={iconStrNameToTablerIcon(habitInfoForm.icon)}
             onPress={() => {
               router.push("/habits/habiticons");
             }}
@@ -138,8 +74,13 @@ export default function CreateOrEditHabit({
             }}
             placeholder="Ex. Workout"
             placeholderTextColor={DefaultColors[colorScheme].placeholder}
-            value={habitName}
-            onChangeText={(text) => setHabitName(text)}
+            value={habitInfoForm.title}
+            onChangeText={(text) =>
+              setHabitInfoForm((prev) => ({
+                ...prev,
+                title: text,
+              }))
+            }
           ></TextInput>
         </View>
       </View>
@@ -156,8 +97,13 @@ export default function CreateOrEditHabit({
             color: DefaultColors[colorScheme].text,
           }}
           maxLength={50}
-          value={description}
-          onChangeText={(text) => setDescription(text)}
+          value={habitInfoForm.description}
+          onChangeText={(text) =>
+            setHabitInfoForm((prev) => ({
+              ...prev,
+              description: text,
+            }))
+          }
         ></TextInput>
       </View>
 
@@ -179,10 +125,15 @@ export default function CreateOrEditHabit({
                     marginBottom: i === 0 ? 8 : 0,
                   }}
                   onPress={() => {
-                    setColor(col);
+                    setHabitInfoForm((prev) => ({
+                      ...prev,
+                      color: col,
+                    }));
                   }}
                 >
-                  {col === color ? <Icon icon={IconCheck} /> : null}
+                  {col === habitInfoForm.color ? (
+                    <Icon icon={IconCheck} />
+                  ) : null}
                 </TouchableOpacity>
               ))}
             </View>
@@ -199,11 +150,21 @@ export default function CreateOrEditHabit({
             style={{ backgroundColor: colors.transparent }}
           >
             <Text className="text-base font-semibold">Goal type</Text>
-            <Menu onSelect={(val) => setGoalType(val)}>
+            <Menu
+              onSelect={(val) =>
+                setHabitInfoForm((prev) => ({
+                  ...prev,
+                  goal: {
+                    period: val,
+                    completionsPerPeriod: prev.goal.completionsPerPeriod,
+                  },
+                }))
+              }
+            >
               <MenuTrigger>
                 <View className="flex flex-row">
                   <Text className="text-base text-stone-400">
-                    {goalType} goal
+                    {habitInfoForm.goal.period} goal
                   </Text>
                   <Icon
                     icon={IconSelector}
@@ -251,13 +212,28 @@ export default function CreateOrEditHabit({
           >
             <Text className="text-base font-semibold">
               {" "}
-              Completions per {goalType === "daily" ? "day" : "week"}
+              Completions per{" "}
+              {habitInfoForm.goal.period === "daily" ? "day" : "week"}
             </Text>
-            <Menu onSelect={(val) => setCompletion(val)}>
+            <Menu
+              onSelect={(val) =>
+                setHabitInfoForm((prev) => ({
+                  ...prev,
+                  goal: {
+                    period: prev.goal.period,
+                    completionsPerPeriod: val,
+                  },
+                }))
+              }
+            >
               <MenuTrigger>
                 <View className="flex flex-row">
                   <Text className="text-base text-stone-400">
-                    {pluralize(completion, "completion", "completions")}
+                    {`${habitInfoForm.goal.completionsPerPeriod} ${
+                      habitInfoForm.goal.completionsPerPeriod === 1
+                        ? "completion"
+                        : "completions"
+                    }`}
                   </Text>
                   <Icon
                     icon={IconSelector}

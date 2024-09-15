@@ -213,6 +213,18 @@ export const createNewHabitAtom = atom(
   },
 );
 
+export const createOrEditHabitFormAtom = atom({
+  createdAt: new Date(),
+  title: "",
+  description: "",
+  color: "red",
+  icon: "default",
+  goal: {
+    period: "daily",
+    completionsPerPeriod: 1,
+  },
+});
+
 export const deleteHabitAtom = atomFamily((habitId: HabitIdT) =>
   atom(null, async (_get, set) => {
     set(allHabitsAtom, (prev) => {

@@ -1,11 +1,9 @@
-import { tempIconAtom } from "@/src/components/CreateOrEditHabit";
-import Icon from "@/src/components/Icon";
+import { createOrEditHabitFormAtom } from "@/src/atoms/atoms";
 import { Text, View } from "@/src/components/Themed";
-import { IconChevronLeft } from "@tabler/icons-react-native";
 import { router } from "expo-router";
 import { useAtom } from "jotai";
 import { useMemo } from "react";
-import { FlatList, TouchableOpacity } from "react-native";
+import { FlatList } from "react-native";
 import { IconButton } from "./icon-button";
 import { iconStrNameToTablerIcon } from "./icons";
 
@@ -155,8 +153,7 @@ const categories: HabitIconsTuple[] = [
 ];
 
 export default function HabitIcons() {
-  const [icon, setIcon] = useAtom(tempIconAtom);
-
+  const [form, setForm] = useAtom(createOrEditHabitFormAtom);
   const habitIcons: HabitIconsTuple[] = useMemo(() => {
     return categories;
   }, []);
@@ -171,10 +168,10 @@ export default function HabitIcons() {
               <IconButton
                 icon={iconStrNameToTablerIcon(key)}
                 onPress={() => {
-                  setIcon(key);
+                  setForm((prev) => ({ ...prev, icon: key }));
                   router.back();
                 }}
-                selected={icon === key}
+                selected={form.icon === key}
               />
             </View>
           ))}
@@ -184,21 +181,7 @@ export default function HabitIcons() {
   };
 
   return (
-    <View className="flex flex-1 flex-col gap-y-5 px-5 pt-12">
-      {/* Header */}
-      <View className="relative flex flex-row items-center justify-center">
-        <TouchableOpacity
-          className="absolute -left-1 flex flex-row items-center justify-center px-2 py-1"
-          onPress={() => {
-            router.back();
-          }}
-        >
-          <Icon icon={IconChevronLeft} size={20} />
-          <Text className="ml-1 text-base font-semibold">Back</Text>
-        </TouchableOpacity>
-        <Text className="text-base font-semibold">Select Icon</Text>
-      </View>
-
+    <View className="flex flex-1 flex-col gap-y-5 px-5 pt-1">
       {/* Content */}
       <FlatList
         data={habitIcons}
