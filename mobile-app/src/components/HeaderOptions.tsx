@@ -1,11 +1,24 @@
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
-import { IconCheck, IconEdit, IconX } from "@tabler/icons-react-native";
+import {
+  IconArrowForwardUp,
+  IconCheck,
+  IconChevronLeft,
+  IconEdit,
+  IconX,
+} from "@tabler/icons-react-native";
 import { router, useGlobalSearchParams } from "expo-router";
-import { useAtom, useAtomValue } from "jotai";
-import { Pressable } from "react-native";
-import { getUserInfoAtom, removeFriendAtom } from "../atoms/atoms";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { Pressable, TouchableOpacity } from "react-native";
+import {
+  createNewHabitAtom,
+  createOrEditHabitFormAtom,
+  editHabitInfoAtom,
+  getUserInfoAtom,
+  removeFriendAtom,
+} from "../atoms/atoms";
 import colors from "../constants/colors";
 import { HabitIdT, UserIdT } from "../lib/db_types";
+import { resetNavigationStack } from "../lib/resetNavigationStack";
 import DotsMenu from "./DotsMenu";
 import HeaderBackButton from "./HeaderBackButton";
 import Icon from "./Icon";
@@ -77,6 +90,115 @@ export function viewHabitOptions(
   };
 }
 
+export function habitIconsOptions(
+  colorScheme: string,
+): NativeStackNavigationOptions {
+  return {
+    headerLeft: () => (
+      <TouchableOpacity
+        className="absolute -left-1 flex flex-row items-center justify-center px-2 py-1"
+        onPress={() => {
+          router.back();
+        }}
+      >
+        <Icon icon={IconChevronLeft} size={20} />
+        <Text className="ml-1 text-base font-semibold">Back</Text>
+      </TouchableOpacity>
+    ),
+    headerTitle: () => (
+      <Text className="text-base font-semibold text-black dark:text-white">
+        Select Icon
+      </Text>
+    ),
+    headerTitleAlign: "center",
+    ...sharedOptions(colorScheme),
+  };
+}
+
+export function createHabitOptions(
+  colorScheme: string,
+): NativeStackNavigationOptions {
+  const habitInfoForm = useAtomValue(createOrEditHabitFormAtom);
+  const needsTag = habitInfoForm.icon === "default";
+  const needsName = habitInfoForm.title === "";
+  const canCreateHabit = !needsTag && !needsName;
+  const createNewHabit = useSetAtom(createNewHabitAtom);
+  function handleCreateHabit() {
+    createNewHabit(habitInfoForm);
+    resetNavigationStack("/habits");
+  }
+  return {
+    headerLeft: () => (
+      <RoundedButton
+        text="Cancel"
+        icon={IconX}
+        onPress={() => {
+          router.back();
+        }}
+      />
+    ),
+    headerTitle: () => (
+      <Text className="text-base font-semibold text-black dark:text-white">
+        New habit
+      </Text>
+    ),
+    headerRight: () => (
+      <RoundedButton
+        text={"Next"}
+        icon={IconArrowForwardUp}
+        isDisabled={!canCreateHabit}
+        onPress={handleCreateHabit}
+      />
+    ),
+    headerTitleAlign: "center",
+    ...sharedOptions(colorScheme),
+  };
+}
+
+export function editHabitOptions(
+  colorScheme: string,
+): NativeStackNavigationOptions {
+  const { habitidStr } = useGlobalSearchParams<{ habitidStr: HabitIdT }>();
+  if (!habitidStr) {
+    return sharedOptions(colorScheme);
+  }
+  const habitInfoForm = useAtomValue(createOrEditHabitFormAtom);
+  const needsTag = habitInfoForm.icon === "default";
+  const needsName = habitInfoForm.title === "";
+  const canCreateHabit = !needsTag && !needsName;
+  const editHabit = useSetAtom(editHabitInfoAtom(habitidStr));
+  function handleEditHabit() {
+    editHabit(habitInfoForm);
+    resetNavigationStack("/habits");
+  }
+  return {
+    headerLeft: () => (
+      <RoundedButton
+        text="Cancel"
+        icon={IconX}
+        onPress={() => {
+          router.back();
+        }}
+      />
+    ),
+    headerTitle: () => (
+      <Text className="text-base font-semibold text-black dark:text-white">
+        Edit habit
+      </Text>
+    ),
+    headerRight: () => (
+      <RoundedButton
+        text={"Done"}
+        icon={IconCheck}
+        isDisabled={!canCreateHabit}
+        onPress={handleEditHabit}
+      />
+    ),
+    headerTitleAlign: "center",
+    ...sharedOptions(colorScheme),
+  };
+}
+
 export function viewProfileOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
@@ -88,7 +210,7 @@ export function viewProfileOptions(
   const [, removeFriend] = useAtom(removeFriendAtom);
 
   return {
-    headerLeft: () => <HeaderBackButton chevronDirection="down" />,
+    headerLeft: () => <HeaderBackButton />,
     headerTitle: () => (
       <Text className="text-base font-semibold text-black dark:text-white">
         {username}
@@ -117,7 +239,7 @@ export function inviteFriendsOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
   return {
-    headerLeft: () => <HeaderBackButton chevronDirection="down" />,
+    headerLeft: () => <HeaderBackButton />,
     headerTitle: () => (
       <Text className="text-base font-semibold text-black dark:text-white">
         Invite friends
@@ -225,7 +347,7 @@ export function addFriendsOptions(
   colorScheme: string,
 ): NativeStackNavigationOptions {
   return {
-    headerLeft: () => <HeaderBackButton chevronDirection="down" />,
+    headerLeft: () => <HeaderBackButton />,
     headerTitle: () => (
       <Text className="text-base font-semibold text-black dark:text-white">
         Add friends

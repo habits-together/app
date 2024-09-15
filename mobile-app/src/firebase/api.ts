@@ -43,7 +43,11 @@ import {
 } from "../lib/db_types";
 import { todayString } from "../lib/formatDateString";
 import { firestore } from "./config";
-import { userSnapToUserWithIdT, userWithIdToUserT } from "./helper";
+import {
+  convertTimestampToJSDate,
+  userSnapToUserWithIdT,
+  userWithIdToUserT,
+} from "./helper";
 
 type SetFunction<T> = (update: SetStateAction<T>) => void;
 
@@ -62,7 +66,7 @@ export async function fetchAllMyHabitsInfo(): Promise<allHabitsT> {
     const data = doc.data();
     myHabits[doc.id as HabitIdT] = {
       ...data,
-      createdAt: new Date(data.createdAt),
+      createdAt: convertTimestampToJSDate(data.createdAt),
     } as habitT;
   });
   return myHabits;
@@ -82,12 +86,11 @@ export async function fetchMultipleHabitsInfo(
         const data = habitDocSnap.data();
         habitsInfo[habitId] = {
           ...data,
-          createdAt: new Date(data.createdAt),
+          createdAt: convertTimestampToJSDate(data.createdAt),
         } as habitT;
       }
     }),
   );
-
   return habitsInfo;
 }
 
@@ -104,7 +107,7 @@ export async function fetchHabitInfo({
   const data = habitDocSnap.data();
   return {
     ...data,
-    createdAt: new Date(data.createdAt),
+    createdAt: convertTimestampToJSDate(data.createdAt),
   } as habitT;
 }
 
@@ -277,7 +280,7 @@ export async function fetchFriendData({
     if (userDocSnap.exists()) {
       const userData = userDocSnap.data();
       allFriendData[friendId] = {
-        createdAt: new Date(userData.createdAt),
+        createdAt: convertTimestampToJSDate(userData.createdAt),
         displayName: userData.displayName,
         username: userData.username,
       } as userT;
@@ -422,7 +425,7 @@ export async function fetchNotifications(): Promise<allNotificationsT> {
     const data = doc.data();
     myNotifications[doc.id as NotificationIdT] = {
       ...data,
-      sentAt: new Date(data.sentAt),
+      sentAt: convertTimestampToJSDate(data.sentAt),
     } as notificationT;
   });
 
@@ -453,7 +456,7 @@ export async function fetchOutboundNotifications(): Promise<allNotificationsT> {
     const data = doc.data();
     myNotifications[doc.id as NotificationIdT] = {
       ...data,
-      sentAt: new Date(data.sentAt),
+      sentAt: convertTimestampToJSDate(data.sentAt),
     } as notificationT;
   });
   return myNotifications;
@@ -673,7 +676,7 @@ export async function searchUsersInDb({
     const data = doc.data();
     searchResultUsersInfo[doc.id as UserIdT] = {
       ...data,
-      createdAt: new Date(data.createdAt),
+      createdAt: convertTimestampToJSDate(data.createdAt),
     } as userT;
   });
 
