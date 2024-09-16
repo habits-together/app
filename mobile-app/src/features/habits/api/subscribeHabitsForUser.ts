@@ -4,6 +4,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   collection,
   DocumentData,
+  DocumentReference,
+  getDoc,
   getDocs,
   onSnapshot,
   Query,
@@ -46,6 +48,62 @@ import { useEffect } from "react";
 //   });
 // }
 
+// export function useFirestoreQuery<T>({
+//   queryKey,
+//   subscribe,
+//   firestoreQuery,
+//   processSnapshot,
+//   defaultValue,
+// }: {
+//   queryKey: string[];
+//   subscribe: boolean;
+//   firestoreQuery: Query<DocumentData, DocumentData>;
+//   processSnapshot: (snapshot: QuerySnapshot<DocumentData, DocumentData>) => T;
+//   defaultValue: T;
+// }) {
+//   if (subscribe) {
+//     return useFirebaseSubscription<T>({
+//       queryKey,
+//       firestoreQuery,
+//       processSnapshot,
+//       defaultValue,
+//     });
+//   } else {
+//     return useQuery<T, Error, T, string[]>({
+//       queryKey,
+//       queryFn: () => getDocs(firestoreQuery).then(processSnapshot),
+//     });
+//   }
+// }
+
+// export function useFirestoreDoc<T>({
+//   queryKey,
+//   subscribe,
+//   firestoreDoc,
+//   processSnapshot,
+//   defaultValue,
+// }: {
+//   queryKey: string[];
+//   subscribe: boolean;
+//   firestoreDoc: DocumentReference<T>;
+//   processSnapshot: (snapshot: DocumentData) => T;
+//   defaultValue: T;
+// }) {
+//   if (subscribe) {
+//     return useFirebaseSubscription<T>({
+//       queryKey,
+//       firestoreQuery: firestoreDoc,
+//       processSnapshot,
+//       defaultValue,
+//     });
+//   } else {
+//     return useQuery<T, Error, T, string[]>({
+//       queryKey,
+//       queryFn: () => getDoc(firestoreDoc).then(processSnapshot),
+//     });
+//   }
+// }
+
 export function useHabitsForUser({
   userId,
   subscribe,
@@ -73,7 +131,7 @@ export function useHabitsForUser({
   };
 
   if (subscribe) {
-    return useSubscription<allHabitsT>({
+    return useFirebaseSubscription<allHabitsT>({
       queryKey: ["habits", userId],
       firestoreQuery: firebaseQuery,
       processSnapshot,
@@ -81,14 +139,14 @@ export function useHabitsForUser({
     });
   } else {
     return useQuery<allHabitsT, Error, allHabitsT, string[]>({
-      queryKey: ["habits"],
+      queryKey: ["habits", userId],
       queryFn: () => getDocs(firebaseQuery).then(processSnapshot),
     });
   }
 }
 
 export function useSubscribeToHabits({ userId }: { userId: UserIdT }) {
-  return useSubscription<allHabitsT>({
+  return useFirebaseSubscription<allHabitsT>({
     queryKey: ["habits"],
     defaultValue: {},
     firestoreQuery: query(
@@ -109,7 +167,7 @@ export function useSubscribeToHabits({ userId }: { userId: UserIdT }) {
   });
 }
 
-export function useSubscription<T>({
+export function useFirebaseSubscription<T>({
   queryKey,
   defaultValue,
   firestoreQuery,
@@ -124,7 +182,6 @@ export function useSubscription<T>({
 
   useEffect(() => {
     const unsubscribe = onSnapshot(firestoreQuery, (firebaseQuerySnapshot) => {
-      // const data = firebaseQuerySnapshot.docs.map((doc) => doc.data());
       const data = processSnapshot(firebaseQuerySnapshot);
       queryClient.setQueryData(queryKey, data);
     });
@@ -139,6 +196,7 @@ export function useSubscription<T>({
       // Fake query function to satisfy the useQuery hook
       return (queryClient.getQueryData(queryKey) as T) || defaultValue;
     },
+    // never automatically refetch since data is updated via subscription
     staleTime: Infinity,
     refetchInterval: undefined,
     refetchOnMount: true,
