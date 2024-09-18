@@ -1,90 +1,67 @@
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
-import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { Provider } from "jotai";
-import { useEffect } from "react";
-import { MenuProvider } from "react-native-popup-menu";
-import "react-native-reanimated";
-import { atomStore } from "../atoms/store";
-import { checkifUserExistsInDb } from "../firebase/api";
-import { UserIdT } from "../lib/db_types";
-import { resetNavigationStack } from "../lib/resetNavigationStack";
+// Import  global CSS file
+import '../../global.css';
 
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from "expo-router";
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { ThemeProvider } from '@react-navigation/native';
+import { SplashScreen, Stack } from 'expo-router';
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import FlashMessage from 'react-native-flash-message';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 
+import { APIProvider } from '@/api';
+import { hydrateAuth, loadSelectedTheme } from '@/core';
+import { useThemeConfig } from '@/core/use-theme-config';
+
+export { ErrorBoundary } from 'expo-router';
+
+export const unstable_settings = {
+  initialRouteName: '(app)',
+};
+
+hydrateAuth();
+loadSelectedTheme();
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const auth = getAuth();
-  const [loaded, error] = useFonts({
-    SpaceMono: require("@/assets/fonts/SpaceMono-Regular.ttf"),
-    ...FontAwesome.font,
-  });
-
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
-  useEffect(() => {
-    if (error) throw error;
-  }, [error]);
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const userHasProfile = await checkifUserExistsInDb({
-          userId: user.uid as UserIdT,
-        });
-        if (!userHasProfile) {
-          /** If user is logged in and they don't exist in firestore
-           * (no profile) rediect them to /createprofile
-           */
-          resetNavigationStack("/createprofile");
-        } else {
-          /** user is logged in and exists
-           * so the auth pages are only usable
-           * when a user is logged out. (idk if we want this???)
-           */
-          resetNavigationStack("/habits");
-        }
-      }
-    });
-    return () => unsubscribe();
-  }, [auth]);
-
-  if (!loaded) {
-    return null;
-  }
-
-  return <RootLayoutNav />;
-}
-
-function RootLayoutNav() {
   return (
-    <Provider store={atomStore}>
-      <MenuProvider>
-        <ThemeProvider value={DefaultTheme}>
-          <Stack
-            screenOptions={{
-              headerShown: false,
-              animation: "ios",
-            }}
-          >
-            <Stack.Screen name="(app)" />
-            <Stack.Screen name="(auth)" />
-          </Stack>
-        </ThemeProvider>
-      </MenuProvider>
-    </Provider>
+    <Providers>
+      {/* <SafeAreaView style={{ flex: 1 }}> */}
+      <Stack
+        screenOptions={{
+          headerShown: false,
+        }}
+      />
+      {/* </SafeAreaView> */}
+    </Providers>
   );
 }
+
+function Providers({ children }: { children: React.ReactNode }) {
+  const theme = useThemeConfig();
+  return (
+    <GestureHandlerRootView
+      style={styles.container}
+      className={theme.dark ? `dark` : undefined}
+    >
+      <KeyboardProvider>
+        <ThemeProvider value={theme}>
+          <APIProvider>
+            <BottomSheetModalProvider>
+              {children}
+              <FlashMessage position="top" />
+            </BottomSheetModalProvider>
+          </APIProvider>
+        </ThemeProvider>
+      </KeyboardProvider>
+    </GestureHandlerRootView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
