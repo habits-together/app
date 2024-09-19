@@ -23,7 +23,6 @@ jobs:
         uses: reviewdog/action-setup@v1
 
       - name: 🏃‍♂️ Run TypeScript PR # Reviewdog tsc errorformat: %f:%l:%c - error TS%n: %m
-        working-directory: ./mobile-app
         # We only need to add the reviewdog step if it's a pull request
         if: github.event_name == 'pull_request'
         run: |
