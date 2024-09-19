@@ -35,11 +35,7 @@ export const ThemeItem = () => {
 
   return (
     <>
-      <Item
-        text="settings.theme.title"
-        value={theme?.label}
-        onPress={modal.present}
-      />
+      <Item text="Theme" value={theme?.label} onPress={modal.present} />
       <Options
         ref={modal.ref}
         options={themes}

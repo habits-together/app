@@ -1,12 +1,11 @@
 import React from 'react';
 
-import { FocusAwareStatusBar, SafeAreaView, Text } from '@/ui';
+import { Header, ScreenContainer } from '@/ui';
 
-export default function Feed() {
+export default function Notifications() {
   return (
-    <SafeAreaView className="flex-1 ">
-      <FocusAwareStatusBar />
-      <Text>this is a page</Text>
-    </SafeAreaView>
+    <ScreenContainer>
+      <Header title="Notifications" />
+    </ScreenContainer>
   );
 }

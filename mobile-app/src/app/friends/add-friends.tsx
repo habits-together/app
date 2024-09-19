@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-import { SafeAreaView, Text } from '@/ui';
+import { Header, ScreenContainer } from '@/ui';
 
-export const AddFriends = () => {
+export default function AddFriends() {
   return (
-    <SafeAreaView className="flex-1">
-      <Text className="text-base">AddFriends Component</Text>
-    </SafeAreaView>
+    <ScreenContainer>
+      <Header title="Add Friends" leftButton="back" />
+    </ScreenContainer>
   );
-};
+}

@@ -1,17 +1,18 @@
 import { useLocalSearchParams } from 'expo-router';
 import * as React from 'react';
 
-import { SafeAreaView, Text } from '@/ui';
+import { Header, ScreenContainer, Text } from '@/ui';
 
-export const ViewProfile = () => {
+export default function ViewProfile() {
   // id automatically passed in from the route
   const { id } = useLocalSearchParams<{
     id: string;
   }>();
 
   return (
-    <SafeAreaView className="flex-1">
+    <ScreenContainer className="flex-1">
+      <Header leftButton="back" />
       <Text className="text-base">{id}</Text>
-    </SafeAreaView>
+    </ScreenContainer>
   );
-};
+}

@@ -28,13 +28,11 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   return (
     <Providers>
-      {/* <SafeAreaView style={{ flex: 1 }}> */}
       <Stack
         screenOptions={{
           headerShown: false,
         }}
       />
-      {/* </SafeAreaView> */}
     </Providers>
   );
 }

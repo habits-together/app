@@ -1,23 +1,24 @@
+/* eslint-disable max-lines-per-function */
 /* eslint-disable react/react-in-jsx-scope */
 import { Env } from '@env';
+import { Linking } from 'react-native';
 
 import { Item } from '@/components/settings/item';
 import { ItemsContainer } from '@/components/settings/items-container';
 import { ThemeItem } from '@/components/settings/theme-item';
 import { useAuth } from '@/core';
-import { FocusAwareStatusBar, ScrollView, Text, View } from '@/ui';
+import { Header, ScreenContainer, ScrollView, View } from '@/ui';
 
 export default function Settings() {
   const signOut = useAuth.use.signOut();
   // const { colorScheme } = useColorScheme();
   // const iconColor = colorScheme === 'dark' ? colors.neutral[400] : colors.neutral[500];
   return (
-    <>
-      <FocusAwareStatusBar />
+    <ScreenContainer>
+      <Header title="Settings" />
 
       <ScrollView>
-        <View className="flex-1 px-4 pt-16">
-          <Text className="text-xl font-bold">Settings</Text>
+        <View className="flex-1">
           <ItemsContainer title="General">
             <ThemeItem />
           </ItemsContainer>
@@ -31,32 +32,54 @@ export default function Settings() {
             <Item
               text="Share"
               // icon={<Share color={iconColor} />}
-              onPress={() => {}}
+              onPress={() => {
+                alert('todo');
+              }}
             />
             <Item
               text="Rate"
               // icon={<Rate color={iconColor} />}
-              onPress={() => {}}
+              onPress={() => {
+                alert('todo');
+              }}
             />
             <Item
               text="Support"
               // icon={<Support color={iconColor} />}
-              onPress={() => {}}
+              onPress={() => {
+                alert('todo');
+              }}
             />
           </ItemsContainer>
 
           <ItemsContainer title="Links">
-            <Item text="Privacy Policy" onPress={() => {}} />
-            <Item text="Terms of Service" onPress={() => {}} />
+            <Item
+              text="Privacy Policy"
+              onPress={() => {
+                alert('todo');
+              }}
+            />
+            <Item
+              text="Terms of Service"
+              onPress={() => {
+                alert('todo');
+              }}
+            />
             <Item
               text="GitHub"
               // icon={<Github color={iconColor} />}
-              onPress={() => {}}
+              onPress={() => {
+                Linking.openURL(
+                  'https://github.com/owengretzinger/habits-together',
+                );
+              }}
             />
             <Item
               text="Website"
               // icon={<Website color={iconColor} />}
-              onPress={() => {}}
+              onPress={() => {
+                Linking.openURL('https://habitstogether.app');
+              }}
             />
           </ItemsContainer>
 
@@ -67,6 +90,6 @@ export default function Settings() {
           </View>
         </View>
       </ScrollView>
-    </>
+    </ScreenContainer>
   );
 }

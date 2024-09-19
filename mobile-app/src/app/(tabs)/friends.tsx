@@ -1,12 +1,20 @@
+import { router } from 'expo-router';
 import React from 'react';
 
-import { FocusAwareStatusBar, SafeAreaView, Text } from '@/ui';
+import { Header, ScreenContainer } from '@/ui';
 
-export default function Feed() {
+export default function Friends() {
   return (
-    <SafeAreaView className="pt-16">
-      <FocusAwareStatusBar />
-      <Text>this is a page</Text>
-    </SafeAreaView>
+    <ScreenContainer>
+      <Header
+        title="Friends"
+        rightButton={{
+          text: 'Add Friends',
+          onPress: () => {
+            router.push('/friends/add-friends');
+          },
+        }}
+      />
+    </ScreenContainer>
   );
 }

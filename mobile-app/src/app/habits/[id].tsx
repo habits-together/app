@@ -1,17 +1,26 @@
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import * as React from 'react';
 
-import { SafeAreaView, Text } from '@/ui';
+import { Header, ScreenContainer, Text } from '@/ui';
 
-export const ViewHabit = () => {
+export default function ViewHabit() {
   // id automatically passed in from the route
   const { id } = useLocalSearchParams<{
     id: string;
   }>();
 
   return (
-    <SafeAreaView className="flex-1">
-      <Text className="text-base">{id}</Text>
-    </SafeAreaView>
+    <ScreenContainer>
+      <Header
+        leftButton="back"
+        rightButton={{
+          text: 'Edit Habit',
+          onPress: () => {
+            router.push('/habits/edit-habit?mode=edit&id=dummyid');
+          },
+        }}
+      />
+      <Text>{id}</Text>
+    </ScreenContainer>
   );
-};
+}

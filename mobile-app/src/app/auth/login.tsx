@@ -4,7 +4,7 @@ import React from 'react';
 import type { LoginFormProps } from '@/components/login-form';
 import { LoginForm } from '@/components/login-form';
 import { useAuth } from '@/core';
-import { FocusAwareStatusBar, SafeAreaView } from '@/ui';
+import { Header, ScreenContainer } from '@/ui';
 
 export default function Login() {
   const router = useRouter();
@@ -16,9 +16,9 @@ export default function Login() {
     router.push('/');
   };
   return (
-    <SafeAreaView>
-      <FocusAwareStatusBar />
+    <ScreenContainer>
+      <Header leftButton={'back'} />
       <LoginForm onSubmit={onSubmit} />
-    </SafeAreaView>
+    </ScreenContainer>
   );
 }
