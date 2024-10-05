@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 
+import { auth } from '../firebase/firebase.config';
 import { createSelectors } from '../utils';
 import type { TokenType } from './utils';
 import { getToken, removeToken, setToken } from './utils';
