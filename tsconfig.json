@@ -4,8 +4,12 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@env": ["./src/core/env.js"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@env": [
+        "./src/core/env.js"
+      ]
     },
     "esModuleInterop": true,
     "checkJs": true
@@ -20,5 +24,10 @@
     "ios",
     "lint-staged.config.js"
   ],
-  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
+  ]
 }
