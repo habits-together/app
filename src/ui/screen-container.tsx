@@ -16,7 +16,7 @@ export const ScreenContainer = ({
 
   return (
     <View
-      className="flex-1 px-3"
+      className="flex-1 bg-slate-50 px-3 dark:bg-stone-900"
       style={{ paddingTop: safeTopPadding }}
       {...props}
     >
