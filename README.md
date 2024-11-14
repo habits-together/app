@@ -89,7 +89,7 @@
 
 - [pnpm](https://pnpm.io/)
 - iOS simulator or Android emulator
-  - See [Expo documentation on setting up a development environment](https://docs.expo.dev/get-started/set-up-your-environment/?platform=ios&device=simulated&mode=development-build)
+  - See [Expo documentation on setting up a development environment](https://docs.expo.dev/get-started/set-up-your-environment/?platform=ios&device=simulated&mode=development-build&buildEnv=local)
 
 ### Installation
 
