@@ -1,4 +1,5 @@
 import { router } from 'expo-router';
+import { ChevronLeft, type LucideIcon, XIcon } from 'lucide-react-native';
 import * as React from 'react';
 import { View } from 'react-native';
 
@@ -10,6 +11,7 @@ type Props = {
     | {
         text: string;
         onPress: () => void;
+        icon?: LucideIcon;
       }
     | 'back'
     | 'cancel';
@@ -17,6 +19,7 @@ type Props = {
   rightButton?: {
     text: string;
     onPress: () => void;
+    icon?: LucideIcon;
   };
 };
 export const Header = ({ leftButton, title, rightButton }: Props) => {
@@ -28,7 +31,13 @@ export const Header = ({ leftButton, title, rightButton }: Props) => {
         <CancelButton />
       ) : (
         leftButton && (
-          <Button onPress={leftButton.onPress} label={leftButton.text} />
+          <Button
+            onPress={leftButton.onPress}
+            label={leftButton.text}
+            variant="outline"
+            size="sm"
+            icon={leftButton.icon}
+          />
         )
       )}
 
@@ -41,7 +50,13 @@ export const Header = ({ leftButton, title, rightButton }: Props) => {
       )}
 
       {rightButton ? (
-        <Button onPress={rightButton.onPress} label={rightButton.text} />
+        <Button
+          onPress={rightButton.onPress}
+          label={rightButton.text}
+          variant="outline"
+          size="sm"
+          icon={rightButton.icon}
+        />
       ) : (
         <View></View>
       )}
@@ -56,6 +71,9 @@ const BackButton = () => {
         router.back();
       }}
       label={'Back'}
+      icon={ChevronLeft}
+      variant="outline"
+      size="sm"
     />
   );
 };
@@ -67,6 +85,9 @@ const CancelButton = () => {
         router.back();
       }}
       label={'Cancel'}
+      icon={XIcon}
+      variant="outline"
+      size="sm"
     />
   );
 };
