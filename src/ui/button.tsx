@@ -1,13 +1,17 @@
+import type { LucideIcon as LucideIconType } from 'lucide-react-native';
 import React from 'react';
-import type { PressableProps, View } from 'react-native';
-import { ActivityIndicator, Pressable, Text } from 'react-native';
+import type { PressableProps } from 'react-native';
+import { ActivityIndicator, Pressable, Text, View } from 'react-native';
 import type { VariantProps } from 'tailwind-variants';
 import { tv } from 'tailwind-variants';
 
+import { LucideIcon } from '@/ui/lucide-icon';
+
 const button = tv({
   slots: {
-    container: 'my-2 flex flex-row items-center justify-center rounded-md px-4',
-    label: 'font-inter text-base font-semibold',
+    container:
+      'my-2 flex flex-row items-center justify-center rounded-full px-4',
+    label: 'font-inter text-base',
     indicator: 'h-6 text-white',
   },
 
@@ -24,7 +28,8 @@ const button = tv({
         indicator: 'text-white',
       },
       outline: {
-        container: 'border border-neutral-400',
+        container:
+          'border border-slate-200 bg-white dark:border-slate-500 dark:bg-transparent',
         label: 'text-black dark:text-neutral-100',
         indicator: 'text-black dark:text-neutral-100',
       },
@@ -46,7 +51,7 @@ const button = tv({
     },
     size: {
       default: {
-        container: 'h-10 px-4',
+        container: 'h-12 px-4',
         label: 'text-base',
       },
       lg: {
@@ -54,8 +59,8 @@ const button = tv({
         label: 'text-xl',
       },
       sm: {
-        container: 'h-8 px-3',
-        label: 'text-sm',
+        container: 'h-8 px-4',
+        label: 'text-base',
         indicator: 'h-2',
       },
       icon: { container: 'h-9 w-9' },
@@ -90,6 +95,7 @@ interface Props extends ButtonVariants, Omit<PressableProps, 'disabled'> {
   loading?: boolean;
   className?: string;
   textClassName?: string;
+  icon?: LucideIconType;
 }
 
 export const Button = React.forwardRef<View, Props>(
@@ -103,6 +109,7 @@ export const Button = React.forwardRef<View, Props>(
       className = '',
       testID,
       textClassName = '',
+      icon: Icon,
       ...props
     },
     ref,
@@ -131,12 +138,21 @@ export const Button = React.forwardRef<View, Props>(
                 testID={testID ? `${testID}-activity-indicator` : undefined}
               />
             ) : (
-              <Text
-                testID={testID ? `${testID}-label` : undefined}
-                className={styles.label({ className: textClassName })}
-              >
-                {text}
-              </Text>
+              <View className="flex-row items-center gap-2">
+                {Icon && (
+                  <LucideIcon
+                    Icon={Icon}
+                    size={16}
+                    className={styles.label({ className: textClassName })}
+                  />
+                )}
+                <Text
+                  testID={testID ? `${testID}-label` : undefined}
+                  className={styles.label({ className: textClassName })}
+                >
+                  {text}
+                </Text>
+              </View>
             )}
           </>
         )}

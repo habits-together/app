@@ -1,4 +1,5 @@
 import { router } from 'expo-router';
+import { PlusIcon } from 'lucide-react-native';
 import React from 'react';
 
 // import { usePosts } from '@/api';
@@ -12,7 +13,8 @@ export default function Habits() {
       <Header
         title="Habits"
         rightButton={{
-          text: 'Add',
+          icon: PlusIcon,
+          text: 'New Habit',
           onPress: () => {
             router.push('/habits/edit-habit?mode=create&id=dummyid');
           },
