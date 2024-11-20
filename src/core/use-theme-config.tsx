@@ -24,7 +24,7 @@ const LightTheme: Theme = {
   colors: {
     ...DefaultTheme.colors,
     primary: colors.primary[400],
-    background: colors.white,
+    background: colors.slate[100],
   },
 };
 
