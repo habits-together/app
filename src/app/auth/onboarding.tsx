@@ -33,7 +33,7 @@ export default function Onboarding() {
           label="Let's Get Started "
           onPress={() => {
             setIsFirstTime(false);
-            router.replace('/auth/login');
+            router.replace('/auth');
           }}
         />
       </View>

@@ -1,7 +1,7 @@
 import type { LucideIcon as LucideIconType } from 'lucide-react-native';
 import React from 'react';
-import type { PressableProps } from 'react-native';
-import { ActivityIndicator, Pressable, Text, View } from 'react-native';
+import type { ImageSourcePropType, PressableProps } from 'react-native';
+import { ActivityIndicator, Image, Pressable, Text, View } from 'react-native';
 import type { VariantProps } from 'tailwind-variants';
 import { tv } from 'tailwind-variants';
 
@@ -9,8 +9,7 @@ import { LucideIcon } from '@/ui/lucide-icon';
 
 const button = tv({
   slots: {
-    container:
-      'my-2 flex flex-row items-center justify-center rounded-full px-4',
+    container: 'flex flex-row items-center justify-center rounded-full px-4',
     label: 'font-inter text-base',
     indicator: 'h-6 text-white',
   },
@@ -29,7 +28,7 @@ const button = tv({
       },
       outline: {
         container:
-          'border border-slate-200 bg-white dark:border-slate-500 dark:bg-transparent',
+          'border border-slate-200 bg-white dark:border-stone-700 dark:bg-transparent',
         label: 'text-black dark:text-neutral-100',
         indicator: 'text-black dark:text-neutral-100',
       },
@@ -96,6 +95,7 @@ interface Props extends ButtonVariants, Omit<PressableProps, 'disabled'> {
   className?: string;
   textClassName?: string;
   icon?: LucideIconType;
+  iconImage?: ImageSourcePropType;
 }
 
 export const Button = React.forwardRef<View, Props>(
@@ -110,6 +110,7 @@ export const Button = React.forwardRef<View, Props>(
       testID,
       textClassName = '',
       icon: Icon,
+      iconImage,
       ...props
     },
     ref,
@@ -144,6 +145,13 @@ export const Button = React.forwardRef<View, Props>(
                     Icon={Icon}
                     size={16}
                     className={styles.label({ className: textClassName })}
+                  />
+                )}
+                {iconImage && (
+                  <Image
+                    source={iconImage}
+                    style={{ width: 16, height: 16 }}
+                    resizeMode="contain"
                   />
                 )}
                 <Text

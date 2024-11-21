@@ -28,7 +28,7 @@ export default function TabLayout() {
     return <Redirect href="/auth/onboarding" />;
   }
   if (status === 'signOut') {
-    return <Redirect href="/auth/login" />;
+    return <Redirect href="/auth" />;
   }
 
   return (
