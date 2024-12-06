@@ -36,7 +36,7 @@ const button = tv({
         container:
           'border border-red-200 bg-white dark:border-red-500 dark:bg-transparent',
         label: 'font-medium text-red-500',
-        indicator: 'text-white',
+        indicator: 'text-red-500',
       },
       ghost: {
         container: 'bg-transparent',

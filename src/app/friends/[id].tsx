@@ -1,8 +1,7 @@
 import { useLocalSearchParams } from 'expo-router';
 import * as React from 'react';
 
-import { type UserIDT } from '@/api';
-import { useFriend } from '@/api/friends/use-friend';
+import { useFriend, type UserIDT } from '@/api';
 import { ErrorMessage } from '@/components/error-message';
 import Profile from '@/components/profile';
 import {
