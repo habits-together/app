@@ -8,6 +8,7 @@ export * from './header';
 export * from './image';
 export * from './input';
 export * from './list';
+export * from './loading-spinner';
 export * from './modal';
 export * from './progress-bar';
 export * from './screen-container';
