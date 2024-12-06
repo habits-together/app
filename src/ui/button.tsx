@@ -33,8 +33,9 @@ const button = tv({
         indicator: 'text-black dark:text-neutral-100',
       },
       destructive: {
-        container: 'bg-red-600',
-        label: 'text-white',
+        container:
+          'border border-red-200 bg-white dark:border-red-500 dark:bg-transparent',
+        label: 'font-medium text-red-500',
         indicator: 'text-white',
       },
       ghost: {
