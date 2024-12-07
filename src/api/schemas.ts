@@ -97,3 +97,14 @@ export type HabitT = z.infer<typeof habitSchema>;
 export type FriendNotificationT = z.infer<typeof friendNotificationSchema>;
 export type HabitNotificationT = z.infer<typeof habitNotificationSchema>;
 export type NotificationT = z.infer<typeof notificationSchema>;
+
+// TODO: figure out what to do about user types (then create zod schemas for them)
+export type CompleteUserT = {
+  id: UserIDT;
+  picture: string;
+} & UserT;
+export type CompleteUserWithFriendStatusT = {
+  id: UserIDT;
+  picture: string;
+  isFriend: boolean;
+} & UserT;
