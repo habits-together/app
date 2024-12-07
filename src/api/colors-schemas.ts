@@ -1,10 +1,12 @@
-import { z } from 'zod'
+import { z } from 'zod';
 export const colorSchema = z.object({
   light: z.string(),
   base: z.string(),
   faded: z.string(),
   text: z.string(),
 });
+
+export type HabitColorT = z.infer<typeof colorSchema>;
 
 export const habitColorsSchema = z.object({
   stone: colorSchema,

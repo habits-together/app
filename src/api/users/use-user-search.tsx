@@ -1,8 +1,7 @@
 import { createQuery } from 'react-query-kit';
 
-import { type CompleteUserT, type UserIDT } from '@/api';
-
-import { addTestDelay } from '../common/add-test-delay';
+import { addTestDelay } from '../common';
+import { type CompleteUserT, type UserIdT } from './types';
 
 type Variables = {
   query: string;
@@ -11,21 +10,21 @@ type Response = CompleteUserT[];
 
 const mockUsers: CompleteUserT[] = [
   {
-    id: '3' as UserIDT,
+    id: '3' as UserIdT,
     displayName: 'Apple Smith',
     username: 'apple',
     createdAt: new Date(),
     picture: 'https://randomuser.me/api/portraits/women/4.jpg',
   },
   {
-    id: '4' as UserIDT,
+    id: '4' as UserIdT,
     displayName: 'Bob Johnson',
     username: 'bob_johnson',
     createdAt: new Date(),
     picture: 'https://randomuser.me/api/portraits/men/5.jpg',
   },
   {
-    id: '5' as UserIDT,
+    id: '5' as UserIdT,
     displayName: 'Lorem Ipsum',
     username: 'lorem_ipsum',
     createdAt: new Date(),

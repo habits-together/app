@@ -2,11 +2,19 @@ import { router } from 'expo-router';
 import { PlusIcon } from 'lucide-react-native';
 import React from 'react';
 
-// import { usePosts } from '@/api';
-import { Header, ScreenContainer } from '@/ui';
+import { useHabits } from '@/api';
+import { ErrorMessage } from '@/components/error-message';
+import { HabitCard } from '@/components/habit-card';
+import {
+  Header,
+  LoadingSpinner,
+  ScreenContainer,
+  ScrollView,
+  View,
+} from '@/ui';
 
 export default function Habits() {
-  // const { data, isPending, isError } = usePosts();
+  const { data, isPending, isError, error, refetch } = useHabits();
 
   return (
     <ScreenContainer>
@@ -20,6 +28,17 @@ export default function Habits() {
           },
         }}
       />
+      <ScrollView className="flex-1" style={{}}>
+        <View className="flex flex-1 flex-col gap-4 pb-10">
+          {isPending ? (
+            <LoadingSpinner />
+          ) : isError ? (
+            <ErrorMessage error={error} refetch={refetch} />
+          ) : (
+            data.map((habit) => <HabitCard key={habit.id} data={habit} />)
+          )}
+        </View>
+      </ScrollView>
     </ScreenContainer>
   );
 }

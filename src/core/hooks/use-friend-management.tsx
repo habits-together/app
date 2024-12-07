@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { showMessage } from 'react-native-flash-message';
 
-import { useRemoveFriend, type UserIDT, useSendFriendRequest } from '@/api';
+import { useRemoveFriend, type UserIdT, useSendFriendRequest } from '@/api';
 
 export const useFriendManagement = (
-  userId: UserIDT,
+  userId: UserIdT,
   initialIsFriend: boolean,
 ) => {
   const [isFriend, setIsFriend] = useState(initialIsFriend);

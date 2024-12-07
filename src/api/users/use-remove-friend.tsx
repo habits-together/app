@@ -1,11 +1,9 @@
 import { createMutation } from 'react-query-kit';
 
-import { type CompleteUserWithFriendStatusT, type UserIDT } from '@/api';
+import { addTestDelay, queryClient } from '../common';
+import { type CompleteUserWithFriendStatusT, type UserIdT } from './types';
 
-import { addTestDelay } from '../common/add-test-delay';
-import { queryClient } from '../common/api-provider';
-
-type Variables = { id: UserIDT };
+type Variables = { id: UserIdT };
 type Response = CompleteUserWithFriendStatusT;
 
 export const useRemoveFriend = createMutation<Response, Variables, Error>({
