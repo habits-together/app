@@ -11,7 +11,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 import { APIProvider } from '@/api';
-import { hydrateAuth, loadSelectedTheme } from '@/core';
+import { ConfettiProvider, hydrateAuth, loadSelectedTheme } from '@/core';
 import { useThemeConfig } from '@/core/use-theme-config';
 
 export { ErrorBoundary } from 'expo-router';
@@ -48,7 +48,7 @@ function Providers({ children }: { children: React.ReactNode }) {
         <ThemeProvider value={theme}>
           <APIProvider>
             <BottomSheetModalProvider>
-              {children}
+              <ConfettiProvider>{children}</ConfettiProvider>
               <FlashMessage position="top" />
             </BottomSheetModalProvider>
           </APIProvider>

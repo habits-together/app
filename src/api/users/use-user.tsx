@@ -1,15 +1,14 @@
 import { createQuery } from 'react-query-kit';
 
-import { type CompleteUserWithFriendStatusT, type UserIDT } from '@/api';
+import { addTestDelay } from '../common';
+import { type CompleteUserWithFriendStatusT, type UserIdT } from './types';
 
-import { addTestDelay } from '../common/add-test-delay';
-
-type Variables = { id: UserIDT };
+type Variables = { id: UserIdT };
 type Response = CompleteUserWithFriendStatusT;
 
 const mockFriends: CompleteUserWithFriendStatusT[] = [
   {
-    id: '1' as UserIDT,
+    id: '1' as UserIdT,
     displayName: 'John Doe',
     username: 'john_doe',
     createdAt: new Date(),
@@ -17,7 +16,7 @@ const mockFriends: CompleteUserWithFriendStatusT[] = [
     isFriend: true,
   },
   {
-    id: '2' as UserIDT,
+    id: '2' as UserIdT,
     displayName: 'Jane Doe',
     username: 'jane_doe',
     createdAt: new Date(),
@@ -25,7 +24,7 @@ const mockFriends: CompleteUserWithFriendStatusT[] = [
     isFriend: true,
   },
   {
-    id: '3' as UserIDT,
+    id: '3' as UserIdT,
     displayName: 'Apple Smith',
     username: 'apple',
     createdAt: new Date(),
@@ -33,7 +32,7 @@ const mockFriends: CompleteUserWithFriendStatusT[] = [
     isFriend: false,
   },
   {
-    id: '4' as UserIDT,
+    id: '4' as UserIdT,
     displayName: 'Bob Johnson',
     username: 'bob_johnson',
     createdAt: new Date(),
@@ -41,7 +40,7 @@ const mockFriends: CompleteUserWithFriendStatusT[] = [
     isFriend: true,
   },
   {
-    id: '5' as UserIDT,
+    id: '5' as UserIdT,
     displayName: 'Lorem Ipsum',
     username: 'lorem_ipsum',
     createdAt: new Date(),

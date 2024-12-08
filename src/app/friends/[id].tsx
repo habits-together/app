@@ -1,7 +1,7 @@
 import { useLocalSearchParams } from 'expo-router';
 import * as React from 'react';
 
-import { type UserIDT, useUser } from '@/api';
+import { type UserIdT, useUser } from '@/api';
 import { ErrorMessage } from '@/components/error-message';
 import Profile from '@/components/profile';
 import {
@@ -14,7 +14,7 @@ import {
 
 export default function ViewProfile() {
   const { id } = useLocalSearchParams<{
-    id: UserIDT;
+    id: UserIdT;
   }>();
 
   const { data, isPending, isError, error, refetch } = useUser({
