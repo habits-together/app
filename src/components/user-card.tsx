@@ -1,12 +1,7 @@
 import { Link } from 'expo-router';
 
-import { type UserIDT, type UserT } from '@/api';
+import { type CompleteUserT } from '@/api';
 import { Image, Pressable, Text, View } from '@/ui';
-
-export type CompleteUserT = {
-  id: UserIDT;
-  picture: string;
-} & UserT;
 
 export default function UserCard({ data }: { data: CompleteUserT }) {
   return (

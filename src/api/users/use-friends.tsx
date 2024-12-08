@@ -1,12 +1,11 @@
 import { createQuery } from 'react-query-kit';
 
-import { type CompleteUserT } from '@/components/user-card';
+import { type CompleteUserT, type UserIDT } from '@/api';
 
 import { addTestDelay } from '../common/add-test-delay';
-import { type UserIDT } from '../schemas';
 
 type Response = CompleteUserT[];
-type Variables = void; // as react-query-kit is strongly typed, we need to specify the type of the variables as void in case we don't need them
+type Variables = void;
 
 const mockFriends: CompleteUserT[] = [
   {
@@ -25,6 +24,7 @@ const mockFriends: CompleteUserT[] = [
   },
 ];
 
+// don't need friend status
 export const useFriends = createQuery<Response, Variables, Error>({
   queryKey: ['friends'],
   fetcher: async () => {

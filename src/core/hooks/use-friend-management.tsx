@@ -1,28 +1,28 @@
 import { useState } from 'react';
 import { showMessage } from 'react-native-flash-message';
 
-import { useAddFriend, useRemoveFriend, type UserIDT } from '@/api';
+import { useRemoveFriend, type UserIDT, useSendFriendRequest } from '@/api';
 
 export const useFriendManagement = (
   userId: UserIDT,
   initialIsFriend: boolean,
 ) => {
   const [isFriend, setIsFriend] = useState(initialIsFriend);
-  const addFriend = useAddFriend();
+  const sendFriendRequest = useSendFriendRequest();
   const removeFriend = useRemoveFriend();
 
-  const handleAddFriend = async () => {
+  const handleSendFriendRequest = async () => {
     try {
-      await addFriend.mutateAsync({ id: userId });
+      await sendFriendRequest.mutateAsync({ id: userId });
       setIsFriend(true);
       showMessage({
-        message: 'Friend added successfully',
+        message: 'Sent friend request successfully',
         type: 'success',
         duration: 2000,
       });
     } catch (error) {
       showMessage({
-        message: 'Failed to add friend',
+        message: 'Failed to send friend request',
         type: 'danger',
         duration: 2000,
       });
@@ -49,9 +49,9 @@ export const useFriendManagement = (
 
   return {
     isFriend,
-    handleAddFriend,
+    handleSendFriendRequest,
     handleRemoveFriend,
-    isAddPending: addFriend.isPending,
+    isAddPending: sendFriendRequest.isPending,
     isRemovePending: removeFriend.isPending,
   };
 };

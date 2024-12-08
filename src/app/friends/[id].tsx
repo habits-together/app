@@ -1,7 +1,7 @@
 import { useLocalSearchParams } from 'expo-router';
 import * as React from 'react';
 
-import { useFriend, type UserIDT } from '@/api';
+import { type UserIDT, useUser } from '@/api';
 import { ErrorMessage } from '@/components/error-message';
 import Profile from '@/components/profile';
 import {
@@ -17,7 +17,7 @@ export default function ViewProfile() {
     id: UserIDT;
   }>();
 
-  const { data, isPending, isError, error, refetch } = useFriend({
+  const { data, isPending, isError, error, refetch } = useUser({
     variables: { id },
   });
 
@@ -28,10 +28,10 @@ export default function ViewProfile() {
         <View className="flex-1 pb-10">
           {isPending ? (
             <LoadingSpinner />
-          ) : isError || !data ? (
+          ) : isError ? (
             <ErrorMessage error={error} refetch={refetch} />
           ) : (
-            <Profile data={data} isFriend={true} />
+            <Profile data={data} />
           )}
         </View>
       </ScrollView>

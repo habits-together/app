@@ -2,7 +2,7 @@ import { router } from 'expo-router';
 import { UserPlus } from 'lucide-react-native';
 import React from 'react';
 
-import { useFriends } from '@/api/friends/use-friends';
+import { useFriends } from '@/api';
 import { ErrorMessage } from '@/components/error-message';
 import UserCard from '@/components/user-card';
 import {
