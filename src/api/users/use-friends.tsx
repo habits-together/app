@@ -1,32 +1,36 @@
 import { createQuery } from 'react-query-kit';
 
-import { addTestDelay } from '../common';
-import { type CompleteUserT, type UserIdT } from './types';
+import { addTestDelay, queryClient } from '../common';
+import { augmentUsersWithPictures } from './augment-user-pictures';
+import { mockUsers } from './mock-users';
+import { type CompleteUserT, loadingPicture } from './types';
 
 type Response = CompleteUserT[];
 type Variables = void;
-
-const mockFriends: CompleteUserT[] = [
-  {
-    id: '1' as UserIdT,
-    displayName: 'John Doe',
-    username: 'john_doe',
-    createdAt: new Date(),
-    picture: 'https://randomuser.me/api/portraits/men/1.jpg',
-  },
-  {
-    id: '2' as UserIdT,
-    displayName: 'Jane Doe',
-    username: 'jane_doe',
-    createdAt: new Date(),
-    picture: 'https://randomuser.me/api/portraits/women/3.jpg',
-  },
-];
 
 // don't need friend status
 export const useFriends = createQuery<Response, Variables, Error>({
   queryKey: ['friends'],
   fetcher: async () => {
-    return addTestDelay(mockFriends);
+    const cachedData: Response | undefined = queryClient.getQueryData<Response>(
+      ['friends'],
+    );
+    if (cachedData) {
+      return cachedData;
+    }
+
+    const friends = await addTestDelay(
+      mockUsers.filter((user) => user.isFriend),
+    );
+    const friendsWithPictures = friends.map((friend) => ({
+      ...friend,
+      picture: loadingPicture,
+    }));
+
+    augmentUsersWithPictures(friendsWithPictures).then((augmentedFriends) => {
+      queryClient.setQueryData(['friends'], augmentedFriends);
+    });
+
+    return friendsWithPictures;
   },
 });

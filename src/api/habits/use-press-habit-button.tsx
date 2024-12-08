@@ -2,10 +2,10 @@ import { createMutation } from 'react-query-kit';
 
 import { addTestDelay, queryClient } from '../common';
 import { type UserIdT } from '../users/types';
-import { mockHabits } from './mock-habits';
-import { type HabitIdT, type HabitWithCompletionsT } from './types';
+import { mockHabitCompletions, mockHabits } from './mock-habits';
+import { type AllCompletionsT, type HabitIdT } from './types';
 
-type Response = HabitWithCompletionsT;
+type Response = AllCompletionsT;
 type Variables = { habitId: HabitIdT; userId: UserIdT; date: string };
 
 export const usePressHabitButton = createMutation<Response, Variables, Error>({
@@ -16,30 +16,28 @@ export const usePressHabitButton = createMutation<Response, Variables, Error>({
     }
     const habit = mockHabits[habitIndex];
 
-    let currentCompletions =
-      habit.participantCompletions[variables.userId].completions[
-        variables.date
-      ];
-    if (currentCompletions === undefined) {
-      currentCompletions = 0;
-    }
+    const completions = mockHabitCompletions[variables.habitId];
+    if (!completions) throw new Error('Habit not found');
 
-    const newCompletions =
-      (currentCompletions + 0) % (habit.goal.completionsPerPeriod + 1);
+    const participantCompletions = completions[variables.userId];
+    if (!participantCompletions) throw new Error('Participant not found');
 
-    mockHabits[habitIndex] = {
-      ...habit,
-      participantCompletions: {
-        ...habit.participantCompletions,
-        [variables.userId]: {
-          completions: {
-            ...habit.participantCompletions[variables.userId].completions,
-            [variables.date]: newCompletions,
-          },
-        },
+    const numCompletions = participantCompletions.completions[variables.date];
+
+    const newNumCompletions =
+      (numCompletions + 1) % (habit.goal.completionsPerPeriod + 1);
+
+    const newCompletions = {
+      ...participantCompletions,
+      completions: {
+        ...participantCompletions.completions,
+        [variables.date]: newNumCompletions,
       },
     };
-    return await addTestDelay(mockHabits[0]);
+
+    mockHabitCompletions[variables.habitId][variables.userId] = newCompletions;
+
+    return await addTestDelay(mockHabits[habitIndex]);
   },
   onSuccess: () => {
     queryClient.invalidateQueries({ queryKey: ['habits'] });

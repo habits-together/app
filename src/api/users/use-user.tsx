@@ -1,64 +1,39 @@
 import { createQuery } from 'react-query-kit';
 
-import { addTestDelay } from '../common';
-import { type CompleteUserWithFriendStatusT, type UserIdT } from './types';
+import { addTestDelay, queryClient } from '../common';
+import { augmentUsersWithPictures } from './augment-user-pictures';
+import { mockUsers } from './mock-users';
+import { type CompleteUserT, loadingPicture, type UserIdT } from './types';
 
 type Variables = { id: UserIdT };
-type Response = CompleteUserWithFriendStatusT;
+type Response = CompleteUserT;
 
-const mockFriends: CompleteUserWithFriendStatusT[] = [
-  {
-    id: '1' as UserIdT,
-    displayName: 'John Doe',
-    username: 'john_doe',
-    createdAt: new Date(),
-    picture: 'https://randomuser.me/api/portraits/men/1.jpg',
-    isFriend: true,
-  },
-  {
-    id: '2' as UserIdT,
-    displayName: 'Jane Doe',
-    username: 'jane_doe',
-    createdAt: new Date(),
-    picture: 'https://randomuser.me/api/portraits/women/3.jpg',
-    isFriend: true,
-  },
-  {
-    id: '3' as UserIdT,
-    displayName: 'Apple Smith',
-    username: 'apple',
-    createdAt: new Date(),
-    picture: 'https://randomuser.me/api/portraits/women/4.jpg',
-    isFriend: false,
-  },
-  {
-    id: '4' as UserIdT,
-    displayName: 'Bob Johnson',
-    username: 'bob_johnson',
-    createdAt: new Date(),
-    picture: 'https://randomuser.me/api/portraits/men/5.jpg',
-    isFriend: true,
-  },
-  {
-    id: '5' as UserIdT,
-    displayName: 'Lorem Ipsum',
-    username: 'lorem_ipsum',
-    createdAt: new Date(),
-    picture: 'https://randomuser.me/api/portraits/men/6.jpg',
-    isFriend: false,
-  },
-];
-
-export const useUser = createQuery<Response, Variables, Error>({
+export const useUser: ReturnType<
+  typeof createQuery<Response, Variables, Error>
+> = createQuery<Response, Variables, Error>({
   queryKey: ['friend'],
   fetcher: async (variables) => {
-    // fetch user AND their friend status
-    const friend = await addTestDelay(
-      mockFriends.find((friend) => friend.id === variables.id),
+    const cachedData: Response | undefined = queryClient.getQueryData<Response>(
+      useUser.getKey(variables),
     );
-    if (!friend) {
-      throw new Error('Friend not found');
+    if (cachedData) {
+      return cachedData;
     }
-    return friend;
+
+    const user = await addTestDelay(
+      mockUsers.find((user) => user.id === variables.id),
+    );
+    if (!user) throw new Error('User not found');
+
+    const userWithPicture = {
+      ...user,
+      picture: loadingPicture,
+    };
+
+    augmentUsersWithPictures([userWithPicture]).then((user) => {
+      queryClient.setQueryData(useUser.getKey(variables), user[0]);
+    });
+
+    return userWithPicture;
   },
 });

@@ -1,15 +1,13 @@
 import { Trash2Icon, UserPlus } from 'lucide-react-native';
 import * as React from 'react';
 
-import { type CompleteUserWithFriendStatusT } from '@/api';
+import { type CompleteUserT } from '@/api';
 import { useFriendManagement } from '@/core';
-import { Button, Image, Text, View } from '@/ui';
+import { Button, Text, View } from '@/ui';
 
-export default function Profile({
-  data,
-}: {
-  data: CompleteUserWithFriendStatusT;
-}) {
+import UserPicture from './picture';
+
+export default function Profile({ data }: { data: CompleteUserT }) {
   const {
     isFriend,
     handleSendFriendRequest,
@@ -29,15 +27,8 @@ export default function Profile({
             @{data.username}
           </Text>
         </View>
-        <Image
-          source={data.picture}
-          alt="Profile Picture"
-          className="rounded-full"
-          style={{
-            height: 128,
-            width: 128,
-          }}
-        />
+        <UserPicture picture={data.picture} size={128} />
+
         <Text className="text-center text-sm font-medium text-stone-400 dark:text-stone-400">
           Joined{' '}
           {data.createdAt.toLocaleDateString('en-US', {

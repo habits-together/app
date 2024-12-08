@@ -35,7 +35,7 @@ export default function Habits() {
           ) : isError ? (
             <ErrorMessage error={error} refetch={refetch} />
           ) : (
-            data.map((habit) => <HabitCard key={habit.id} data={habit} />)
+            data.map((habit) => <HabitCard key={habit.id} habit={habit} />)
           )}
         </View>
       </ScrollView>
