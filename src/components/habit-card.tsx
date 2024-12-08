@@ -7,24 +7,40 @@ import { showMessage } from 'react-native-flash-message';
 
 import {
   type HabitColorT,
+  type HabitCompletionWithDateInfoT,
   type HabitIdT,
-  type HabitWithCompletionsT,
-  type ParticipantCompletionsT,
+  type HabitWithParticipantPicturesT,
   usePressHabitButton,
   type UserIdT,
 } from '@/api';
+import { useHabitCompletions } from '@/api/habits/use-habit-completions';
 import { useConfetti } from '@/core/confetti';
-import { colors, Pressable, Text, View } from '@/ui';
+import { colors, LoadingSpinner, Pressable, Text, View } from '@/ui';
 
-export function HabitCard({ data }: { data: HabitWithCompletionsT }) {
+import { ErrorMessage } from './error-message';
+
+interface HabitCardProps {
+  habit: HabitWithParticipantPicturesT;
+}
+export function HabitCard({ habit }: HabitCardProps) {
   const { colorScheme } = useColorScheme();
+  const userId = '1' as UserIdT;
+  const {
+    data: completions,
+    isPending,
+    isError,
+    error,
+    refetch,
+  } = useHabitCompletions({
+    variables: { habitId: habit.id, userId },
+  });
 
   return (
     <Link
       push
       href={{
         pathname: '/habits/[id]',
-        params: { id: data.id },
+        params: { id: habit.id },
       }}
       asChild
     >
@@ -32,14 +48,24 @@ export function HabitCard({ data }: { data: HabitWithCompletionsT }) {
         className="flex h-[171px] flex-col gap-[10px] rounded-3xl px-4 py-[10px]"
         style={{
           backgroundColor:
-            colorScheme === 'dark' ? colors.stone.light : data.color.light,
+            colorScheme === 'dark' ? colors.stone.light : habit.color.light,
         }}
       >
-        <HabitHeader title={data.title} icon={data.icon} />
+        <HabitHeader title={habit.title} icon={habit.icon} />
         <View className="h-[10px]" />
-        {/* <HabitFriendCompletions habitId={habitId} /> */}
+        {/* <HabitFriendCompletions habit={habit} /> */}
         <View className="h-[10px]" />
-        <WeekViewCompletions userId={'1' as UserIdT} data={data} />
+        {isPending ? (
+          <LoadingSpinner />
+        ) : isError ? (
+          <ErrorMessage error={error} refetch={refetch} />
+        ) : (
+          <WeekViewCompletions
+            userId={userId}
+            habit={habit}
+            completions={completions}
+          />
+        )}
       </Pressable>
     </Link>
   );
@@ -100,63 +126,27 @@ const HabitHeader = ({ title }: { title: string; icon: string }) => {
   );
 };
 
-type habitCompletionWithDateInfoT = {
-  date: string;
-  numberOfCompletions: number;
-  dayOfTheMonth: number;
-  dayOfTheWeek: string;
-};
-function structureCompletionData({
-  completionData,
-  numDays,
-}: {
-  completionData: ParticipantCompletionsT;
-  numDays: number;
-}): habitCompletionWithDateInfoT[] {
-  const structuredCompletionData: habitCompletionWithDateInfoT[] = [];
-
-  let currentDate = new Date();
-  // go back to the first day we want to display
-  currentDate.setDate(currentDate.getDate() - numDays + 1);
-  // loop through each day and add the completion data for that day to the structured data
-  for (let i = 0; i < numDays; i++) {
-    // if there is no completion data for the current date, default to 0 (no completions that day)
-    structuredCompletionData.push({
-      numberOfCompletions:
-        completionData?.completions?.[
-          currentDate.toLocaleDateString('en-CA')
-        ] ?? 0,
-      dayOfTheMonth: currentDate.getDate(),
-      dayOfTheWeek: currentDate.toLocaleString('en-US', { weekday: 'short' }),
-      date: currentDate.toLocaleDateString('en-CA'),
-    });
-    // move current date ahead 1 day
-    currentDate.setDate(currentDate.getDate() + 1);
-  }
-
-  return structuredCompletionData;
-}
-
 interface WeekViewCompletionsProps {
   userId: UserIdT;
-  data: HabitWithCompletionsT;
+  habit: HabitWithParticipantPicturesT;
+  completions: HabitCompletionWithDateInfoT[];
 }
-const WeekViewCompletions = ({ userId, data }: WeekViewCompletionsProps) => {
-  const structuredCompletionData = structureCompletionData({
-    completionData: data.participantCompletions[userId],
-    numDays: 7,
-  });
+const WeekViewCompletions = ({
+  userId,
+  habit,
+  completions,
+}: WeekViewCompletionsProps) => {
   const completionsPerDay =
-    data.goal.period === 'daily' ? data.goal.completionsPerPeriod : 1;
+    habit.goal.period === 'daily' ? habit.goal.completionsPerPeriod : 1;
 
   return (
     <View className="flex w-full flex-1 flex-row items-end justify-between gap-x-4">
-      {structuredCompletionData.map((completion) => (
+      {completions.map((completion) => (
         <WeekViewSquare
           key={completion.date}
-          habitId={data.id}
+          habitId={habit.id}
           userId={userId}
-          color={data.color}
+          color={habit.color}
           completionsPerDay={completionsPerDay}
           completion={completion}
         />
@@ -170,7 +160,7 @@ interface WeekViewSquareProps {
   userId: UserIdT;
   color: HabitColorT;
   completionsPerDay: number;
-  completion: habitCompletionWithDateInfoT;
+  completion: HabitCompletionWithDateInfoT;
 }
 const WeekViewSquare = ({
   habitId,

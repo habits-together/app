@@ -1,7 +1,12 @@
-import { type HabitIdT, type HabitWithCompletionsT, type UserIdT } from '@/api';
+import {
+  type AllCompletionsT,
+  type HabitIdT,
+  type HabitWithParticipantsT,
+  type UserIdT,
+} from '@/api';
 import { habitColors } from '@/ui/colors';
 
-export const mockHabits: HabitWithCompletionsT[] = [
+export const mockHabits: HabitWithParticipantsT[] = [
   {
     id: '1' as HabitIdT,
     color: habitColors.orange,
@@ -14,19 +19,11 @@ export const mockHabits: HabitWithCompletionsT[] = [
     },
     icon: '💧',
     participants: {
-      user1: {
+      ['1' as UserIdT]: {
         displayName: 'John Doe',
         username: 'johndoe',
         mostRecentCompletionDate: new Date('2024-01-15'),
         isOwner: true,
-      },
-    },
-    participantCompletions: {
-      ['1' as UserIdT]: {
-        completions: {
-          '2024-12-06': 1,
-          '2024-12-05': 2,
-        },
       },
     },
   },
@@ -42,19 +39,11 @@ export const mockHabits: HabitWithCompletionsT[] = [
     },
     icon: '🏃',
     participants: {
-      user2: {
+      ['2' as UserIdT]: {
         displayName: 'Jane Smith',
         username: 'janesmith',
         mostRecentCompletionDate: new Date('2024-01-15'),
         isOwner: true,
-      },
-    },
-    participantCompletions: {
-      ['1' as UserIdT]: {
-        completions: {
-          '2024-12-06': 1,
-          '2024-12-05': 2,
-        },
       },
     },
   },
@@ -70,20 +59,42 @@ export const mockHabits: HabitWithCompletionsT[] = [
     },
     icon: '📚',
     participants: {
-      user3: {
+      ['3' as UserIdT]: {
         displayName: 'Alex Chen',
         username: 'alexchen',
         mostRecentCompletionDate: new Date('2024-01-15'),
         isOwner: true,
       },
     },
-    participantCompletions: {
-      ['1' as UserIdT]: {
-        completions: {
-          '2024-12-06': 1,
-          '2024-12-05': 1,
-        },
+  },
+];
+
+export const mockHabitCompletions: Record<HabitIdT, AllCompletionsT> = {
+  ['1' as HabitIdT]: {
+    ['1' as UserIdT]: {
+      completions: {
+        '2024-12-04': 0,
+        '2024-12-05': 1,
+        '2024-12-06': 1,
       },
     },
   },
-];
+  ['2' as HabitIdT]: {
+    ['1' as UserIdT]: {
+      completions: {
+        '2024-12-04': 1,
+        '2024-12-05': 0,
+        '2024-12-06': 1,
+      },
+    },
+  },
+  ['3' as HabitIdT]: {
+    ['1' as UserIdT]: {
+      completions: {
+        '2024-12-04': 0,
+        '2024-12-05': 0,
+        '2024-12-06': 1,
+      },
+    },
+  },
+};
