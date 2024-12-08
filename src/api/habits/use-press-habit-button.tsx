@@ -6,6 +6,7 @@ import {
   mockHabitCompletions,
   mockHabits,
   setMockHabitCompletions,
+  setMockHabits,
 } from './mock-habits';
 import { type AllCompletionsT, type HabitIdT } from './types';
 
@@ -18,7 +19,7 @@ export const usePressHabitButton = createMutation<Response, Variables, Error>({
     if (habitIndex === -1) {
       throw new Error('Habit not found');
     }
-    const habit = mockHabits[habitIndex];
+    const { data } = mockHabits[habitIndex];
 
     const completions = mockHabitCompletions[variables.habitId];
     if (!completions) throw new Error('Habit not found');
@@ -31,7 +32,7 @@ export const usePressHabitButton = createMutation<Response, Variables, Error>({
     let newNumCompletions = 1;
     if (numCompletions) {
       newNumCompletions =
-        (numCompletions + 1) % (habit.goal.completionsPerPeriod + 1);
+        (numCompletions + 1) % (data.goal.completionsPerPeriod + 1);
     }
 
     const newCompletions = {
@@ -49,6 +50,37 @@ export const usePressHabitButton = createMutation<Response, Variables, Error>({
         [variables.userId]: newCompletions,
       },
     });
+
+    // update mostRecentCompletionDate in mockHabits
+    setMockHabits(
+      mockHabits.map((habit) => {
+        if (habit.id === variables.habitId) {
+          const participant = habit.data.participants[variables.userId];
+          if (!participant) throw new Error('Participant not found');
+          return {
+            ...habit,
+            data: {
+              ...habit.data,
+              participants: {
+                ...habit.data.participants,
+                [variables.userId]: {
+                  ...participant,
+                  mostRecentCompletionDate: participant.mostRecentCompletionDate
+                    ? new Date(
+                        Math.max(
+                          new Date(`${variables.date}T00:00:00`).getTime(),
+                          participant.mostRecentCompletionDate?.getTime() ?? 0,
+                        ),
+                      )
+                    : new Date(`${variables.date}T00:00:00`),
+                },
+              },
+            },
+          };
+        }
+        return habit;
+      }),
+    );
 
     return await addTestDelay(mockHabits[habitIndex]);
   },

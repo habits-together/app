@@ -3,6 +3,7 @@ import Svg from 'react-native-svg';
 
 export * from './button';
 export { default as colors } from './colors';
+export * from './dropdown-menu';
 export * from './focus-aware-status-bar';
 export * from './header';
 export * from './image';

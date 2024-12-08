@@ -106,7 +106,11 @@
    ```
    pnpm start
    ```
-   Then instructions will appear for how to open your simulator/emulator. Alternatively, you can use `pnpm ios` or `pnpm android` directly.
+   Then instructions will appear for how to open your simulator/emulator. Alternatively, you can use `pnpm ios` or `pnpm android` directly. (You might need to use `pnpm ios` or `pnpm android` after installing packages for the first time.)
+
+### Common Issues
+
+- If some nativewind styles are just not applying sometimes, clear the cache using `pnpm start -c`.
 
 ## Contributing
 

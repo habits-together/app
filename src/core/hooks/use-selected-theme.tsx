@@ -32,7 +32,6 @@ export const useSelectedTheme = () => {
 export const loadSelectedTheme = () => {
   const theme = storage.getString(SELECTED_THEME);
   if (theme !== undefined) {
-    console.log('theme', theme);
     colorScheme.set(theme as ColorSchemeType);
   }
 };

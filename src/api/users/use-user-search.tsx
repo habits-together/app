@@ -16,13 +16,6 @@ export const useUserSearch: ReturnType<
 > = createQuery<Response, Variables, Error>({
   queryKey: ['user-search'],
   fetcher: async (variables) => {
-    const cachedData: Response | undefined = queryClient.getQueryData<Response>(
-      useUserSearch.getKey(variables),
-    );
-    if (cachedData) {
-      return cachedData;
-    }
-
     const users = await addTestDelay(
       mockUsers.filter(
         (user) =>
@@ -32,13 +25,18 @@ export const useUserSearch: ReturnType<
           user.username.toLowerCase().includes(variables.query.toLowerCase()),
       ),
     );
+
+    const cachedData: Response | undefined = queryClient.getQueryData<Response>(
+      useUserSearch.getKey(variables),
+    );
+
     const usersWithPictures = users.map((user) => ({
       ...user,
-      picture: loadingPicture,
+      picture:
+        cachedData?.find((h) => h.id === user.id)?.picture ?? loadingPicture,
     }));
 
     augmentUsersWithPictures(usersWithPictures).then((augmentedUsers) => {
-      console.log('augmentedFriends', augmentedUsers);
       queryClient.setQueryData(useUserSearch.getKey(variables), augmentedUsers);
     });
 

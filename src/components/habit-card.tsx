@@ -1,26 +1,46 @@
 /* eslint-disable max-lines-per-function */
 import { Link } from 'expo-router';
-import { BookIcon, CheckIcon } from 'lucide-react-native';
+import {
+  ActivityIcon,
+  BookIcon,
+  CheckIcon,
+  EllipsisIcon,
+} from 'lucide-react-native';
 import { useColorScheme } from 'nativewind';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { showMessage } from 'react-native-flash-message';
 
 import {
   type HabitColorT,
   type HabitCompletionWithDateInfoT,
   type HabitIdT,
-  type HabitWithParticipantPicturesT,
+  type HabitT,
+  type ParticipantWithIdT,
   usePressHabitButton,
   type UserIdT,
 } from '@/api';
 import { useHabitCompletions } from '@/api/habits/use-habit-completions';
+import { useHabitOrder } from '@/core';
 import { useConfetti } from '@/core/confetti';
-import { colors, LoadingSpinner, Pressable, Text, View } from '@/ui';
+import { getTranslucentColor } from '@/core/get-translucent-color';
+import {
+  colors,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuItemTitle,
+  DropdownMenuRoot,
+  DropdownMenuTrigger,
+  LoadingSpinner,
+  Pressable,
+  Text,
+  View,
+} from '@/ui';
 
 import { ErrorMessage } from './error-message';
+import UserPicture from './picture';
 
 interface HabitCardProps {
-  habit: HabitWithParticipantPicturesT;
+  habit: HabitT;
 }
 export function HabitCard({ habit }: HabitCardProps) {
   const { colorScheme } = useColorScheme();
@@ -36,45 +56,87 @@ export function HabitCard({ habit }: HabitCardProps) {
   });
 
   return (
-    <Link
-      push
-      href={{
-        pathname: '/habits/[id]',
-        params: { id: habit.id },
-      }}
-      asChild
-    >
-      <Pressable
-        className="flex h-[171px] flex-col gap-[10px] rounded-3xl px-4 py-[10px]"
-        style={{
-          backgroundColor:
-            colorScheme === 'dark' ? colors.stone.light : habit.color.light,
+    <>
+      <Link
+        push
+        href={{
+          pathname: '/habits/[id]',
+          params: { id: habit.id },
         }}
+        asChild
       >
-        <HabitHeader title={habit.title} icon={habit.icon} />
-        <View className="h-[10px]" />
-        {/* <HabitFriendCompletions habit={habit} /> */}
-        <View className="h-[10px]" />
-        {isPending ? (
-          <LoadingSpinner />
-        ) : isError ? (
-          <ErrorMessage error={error} refetch={refetch} />
-        ) : (
-          <WeekViewCompletions
-            userId={userId}
-            habit={habit}
-            completions={completions}
+        <Pressable
+          className="flex h-[171px] flex-col gap-[10px] rounded-3xl px-4 py-[10px]"
+          style={{
+            backgroundColor:
+              colorScheme === 'dark' ? colors.stone.light : habit.color.light,
+          }}
+        >
+          <HabitHeader
+            habitId={habit.id}
+            title={habit.title}
+            icon={habit.icon}
           />
-        )}
-      </Pressable>
-    </Link>
+          <View className="flex flex-row">
+            <HabitFriendCompletions habit={habit} />
+          </View>
+          {isPending ? (
+            <LoadingSpinner />
+          ) : isError ? (
+            <ErrorMessage error={error} refetch={refetch} variant="compact" />
+          ) : (
+            <WeekViewCompletions
+              userId={userId}
+              habit={habit}
+              completions={completions}
+            />
+          )}
+        </Pressable>
+      </Link>
+    </>
   );
 }
 
-const HabitHeader = ({ title }: { title: string; icon: string }) => {
+interface HabitHeaderProps {
+  habitId: HabitIdT;
+  title: string;
+  icon: string;
+}
+const HabitHeader = ({ habitId, title }: HabitHeaderProps) => {
   const { colorScheme } = useColorScheme();
+  const { moveHabit, canMoveHabit } = useHabitOrder();
+
+  const menuItems = [
+    {
+      key: 'Move up in list',
+      title: 'Move up in list',
+      onSelect: () => moveHabit(habitId, 'up'),
+      disabled: !canMoveHabit(habitId, 'up'),
+    },
+    {
+      key: 'Move down in list',
+      title: 'Move down in list',
+      onSelect: () => moveHabit(habitId, 'down'),
+      disabled: !canMoveHabit(habitId, 'down'),
+    },
+    {
+      key: 'Edit habit',
+      title: 'Edit habit',
+      onSelect: () => {
+        alert('todo');
+      },
+    },
+    {
+      key: 'Delete habit',
+      title: 'Delete habit',
+      onSelect: () => {
+        alert('todo');
+      },
+    },
+  ];
+
   return (
-    <View className="-mb-2 ml-1 flex-row items-center justify-between">
+    <View className="ml-1 flex-row items-center justify-between">
       <View className="mr-2 flex-1 flex-row items-center gap-1">
         <BookIcon
           size={24}
@@ -89,38 +151,27 @@ const HabitHeader = ({ title }: { title: string; icon: string }) => {
       </View>
 
       <View className="">
-        {/* <DotsMenu
-            options={[
-              // change to other view
-              {
-                label: `Change to ${displayType === 'weekly-view' ? 'monthly' : 'weekly'} view`,
-                color: colors.black,
-                action: () =>
-                  setDisplayType(
-                    displayType === 'weekly-view'
-                      ? 'monthly-view'
-                      : 'weekly-view',
-                  ),
-              },
-              {
-                label: 'Edit',
-                color: colors.black,
-                action: () => {
-                  router.push({
-                    pathname: '/habits/edithabit',
-                    params: { habitidStr: habitId },
-                  });
-                },
-              },
-              {
-                label: 'Delete',
-                color: colors.black,
-                action: () => {
-                  deleteHabit();
-                },
-              },
-            ]}
-          /> */}
+        <DropdownMenuRoot>
+          <DropdownMenuTrigger>
+            <Pressable>
+              <EllipsisIcon
+                size={24}
+                color={colorScheme === 'dark' ? colors.white : colors.black}
+              />
+            </Pressable>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            {menuItems.map((item) => (
+              <DropdownMenuItem
+                key={item.key}
+                onSelect={item.onSelect}
+                disabled={item.disabled}
+              >
+                <DropdownMenuItemTitle>{item.title}</DropdownMenuItemTitle>
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenuRoot>
       </View>
     </View>
   );
@@ -128,7 +179,7 @@ const HabitHeader = ({ title }: { title: string; icon: string }) => {
 
 interface WeekViewCompletionsProps {
   userId: UserIdT;
-  habit: HabitWithParticipantPicturesT;
+  habit: HabitT;
   completions: HabitCompletionWithDateInfoT[];
 }
 const WeekViewCompletions = ({
@@ -256,3 +307,151 @@ const WeekViewSquare = ({
     </>
   );
 };
+
+interface HabitFriendCompletionsProps {
+  habit: HabitT;
+}
+function HabitFriendCompletions({ habit }: HabitFriendCompletionsProps) {
+  const participantsList: ParticipantWithIdT[] = Object.entries(
+    habit.participants,
+  )
+    .map(([id, participant]) => ({ id: id as UserIdT, ...participant }))
+    .filter((p): p is ParticipantWithIdT => p.picture !== undefined)
+    .sort(
+      (a, b) => (a.hasActivityToday ? 0 : 1) - (b.hasActivityToday ? 0 : 1),
+    );
+
+  return (
+    <View
+      className={`flex flex-row items-center gap-[5px] rounded-[10px] border p-[5px]`}
+      style={{
+        borderColor: getTranslucentColor(habit.color.text, 0.5),
+      }}
+    >
+      <ProfilePicsList
+        participants={participantsList}
+        maxNumPics={5}
+        color={habit.color}
+      />
+      <HabitParticipantCompletedBadge
+        numParticipantsActiveToday={
+          participantsList.filter((p) => p.hasActivityToday).length
+        }
+        color={habit.color}
+      />
+    </View>
+  );
+}
+
+interface ProfilePicsListProps {
+  participants: ParticipantWithIdT[];
+  maxNumPics: number;
+  color: HabitColorT;
+}
+function ProfilePicsList({
+  participants,
+  maxNumPics,
+  color,
+}: ProfilePicsListProps) {
+  const { colorScheme } = useColorScheme();
+  const [numPfpsToDisplay, setNumPfpsToDisplay] = useState<number>(maxNumPics);
+  useEffect(() => {
+    // since we want to display x pfps
+    // but if there are more, we want to take one away
+    // in order to display a "+3" circle (or whatever the amount is)
+    if (participants.length === maxNumPics) {
+      setNumPfpsToDisplay(maxNumPics);
+    } else {
+      setNumPfpsToDisplay(maxNumPics - 1);
+    }
+  }, [participants, maxNumPics]);
+
+  return (
+    <View
+      className="mr-[7px] flex flex-row-reverse"
+      style={{ backgroundColor: 'transparent' }}
+    >
+      {participants.length > maxNumPics && (
+        <ExtraHiddenPfpsCircle
+          color={color}
+          numberToDisplay={participants.length - maxNumPics + 1}
+        />
+      )}
+      {participants
+        .slice(0, numPfpsToDisplay)
+        .reverse()
+        .map((p) => (
+          <View
+            key={p.id}
+            className="-mr-2 rounded-full border-2"
+            style={{
+              borderColor: p.hasActivityToday
+                ? color.base
+                : colorScheme === 'dark'
+                  ? colors.stone[500]
+                  : colors.stone[600],
+            }}
+          >
+            <UserPicture key={p.id} picture={p.picture} size={30} />
+          </View>
+        ))}
+    </View>
+  );
+}
+
+interface ExtraHiddenPfpsCircleProps {
+  color: HabitColorT;
+  numberToDisplay: number;
+}
+function ExtraHiddenPfpsCircle({
+  color,
+  numberToDisplay,
+}: ExtraHiddenPfpsCircleProps) {
+  const { colorScheme } = useColorScheme();
+
+  return (
+    <View
+      className="mr-[-7px] h-[32px] w-[32px] rounded-full" // 30px + 1px border
+      style={{
+        backgroundColor:
+          colorScheme === 'dark' ? colors.stone.faded : color.faded,
+      }}
+    >
+      <Text
+        className="m-auto pl-1 text-xs font-semibold"
+        style={{
+          color: colorScheme === 'dark' ? colors.stone.text : color.text,
+        }}
+      >
+        +{numberToDisplay}
+      </Text>
+    </View>
+  );
+}
+
+interface HabitParticipantCompletedBadgeProps {
+  numParticipantsActiveToday: number;
+  color: HabitColorT;
+}
+function HabitParticipantCompletedBadge({
+  numParticipantsActiveToday,
+  color,
+}: HabitParticipantCompletedBadgeProps) {
+  return (
+    <View
+      className="flex flex-row items-center rounded-full border px-[10px] py-1 text-habitColors-red-base"
+      style={{
+        borderColor: color.base,
+        backgroundColor: getTranslucentColor(color.base, 0.15),
+      }}
+    >
+      <ActivityIcon size={12} strokeWidth={3} color={color.base} />
+      <Text
+        className="ml-[2px] text-xs font-semibold"
+        style={{ color: color.base }}
+      >
+        {numParticipantsActiveToday} active today
+      </Text>
+    </View>
+  );
+}

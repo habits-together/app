@@ -53,6 +53,7 @@
     "react-native-web": "~0.19.12",
     "react-query-kit": "^3.3.0",
     "tailwind-variants": "^0.2.1",
+    "zeego": "^2.0.4",
     "zod": "^3.23.8",
     "zustand": "^4.5.5"
   },

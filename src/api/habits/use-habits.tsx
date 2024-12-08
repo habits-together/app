@@ -1,47 +1,63 @@
 import { createQuery } from 'react-query-kit';
 
+import { habitColors } from '@/ui/colors';
+
 import { addTestDelay, queryClient } from '../common';
-import { loadingPicture } from '../users';
+import { loadingPicture, type UserIdT } from '../users';
 import { augmentParticipantsWithPicturesForAllHabits } from './augment-participant-pictures';
 import { mockHabits } from './mock-habits';
-import { type HabitWithParticipantPicturesT } from './types';
+import { type HabitT } from './types';
 
-type Response = HabitWithParticipantPicturesT[];
+type Response = HabitT[];
 type Variables = void;
 
 export const useHabits = createQuery<Response, Variables, Error>({
   queryKey: ['habits'],
   fetcher: async () => {
-    const habits = await addTestDelay(mockHabits);
-    const habitsWithUserPictures: HabitWithParticipantPicturesT[] = habits.map(
-      (habit) => ({
-        ...habit,
-        participants: Object.fromEntries(
-          Object.entries(habit.participants).map(([id, participant]) => {
+    const dbHabits = await addTestDelay(mockHabits);
+
+    const cachedData: Response | undefined = queryClient.getQueryData<Response>(
+      ['habits'],
+    );
+
+    const habits: HabitT[] = dbHabits.map(({ id: habitId, data }) => ({
+      id: habitId,
+      ...data,
+      color: habitColors[data.colorName],
+      participants: Object.fromEntries(
+        Object.entries(data.participants).map(
+          ([participantId, participant]) => {
             if (!participant)
-              throw new Error('Participant not found for habit ' + habit.title);
+              throw new Error('Participant not found for habit ' + habitId);
 
             return [
-              id,
+              participantId,
               {
                 displayName: participant.displayName,
                 username: participant.username,
                 mostRecentCompletionDate: participant.mostRecentCompletionDate,
-                picture: loadingPicture,
+                hasActivityToday:
+                  participant.mostRecentCompletionDate.toLocaleDateString(
+                    'en-CA',
+                  ) === new Date().toLocaleDateString('en-CA'),
+                picture:
+                  cachedData?.find((h) => h.id === habitId)?.participants[
+                    participantId as UserIdT
+                  ]?.picture ?? loadingPicture,
                 isOwner: participant?.isOwner ?? false,
               },
             ];
-          }),
+          },
         ),
-      }),
-    );
+      ),
+    }));
 
-    augmentParticipantsWithPicturesForAllHabits(habitsWithUserPictures).then(
+    augmentParticipantsWithPicturesForAllHabits(habits).then(
       (augmentedHabits) => {
         queryClient.setQueryData(['habits'], augmentedHabits);
       },
     );
 
-    return habitsWithUserPictures;
+    return habits;
   },
 });

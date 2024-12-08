@@ -12,19 +12,18 @@ type Variables = void;
 export const useFriends = createQuery<Response, Variables, Error>({
   queryKey: ['friends'],
   fetcher: async () => {
-    const cachedData: Response | undefined = queryClient.getQueryData<Response>(
-      ['friends'],
-    );
-    if (cachedData) {
-      return cachedData;
-    }
-
     const friends = await addTestDelay(
       mockUsers.filter((user) => user.isFriend),
     );
+
+    const cachedData: Response | undefined = queryClient.getQueryData<Response>(
+      ['friends'],
+    );
+
     const friendsWithPictures = friends.map((friend) => ({
       ...friend,
-      picture: loadingPicture,
+      picture:
+        cachedData?.find((h) => h.id === friend.id)?.picture ?? loadingPicture,
     }));
 
     augmentUsersWithPictures(friendsWithPictures).then((augmentedFriends) => {
