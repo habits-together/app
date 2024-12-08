@@ -45,7 +45,7 @@ export function ConfettiProvider({ children }: { children: React.ReactNode }) {
   return (
     <ConfettiContext.Provider value={{ playConfetti }}>
       {children}
-      <View className="absolute inset-0 scale-50">
+      <View className="container pointer-events-none absolute inset-0 scale-50">
         {confettiInstances.map(({ id, x, y }) => (
           <LottieView
             key={id}
@@ -58,7 +58,7 @@ export function ConfettiProvider({ children }: { children: React.ReactNode }) {
             style={{
               position: 'absolute',
               top: y * 2 - 80,
-              left: x * 2,
+              left: x * 2 - 212,
               width: size,
               height: size,
               zIndex: 1000,

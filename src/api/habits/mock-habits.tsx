@@ -98,3 +98,8 @@ export const mockHabitCompletions: Record<HabitIdT, AllCompletionsT> = {
     },
   },
 };
+export const setMockHabitCompletions = (
+  newCompletions: Record<HabitIdT, AllCompletionsT>,
+) => {
+  Object.assign(mockHabitCompletions, newCompletions);
+};
