@@ -2,7 +2,11 @@ import { createMutation } from 'react-query-kit';
 
 import { addTestDelay, queryClient } from '../common';
 import { type UserIdT } from '../users/types';
-import { mockHabitCompletions, mockHabits } from './mock-habits';
+import {
+  mockHabitCompletions,
+  mockHabits,
+  setMockHabitCompletions,
+} from './mock-habits';
 import { type AllCompletionsT, type HabitIdT } from './types';
 
 type Response = AllCompletionsT;
@@ -24,8 +28,11 @@ export const usePressHabitButton = createMutation<Response, Variables, Error>({
 
     const numCompletions = participantCompletions.completions[variables.date];
 
-    const newNumCompletions =
-      (numCompletions + 1) % (habit.goal.completionsPerPeriod + 1);
+    let newNumCompletions = 1;
+    if (numCompletions) {
+      newNumCompletions =
+        (numCompletions + 1) % (habit.goal.completionsPerPeriod + 1);
+    }
 
     const newCompletions = {
       ...participantCompletions,
@@ -35,7 +42,13 @@ export const usePressHabitButton = createMutation<Response, Variables, Error>({
       },
     };
 
-    mockHabitCompletions[variables.habitId][variables.userId] = newCompletions;
+    setMockHabitCompletions({
+      ...mockHabitCompletions,
+      [variables.habitId]: {
+        ...mockHabitCompletions[variables.habitId],
+        [variables.userId]: newCompletions,
+      },
+    });
 
     return await addTestDelay(mockHabits[habitIndex]);
   },
