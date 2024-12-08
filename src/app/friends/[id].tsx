@@ -1,28 +1,41 @@
+import { useLocalSearchParams } from 'expo-router';
 import * as React from 'react';
 
 import { type UserIDT } from '@/api';
+import { useFriend } from '@/api/friends/use-friend';
+import { ErrorMessage } from '@/components/error-message';
 import Profile from '@/components/profile';
-import { type CompleteUserT } from '@/components/user-card';
-import { Header, ScreenContainer } from '@/ui';
-
-const mockUser: CompleteUserT = {
-  id: '1' as UserIDT,
-  displayName: 'John Doe',
-  username: 'john_doe',
-  createdAt: new Date(),
-  picture: 'https://randomuser.me/api/portraits/men/1.jpg',
-};
+import {
+  Header,
+  LoadingSpinner,
+  ScreenContainer,
+  ScrollView,
+  View,
+} from '@/ui';
 
 export default function ViewProfile() {
-  // id automatically passed in from the route
-  // const { id } = useLocalSearchParams<{
-  //   id: string;
-  // }>();
+  const { id } = useLocalSearchParams<{
+    id: UserIDT;
+  }>();
+
+  const { data, isPending, isError, error, refetch } = useFriend({
+    variables: { id },
+  });
 
   return (
     <ScreenContainer>
       <Header leftButton="back" />
-      <Profile data={mockUser} isFriend={true} />
+      <ScrollView className="flex-1" style={{}}>
+        <View className="flex-1 pb-10">
+          {isPending ? (
+            <LoadingSpinner />
+          ) : isError || !data ? (
+            <ErrorMessage error={error} refetch={refetch} />
+          ) : (
+            <Profile data={data} isFriend={true} />
+          )}
+        </View>
+      </ScrollView>
     </ScreenContainer>
   );
 }

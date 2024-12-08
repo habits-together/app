@@ -2,28 +2,20 @@ import { router } from 'expo-router';
 import { UserPlus } from 'lucide-react-native';
 import React from 'react';
 
-import { type UserIDT } from '@/api';
-import UserCard, { type CompleteUserT } from '@/components/user-card';
-import { Header, ScreenContainer } from '@/ui';
-
-const mockFriends: CompleteUserT[] = [
-  {
-    id: '1' as UserIDT,
-    displayName: 'John Doe',
-    username: 'john_doe',
-    createdAt: new Date(),
-    picture: 'https://randomuser.me/api/portraits/men/1.jpg',
-  },
-  {
-    id: '2' as UserIDT,
-    displayName: 'Jane Doe',
-    username: 'jane_doe',
-    createdAt: new Date(),
-    picture: 'https://randomuser.me/api/portraits/women/3.jpg',
-  },
-];
+import { useFriends } from '@/api/friends/use-friends';
+import { ErrorMessage } from '@/components/error-message';
+import UserCard from '@/components/user-card';
+import {
+  Header,
+  LoadingSpinner,
+  ScreenContainer,
+  ScrollView,
+  View,
+} from '@/ui';
 
 export default function Friends() {
+  const { data, isPending, isError, error, refetch } = useFriends();
+
   return (
     <ScreenContainer>
       <Header
@@ -36,9 +28,17 @@ export default function Friends() {
           },
         }}
       />
-      {mockFriends.map((friend) => (
-        <UserCard key={friend.id} data={friend} />
-      ))}
+      <ScrollView className="flex-1" style={{}}>
+        <View className="flex-1 pb-10">
+          {isPending ? (
+            <LoadingSpinner />
+          ) : isError ? (
+            <ErrorMessage error={error} refetch={refetch} />
+          ) : (
+            data.map((friend) => <UserCard key={friend.id} data={friend} />)
+          )}
+        </View>
+      </ScrollView>
     </ScreenContainer>
   );
 }
