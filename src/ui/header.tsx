@@ -24,7 +24,7 @@ type Props = {
 };
 export const Header = ({ leftButton, title, rightButton }: Props) => {
   return (
-    <View className="flex h-8 flex-row items-center justify-between">
+    <View className="mb-4 flex h-8 flex-row items-center justify-between">
       {leftButton === 'back' ? (
         <BackButton />
       ) : leftButton === 'cancel' ? (
