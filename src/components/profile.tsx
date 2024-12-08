@@ -2,15 +2,24 @@ import { Trash2Icon, UserPlus } from 'lucide-react-native';
 import * as React from 'react';
 
 import { type CompleteUserT } from '@/components/user-card';
+import { useFriendManagement } from '@/core';
 import { Button, Image, Text, View } from '@/ui';
 
 export default function Profile({
   data,
-  isFriend,
+  isFriend: initialIsFriend,
 }: {
   data: CompleteUserT;
   isFriend: boolean;
 }) {
+  const {
+    isFriend,
+    handleAddFriend,
+    handleRemoveFriend,
+    isAddPending,
+    isRemovePending,
+  } = useFriendManagement(data.id, initialIsFriend);
+
   return (
     <View className="flex flex-col items-center gap-4">
       <View className="flex flex-col items-center gap-2">
@@ -46,18 +55,16 @@ export default function Profile({
           label="Remove Friend"
           variant="destructive"
           className="w-full"
-          onPress={() => {
-            alert('Remove friend');
-          }}
+          onPress={handleRemoveFriend}
+          loading={isRemovePending}
         />
       ) : (
         <Button
           icon={UserPlus}
           label="Add Friend"
           className="w-full"
-          onPress={() => {
-            alert('Add friend');
-          }}
+          onPress={handleAddFriend}
+          loading={isAddPending}
         />
       )}
     </View>
