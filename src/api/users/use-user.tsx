@@ -1,12 +1,11 @@
 import { createQuery } from 'react-query-kit';
 
-import { addTestDelay, queryClient } from '../common';
-import { augmentUsersWithPictures } from './augment-user-pictures';
+import { addTestDelay } from '../common';
 import { mockUsers } from './mock-users';
-import { type CompleteUserT, loadingPicture, type UserIdT } from './types';
+import { type UserIdT, type UserT } from './types';
 
 type Variables = { id: UserIdT };
-type Response = CompleteUserT;
+type Response = UserT;
 
 export const useUser: ReturnType<
   typeof createQuery<Response, Variables, Error>
@@ -18,19 +17,6 @@ export const useUser: ReturnType<
     );
     if (!user) throw new Error('User not found');
 
-    const cachedData: Response | undefined = queryClient.getQueryData<Response>(
-      useUser.getKey(variables),
-    );
-
-    const userWithPicture = {
-      ...user,
-      picture: cachedData?.picture ?? loadingPicture,
-    };
-
-    augmentUsersWithPictures([userWithPicture]).then((user) => {
-      queryClient.setQueryData(useUser.getKey(variables), user[0]);
-    });
-
-    return userWithPicture;
+    return user;
   },
 });

@@ -2,9 +2,7 @@ import { createQuery } from 'react-query-kit';
 
 import { habitColors } from '@/ui/colors';
 
-import { addTestDelay, queryClient } from '../common';
-import { loadingPicture, type UserIdT } from '../users';
-import { augmentParticipantsWithPicturesForAllHabits } from './augment-participant-pictures';
+import { addTestDelay } from '../common';
 import { mockHabits } from './mock-habits';
 import { type HabitT } from './types';
 
@@ -15,10 +13,6 @@ export const useHabits = createQuery<Response, Variables, Error>({
   queryKey: ['habits'],
   fetcher: async () => {
     const dbHabits = await addTestDelay(mockHabits);
-
-    const cachedData: Response | undefined = queryClient.getQueryData<Response>(
-      ['habits'],
-    );
 
     const habits: HabitT[] = dbHabits.map(({ id: habitId, data }) => ({
       id: habitId,
@@ -40,10 +34,6 @@ export const useHabits = createQuery<Response, Variables, Error>({
                   participant.mostRecentCompletionDate.toLocaleDateString(
                     'en-CA',
                   ) === new Date().toLocaleDateString('en-CA'),
-                picture:
-                  cachedData?.find((h) => h.id === habitId)?.participants[
-                    participantId as UserIdT
-                  ]?.picture ?? loadingPicture,
                 isOwner: participant?.isOwner ?? false,
               },
             ];
@@ -51,12 +41,6 @@ export const useHabits = createQuery<Response, Variables, Error>({
         ),
       ),
     }));
-
-    augmentParticipantsWithPicturesForAllHabits(habits).then(
-      (augmentedHabits) => {
-        queryClient.setQueryData(['habits'], augmentedHabits);
-      },
-    );
 
     return habits;
   },
