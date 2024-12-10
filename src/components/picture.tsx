@@ -1,30 +1,33 @@
 import { TriangleAlertIcon } from 'lucide-react-native';
 
-import { type UserPictureT } from '@/api';
+import { usePicture, type UserIdT } from '@/api';
 import { Image, View } from '@/ui';
 
 interface PictureProps {
-  picture: UserPictureT;
+  userId: UserIdT;
   size: 128 | 40 | 30;
 }
-export default function UserPicture({ picture, size }: PictureProps) {
+export default function UserPicture({ userId, size }: PictureProps) {
+  const { data, isPending, isError } = usePicture({
+    variables: { id: userId },
+  });
+
   return (
     <View
-      className={`${picture.isPending ? 'animate-pulse' : 'animate-none'} rounded-full bg-stone-200 dark:bg-stone-700`}
+      className="overflow-hidden rounded-full bg-stone-300 dark:bg-stone-600"
       style={{
         height: size,
         width: size,
       }}
     >
-      {picture.isPending ? (
-        <></>
-      ) : picture.isError ? (
+      {isPending ? (
+        <View className="h-full w-full animate-pulse bg-stone-200 dark:bg-stone-700" />
+      ) : isError ? (
         <TriangleAlertIcon className="m-auto h-8 w-8 text-red-500" />
       ) : (
         <Image
-          source={picture.url}
+          source={data}
           alt="Profile Picture"
-          className="rounded-full"
           style={{
             height: size,
             width: size,

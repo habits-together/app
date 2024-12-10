@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { colorSchema, habitColorsSchema } from '../colors-schemas';
-import { UserIdSchema, type UserIdT, userPictureSchema } from '../users/types';
+import { UserIdSchema, type UserIdT } from '../users/types';
 
 export type HabitIdT = string & { readonly __brand: unique symbol };
 export const HabitIdSchema = z.coerce
@@ -83,8 +83,6 @@ const participantSchema = dbParticipantSchema
   .omit({ mostRecentCompletionDate: true })
   .extend({
     hasActivityToday: z.boolean(),
-    // include the user's picture (needs to fetch from firebase storage)
-    picture: userPictureSchema,
   });
 
 export const participantWithIdSchema = participantSchema.extend({

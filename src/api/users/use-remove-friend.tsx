@@ -1,10 +1,10 @@
 import { createMutation } from 'react-query-kit';
 
 import { addTestDelay, queryClient } from '../common';
-import { type CompleteUserT, loadingPicture, type UserIdT } from './types';
+import { type UserIdT, type UserT } from './types';
 
 type Variables = { id: UserIdT };
-type Response = CompleteUserT;
+type Response = UserT;
 
 export const useRemoveFriend = createMutation<Response, Variables, Error>({
   mutationFn: async (variables) => {
@@ -13,7 +13,6 @@ export const useRemoveFriend = createMutation<Response, Variables, Error>({
       displayName: 'Old Friend',
       username: 'old_friend',
       createdAt: new Date(),
-      picture: loadingPicture,
       isFriend: false,
     });
     return friend;

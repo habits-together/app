@@ -1,11 +1,10 @@
 import { createQuery } from 'react-query-kit';
 
-import { addTestDelay, queryClient } from '../common';
-import { augmentUsersWithPictures } from './augment-user-pictures';
+import { addTestDelay } from '../common';
 import { mockUsers } from './mock-users';
-import { type CompleteUserT, loadingPicture } from './types';
+import { type UserT } from './types';
 
-type Response = CompleteUserT[];
+type Response = UserT[];
 type Variables = void;
 
 // don't need friend status
@@ -16,20 +15,6 @@ export const useFriends = createQuery<Response, Variables, Error>({
       mockUsers.filter((user) => user.isFriend),
     );
 
-    const cachedData: Response | undefined = queryClient.getQueryData<Response>(
-      ['friends'],
-    );
-
-    const friendsWithPictures = friends.map((friend) => ({
-      ...friend,
-      picture:
-        cachedData?.find((h) => h.id === friend.id)?.picture ?? loadingPicture,
-    }));
-
-    augmentUsersWithPictures(friendsWithPictures).then((augmentedFriends) => {
-      queryClient.setQueryData(['friends'], augmentedFriends);
-    });
-
-    return friendsWithPictures;
+    return friends;
   },
 });
