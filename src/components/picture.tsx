@@ -5,7 +5,7 @@ import { Image, View } from '@/ui';
 
 interface PictureProps {
   picture: UserPictureT;
-  size: 128 | 40;
+  size: 128 | 40 | 30;
 }
 export default function UserPicture({ picture, size }: PictureProps) {
   return (

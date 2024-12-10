@@ -21,7 +21,6 @@ export const augmentUsersWithPictures = async (users: CompleteUserT[]) => {
         },
       };
     } catch (error) {
-      console.log('Error fetching user picture');
       showMessage({
         message: 'Error fetching image(s)',
         type: 'danger',

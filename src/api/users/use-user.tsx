@@ -13,21 +13,18 @@ export const useUser: ReturnType<
 > = createQuery<Response, Variables, Error>({
   queryKey: ['friend'],
   fetcher: async (variables) => {
-    const cachedData: Response | undefined = queryClient.getQueryData<Response>(
-      useUser.getKey(variables),
-    );
-    if (cachedData) {
-      return cachedData;
-    }
-
     const user = await addTestDelay(
       mockUsers.find((user) => user.id === variables.id),
     );
     if (!user) throw new Error('User not found');
 
+    const cachedData: Response | undefined = queryClient.getQueryData<Response>(
+      useUser.getKey(variables),
+    );
+
     const userWithPicture = {
       ...user,
-      picture: loadingPicture,
+      picture: cachedData?.picture ?? loadingPicture,
     };
 
     augmentUsersWithPictures([userWithPicture]).then((user) => {
