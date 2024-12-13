@@ -316,7 +316,7 @@ function HabitFriendCompletions({ habit }: HabitFriendCompletionsProps) {
     habit.participants,
   )
     .map(([id, participant]) => ({ id: id as UserIdT, ...participant }))
-    .filter((p): p is ParticipantWithIdT => p.picture !== undefined)
+    .filter((p): p is ParticipantWithIdT => p !== undefined)
     .sort(
       (a, b) => (a.hasActivityToday ? 0 : 1) - (b.hasActivityToday ? 0 : 1),
     );
@@ -392,7 +392,7 @@ function ProfilePicsList({
                   : colors.stone[600],
             }}
           >
-            <UserPicture key={p.id} picture={p.picture} size={30} />
+            <UserPicture key={p.id} userId={p.id} size={30} />
           </View>
         ))}
     </View>
