@@ -1,20 +1,20 @@
 import { Trash2Icon, UserPlus } from 'lucide-react-native';
 import * as React from 'react';
 
-import { type UserT } from '@/api';
+import { type UserWithRelationshipT } from '@/api';
 import { useFriendManagement } from '@/core';
 import { Button, Text, View } from '@/ui';
 
 import UserPicture from './picture';
 
-export default function Profile({ data }: { data: UserT }) {
+export default function Profile({ data }: { data: UserWithRelationshipT }) {
   const {
     isFriend,
     handleSendFriendRequest,
     handleRemoveFriend,
     isAddPending,
     isRemovePending,
-  } = useFriendManagement(data.id, false);
+  } = useFriendManagement(data.id, data.relationship.status === 'friends');
 
   return (
     <View className="flex flex-col items-center gap-4">
@@ -37,6 +37,16 @@ export default function Profile({ data }: { data: UserT }) {
             day: 'numeric',
           })}
         </Text>
+        {data.relationship.friendsSince && (
+          <Text className="text-center text-sm font-medium text-stone-400 dark:text-stone-400">
+            Friends Since{' '}
+            {data.relationship.friendsSince.toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </Text>
+        )}
       </View>
       {isFriend ? (
         <Button
