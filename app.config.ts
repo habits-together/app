@@ -67,6 +67,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         ],
       },
     ],
+    [
+      'expo-image-picker',
+      {
+        cameraPermission: 'The camera is used to take pictures of your habits.',
+      },
+    ],
   ],
   extra: {
     ...ClientEnv,

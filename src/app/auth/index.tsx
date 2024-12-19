@@ -75,9 +75,9 @@ export default function Auth() {
             onPress={handleSubmit(onSubmit)}
           />
           <View className="flex-row items-center gap-3">
-            <View className="h-px flex-1 bg-slate-300 dark:bg-slate-600" />
+            <View className="h-px flex-1 bg-slate-300 dark:bg-stone-600" />
             <Text className="text-slate-300">OR</Text>
-            <View className="h-px flex-1 bg-slate-300 dark:bg-slate-600" />
+            <View className="h-px flex-1 bg-slate-300 dark:bg-stone-600" />
           </View>
 
           <Button

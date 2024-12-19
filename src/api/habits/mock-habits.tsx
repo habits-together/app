@@ -106,56 +106,60 @@ export const setMockHabits = (
 export const mockHabitCompletions: Record<HabitIdT, AllCompletionsT> = {
   ['1' as HabitIdT]: {
     ['1' as UserIdT]: {
-      completions: {
-        '2024-12-04': 0,
-        '2024-12-05': 1,
-        '2024-12-06': 1,
+      entries: {
+        '2024-12-04': { numberOfCompletions: 0 },
+        '2024-12-05': { numberOfCompletions: 1 },
+        '2024-12-06': { numberOfCompletions: 1 },
+        '2024-12-18': {
+          numberOfCompletions: 1,
+          note: 'Drank 8 glasses of water today!',
+        },
       },
     },
     ['2' as UserIdT]: {
-      completions: {
-        '2024-12-04': 2,
-        '2024-12-05': 3,
-        '2024-12-06': 1,
+      entries: {
+        '2024-12-04': { numberOfCompletions: 2 },
+        '2024-12-05': { numberOfCompletions: 3 },
+        '2024-12-06': { numberOfCompletions: 1 },
       },
     },
     ['3' as UserIdT]: {
-      completions: {
-        '2024-12-04': 1,
-        '2024-12-05': 2,
-        '2024-12-06': 2,
+      entries: {
+        '2024-12-04': { numberOfCompletions: 1 },
+        '2024-12-05': { numberOfCompletions: 2 },
+        '2024-12-06': { numberOfCompletions: 2 },
       },
     },
     ['4' as UserIdT]: {
-      completions: {
-        '2024-12-04': 3,
-        '2024-12-05': 1,
-        '2024-12-06': 0,
+      entries: {
+        '2024-12-04': { numberOfCompletions: 3 },
+        '2024-12-05': { numberOfCompletions: 1 },
+        '2024-12-06': { numberOfCompletions: 0 },
       },
     },
-    ['4' as UserIdT]: {
-      completions: {
-        '2024-12-04': 3,
-        '2024-12-05': 1,
-        '2024-12-06': 0,
+    ['5' as UserIdT]: {
+      entries: {
+        '2024-12-04': { numberOfCompletions: 3 },
+        '2024-12-05': { numberOfCompletions: 1 },
+        '2024-12-06': { numberOfCompletions: 0 },
       },
     },
   },
   ['2' as HabitIdT]: {
     ['1' as UserIdT]: {
-      completions: {
-        '2024-12-04': 1,
-        '2024-12-05': 0,
-        '2024-12-06': 1,
+      entries: {
+        '2024-12-04': { numberOfCompletions: 1 },
+        '2024-12-05': { numberOfCompletions: 0 },
+        '2024-12-06': { numberOfCompletions: 1 },
       },
     },
   },
   ['3' as HabitIdT]: {
     ['1' as UserIdT]: {
-      completions: {
-        '2024-12-04': 0,
-        '2024-12-05': 0,
-        '2024-12-06': 1,
+      entries: {
+        '2024-12-04': { numberOfCompletions: 0 },
+        '2024-12-05': { numberOfCompletions: 0 },
+        '2024-12-06': { numberOfCompletions: 1 },
       },
     },
   },
