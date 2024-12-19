@@ -22,10 +22,11 @@ export const unstable_settings = {
 
 hydrateAuth();
 loadSelectedTheme();
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  // Call preventAutoHideAsync before rendering any UI
+  SplashScreen.preventAutoHideAsync();
+
   return (
     <Providers>
       <Stack

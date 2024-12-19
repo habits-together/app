@@ -16,7 +16,7 @@ type Variables = {
 };
 
 export const useHabitCompletions = createQuery<Response, Variables, Error>({
-  queryKey: ['habits-completions'],
+  queryKey: ['habit-completions'],
   fetcher: async (variables) => {
     const completions = mockHabitCompletions[variables.habitId];
     if (!completions) {
@@ -45,15 +45,16 @@ function getStructuredCompletionData(
   currentDate.setDate(currentDate.getDate() - numDays + 1);
   // loop through each day and add the completion data for that day to the structured data
   for (let i = 0; i < numDays; i++) {
+    const dateString = currentDate.toLocaleDateString('en-CA');
     // if there is no completion data for the current date, default to 0 (no completions that day)
     structuredCompletionData.push({
       numberOfCompletions:
-        completionData?.completions?.[
-          currentDate.toLocaleDateString('en-CA')
-        ] ?? 0,
+        completionData.entries?.[dateString]?.numberOfCompletions ?? 0,
       dayOfTheMonth: currentDate.getDate(),
       dayOfTheWeek: currentDate.toLocaleString('en-US', { weekday: 'short' }),
       date: currentDate.toLocaleDateString('en-CA'),
+      note: completionData.entries?.[dateString]?.note,
+      image: completionData.entries?.[dateString]?.image,
     });
     // move current date ahead 1 day
     currentDate.setDate(currentDate.getDate() + 1);
