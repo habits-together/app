@@ -9,12 +9,17 @@ import {
   setMockHabitCompletions,
   setMockHabits,
 } from './mock-habits';
-import { type AllCompletionsT, type HabitIdT } from './types';
+import { type AllCompletionsT, type HabitEntryT, type HabitIdT } from './types';
 
 type Response = AllCompletionsT;
-type Variables = { habitId: HabitIdT; userId: UserIdT; date: string };
+type Variables = {
+  userId: UserIdT;
+  habitId: HabitIdT;
+  date: string;
+  modifiedEntry: HabitEntryT;
+};
 
-export const usePressHabitButton = createMutation<Response, Variables, Error>({
+export const useModifyHabitEntry = createMutation<Response, Variables, Error>({
   mutationFn: async (variables) => {
     const habitIndex = mockHabits.findIndex((h) => h.id === variables.habitId);
     if (habitIndex === -1) {
@@ -27,21 +32,23 @@ export const usePressHabitButton = createMutation<Response, Variables, Error>({
     const participantCompletions = completions[variables.userId];
     if (!participantCompletions) throw new Error('Participant not found');
 
-    const numCompletions = participantCompletions.entries[variables.date];
-
-    let newNumCompletions = 1;
-    if (numCompletions) {
-      newNumCompletions = numCompletions.numberOfCompletions + 1;
-    }
+    // update number of completions, note, and image
+    const existingEntry = participantCompletions.entries[variables.date] ?? {
+      numberOfCompletions: 0,
+    };
+    const newEntry = {
+      numberOfCompletions:
+        variables.modifiedEntry.numberOfCompletions ??
+        existingEntry.numberOfCompletions,
+      note: variables.modifiedEntry.note,
+      image: variables.modifiedEntry.image,
+    };
 
     const newCompletions = {
       ...participantCompletions,
       entries: {
         ...participantCompletions.entries,
-        [variables.date]: {
-          ...participantCompletions.entries[variables.date],
-          numberOfCompletions: newNumCompletions,
-        },
+        [variables.date]: newEntry,
       },
     };
 
@@ -86,7 +93,12 @@ export const usePressHabitButton = createMutation<Response, Variables, Error>({
 
     return await addTestDelay(mockHabits[habitIndex]);
   },
-  onSuccess: () => {
-    queryClient.invalidateQueries({ queryKey: ['habits'] });
+  onSuccess: (_, variables) => {
+    queryClient.invalidateQueries({
+      queryKey: [
+        'habit-completions',
+        { habitId: variables.habitId, userId: variables.userId },
+      ],
+    });
   },
 });
