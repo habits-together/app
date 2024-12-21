@@ -6,10 +6,12 @@ import { Pressable, Text, View } from '@/ui';
 interface CompletionsSectionProps {
   numberOfCompletions: number;
   setNumberOfCompletions: (value: number | ((prev: number) => number)) => void;
+  allowMultipleCompletions: boolean;
 }
 export function CompletionsSection({
   numberOfCompletions,
   setNumberOfCompletions,
+  allowMultipleCompletions,
 }: CompletionsSectionProps) {
   const { colorScheme } = useColorScheme();
   return (
@@ -32,10 +34,17 @@ export function CompletionsSection({
         </Pressable>
         <Text className="w-12 text-center text-2xl">{numberOfCompletions}</Text>
         <Pressable
-          className="h-12 w-12 items-center justify-center rounded-full border border-slate-200 dark:border-stone-700"
+          className={`h-12 w-12 items-center justify-center rounded-full border border-slate-200 dark:border-stone-700 ${
+            !allowMultipleCompletions && numberOfCompletions === 1
+              ? 'opacity-30'
+              : ''
+          }`}
           onPress={() => {
-            setNumberOfCompletions((prev) => prev + 1);
+            if (allowMultipleCompletions || numberOfCompletions < 1) {
+              setNumberOfCompletions((prev) => prev + 1);
+            }
           }}
+          disabled={!allowMultipleCompletions && numberOfCompletions === 1}
         >
           <PlusIcon
             size={16}

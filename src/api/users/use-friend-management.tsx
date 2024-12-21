@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { showMessage } from 'react-native-flash-message';
 
-import { useRemoveFriend, type UserIdT, useSendFriendRequest } from '@/api';
+import { type UserIdT } from './types';
+import { useRemoveFriend } from './use-remove-friend';
+import { useSendFriendRequest } from './use-send-friend-request';
 
 export const useFriendManagement = (
   userId: UserIdT,

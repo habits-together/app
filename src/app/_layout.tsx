@@ -11,8 +11,12 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 import { APIProvider } from '@/api';
-import { ConfettiProvider, hydrateAuth, loadSelectedTheme } from '@/core';
-import { useThemeConfig } from '@/core/use-theme-config';
+import {
+  ConfettiProvider,
+  hydrateAuth,
+  loadSelectedTheme,
+  useThemeConfig,
+} from '@/core';
 
 export { ErrorBoundary } from 'expo-router';
 

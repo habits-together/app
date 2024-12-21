@@ -31,7 +31,10 @@ export const usePressHabitButton = createMutation<Response, Variables, Error>({
 
     let newNumCompletions = 1;
     if (numCompletions) {
-      newNumCompletions = numCompletions.numberOfCompletions + 1;
+      newNumCompletions = mockHabits[habitIndex].data.settings
+        .allowMultipleCompletions
+        ? numCompletions.numberOfCompletions + 1
+        : 1;
     }
 
     const newCompletions = {

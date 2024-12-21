@@ -2,7 +2,7 @@ import { Trash2Icon, UserPlus } from 'lucide-react-native';
 import * as React from 'react';
 
 import { type UserWithRelationshipT } from '@/api';
-import { useFriendManagement } from '@/core';
+import { useFriendManagement } from '@/api/users/use-friend-management';
 import { Button, Text, View } from '@/ui';
 
 import UserPicture from './picture';

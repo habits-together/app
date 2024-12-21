@@ -1,5 +1,6 @@
+/* eslint-disable max-lines-per-function */
 import { useCallback, useMemo } from 'react';
-import { useMMKVString } from 'react-native-mmkv';
+import { MMKV, useMMKVString } from 'react-native-mmkv';
 
 import { type HabitIdT } from '@/api';
 
@@ -73,4 +74,17 @@ export function useHabitOrder() {
     initializeOrder,
     sortHabits,
   };
+}
+
+export function addHabitToOrder(habitId: HabitIdT) {
+  const storage = new MMKV();
+  const currentOrder = storage.getString(HABIT_ORDER_KEY);
+  if (!currentOrder) {
+    return storage.set(HABIT_ORDER_KEY, JSON.stringify([habitId]));
+  }
+  const parsedOrder: HabitIdT[] = JSON.parse(currentOrder);
+  return storage.set(
+    HABIT_ORDER_KEY,
+    JSON.stringify([habitId, ...parsedOrder]),
+  );
 }
