@@ -1,5 +1,5 @@
 /* eslint-disable max-lines-per-function */
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { ActivityIcon, CheckIcon, EllipsisIcon } from 'lucide-react-native';
 import { useColorScheme } from 'nativewind';
 import React, { useEffect, useState } from 'react';
@@ -69,11 +69,7 @@ export function HabitCard({ habit }: HabitCardProps) {
               colorScheme === 'dark' ? colors.stone.light : habit.color.light,
           }}
         >
-          <HabitHeader
-            habitId={habit.id}
-            title={habit.title}
-            icon={habit.icon}
-          />
+          <HabitHeader habit={habit} />
           <View className="flex flex-row">
             <HabitFriendCompletions habit={habit} />
           </View>
@@ -98,11 +94,9 @@ export function HabitCard({ habit }: HabitCardProps) {
 }
 
 interface HabitHeaderProps {
-  habitId: HabitIdT;
-  title: string;
-  icon: string;
+  habit: HabitT;
 }
-const HabitHeader = ({ habitId, title, icon }: HabitHeaderProps) => {
+const HabitHeader = ({ habit }: HabitHeaderProps) => {
   const { colorScheme } = useColorScheme();
   const { moveHabit, canMoveHabit } = useHabitOrder();
 
@@ -110,20 +104,26 @@ const HabitHeader = ({ habitId, title, icon }: HabitHeaderProps) => {
     {
       key: 'Move up in list',
       title: 'Move up in list',
-      onSelect: () => moveHabit(habitId, 'up'),
-      disabled: !canMoveHabit(habitId, 'up'),
+      onSelect: () => moveHabit(habit.id, 'up'),
+      disabled: !canMoveHabit(habit.id, 'up'),
     },
     {
       key: 'Move down in list',
       title: 'Move down in list',
-      onSelect: () => moveHabit(habitId, 'down'),
-      disabled: !canMoveHabit(habitId, 'down'),
+      onSelect: () => moveHabit(habit.id, 'down'),
+      disabled: !canMoveHabit(habit.id, 'down'),
     },
     {
       key: 'Edit habit',
       title: 'Edit habit',
       onSelect: () => {
-        alert('todo');
+        router.push({
+          pathname: '/habits/edit-habit',
+          params: {
+            mode: 'edit',
+            habit: JSON.stringify(habit),
+          },
+        });
       },
     },
     {
@@ -139,7 +139,7 @@ const HabitHeader = ({ habitId, title, icon }: HabitHeaderProps) => {
     <View className="ml-1 flex-row items-center justify-between">
       <View className="mr-2 flex-1 flex-row items-center gap-1">
         <HabitIcon
-          icon={icon as keyof typeof habitIcons}
+          icon={habit.icon as keyof typeof habitIcons}
           size={24}
           color={colorScheme === 'dark' ? colors.white : colors.black}
         />
@@ -147,7 +147,7 @@ const HabitHeader = ({ habitId, title, icon }: HabitHeaderProps) => {
           numberOfLines={1}
           className="mb-1 flex-1 text-base font-bold text-black dark:text-white"
         >
-          {title}
+          {habit.title}
         </Text>
       </View>
 
