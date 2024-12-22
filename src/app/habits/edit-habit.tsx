@@ -2,10 +2,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from 'expo-router';
 import { useLocalSearchParams } from 'expo-router';
-import { CheckIcon } from 'lucide-react-native';
+import { CheckIcon, Trash2Icon } from 'lucide-react-native';
 import { useColorScheme } from 'nativewind';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
+import { Alert } from 'react-native';
 
 import {
   habitColorNames,
@@ -15,6 +16,7 @@ import {
   useCreateHabit,
   useEditHabit,
 } from '@/api';
+import { useDeleteHabit } from '@/api/habits/use-delete-habit';
 import { HabitIcon, habitIcons } from '@/components/habit-icon';
 import {
   Button,
@@ -49,6 +51,7 @@ export default function EditHabit() {
   const parsedHabit: HabitT = mode === 'edit' ? JSON.parse(habitJson) : null;
   const createHabit = useCreateHabit();
   const updateHabit = useEditHabit();
+  const deleteHabit = useDeleteHabit();
 
   const { control, handleSubmit, setValue, watch } = useForm<HabitCreationT>({
     resolver: zodResolver(habitCreationSchema),
@@ -80,6 +83,27 @@ export default function EditHabit() {
       });
     }
     router.back();
+  };
+
+  const handleDelete = () => {
+    Alert.alert(
+      'Delete Habit',
+      'Are you sure you want to delete this habit? This action cannot be undone.',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => {
+            deleteHabit.mutate({ habitId: parsedHabit.id });
+            router.back();
+          },
+        },
+      ],
+    );
   };
 
   return (
@@ -174,6 +198,14 @@ export default function EditHabit() {
               </Switch.Root>
             </View>
           </View>
+          {mode === 'edit' && (
+            <Button
+              icon={Trash2Icon}
+              label="Delete Habit"
+              onPress={handleDelete}
+              variant="destructive"
+            />
+          )}
           <Button
             label={mode === 'edit' ? 'Save Changes' : 'Create Habit'}
             onPress={handleSubmit(onSubmit)}
