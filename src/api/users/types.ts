@@ -22,19 +22,32 @@ export const userSchema = dbUserSchema.extend({
 });
 export type UserT = z.infer<typeof userSchema>;
 
-export const friendStatusSchema = z.object({
-  isFriend: z.boolean(),
-});
-export type FriendStatusT = z.infer<typeof friendStatusSchema>;
+export const dbRelationshipStatusSchema = z.enum([
+  'pending',
+  'friends',
+  'blocked',
+]);
+export type dbRelationshipStatusT = z.infer<typeof dbRelationshipStatusSchema>;
 
-export const userWithFriendStatusSchema = userSchema.extend({
-  ...friendStatusSchema.shape,
-});
-export type UserWithFriendStatusT = z.infer<typeof userWithFriendStatusSchema>;
+export const relationshipStatusSchema = z.enum([
+  ...dbRelationshipStatusSchema.options,
+  'none',
+]);
+export type RelationshipStatusT = z.infer<typeof relationshipStatusSchema>;
 
-export const friendshipSchema = z.object({
-  user1Id: UserIdSchema,
-  user2Id: UserIdSchema,
-  friendsSince: z.date(),
+export const relationshipSchema = z.union([
+  z.object({
+    status: dbRelationshipStatusSchema.extract(['friends']),
+    friendsSince: z.date(),
+  }),
+  z.object({
+    status: relationshipStatusSchema.exclude(['friends']),
+    friendsSince: z.undefined(),
+  }),
+]);
+export type RelationshipT = z.infer<typeof relationshipSchema>;
+
+export const userWithRelationshipSchema = userSchema.extend({
+  relationship: relationshipSchema,
 });
-export type FriendshipT = z.infer<typeof friendshipSchema>;
+export type UserWithRelationshipT = z.infer<typeof userWithRelationshipSchema>;
