@@ -37,6 +37,7 @@ import {
 } from '@/ui';
 
 import { ErrorMessage } from './error-message';
+import ModifyHabitEntry from './modify-habit-entry';
 import UserPicture from './picture';
 
 interface HabitCardProps {
@@ -66,7 +67,7 @@ export function HabitCard({ habit }: HabitCardProps) {
         asChild
       >
         <Pressable
-          className="flex h-[171px] flex-col gap-[10px] rounded-3xl px-4 py-[10px]"
+          className="flex h-[209px] flex-col gap-[10px] rounded-3xl px-4 py-[10px]"
           style={{
             backgroundColor:
               colorScheme === 'dark' ? colors.stone.light : habit.color.light,
@@ -85,11 +86,14 @@ export function HabitCard({ habit }: HabitCardProps) {
           ) : isError ? (
             <ErrorMessage error={error} refetch={refetch} variant="compact" />
           ) : (
-            <WeekViewCompletions
-              userId={userId}
-              habit={habit}
-              completions={completions}
-            />
+            <>
+              <WeekViewCompletions
+                userId={userId}
+                habit={habit}
+                completions={completions}
+              />
+              <ModifyHabitEntry habit={habit} completions={completions} />
+            </>
           )}
         </Pressable>
       </Link>
@@ -187,9 +191,6 @@ const WeekViewCompletions = ({
   habit,
   completions,
 }: WeekViewCompletionsProps) => {
-  const completionsPerDay =
-    habit.goal.period === 'daily' ? habit.goal.completionsPerPeriod : 1;
-
   return (
     <View className="flex w-full flex-1 flex-row items-end justify-between gap-x-4">
       {completions.map((completion) => (
@@ -198,7 +199,6 @@ const WeekViewCompletions = ({
           habitId={habit.id}
           userId={userId}
           color={habit.color}
-          completionsPerDay={completionsPerDay}
           completion={completion}
         />
       ))}
@@ -210,14 +210,12 @@ interface WeekViewSquareProps {
   habitId: HabitIdT;
   userId: UserIdT;
   color: HabitColorT;
-  completionsPerDay: number;
   completion: HabitCompletionWithDateInfoT;
 }
 const WeekViewSquare = ({
   habitId,
   userId,
   color,
-  completionsPerDay,
   completion,
 }: WeekViewSquareProps) => {
   const { colorScheme } = useColorScheme();
@@ -230,7 +228,7 @@ const WeekViewSquare = ({
     const currentCompletions = completion.numberOfCompletions;
     try {
       // Optimistically update UI through mutation
-      const newCompletions = (currentCompletions + 1) % (completionsPerDay + 1);
+      const newCompletions = currentCompletions + 1;
       completion.numberOfCompletions = newCompletions;
       if (newCompletions !== 0) {
         playConfetti(event.nativeEvent.pageX, event.nativeEvent.pageY);
@@ -266,7 +264,7 @@ const WeekViewSquare = ({
             onPress={(event) => handlePress(event)}
           >
             {/* day of the month text */}
-            {completion.numberOfCompletions !== completionsPerDay && (
+            {completion.numberOfCompletions === 0 && (
               <Text
                 className="m-auto text-center text-xs font-semibold"
                 style={{
@@ -277,20 +275,30 @@ const WeekViewSquare = ({
                 {completion.dayOfTheMonth}
               </Text>
             )}
-            {/* base color fill (can be partial for multiple-times-per-day habit) */}
-            {completion.numberOfCompletions > 0 && (
+            {/* base color fill */}
+            {completion.numberOfCompletions >= 1 && (
               <View
-                className="absolute bottom-0 w-full"
+                className="absolute bottom-0 h-full w-full"
                 style={{
                   backgroundColor: color.base,
-                  height: `${(100 * completion.numberOfCompletions) / completionsPerDay}%`,
                 }}
               ></View>
             )}
             {/* check mark */}
-            {completion.numberOfCompletions === completionsPerDay && (
+            {completion.numberOfCompletions >= 1 && (
               <View className="m-auto">
-                <CheckIcon size={20} strokeWidth={4} color={colors.white} />
+                {completion.numberOfCompletions === 1 ? (
+                  <CheckIcon size={20} strokeWidth={4} color={colors.white} />
+                ) : (
+                  <Text
+                    className="text-xl font-bold"
+                    style={{
+                      color: colors.white,
+                    }}
+                  >
+                    {completion.numberOfCompletions}
+                  </Text>
+                )}
               </View>
             )}
           </Pressable>

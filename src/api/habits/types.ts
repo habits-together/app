@@ -25,9 +25,16 @@ export const dbParticipantsSchema = z.record(UserIdSchema, dbParticipantSchema);
 export type DbParticipantsT = Record<UserIdT, DbParticipantT>;
 
 // COMPLETIONS
+export const habitEntrySchema = z.object({
+  numberOfCompletions: z.number(),
+  note: z.string().optional(),
+  image: z.string().optional(),
+});
+export type HabitEntryT = z.infer<typeof habitEntrySchema>;
+
 export const participantCompletionsSchema = z.object({
   // { date: numberOfCompletions }; ex. { '2021-01-01': 3 }
-  completions: z.record(z.string(), z.number()),
+  entries: z.record(z.string(), habitEntrySchema),
 });
 export type ParticipantCompletionsT = z.infer<
   typeof participantCompletionsSchema
@@ -44,14 +51,13 @@ export type HabitCompletionPeriodT = z.infer<
   typeof habitCompletionPeriodSchema
 >;
 
-export const habitCompletionWithDateInfoSchema = z.object({
+export const habitEntryWithDateInfoSchema = habitEntrySchema.extend({
   date: z.string(),
-  numberOfCompletions: z.number(),
   dayOfTheMonth: z.number(),
   dayOfTheWeek: z.string(),
 });
 export type HabitCompletionWithDateInfoT = z.infer<
-  typeof habitCompletionWithDateInfoSchema
+  typeof habitEntryWithDateInfoSchema
 >;
 
 // HABITS
