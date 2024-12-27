@@ -39,7 +39,10 @@ export default function Habits() {
           icon: PlusIcon,
           text: 'New Habit',
           onPress: () => {
-            router.push('/habits/edit-habit?mode=create&id=dummyid');
+            router.push({
+              pathname: '/habits/edit-habit',
+              params: { mode: 'create' },
+            });
           },
         }}
       />

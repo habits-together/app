@@ -58,8 +58,8 @@ export function HabitCard({ habit }: HabitCardProps) {
       <Link
         push
         href={{
-          pathname: '/habits/[id]',
-          params: { id: habit.id },
+          pathname: '/habits/view-habit',
+          params: { habitJson: JSON.stringify(habit) },
         }}
         asChild
       >
@@ -123,7 +123,7 @@ const HabitHeader = ({ habit }: HabitHeaderProps) => {
           pathname: '/habits/edit-habit',
           params: {
             mode: 'edit',
-            habit: JSON.stringify(habit),
+            habitJson: JSON.stringify(habit),
           },
         });
       },

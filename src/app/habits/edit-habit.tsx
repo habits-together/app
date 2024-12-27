@@ -34,21 +34,22 @@ import {
 import { Header } from '@/ui/header';
 
 /**
- * This is for editing or creating a habit. Pass in query params.
+ * This is for editing or creating a habit. Pass in query params:
  *
- * - ex. /habits/edit-habit?mode=edit&id=n3i2e0ddj32i
- * - ex. /habits/edit-habit?mode=create&id=dummyid
+ * mode: 'edit' | 'create'
+ *
+ * habitJson: JSON.stringify(HabitT)
  */
 export default function EditHabit() {
   const { colorScheme } = useColorScheme();
   const iconModal = useModal();
 
-  const { mode, habit: habitJson } = useLocalSearchParams<{
+  const { mode, habitJson } = useLocalSearchParams<{
     mode: 'edit' | 'create';
-    habit: string;
+    habitJson: string;
   }>();
-
   const parsedHabit: HabitT = mode === 'edit' ? JSON.parse(habitJson) : null;
+
   const createHabit = useCreateHabit();
   const updateHabit = useEditHabit();
   const deleteHabit = useDeleteHabit();
