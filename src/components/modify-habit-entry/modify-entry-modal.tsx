@@ -58,7 +58,12 @@ export function ModifyEntryModal({
     setNumberOfCompletions(selectedCompletion.numberOfCompletions);
     setImage(selectedCompletion.image ?? undefined);
     resetForm({ note: selectedCompletion.note ?? '' });
-  }, [selectedDayIndex, selectedCompletion, resetForm]);
+  }, [
+    selectedCompletion.numberOfCompletions,
+    selectedCompletion.image,
+    selectedCompletion.note,
+    resetForm,
+  ]);
 
   const resetStates = () => {
     setNumberOfCompletions(selectedCompletion.numberOfCompletions);
@@ -133,6 +138,7 @@ export function ModifyEntryModal({
           <CompletionsSection
             numberOfCompletions={numberOfCompletions}
             setNumberOfCompletions={setNumberOfCompletions}
+            allowMultipleCompletions={habit.settings.allowMultipleCompletions}
           />
           <NoteSection control={noteControl} />
           <ImageSection image={image} setImage={setImage} />

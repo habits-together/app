@@ -1,11 +1,6 @@
 /* eslint-disable max-lines-per-function */
 import { Link } from 'expo-router';
-import {
-  ActivityIcon,
-  BookIcon,
-  CheckIcon,
-  EllipsisIcon,
-} from 'lucide-react-native';
+import { ActivityIcon, CheckIcon, EllipsisIcon } from 'lucide-react-native';
 import { useColorScheme } from 'nativewind';
 import React, { useEffect, useState } from 'react';
 import { showMessage } from 'react-native-flash-message';
@@ -37,6 +32,7 @@ import {
 } from '@/ui';
 
 import { ErrorMessage } from './error-message';
+import { HabitIcon, type habitIcons } from './habit-icon';
 import ModifyHabitEntry from './modify-habit-entry';
 import UserPicture from './picture';
 
@@ -106,7 +102,7 @@ interface HabitHeaderProps {
   title: string;
   icon: string;
 }
-const HabitHeader = ({ habitId, title }: HabitHeaderProps) => {
+const HabitHeader = ({ habitId, title, icon }: HabitHeaderProps) => {
   const { colorScheme } = useColorScheme();
   const { moveHabit, canMoveHabit } = useHabitOrder();
 
@@ -142,7 +138,8 @@ const HabitHeader = ({ habitId, title }: HabitHeaderProps) => {
   return (
     <View className="ml-1 flex-row items-center justify-between">
       <View className="mr-2 flex-1 flex-row items-center gap-1">
-        <BookIcon
+        <HabitIcon
+          icon={icon as keyof typeof habitIcons}
           size={24}
           color={colorScheme === 'dark' ? colors.white : colors.black}
         />
@@ -200,6 +197,7 @@ const WeekViewCompletions = ({
           userId={userId}
           color={habit.color}
           completion={completion}
+          allowMultipleCompletions={habit.settings.allowMultipleCompletions}
         />
       ))}
     </View>
@@ -211,12 +209,14 @@ interface WeekViewSquareProps {
   userId: UserIdT;
   color: HabitColorT;
   completion: HabitCompletionWithDateInfoT;
+  allowMultipleCompletions: boolean;
 }
 const WeekViewSquare = ({
   habitId,
   userId,
   color,
   completion,
+  allowMultipleCompletions,
 }: WeekViewSquareProps) => {
   const { colorScheme } = useColorScheme();
   const pressHabit = usePressHabitButton();
@@ -228,7 +228,9 @@ const WeekViewSquare = ({
     const currentCompletions = completion.numberOfCompletions;
     try {
       // Optimistically update UI through mutation
-      const newCompletions = currentCompletions + 1;
+      const newCompletions = allowMultipleCompletions
+        ? currentCompletions + 1
+        : 1;
       completion.numberOfCompletions = newCompletions;
       if (newCompletions !== 0) {
         playConfetti(event.nativeEvent.pageX, event.nativeEvent.pageY);

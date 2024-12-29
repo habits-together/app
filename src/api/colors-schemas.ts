@@ -5,11 +5,9 @@ export const colorSchema = z.object({
   faded: z.string(),
   text: z.string(),
 });
-
 export type HabitColorT = z.infer<typeof colorSchema>;
 
 export const habitColorsSchema = z.object({
-  stone: colorSchema,
   red: colorSchema,
   orange: colorSchema,
   amber: colorSchema,
@@ -27,6 +25,11 @@ export const habitColorsSchema = z.object({
   fuchsia: colorSchema,
   pink: colorSchema,
   rose: colorSchema,
+  stone: colorSchema,
 });
-
 export type HabitColorsT = z.infer<typeof habitColorsSchema>;
+
+export const habitColorNames = Object.keys(
+  habitColorsSchema.shape,
+) as (keyof typeof habitColorsSchema.shape)[];
+export type HabitColorNameT = (typeof habitColorNames)[number];

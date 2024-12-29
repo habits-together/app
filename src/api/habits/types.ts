@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { habitIcons } from '@/components/habit-icon';
+
 import { colorSchema, habitColorsSchema } from '../colors-schemas';
 import { UserIdSchema, type UserIdT } from '../users/types';
 
@@ -46,11 +48,6 @@ export const allCompletionsSchema = z.record(
 );
 export type AllCompletionsT = z.infer<typeof allCompletionsSchema>;
 
-export const habitCompletionPeriodSchema = z.enum(['daily', 'weekly']);
-export type HabitCompletionPeriodT = z.infer<
-  typeof habitCompletionPeriodSchema
->;
-
 export const habitEntryWithDateInfoSchema = habitEntrySchema.extend({
   date: z.string(),
   dayOfTheMonth: z.number(),
@@ -63,13 +60,12 @@ export type HabitCompletionWithDateInfoT = z.infer<
 // HABITS
 export const dbHabitInfoSchema = z.object({
   createdAt: z.date(),
-  description: z.string(),
+  description: z.string().optional(),
   title: z.string(),
-  goal: z.object({
-    period: habitCompletionPeriodSchema,
-    completionsPerPeriod: z.number(),
+  settings: z.object({
+    allowMultipleCompletions: z.boolean(),
   }),
-  icon: z.string(),
+  icon: z.enum(Object.keys(habitIcons) as [keyof typeof habitIcons]),
   colorName: z.enum(habitColorsSchema.keyof().options),
 });
 export type DbHabitInfoT = z.infer<typeof dbHabitInfoSchema>;
@@ -124,3 +120,12 @@ export const HabitWithCompletions = habitSchema.extend({
   ...participantCompletionsSchema.shape,
 });
 export type HabitWithCompletionsT = z.infer<typeof HabitWithCompletions>;
+
+export const habitCreationSchema = z.object({
+  title: z.string().min(1, 'Title is required'),
+  description: z.string().optional(),
+  color: z.string().min(1, 'Color is required'),
+  allowMultipleCompletions: z.boolean(),
+  icon: z.enum(Object.keys(habitIcons) as [keyof typeof habitIcons]),
+});
+export type HabitCreationT = z.infer<typeof habitCreationSchema>;

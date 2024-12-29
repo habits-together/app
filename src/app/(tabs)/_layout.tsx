@@ -4,8 +4,7 @@ import { Redirect, SplashScreen, Tabs } from 'expo-router';
 import { Bell, Layers, Settings, Users } from 'lucide-react-native';
 import React, { useCallback, useEffect } from 'react';
 
-import { useAuth, useIsFirstTime } from '@/core';
-import { useThemeConfig } from '@/core/use-theme-config';
+import { useAuth, useIsFirstTime, useThemeConfig } from '@/core';
 import { LucideIcon } from '@/ui/lucide-icon';
 
 export default function TabLayout() {
