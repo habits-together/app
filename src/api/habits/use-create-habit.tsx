@@ -23,7 +23,7 @@ export const useCreateHabit = createMutation<Response, Variables, Error>({
     const newHabit: DbHabitT = {
       title: variables.habitCreationInfo.title,
       description: variables.habitCreationInfo.description,
-      colorName: variables.habitCreationInfo.color as HabitColorNameT,
+      colorName: variables.habitCreationInfo.colorName as HabitColorNameT,
       icon: variables.habitCreationInfo.icon,
       settings: {
         allowMultipleCompletions:

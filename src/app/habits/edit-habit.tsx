@@ -11,7 +11,9 @@ import {
   habitColorNames,
   habitCreationSchema,
   type HabitCreationT,
+  type HabitT,
   useCreateHabit,
+  useEditHabit,
 } from '@/api';
 import { HabitIcon, habitIcons } from '@/components/habit-icon';
 import {
@@ -39,32 +41,44 @@ export default function EditHabit() {
   const { colorScheme } = useColorScheme();
   const iconModal = useModal();
 
-  const { mode } = useLocalSearchParams<{
+  const { mode, habit: habitJson } = useLocalSearchParams<{
     mode: 'edit' | 'create';
-    id: string;
+    habit: string;
   }>();
 
+  const parsedHabit: HabitT = mode === 'edit' ? JSON.parse(habitJson) : null;
   const createHabit = useCreateHabit();
+  const updateHabit = useEditHabit();
 
-  const { control, handleSubmit, setValue, watch } = useForm({
+  const { control, handleSubmit, setValue, watch } = useForm<HabitCreationT>({
     resolver: zodResolver(habitCreationSchema),
     defaultValues: {
-      icon: 'diamond' as keyof typeof habitIcons,
-      title: '',
-      description: '',
-      color: 'red',
-      allowMultipleCompletions: false,
+      icon: (mode === 'edit'
+        ? parsedHabit.icon
+        : 'diamond') as keyof typeof habitIcons,
+      title: mode === 'edit' ? parsedHabit.title : '',
+      description: mode === 'edit' ? parsedHabit.description : '',
+      colorName: mode === 'edit' ? parsedHabit.colorName : 'red',
+      allowMultipleCompletions:
+        mode === 'edit' ? parsedHabit.settings.allowMultipleCompletions : false,
     },
   });
 
-  const selectedColor = watch('color');
+  const selectedColor = watch('colorName');
   const selectedIcon = watch('icon');
   const allowMultipleCompletions = watch('allowMultipleCompletions');
 
   const onSubmit = (data: HabitCreationT) => {
-    createHabit.mutate({
-      habitCreationInfo: data,
-    });
+    if (mode === 'edit') {
+      updateHabit.mutate({
+        habitId: parsedHabit.id,
+        newHabitInfo: data,
+      });
+    } else {
+      createHabit.mutate({
+        habitCreationInfo: data,
+      });
+    }
     router.back();
   };
 
@@ -125,7 +139,7 @@ export default function EditHabit() {
                   style={{
                     width: '11.1%',
                   }}
-                  onPress={() => setValue('color', col)}
+                  onPress={() => setValue('colorName', col)}
                 >
                   <View
                     className="flex h-full w-full items-center justify-center rounded-full"
@@ -160,7 +174,10 @@ export default function EditHabit() {
               </Switch.Root>
             </View>
           </View>
-          <Button label="Create Habit" onPress={handleSubmit(onSubmit)} />
+          <Button
+            label={mode === 'edit' ? 'Save Changes' : 'Create Habit'}
+            onPress={handleSubmit(onSubmit)}
+          />
         </View>
       </ScrollView>
 

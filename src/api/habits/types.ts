@@ -124,7 +124,7 @@ export type HabitWithCompletionsT = z.infer<typeof HabitWithCompletions>;
 export const habitCreationSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   description: z.string().optional(),
-  color: z.string().min(1, 'Color is required'),
+  colorName: z.string().min(1, 'Color is required'),
   allowMultipleCompletions: z.boolean(),
   icon: z.enum(Object.keys(habitIcons) as [keyof typeof habitIcons]),
 });
