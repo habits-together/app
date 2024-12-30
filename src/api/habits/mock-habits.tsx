@@ -97,7 +97,8 @@ export const mockHabits: { id: HabitIdT; data: DbHabitT }[] = [
 export const setMockHabits = (
   newHabits: { id: HabitIdT; data: DbHabitT }[],
 ) => {
-  Object.assign(mockHabits, newHabits);
+  mockHabits.length = 0;
+  mockHabits.push(...newHabits);
 };
 
 export const mockHabitCompletions: Record<HabitIdT, AllCompletionsT> = {
