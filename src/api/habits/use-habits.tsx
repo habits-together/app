@@ -1,8 +1,10 @@
+import { collection, getDocs } from 'firebase/firestore';
 import { createQuery } from 'react-query-kit';
 
 import { habitColors } from '@/ui/colors';
 
 import { addTestDelay } from '../common';
+import { firestore } from '../config';
 import { mockHabits } from './mock-habits';
 import { type HabitT } from './types';
 
@@ -13,6 +15,17 @@ export const useHabits = createQuery<Response, Variables, Error>({
   queryKey: ['habits'],
   fetcher: async () => {
     const dbHabits = await addTestDelay(mockHabits);
+    console.log("MOD's twin sister furgis");
+
+    const habitsCollection = collection(firestore, 'habits');
+
+    // Fetch all documents from the collection
+    const snapshot = await getDocs(habitsCollection);
+
+    // Map through documents and print each habit
+    snapshot.forEach((doc) => {
+      console.log(`Habit ID: ${doc.id}`, doc.data());
+    });
 
     const habits: HabitT[] = dbHabits.map(({ id: habitId, data }) => ({
       id: habitId,
