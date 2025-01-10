@@ -112,6 +112,82 @@
 
 - If some nativewind styles are just not applying sometimes, clear the cache using `pnpm start -c`.
 
+## Firestore Schema
+
+```ts
+// habits collection
+{
+  [habitId: HabitIdT]: {
+    title: string;
+    icon: string;
+    description: string | undefined;
+    colorName: string;
+    settings: {
+      allowMultipleCompletions: boolean;
+    };
+    createdAt: Date;
+    participants: { // map, not subcollection
+      [userId: UserIdT]: {
+        displayName: string;
+        username: string;
+        lastActivity: Date;
+        isOwner: boolean | undefined;
+      };
+    };
+    // subcollection
+    participantCompletions: {
+      [userId: UserIdT]: {
+        entries: {
+          [entryId: EntryIdT]: {
+            numberOfCompletions: number;
+            note: string | undefined;
+            image: string | undefined;
+          };
+        };
+      };
+    };
+  };
+}
+```
+
+```ts
+// users collection
+{
+  [userId: UserIdT]: {
+    username: string;
+    displayName: string;
+    createdAt: Date;
+  };
+}
+```
+
+```ts
+// relationships collection
+{
+  [userId: UserIdT]: {
+    [otherUserId: UserIdT]: {
+      {
+        status: "friends" | "pending" | "blocked";
+        friendsSince: Date | undefined;
+      };
+    };
+  };
+}
+```
+
+```ts
+// notifications collection
+{
+  [notificationId: NotificationIdT]: {
+    type: "habitInvite" | "nudge" | "friendRequest";
+    senderId: UserIdT;
+    receiverId: UserIdT;
+    habitId: HabitIdT | undefined;
+    sentAt: Date;
+  };
+}
+```
+
 ## Contributing
 
 We are open to contributions. You can fork the repository then make a pull request. But it would be best to reach out first!
