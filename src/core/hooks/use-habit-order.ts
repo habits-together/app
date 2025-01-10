@@ -19,7 +19,7 @@ export function useHabitOrder() {
 
   const initializeOrder = useCallback(
     (habitIds: HabitIdT[]) => {
-      if (!parsedOrder.length) {
+      if (parsedOrder.length !== habitIds.length) {
         setOrder(JSON.stringify(habitIds));
       }
     },
@@ -87,4 +87,13 @@ export function addHabitToOrder(habitId: HabitIdT) {
     HABIT_ORDER_KEY,
     JSON.stringify([habitId, ...parsedOrder]),
   );
+}
+
+export function removeHabitFromOrder(habitId: HabitIdT) {
+  const storage = new MMKV();
+  const currentOrder = storage.getString(HABIT_ORDER_KEY);
+  if (!currentOrder) return;
+  const parsedOrder: HabitIdT[] = JSON.parse(currentOrder);
+  const newOrder = parsedOrder.filter((id) => id !== habitId);
+  storage.set(HABIT_ORDER_KEY, JSON.stringify(newOrder));
 }

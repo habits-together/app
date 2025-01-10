@@ -11,6 +11,7 @@ import {
   type HabitIdT,
   type HabitT,
   type ParticipantWithIdT,
+  useDeleteHabit,
   usePressHabitButton,
   type UserIdT,
 } from '@/api';
@@ -99,6 +100,7 @@ interface HabitHeaderProps {
 const HabitHeader = ({ habit }: HabitHeaderProps) => {
   const { colorScheme } = useColorScheme();
   const { moveHabit, canMoveHabit } = useHabitOrder();
+  const deleteHabit = useDeleteHabit();
 
   const menuItems = [
     {
@@ -130,7 +132,7 @@ const HabitHeader = ({ habit }: HabitHeaderProps) => {
       key: 'Delete habit',
       title: 'Delete habit',
       onSelect: () => {
-        alert('todo');
+        deleteHabit.mutate({ habitId: habit.id });
       },
     },
   ];
