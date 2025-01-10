@@ -28,7 +28,7 @@ require('dotenv').config({
  * 2nd part: Define some static variables for the app
  * Such as: bundle id, package name, app name.
  *
- * You can add them to the .env file but we think it's better to keep them here as as we use prefix to generate this values based on the APP_ENV
+ * You can add them to the `.env` file but we think it's better to keep them here as as we use prefix to generate this values based on the APP_ENV
  * for example: if the APP_ENV is staging, the bundle id will be com.habitstogether.staging
  */
 
@@ -78,17 +78,19 @@ const client = z.object({
   PACKAGE: z.string(),
   VERSION: z.string(),
 
-  // ADD YOUR CLIENT ENV VARS HERE
-  API_URL: z.string(),
-  VAR_NUMBER: z.number(),
-  VAR_BOOL: z.boolean(),
+  // Firebase Variables
+  EXPO_PUBLIC_FIREBASE_API_KEY: z.string(),
+  EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN: z.string(),
+  EXPO_PUBLIC_FIREBASE_PROJECT_ID: z.string(),
+  EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET: z.string(),
+  EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: z.string(),
+  EXPO_PUBLIC_FIREBASE_APP_ID: z.string(),
+  EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID: z.string(),
 });
 
 const buildTime = z.object({
   EXPO_ACCOUNT_OWNER: z.string(),
   EAS_PROJECT_ID: z.string(),
-  // ADD YOUR BUILD TIME ENV VARS HERE
-  SECRET_KEY: z.string(),
 });
 
 /**
@@ -102,10 +104,18 @@ const _clientEnv = {
   PACKAGE: withEnvSuffix(PACKAGE),
   VERSION: packageJSON.version,
 
-  // ADD YOUR ENV VARS HERE TOO
-  API_URL: process.env.API_URL,
-  VAR_NUMBER: Number(process.env.VAR_NUMBER),
-  VAR_BOOL: process.env.VAR_BOOL === 'true',
+  // Firebase Variables
+  EXPO_PUBLIC_FIREBASE_API_KEY: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
+  EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN:
+    process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  EXPO_PUBLIC_FIREBASE_PROJECT_ID: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID,
+  EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET:
+    process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID:
+    process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  EXPO_PUBLIC_FIREBASE_APP_ID: process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
+  EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID:
+    process.env.EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
 /**
@@ -114,8 +124,6 @@ const _clientEnv = {
 const _buildTimeEnv = {
   EXPO_ACCOUNT_OWNER,
   EAS_PROJECT_ID,
-  // ADD YOUR ENV VARS HERE TOO
-  SECRET_KEY: process.env.SECRET_KEY,
 };
 
 /**
