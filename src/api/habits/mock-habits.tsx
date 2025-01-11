@@ -88,6 +88,11 @@ export const mockHabits: { id: HabitIdT; data: DbHabitT }[] = [
           displayName: 'John Doe',
           username: 'john_doe',
           lastActivity: new Date('2024-12-01T00:00:00'),
+        },
+        ['6' as UserIdT]: {
+          displayName: 'Sarah Wilson',
+          username: 'sarah_wilson',
+          lastActivity: new Date('2024-12-15T00:00:00'),
           isOwner: true,
         },
       },
@@ -159,6 +164,13 @@ export const mockHabitCompletions: Record<HabitIdT, AllCompletionsT> = {
         '2024-12-04': { numberOfCompletions: 0 },
         '2024-12-05': { numberOfCompletions: 0 },
         '2024-12-06': { numberOfCompletions: 1 },
+      },
+    },
+    ['6' as UserIdT]: {
+      entries: {
+        '2024-12-13': { numberOfCompletions: 1 },
+        '2024-12-14': { numberOfCompletions: 1 },
+        '2024-12-15': { numberOfCompletions: 1, note: 'Great book tonight!' },
       },
     },
   },

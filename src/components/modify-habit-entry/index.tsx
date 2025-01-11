@@ -24,7 +24,7 @@ export default function ModifyHabitEntry({
 
   return (
     <>
-      <View className="flex flex-row">
+      <View className="flex flex-row justify-end">
         {showAsNormalButton ? (
           <Button
             variant="outline"
