@@ -56,7 +56,6 @@ export const usePressHabitButton = createMutation<Response, Variables, Error>({
       },
     });
 
-    // update mostRecentCompletionDate in mockHabits
     setMockHabits(
       mockHabits.map((habit) => {
         if (habit.id === variables.habitId) {
@@ -70,11 +69,11 @@ export const usePressHabitButton = createMutation<Response, Variables, Error>({
                 ...habit.data.participants,
                 [variables.userId]: {
                   ...participant,
-                  mostRecentCompletionDate: participant.mostRecentCompletionDate
+                  lastActivity: participant.lastActivity
                     ? new Date(
                         Math.max(
                           new Date(`${variables.date}T00:00:00`).getTime(),
-                          participant.mostRecentCompletionDate?.getTime() ?? 0,
+                          participant.lastActivity?.getTime() ?? 0,
                         ),
                       )
                     : new Date(`${variables.date}T00:00:00`),

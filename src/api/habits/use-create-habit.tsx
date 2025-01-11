@@ -33,7 +33,7 @@ export const useCreateHabit = createMutation<Response, Variables, Error>({
         ['1' as UserIdT]: {
           displayName: 'Alex Chen',
           username: 'alexchen',
-          mostRecentCompletionDate: new Date(),
+          lastActivity: new Date(),
           isOwner: true,
         },
       },

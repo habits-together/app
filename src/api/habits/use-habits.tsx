@@ -3,6 +3,7 @@ import { createQuery } from 'react-query-kit';
 import { habitColors } from '@/ui/colors';
 
 import { addTestDelay } from '../common';
+import { type UserIdT } from '../users';
 import { mockHabits } from './mock-habits';
 import { type HabitT } from './types';
 
@@ -27,13 +28,13 @@ export const useHabits = createQuery<Response, Variables, Error>({
             return [
               participantId,
               {
+                id: participantId as UserIdT,
                 displayName: participant.displayName,
                 username: participant.username,
-                mostRecentCompletionDate: participant.mostRecentCompletionDate,
+                lastActivity: new Date(participant.lastActivity),
                 hasActivityToday:
-                  participant.mostRecentCompletionDate.toLocaleDateString(
-                    'en-CA',
-                  ) === new Date().toLocaleDateString('en-CA'),
+                  participant.lastActivity.toLocaleDateString('en-CA') ===
+                  new Date().toLocaleDateString('en-CA'),
                 isOwner: participant?.isOwner ?? false,
               },
             ];
