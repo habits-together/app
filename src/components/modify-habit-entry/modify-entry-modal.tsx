@@ -12,7 +12,7 @@ import {
   type UserIdT,
 } from '@/api';
 import { useModifyHabitEntry } from '@/api/habits/use-modify-entry';
-import { colors, Header, Modal, type ModalMethods, View } from '@/ui';
+import { colors, Header, Modal, type ModalMethods, Text, View } from '@/ui';
 
 import { CompletionsSection } from './completions-section';
 import { DayNavigation } from './day-navigation';
@@ -128,13 +128,20 @@ export function ModifyEntryModal({
           rightButton={{ icon: SaveIcon, text: 'Save', onPress: handleSave }}
         />
         <View className="flex flex-col gap-4">
-          <DayNavigation
-            selectedDayIndex={selectedDayIndex}
-            completions={completions}
-            hasUnsavedChanges={hasUnsavedChanges()}
-            onDayChange={setSelectedDayIndex}
-            resetStates={resetStates}
-          />
+          <View className="-mb-2 flex flex-col">
+            <DayNavigation
+              selectedDayIndex={selectedDayIndex}
+              datesList={completions.map(
+                (completion) => new Date(completion.date),
+              )}
+              hasUnsavedChanges={hasUnsavedChanges()}
+              onDayChange={setSelectedDayIndex}
+              resetStates={resetStates}
+            />
+            <Text className="text-center text-sm text-orange-500 dark:text-orange-500">
+              {hasUnsavedChanges() ? 'You have unsaved changes' : ' '}
+            </Text>
+          </View>
           <CompletionsSection
             numberOfCompletions={numberOfCompletions}
             setNumberOfCompletions={setNumberOfCompletions}
