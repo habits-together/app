@@ -31,6 +31,12 @@ export const mockUsers: UserT[] = [
     username: 'lorem_ipsum',
     createdAt: new Date(),
   },
+  {
+    id: '6' as UserIdT,
+    displayName: 'Sarah Wilson',
+    username: 'sarah_wilson',
+    createdAt: new Date(),
+  },
 ];
 
 export const mockPictures: Record<UserIdT, string> = {
@@ -39,6 +45,7 @@ export const mockPictures: Record<UserIdT, string> = {
   ['3' as UserIdT]: 'https://randomuser.me/api/portraits/women/4.jpg',
   ['4' as UserIdT]: 'https://randomuser.me/api/portraits/men/5.jpg',
   ['5' as UserIdT]: 'https://randomuser.me/api/portraits/men/6.jpg',
+  ['6' as UserIdT]: 'https://randomuser.me/api/portraits/women/7.jpg',
 };
 
 export const mockRelationships: Record<
