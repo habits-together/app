@@ -50,7 +50,7 @@ export function HabitCard({ habit }: HabitCardProps) {
     error,
     refetch,
   } = useHabitCompletions({
-    variables: { habitId: habit.id, userId },
+    variables: { habitId: habit.id, userId, numDays: 7 },
   });
 
   return (
