@@ -18,7 +18,7 @@ export const HabitIdSchema = z.coerce
 export const dbParticipantSchema = z.object({
   displayName: z.string(),
   username: z.string(),
-  mostRecentCompletionDate: z.date(),
+  lastActivity: z.date(),
   isOwner: z.boolean().optional(),
 });
 export type DbParticipantT = z.infer<typeof dbParticipantSchema>;
@@ -82,7 +82,6 @@ export type DbHabitT = z.infer<typeof dbHabitSchema>;
 // PARTICIPANTS
 const participantSchema = dbParticipantSchema
   // indicator of whether the user has activity today instead of the most recent completion date
-  .omit({ mostRecentCompletionDate: true })
   .extend({
     hasActivityToday: z.boolean(),
   });
@@ -98,7 +97,7 @@ export type ParticipantWithoutIdT = z.infer<typeof participantWithoutIdSchema>;
 
 export const participantsSchema = z.record(
   UserIdSchema,
-  participantWithoutIdSchema,
+  participantWithIdSchema,
 );
 export type ParticipantsT = z.infer<typeof participantsSchema>;
 
