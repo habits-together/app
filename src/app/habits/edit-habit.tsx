@@ -1,4 +1,5 @@
 /* eslint-disable max-lines-per-function */
+import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from 'expo-router';
 import { useLocalSearchParams } from 'expo-router';
@@ -217,33 +218,32 @@ export default function EditHabit() {
       <Modal
         ref={iconModal.ref}
         snapPoints={['80%']}
+        enableDynamicSizing={false}
         backgroundStyle={{
           backgroundColor:
             colorScheme === 'dark' ? colors.neutral[800] : colors.white,
         }}
       >
-        <View className="flex flex-1 px-4">
-          <ScrollView>
-            <View className="flex-row flex-wrap justify-center gap-4 py-4">
-              {Object.keys(habitIcons).map((icon) => (
-                <Pressable
-                  key={icon}
-                  className="h-16 w-16 items-center justify-center rounded-lg border border-slate-200 dark:border-stone-700"
-                  onPress={() => {
-                    setValue('icon', icon as keyof typeof habitIcons);
-                    iconModal.dismiss();
-                  }}
-                >
-                  <HabitIcon
-                    icon={icon as keyof typeof habitIcons}
-                    size={24}
-                    color={colorScheme === 'dark' ? colors.white : colors.black}
-                  />
-                </Pressable>
-              ))}
-            </View>
-          </ScrollView>
-        </View>
+        <BottomSheetScrollView className="flex flex-1 px-4">
+          <View className="flex-row flex-wrap justify-center gap-4 pb-10">
+            {Object.keys(habitIcons).map((icon) => (
+              <Pressable
+                key={icon}
+                className="h-16 w-16 items-center justify-center rounded-lg border border-slate-200 dark:border-stone-700"
+                onPress={() => {
+                  setValue('icon', icon as keyof typeof habitIcons);
+                  iconModal.dismiss();
+                }}
+              >
+                <HabitIcon
+                  icon={icon as keyof typeof habitIcons}
+                  size={24}
+                  color={colorScheme === 'dark' ? colors.white : colors.black}
+                />
+              </Pressable>
+            ))}
+          </View>
+        </BottomSheetScrollView>
       </Modal>
     </ScreenContainer>
   );

@@ -3,9 +3,11 @@ import { TriangleAlertIcon } from 'lucide-react-native';
 import { usePicture, type UserIdT } from '@/api';
 import { Image, View } from '@/ui';
 
+export type pfpSize = 128 | 40 | 30;
+
 interface PictureProps {
   userId: UserIdT;
-  size: 128 | 40 | 30;
+  size: pfpSize;
 }
 export default function UserPicture({ userId, size }: PictureProps) {
   const { data, isPending, isError } = usePicture({

@@ -108,6 +108,7 @@ export function ModifyEntryModal({
   return (
     <Modal
       ref={modal.ref}
+      enableDynamicSizing={false}
       snapPoints={['90%']}
       enablePanDownToClose={false}
       disableBackdropPress={true}

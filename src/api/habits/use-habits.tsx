@@ -15,33 +15,35 @@ export const useHabits = createQuery<Response, Variables, Error>({
   fetcher: async () => {
     const dbHabits = await addTestDelay(mockHabits);
 
-    const habits: HabitT[] = dbHabits.map(({ id: habitId, data }) => ({
-      id: habitId,
-      ...data,
-      color: habitColors[data.colorName],
-      participants: Object.fromEntries(
-        Object.entries(data.participants).map(
-          ([participantId, participant]) => {
-            if (!participant)
-              throw new Error('Participant not found for habit ' + habitId);
+    const habits: HabitT[] = dbHabits
+      .filter((habit) => '1' in habit.data.participants)
+      .map(({ id: habitId, data }) => ({
+        id: habitId,
+        ...data,
+        color: habitColors[data.colorName],
+        participants: Object.fromEntries(
+          Object.entries(data.participants).map(
+            ([participantId, participant]) => {
+              if (!participant)
+                throw new Error('Participant not found for habit ' + habitId);
 
-            return [
-              participantId,
-              {
-                id: participantId as UserIdT,
-                displayName: participant.displayName,
-                username: participant.username,
-                lastActivity: new Date(participant.lastActivity),
-                hasActivityToday:
-                  participant.lastActivity.toLocaleDateString('en-CA') ===
-                  new Date().toLocaleDateString('en-CA'),
-                isOwner: participant?.isOwner ?? false,
-              },
-            ];
-          },
+              return [
+                participantId,
+                {
+                  id: participantId as UserIdT,
+                  displayName: participant.displayName,
+                  username: participant.username,
+                  lastActivity: new Date(participant.lastActivity),
+                  hasActivityToday:
+                    participant.lastActivity.toLocaleDateString('en-CA') ===
+                    new Date().toLocaleDateString('en-CA'),
+                  isOwner: participant?.isOwner ?? false,
+                },
+              ];
+            },
+          ),
         ),
-      ),
-    }));
+      }));
 
     return habits;
   },

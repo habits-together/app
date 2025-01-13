@@ -98,6 +98,33 @@ export const mockHabits: { id: HabitIdT; data: DbHabitT }[] = [
       },
     },
   },
+  {
+    id: '4' as HabitIdT,
+    data: {
+      colorName: 'blue',
+      createdAt: new Date('2024-01-04T00:00:00'),
+      description: 'Meditate for 10 minutes',
+      title: 'Daily Meditation',
+      settings: {
+        allowMultipleCompletions: false,
+      },
+      icon: 'star',
+      participants: {
+        ['2' as UserIdT]: {
+          displayName: 'Jane Doe',
+          username: 'jane_doe',
+          lastActivity: new Date('2024-12-15T00:00:00'),
+          isOwner: true,
+        },
+        ['4' as UserIdT]: {
+          displayName: 'Bob Johnson',
+          username: 'bob_johnson',
+          lastActivity: new Date('2024-12-14T00:00:00'),
+          isOwner: false,
+        },
+      },
+    },
+  },
 ];
 export const setMockHabits = (
   newHabits: { id: HabitIdT; data: DbHabitT }[],

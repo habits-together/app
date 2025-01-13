@@ -10,7 +10,7 @@ type Response = UserWithRelationshipT;
 export const useUser: ReturnType<
   typeof createQuery<Response, Variables, Error>
 > = createQuery<Response, Variables, Error>({
-  queryKey: ['friend'],
+  queryKey: ['user'],
   fetcher: async (variables) => {
     const myId = '1' as UserIdT;
     const user = await addTestDelay(
