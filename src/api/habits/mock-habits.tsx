@@ -201,6 +201,22 @@ export const mockHabitCompletions: Record<HabitIdT, AllCompletionsT> = {
       },
     },
   },
+  ['4' as HabitIdT]: {
+    ['2' as UserIdT]: {
+      entries: {
+        '2024-12-13': { numberOfCompletions: 1 },
+        '2024-12-14': { numberOfCompletions: 1 },
+        '2024-12-15': { numberOfCompletions: 1, note: 'Very peaceful session' },
+      },
+    },
+    ['4' as UserIdT]: {
+      entries: {
+        '2024-12-12': { numberOfCompletions: 1 },
+        '2024-12-13': { numberOfCompletions: 1 },
+        '2024-12-14': { numberOfCompletions: 1, note: 'Feeling zen' },
+      },
+    },
+  },
 };
 export const setMockHabitCompletions = (
   newCompletions: Record<HabitIdT, AllCompletionsT>,

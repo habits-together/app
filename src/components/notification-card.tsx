@@ -5,6 +5,7 @@ import { useColorScheme } from 'nativewind';
 import React from 'react';
 
 import { type HabitT, type NotificationT, useUser } from '@/api';
+import { useRespondToNotification } from '@/api/notifications/use-respond-to-notification';
 import { HabitIcon } from '@/components/habit-icon';
 import HabitInfoCard from '@/components/habit-info-card';
 import UserPicture from '@/components/picture';
@@ -107,15 +108,20 @@ export function NotificationCard({
   isLoading,
 }: NotificationCardProps) {
   const modal = useModal();
+  const { mutate: respondToNotification } = useRespondToNotification();
 
   const handleConfirm = () => {
-    // TODO: Implement confirmation logic
-    console.log('Confirmed');
+    respondToNotification({
+      notification,
+      response: 'confirm',
+    });
   };
 
   const handleDelete = () => {
-    // TODO: Implement deletion logic
-    console.log('Deleted');
+    respondToNotification({
+      notification,
+      response: 'delete',
+    });
   };
 
   return (
