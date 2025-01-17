@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { CheckIcon, Trash2Icon } from 'lucide-react-native';
 import { useColorScheme } from 'nativewind';

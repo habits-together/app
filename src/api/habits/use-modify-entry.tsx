@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import { createMutation } from 'react-query-kit';
 
 import { addTestDelay, queryClient } from '../common';

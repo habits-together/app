@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SaveIcon, XIcon } from 'lucide-react-native';
 import { useColorScheme } from 'nativewind';

@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 /* eslint-disable react/react-in-jsx-scope */
 import { Env } from '@env';
 import { Linking } from 'react-native';
