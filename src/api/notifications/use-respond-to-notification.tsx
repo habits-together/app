@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import { showMessage } from 'react-native-flash-message';
 import { createMutation } from 'react-query-kit';
 

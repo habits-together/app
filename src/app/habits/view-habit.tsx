@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { Link, useLocalSearchParams } from 'expo-router';
 import {

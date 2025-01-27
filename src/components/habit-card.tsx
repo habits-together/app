@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import { Link, router } from 'expo-router';
 import { ActivityIcon, CheckIcon, EllipsisIcon } from 'lucide-react-native';
 import { useColorScheme } from 'nativewind';

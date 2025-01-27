@@ -19,7 +19,6 @@ const emailSchema = z.object({
 
 type EmailFormType = z.infer<typeof emailSchema>;
 
-// eslint-disable-next-line max-lines-per-function
 export default function Auth() {
   const router = useRouter();
   const { handleSubmit, control } = useForm<EmailFormType>({

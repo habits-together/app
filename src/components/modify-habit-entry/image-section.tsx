@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import * as ImagePicker from 'expo-image-picker';
 import { CameraIcon, ImageIcon, Trash2Icon } from 'lucide-react-native';
 import { useColorScheme } from 'nativewind';

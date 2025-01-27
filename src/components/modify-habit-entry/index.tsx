@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import { PenIcon } from 'lucide-react-native';
 import React, { useState } from 'react';
 

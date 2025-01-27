@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import { useCallback, useMemo } from 'react';
 import { MMKV, useMMKVString } from 'react-native-mmkv';
 
