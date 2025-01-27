@@ -1,3 +1,4 @@
+import { type FieldValue, type Timestamp } from 'firebase/firestore';
 import { z } from 'zod';
 
 export type UserIdT = string & { readonly __brand: unique symbol };
@@ -10,15 +11,20 @@ export const FriendshipIdSchema = z.coerce
   .string()
   .transform((val) => val as FriendshipIdT);
 
+// DB types (as stored in Firebase)
 export const dbUserSchema = z.object({
-  createdAt: z.date(),
+  createdAt: z.custom<Timestamp | FieldValue>(),
   displayName: z.string(),
   username: z.string(),
 });
-export type DbUserT = z.infer<typeof userSchema>;
+export type DbUserT = z.infer<typeof dbUserSchema>;
 
-export const userSchema = dbUserSchema.extend({
+// Frontend types (after processing)
+export const userSchema = z.object({
   id: UserIdSchema,
+  createdAt: z.date(),
+  displayName: z.string(),
+  username: z.string(),
 });
 export type UserT = z.infer<typeof userSchema>;
 
@@ -34,6 +40,18 @@ export const relationshipStatusSchema = z.enum([
   'none',
 ]);
 export type RelationshipStatusT = z.infer<typeof relationshipStatusSchema>;
+
+export const dbRelationshipSchema = z.union([
+  z.object({
+    status: dbRelationshipStatusSchema.extract(['friends']),
+    friendsSince: z.custom<Timestamp | FieldValue>(),
+  }),
+  z.object({
+    status: relationshipStatusSchema.exclude(['friends']),
+    friendsSince: z.undefined(),
+  }),
+]);
+export type DbRelationshipT = z.infer<typeof dbRelationshipSchema>;
 
 export const relationshipSchema = z.union([
   z.object({

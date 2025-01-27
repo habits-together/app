@@ -1,7 +1,13 @@
 import { useQueries } from '@tanstack/react-query';
 import React from 'react';
 
-import { type HabitT, useHabit, useNotifications, useUser } from '@/api';
+import {
+  type HabitT,
+  useHabit,
+  useNotifications,
+  type UserIdT,
+  useUser,
+} from '@/api';
 import { NotificationCard } from '@/components/notification-card';
 import {
   Header,
@@ -29,7 +35,7 @@ export default function Notifications() {
   const users = useQueries({
     queries: senderIds.map((id) => ({
       queryKey: ['user', { id }],
-      queryFn: () => useUser.fetcher({ id }),
+      queryFn: () => useUser.fetcher({ id: id as UserIdT }),
       staleTime: Infinity,
     })),
   });

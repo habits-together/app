@@ -1,3 +1,4 @@
+import { type FieldValue, type Timestamp } from 'firebase/firestore';
 import { z } from 'zod';
 
 import { habitIcons } from '@/components/habit-icon';
@@ -18,7 +19,7 @@ export const HabitIdSchema = z.coerce
 export const dbParticipantSchema = z.object({
   displayName: z.string(),
   username: z.string(),
-  lastActivity: z.date(),
+  lastActivity: z.custom<Timestamp | FieldValue>(),
   isOwner: z.boolean().optional(),
 });
 export type DbParticipantT = z.infer<typeof dbParticipantSchema>;
@@ -59,7 +60,7 @@ export type HabitCompletionWithDateInfoT = z.infer<
 
 // HABITS
 export const dbHabitInfoSchema = z.object({
-  createdAt: z.date(),
+  createdAt: z.custom<Timestamp | FieldValue>(),
   description: z.string().optional(),
   title: z.string(),
   settings: z.object({
@@ -80,11 +81,13 @@ export type DbHabitT = z.infer<typeof dbHabitSchema>;
 // ----------------------------------------
 
 // PARTICIPANTS
-const participantSchema = dbParticipantSchema
-  // indicator of whether the user has activity today instead of the most recent completion date
-  .extend({
-    hasActivityToday: z.boolean(),
-  });
+const participantSchema = z.object({
+  displayName: z.string(),
+  username: z.string(),
+  lastActivity: z.date(),
+  isOwner: z.boolean().optional(),
+  hasActivityToday: z.boolean(),
+});
 
 export const participantWithIdSchema = participantSchema.extend({
   id: UserIdSchema,
@@ -102,11 +105,17 @@ export const participantsSchema = z.record(
 export type ParticipantsT = z.infer<typeof participantsSchema>;
 
 // HABITS
-export const habitInfoSchema = dbHabitInfoSchema.extend({
-  // include color object with light, base, faded, and text colors
-  color: colorSchema,
-  // include the habit's id
+export const habitInfoSchema = z.object({
   id: HabitIdSchema,
+  title: z.string(),
+  description: z.string().optional(),
+  colorName: z.enum(habitColorsSchema.keyof().options),
+  color: colorSchema,
+  icon: z.enum(Object.keys(habitIcons) as [keyof typeof habitIcons]),
+  settings: z.object({
+    allowMultipleCompletions: z.boolean(),
+  }),
+  createdAt: z.date(),
 });
 export type HabitInfoT = z.infer<typeof habitInfoSchema>;
 

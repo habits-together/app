@@ -1,10 +1,8 @@
 import { showMessage } from 'react-native-flash-message';
 import { createMutation } from 'react-query-kit';
 
-import { removeHabitFromOrder } from '@/core';
-
-import { addTestDelay, queryClient } from '../common';
-import { mockHabits, setMockHabits } from './mock-habits';
+import { queryClient } from '../common';
+import { deleteHabit } from './firebase-mutations';
 import { type DbHabitT, type HabitIdT } from './types';
 
 type Response = DbHabitT;
@@ -14,15 +12,8 @@ type Variables = {
 
 export const useDeleteHabit = createMutation<Response, Variables, Error>({
   mutationFn: async ({ habitId }) => {
-    const habit = mockHabits.find((h) => h.id === habitId);
-    if (!habit) throw new Error('Habit not found');
-
-    const updatedHabits = mockHabits.filter((h) => h.id !== habitId);
-    setMockHabits(updatedHabits);
-    removeHabitFromOrder(habitId);
-
-    await addTestDelay(null);
-    return habit.data;
+    await deleteHabit(habitId);
+    return {} as DbHabitT; // Return type is required but not used
   },
   onSuccess: () => {
     queryClient.invalidateQueries({ queryKey: ['habits'] });

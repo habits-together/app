@@ -1,6 +1,8 @@
 import { createMutation } from 'react-query-kit';
 
-import { addTestDelay, queryClient } from '../common';
+import { queryClient } from '../common';
+import { removeFriend } from './firebase-mutations';
+import { getUserById } from './firebase-queries';
 import { type UserIdT, type UserT } from './types';
 
 type Variables = { id: UserIdT };
@@ -8,14 +10,10 @@ type Response = UserT;
 
 export const useRemoveFriend = createMutation<Response, Variables, Error>({
   mutationFn: async (variables) => {
-    const friend = await addTestDelay({
-      id: variables.id,
-      displayName: 'Old Friend',
-      username: 'old_friend',
-      createdAt: new Date(),
-      isFriend: false,
-    });
-    return friend;
+    await removeFriend(variables.id);
+    const user = await getUserById(variables.id);
+    if (!user) throw new Error('User not found');
+    return user;
   },
   onSuccess: () => {
     queryClient.invalidateQueries({ queryKey: ['friends'] });
