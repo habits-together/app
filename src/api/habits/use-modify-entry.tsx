@@ -96,8 +96,11 @@ export const useModifyHabitEntry = createMutation<Response, Variables, Error>({
     queryClient.invalidateQueries({
       queryKey: [
         'habit-completions',
-        { habitId: variables.habitId, userId: variables.userId },
+        { habitId: variables.habitId, userId: variables.userId, numDays: 7 },
       ],
+    });
+    queryClient.invalidateQueries({
+      queryKey: ['all-users-habit-completions', { habitId: variables.habitId }],
     });
   },
 });

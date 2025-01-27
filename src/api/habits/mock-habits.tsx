@@ -20,31 +20,31 @@ export const mockHabits: { id: HabitIdT; data: DbHabitT }[] = [
       participants: {
         ['1' as UserIdT]: {
           displayName: 'John Doe',
-          username: 'johndoe',
+          username: 'john_doe',
           lastActivity: new Date('2024-12-01T00:00:00'),
           isOwner: true,
         },
         ['2' as UserIdT]: {
-          displayName: 'Sarah Johnson',
-          username: 'sarahj',
-          lastActivity: new Date('2024-12-08T00:00:00'),
+          displayName: 'Jane Doe',
+          username: 'jane_doe',
+          lastActivity: new Date('2025-01-11T00:00:00'),
           isOwner: false,
         },
         ['3' as UserIdT]: {
-          displayName: 'Mike Wilson',
-          username: 'mikew',
+          displayName: 'Apple Smith',
+          username: 'apple',
           lastActivity: new Date('2024-12-08T00:00:00'),
           isOwner: false,
         },
         ['4' as UserIdT]: {
-          displayName: 'Emily Brown',
-          username: 'emilyb',
+          displayName: 'Bob Johnson',
+          username: 'bob_johnson',
           lastActivity: new Date('2024-12-07T00:00:00'),
           isOwner: false,
         },
         ['5' as UserIdT]: {
-          displayName: 'Chris Lee',
-          username: 'chrisl',
+          displayName: 'Lorem Ipsum',
+          username: 'lorem_ipsum',
           lastActivity: new Date('2024-12-03T00:00:00'),
           isOwner: false,
         },
@@ -64,8 +64,8 @@ export const mockHabits: { id: HabitIdT; data: DbHabitT }[] = [
       icon: 'dumbbell',
       participants: {
         ['1' as UserIdT]: {
-          displayName: 'Jane Smith',
-          username: 'janesmith',
+          displayName: 'John Doe',
+          username: 'john_doe',
           lastActivity: new Date('2024-01-15T00:00:00'),
           isOwner: true,
         },
@@ -85,8 +85,8 @@ export const mockHabits: { id: HabitIdT; data: DbHabitT }[] = [
       icon: 'book',
       participants: {
         ['1' as UserIdT]: {
-          displayName: 'Alex Chen',
-          username: 'alexchen',
+          displayName: 'John Doe',
+          username: 'john_doe',
           lastActivity: new Date('2024-12-01T00:00:00'),
           isOwner: true,
         },
@@ -119,6 +119,7 @@ export const mockHabitCompletions: Record<HabitIdT, AllCompletionsT> = {
         '2024-12-04': { numberOfCompletions: 2 },
         '2024-12-05': { numberOfCompletions: 3 },
         '2024-12-06': { numberOfCompletions: 1 },
+        '2025-01-11': { numberOfCompletions: 1, note: 'Drank 8 glasses' },
       },
     },
     ['3' as UserIdT]: {

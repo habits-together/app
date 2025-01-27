@@ -9,13 +9,18 @@ import {
   type ParticipantCompletionsT,
 } from './types';
 
-type Response = HabitCompletionWithDateInfoT[];
-type Variables = {
+type SingleUserHabitCompletionsResponse = HabitCompletionWithDateInfoT[];
+type SingleUserHabitCompletionsVariables = {
   habitId: HabitIdT;
   userId: UserIdT;
+  numDays: number;
 };
 
-export const useHabitCompletions = createQuery<Response, Variables, Error>({
+export const useHabitCompletions = createQuery<
+  SingleUserHabitCompletionsResponse,
+  SingleUserHabitCompletionsVariables,
+  Error
+>({
   queryKey: ['habit-completions'],
   fetcher: async (variables) => {
     const completions = mockHabitCompletions[variables.habitId];
@@ -28,9 +33,45 @@ export const useHabitCompletions = createQuery<Response, Variables, Error>({
     }
 
     const structuredCompletions: HabitCompletionWithDateInfoT[] =
-      getStructuredCompletionData(participantCompletions, 7);
+      getStructuredCompletionData(participantCompletions, variables.numDays);
 
     return await addTestDelay(structuredCompletions);
+  },
+});
+
+type AllUsersHabitCompletionsResponse = {
+  [key: UserIdT]: HabitCompletionWithDateInfoT[];
+};
+type AllUsersHabitCompletionsVariables = {
+  habitId: HabitIdT;
+  numDays: number;
+};
+
+export const useAllUsersHabitCompletions = createQuery<
+  AllUsersHabitCompletionsResponse,
+  AllUsersHabitCompletionsVariables,
+  Error
+>({
+  queryKey: ['all-users-habit-completions'],
+  fetcher: async (variables) => {
+    const completions = mockHabitCompletions[variables.habitId];
+    if (!completions) {
+      throw new Error('Habit not found');
+    }
+
+    const result: { [key: UserIdT]: HabitCompletionWithDateInfoT[] } = {};
+    for (const userId in completions) {
+      const participantCompletions = completions[userId as UserIdT];
+      if (!participantCompletions) {
+        throw new Error('Participant not found');
+      }
+      result[userId as UserIdT] = getStructuredCompletionData(
+        participantCompletions,
+        variables.numDays,
+      );
+    }
+
+    return await addTestDelay(result);
   },
 });
 
