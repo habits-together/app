@@ -20,7 +20,7 @@ module.exports = {
         ignore: ['/android', '/ios'],
       },
     ],
-    'max-params': ['error', 3], // Limit the number of parameters in a function to use object instead
+    'max-params': ['error', 4], // Limit the number of parameters in a function to use object instead
     'react/display-name': 'off',
     'react/no-inline-styles': 'off',
     'react/destructuring-assignment': 'off', // Vscode doesn't support automatically destructuring, it's a pain to add a new variable

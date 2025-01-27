@@ -1,23 +1,25 @@
 import { showMessage } from 'react-native-flash-message';
 import { createMutation } from 'react-query-kit';
 
-import { addTestDelay, queryClient } from '../common';
+import { queryClient } from '../common';
+import { acceptHabitInvite } from '../habits/firebase-mutations';
+import { type HabitIdT } from '../habits/types';
+import { acceptFriendRequest } from '../users/firebase-mutations';
+import { type UserIdT } from '../users/types';
+import { deleteNotification } from './firebase-mutations';
 import {
-  mockHabitCompletions,
-  mockHabits,
-  setMockHabits,
-} from '../habits/mock-habits';
-import { mockRelationships } from '../users/mock-users';
-import { mockNotifications, setMockNotifications } from './mock-notifications';
-import { type NotificationT } from './types';
+  type FriendNotificationT,
+  type HabitNotificationT,
+  type NotificationTypeT,
+} from './types';
 
 type Response = void;
 type Variables = {
-  notification: NotificationT;
+  notification: FriendNotificationT | HabitNotificationT;
   response: 'confirm' | 'delete';
 };
 type Context = {
-  previousNotifications: NotificationT[] | undefined;
+  notificationType: NotificationTypeT;
 };
 
 export const useRespondToNotification = createMutation<
@@ -26,135 +28,47 @@ export const useRespondToNotification = createMutation<
   Error,
   Context
 >({
-  mutationFn: async ({ notification, response }) => {
-    if (response === 'confirm') {
-      if (notification.type === 'friendRequest') {
-        // Add to relationships
-        const senderId = notification.senderId;
-        const receiverId = notification.receiverId;
+  mutationFn: async (variables) => {
+    const { notification, response } = variables;
 
-        if (!mockRelationships[senderId]) {
-          mockRelationships[senderId] = {};
-        }
-        if (!mockRelationships[receiverId]) {
-          mockRelationships[receiverId] = {};
-        }
-
-        mockRelationships[senderId][receiverId] = {
-          status: 'friends',
-          friendsSince: new Date(),
-        };
-        mockRelationships[receiverId][senderId] = {
-          status: 'friends',
-          friendsSince: new Date(),
-        };
-      } else if (notification.type === 'habitInvite') {
-        // Add user to habit participants
-        const habitToUpdate = mockHabits.find(
-          (h) => h.id === notification.habitId,
-        );
-        if (habitToUpdate) {
-          const updatedHabit = {
-            ...habitToUpdate,
-            data: {
-              ...habitToUpdate.data,
-              participants: {
-                ...habitToUpdate.data.participants,
-                [notification.receiverId]: {
-                  displayName: 'John Doe', // In a real app, get from user profile
-                  username: 'john_doe',
-                  lastActivity: new Date(),
-                  isOwner: false,
-                },
-              },
-            },
-          };
-
-          setMockHabits(
-            mockHabits.map((h) =>
-              h.id === notification.habitId ? updatedHabit : h,
-            ),
-          );
-
-          // Initialize empty completions for the new participant
-          if (!mockHabitCompletions[notification.habitId]) {
-            mockHabitCompletions[notification.habitId] = {};
-          }
-          mockHabitCompletions[notification.habitId][notification.receiverId] =
-            {
-              entries: {},
-            };
-        }
+    if (notification.type === 'friendRequest') {
+      if (response === 'confirm') {
+        await acceptFriendRequest(notification.senderId as UserIdT);
+      }
+    } else if (notification.type === 'habitInvite') {
+      if (response === 'confirm') {
+        await acceptHabitInvite(notification.habitId as HabitIdT);
       }
     }
 
-    // Remove notification
-    const updatedNotifications = mockNotifications.filter((n) => {
-      if (n.type !== notification.type) return true;
-      if (n.senderId !== notification.senderId) return true;
-      if (n.receiverId !== notification.receiverId) return true;
-
-      // Additional check for habit-related notifications
-      if (
-        (n.type === 'habitInvite' || n.type === 'nudge') &&
-        (notification.type === 'habitInvite' || notification.type === 'nudge')
-      ) {
-        return n.habitId !== notification.habitId;
-      }
-
-      return false;
-    });
-
-    setMockNotifications(updatedNotifications);
-
-    await addTestDelay(undefined);
+    // Delete notification after responding
+    await deleteNotification(notification.id);
   },
-  onMutate: async ({ notification }) => {
-    // Cancel any outgoing refetches so they don't overwrite our optimistic update
-    await queryClient.cancelQueries({ queryKey: ['notifications'] });
-
-    // Snapshot the previous value
-    const previousNotifications = queryClient.getQueryData<NotificationT[]>([
-      'notifications',
-    ]);
-
-    // Optimistically update the cache
-    queryClient.setQueryData<NotificationT[]>(['notifications'], (old) => {
-      if (!old) return [];
-      return old.filter((n) => {
-        if (n.type !== notification.type) return true;
-        if (n.senderId !== notification.senderId) return true;
-        if (n.receiverId !== notification.receiverId) return true;
-        if (
-          (n.type === 'habitInvite' || n.type === 'nudge') &&
-          (notification.type === 'habitInvite' || notification.type === 'nudge')
-        ) {
-          return n.habitId !== notification.habitId;
-        }
-        return false;
-      });
-    });
-
-    return { previousNotifications };
+  onMutate: (variables) => {
+    // Store the notification type in the mutation context
+    return { notificationType: variables.notification.type };
   },
-  onSuccess: (_, { notification, response }) => {
+  onSuccess: (_, __, context) => {
+    // Always invalidate notifications since we delete the notification
     queryClient.invalidateQueries({ queryKey: ['notifications'] });
-    if (response === 'confirm') {
-      if (notification.type === 'friendRequest') {
-        queryClient.invalidateQueries({ queryKey: ['friends'] });
-      } else if (notification.type === 'habitInvite') {
-        queryClient.invalidateQueries({ queryKey: ['habits'] });
-      }
+
+    // Only invalidate friends list if it was a friend request
+    if (context?.notificationType === 'friendRequest') {
+      queryClient.invalidateQueries({ queryKey: ['friends'] });
     }
+
+    // Only invalidate habits list if it was a habit invite
+    if (context?.notificationType === 'habitInvite') {
+      queryClient.invalidateQueries({ queryKey: ['habits'] });
+    }
+
+    showMessage({
+      message: 'Response sent successfully',
+      type: 'success',
+      duration: 2000,
+    });
   },
-  onError: (err, variables, context) => {
-    // Rollback optimistic update
-    if (context?.previousNotifications) {
-      queryClient.setQueryData(
-        ['notifications'],
-        context.previousNotifications,
-      );
-    }
+  onError: () => {
     showMessage({
       message: 'Failed to respond to notification',
       type: 'danger',

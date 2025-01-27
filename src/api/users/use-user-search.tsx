@@ -1,7 +1,6 @@
 import { createQuery } from 'react-query-kit';
 
-import { addTestDelay } from '../common';
-import { mockUsers } from './mock-users';
+import { searchUsers } from './firebase-queries';
 import { type UserT } from './types';
 
 type Variables = {
@@ -10,21 +9,9 @@ type Variables = {
 type Response = UserT[];
 
 // don't need friend status
-export const useUserSearch: ReturnType<
-  typeof createQuery<Response, Variables, Error>
-> = createQuery<Response, Variables, Error>({
+export const useUserSearch = createQuery<Response, Variables, Error>({
   queryKey: ['user-search'],
   fetcher: async (variables) => {
-    const users = await addTestDelay(
-      mockUsers.filter(
-        (user) =>
-          user.displayName
-            .toLowerCase()
-            .includes(variables.query.toLowerCase()) ||
-          user.username.toLowerCase().includes(variables.query.toLowerCase()),
-      ),
-    );
-
-    return users;
+    return await searchUsers(variables.query);
   },
 });
