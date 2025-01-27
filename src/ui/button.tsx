@@ -34,7 +34,7 @@ const button = tv({
       },
       destructive: {
         container:
-          'border border-red-200 bg-white dark:border-red-500 dark:bg-transparent',
+          'border border-red-200 bg-white dark:border-red-500 dark:bg-red-500/5',
         label: 'font-medium text-red-500',
         indicator: 'text-red-500',
       },

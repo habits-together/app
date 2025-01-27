@@ -16,13 +16,14 @@ import {
   type HabitT,
   type ParticipantWithIdT,
   useAllUsersHabitCompletions,
+  type UserIdT,
   type UserT,
 } from '@/api';
 import { ErrorMessage } from '@/components/error-message';
 import { HabitIcon, type habitIcons } from '@/components/habit-icon';
 import ModifyHabitEntry from '@/components/modify-habit-entry';
 import { DayNavigation } from '@/components/modify-habit-entry/day-navigation';
-import { UserImageNameAndUsername } from '@/components/user-card';
+import UserCard, { UserImageNameAndUsername } from '@/components/user-card';
 import { getTranslucentColor } from '@/core/get-translucent-color';
 import {
   Button,
@@ -180,6 +181,21 @@ interface HabitHeaderProps {
 const HabitHeader = ({ habit }: HabitHeaderProps) => {
   const { colorScheme } = useColorScheme();
   const modal = useModal();
+  const participants = Object.entries(habit.participants)
+    .filter(
+      (entry): entry is [string, NonNullable<(typeof entry)[1]>] =>
+        entry[1] !== undefined,
+    )
+    .map(([_, p]) => p);
+  const isOwner = habit.participants['1' as UserIdT]?.isOwner;
+
+  const handleTransferOwnership = (userId: string) => {
+    alert('TODO: Transfer ownership to ' + userId);
+  };
+
+  const handleKickUser = (userId: string) => {
+    alert('TODO: Kick user ' + userId);
+  };
 
   return (
     <>
@@ -214,15 +230,93 @@ const HabitHeader = ({ habit }: HabitHeaderProps) => {
             colorScheme === 'dark' ? colors.neutral[800] : colors.white,
         }}
       >
-        <View className="flex-1 px-4">
-          <Header title={habit.title} />
-          <View className="flex flex-col gap-4">
+        <ScrollView className="flex-1 px-4">
+          <View className="flex flex-col gap-6">
+            <View
+              className="flex flex-col gap-2 rounded-xl p-4"
+              style={{
+                backgroundColor:
+                  colorScheme === 'dark'
+                    ? getTranslucentColor(habit.color.base, 0.05)
+                    : habit.color.light,
+                borderColor:
+                  colorScheme === 'dark' ? habit.color.base : 'transparent',
+                borderWidth: colorScheme === 'dark' ? 1 : 0,
+              }}
+            >
+              <View className="flex flex-row items-center gap-2">
+                <HabitIcon
+                  icon={habit.icon}
+                  size={24}
+                  color={colorScheme === 'dark' ? colors.white : colors.black}
+                  strokeWidth={2}
+                />
+                <Text className="text-xl font-semibold">{habit.title}</Text>
+              </View>
+              {habit.description && (
+                <Text className="text-base">{habit.description}</Text>
+              )}
+              <Text
+                className="text-sm"
+                style={{
+                  color:
+                    colorScheme === 'dark'
+                      ? colors.stone[400]
+                      : habit.color.text,
+                }}
+              >
+                {habit.settings.allowMultipleCompletions
+                  ? 'Multiple completions allowed per day'
+                  : 'One completion per day limit'}
+              </Text>
+              <Text
+                className="text-sm"
+                style={{
+                  color:
+                    colorScheme === 'dark'
+                      ? colors.stone[400]
+                      : habit.color.text,
+                }}
+              >
+                Created{' '}
+                {new Date(habit.createdAt).toLocaleDateString(undefined, {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </Text>
+            </View>
+
             <Button
               label="Invite Friends"
-              variant="outline"
               icon={UserPlusIcon}
               onPress={() => alert('todo')}
             />
+
+            {participants.length >= 2 && (
+              <View className="flex flex-col">
+                <Text className="font-medium">
+                  {participants.length} participants:
+                </Text>
+                {participants.map((p) => (
+                  <UserCard
+                    key={p.id}
+                    data={{
+                      id: p.id,
+                      displayName: p.displayName,
+                      username: p.username,
+                      createdAt: p.lastActivity,
+                    }}
+                    showOwnerBadge={p.isOwner}
+                    showManageOptions={isOwner && p.id !== '1'}
+                    onTransferOwnership={() => handleTransferOwnership(p.id)}
+                    onKickUser={() => handleKickUser(p.id)}
+                    onPress={modal.dismiss}
+                  />
+                ))}
+              </View>
+            )}
+
             <Button
               label="Leave Habit"
               variant="destructive"
@@ -230,7 +324,7 @@ const HabitHeader = ({ habit }: HabitHeaderProps) => {
               onPress={() => alert('todo')}
             />
           </View>
-        </View>
+        </ScrollView>
       </Modal>
     </>
   );
@@ -328,7 +422,7 @@ const UserWithEntry = ({
           {modifyEntryButton ||
             // for other users, show nudge button if no completions and it's today
             (entry.numberOfCompletions === 0 && isToday && (
-              <View className="flex flex-row">
+              <View className="flex flex-row justify-end">
                 <Button
                   variant="outline"
                   size="sm"
