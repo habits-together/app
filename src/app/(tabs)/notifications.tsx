@@ -73,27 +73,33 @@ export default function Notifications() {
       <Header title="Notifications" />
       <ScrollView className="flex-1">
         <View className="flex flex-col gap-6">
-          {sortedNotifications.map((notification) => {
-            const userName = getUserName(notification.senderId);
-            const habit =
-              notification.type !== 'friendRequest'
-                ? getHabitData(notification.habitId)
-                : undefined;
+          {sortedNotifications.length === 0 ? (
+            <Text className="text-center text-stone-500 dark:text-stone-400">
+              You have no more notifications 🎉
+            </Text>
+          ) : (
+            sortedNotifications.map((notification) => {
+              const userName = getUserName(notification.senderId);
+              const habit =
+                notification.type !== 'friendRequest'
+                  ? getHabitData(notification.habitId)
+                  : undefined;
 
-            const isLoading =
-              userName === null ||
-              (notification.type !== 'friendRequest' && habit === null);
+              const isLoading =
+                userName === null ||
+                (notification.type !== 'friendRequest' && habit === null);
 
-            return (
-              <NotificationCard
-                key={`${notification.type}-${notification.sentAt}`}
-                notification={notification}
-                userName={userName}
-                habit={habit}
-                isLoading={isLoading}
-              />
-            );
-          })}
+              return (
+                <NotificationCard
+                  key={`${notification.type}-${notification.sentAt}`}
+                  notification={notification}
+                  userName={userName}
+                  habit={habit}
+                  isLoading={isLoading}
+                />
+              );
+            })
+          )}
         </View>
       </ScrollView>
     </ScreenContainer>
