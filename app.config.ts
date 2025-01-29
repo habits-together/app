@@ -1,6 +1,6 @@
 import type { ConfigContext, ExpoConfig } from '@expo/config';
 
-import { ClientEnv, Env } from './env';
+import { Env } from './env';
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
@@ -74,7 +74,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ],
   ],
   extra: {
-    ...ClientEnv,
+    ...Env,
     eas: {
       projectId: Env.EAS_PROJECT_ID,
     },

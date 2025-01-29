@@ -1,27 +1,32 @@
+import { Env } from '@env';
 import { initializeApp } from 'firebase/app';
-import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
+import {
+  connectFirestoreEmulator,
+  initializeFirestore,
+} from 'firebase/firestore';
 import { connectFunctionsEmulator, getFunctions } from 'firebase/functions';
+import { Platform } from 'react-native';
 
 const firebaseConfig = {
-  apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
+  apiKey: Env.EXPO_PUBLIC_FIREBASE_API_KEY,
+  authDomain: Env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: Env.EXPO_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: Env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: Env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: Env.EXPO_PUBLIC_FIREBASE_APP_ID,
 };
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
+export const db = initializeFirestore(app, {
+  experimentalForceLongPolling: true,
+});
+const functions = getFunctions(app);
 
-// Connect to emulator in development
+// Connect to emulator
+// 10.0.2.2 is a special IP address to connect to the 'localhost' of the host computer from an Android emulator
+const emulatorHost = Platform.OS === 'ios' ? '127.0.0.1' : '10.0.2.2';
 if (__DEV__) {
-  connectFirestoreEmulator(db, '127.0.0.1', 8080);
-}
-
-// Connect to Functions emulator
-const functions = getFunctions();
-if (process.env.NODE_ENV === 'development') {
-  connectFunctionsEmulator(functions, '127.0.0.1', 5001);
+  connectFirestoreEmulator(db, emulatorHost, 8080);
+  connectFunctionsEmulator(functions, emulatorHost, 5001);
 }
