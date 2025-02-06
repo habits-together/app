@@ -1,45 +1,102 @@
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut as firebaseSignOut,
+  type User,
+} from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 import { create } from 'zustand';
 
+import { auth, db } from '../../api/common/firebase';
 import { createSelectors } from '../utils';
-import type { TokenType } from './utils';
-import { getToken, removeToken, setToken } from './utils';
 
 interface AuthState {
-  token: TokenType | null;
+  user: User | null;
   status: 'idle' | 'signOut' | 'signIn';
-  signIn: (data: TokenType) => void;
-  signOut: () => void;
+  signIn: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string) => Promise<void>;
+  signOut: () => Promise<void>;
   hydrate: () => void;
 }
 
-const _useAuth = create<AuthState>((set, get) => ({
+const _useAuth = create<AuthState>((set) => ({
+  user: null,
   status: 'idle',
-  token: null,
-  signIn: (token) => {
-    setToken(token);
-    set({ status: 'signIn', token });
-  },
-  signOut: () => {
-    removeToken();
-    set({ status: 'signOut', token: null });
-  },
-  hydrate: () => {
+
+  signIn: async (email, password) => {
     try {
-      const userToken = getToken();
-      if (userToken !== null) {
-        get().signIn(userToken);
-      } else {
-        get().signOut();
-      }
-    } catch (e) {
-      // catch error here
-      // Maybe sign_out user!
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      set({
+        user: userCredential.user,
+        status: 'signIn',
+      });
+    } catch (error) {
+      console.error('SignIn Error:', error);
+      throw error;
     }
+  },
+
+  signUp: async (email, password) => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      set({
+        user: userCredential.user,
+        status: 'signIn',
+      });
+    } catch (error) {
+      console.error('SignUp Error:', error);
+      throw error;
+    }
+  },
+
+  signOut: async () => {
+    try {
+      await firebaseSignOut(auth);
+      set({ user: null, status: 'signOut' });
+    } catch (error) {
+      console.error('SignOut Error:', error);
+    }
+  },
+
+  hydrate: () => {
+    set({ status: 'idle' });
+
+    // Subscribe to Firebase auth state changes
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        set({ user, status: 'signIn' });
+      } else {
+        set({ user: null, status: 'signOut' });
+      }
+    });
   },
 }));
 
 export const useAuth = createSelectors(_useAuth);
 
+// Functions for easier usage in components
 export const signOut = () => _useAuth.getState().signOut();
-export const signIn = (token: TokenType) => _useAuth.getState().signIn(token);
+export const signIn = (email: string, password: string) =>
+  _useAuth.getState().signIn(email, password);
 export const hydrateAuth = () => _useAuth.getState().hydrate();
+
+export const checkIfUserExistsInFirestore = async (): Promise<boolean> => {
+  const userId = _useAuth.getState().user?.uid;
+  if (!userId) return false;
+  try {
+    const userDoc = await getDoc(doc(db, 'users', userId));
+    return userDoc.exists();
+  } catch (error) {
+    console.error('Error checking if user exists in Firestore:', error);
+    return false;
+  }
+};
