@@ -1,17 +1,19 @@
-import { ref, uploadBytes } from '@firebase/storage';
+import { getDownloadURL, ref, uploadBytes } from '@firebase/storage';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as ImagePicker from 'expo-image-picker';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import {
   collection,
   doc,
   getDocs,
   query,
+  serverTimestamp,
   setDoc,
+  updateDoc,
   where,
 } from 'firebase/firestore';
 import { Upload } from 'lucide-react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Image, KeyboardAvoidingView } from 'react-native';
 import * as z from 'zod';
@@ -19,6 +21,7 @@ import * as z from 'zod';
 import { db, storage } from '@/api';
 import { useAuth } from '@/core';
 import { Button, ControlledInput, Header, ScreenContainer, View } from '@/ui';
+
 const profileSchema = z.object({
   displayName: z.string().min(2, 'Display name is required'),
   username: z.string().min(2, 'Username is required'),
@@ -29,10 +32,30 @@ type ProfileFormType = z.infer<typeof profileSchema>;
 export default function CreateProfile() {
   const router = useRouter();
   const currentUid = useAuth.getState().user?.uid;
-  const defaultProfilePic = require('/assets/images/default_profile_pic.jpg');
+  const defaultProfilePic = require('/assets/images/default_profile_pic.png');
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
-  const [isCreatingProfile, setIsCreatingProfile] = useState(false);
+  const [isSubmiting, setIsSubmiting] = useState(false);
+
+  const { mode } = useLocalSearchParams<{
+    mode: 'edit' | 'create';
+  }>();
+
+  useEffect(() => {
+    const fetchProfilePic = async () => {
+      if (mode !== 'edit' || !currentUid) return;
+
+      try {
+        const profilePicRef = ref(storage, `profilePics/${currentUid}`);
+        const url = await getDownloadURL(profilePicRef);
+        setProfileImage(url);
+      } catch (error) {
+        console.log('No profile image found, using default.');
+      }
+    };
+
+    fetchProfilePic();
+  }, [mode, currentUid]);
 
   const { handleSubmit, control, setError } = useForm<ProfileFormType>({
     resolver: zodResolver(profileSchema),
@@ -77,9 +100,9 @@ export default function CreateProfile() {
     }
   };
 
-  const onSubmit = async (data: ProfileFormType) => {
-    setIsCreatingProfile(true);
+  const createProfile = async (data: ProfileFormType) => {
     if (!currentUid) return;
+    setIsSubmiting(true);
     try {
       // check if username taken
       const usernameQuery = query(
@@ -93,7 +116,7 @@ export default function CreateProfile() {
           type: 'custom',
           message: 'This username is already taken',
         });
-        setIsCreatingProfile(false);
+        setIsSubmiting(false);
         return;
       }
 
@@ -103,7 +126,7 @@ export default function CreateProfile() {
       await setDoc(userDocRef, {
         displayName: data.displayName,
         username: data.username,
-        createdAt: new Date().toLocaleDateString('en-CA'),
+        createdAt: serverTimestamp(),
       });
 
       // upload profile pic to storage
@@ -111,13 +134,56 @@ export default function CreateProfile() {
 
       router.push('/');
     } catch (error) {
-      console.error('Error updating profile', error);
+      console.error('Error creating profile', error);
       setError('root', {
         type: 'custom',
         message: 'Something went wrong creating profile',
       });
     } finally {
-      setIsCreatingProfile(false);
+      setIsSubmiting(false);
+    }
+  };
+
+  const editProfile = async (data: ProfileFormType) => {
+    if (!currentUid) return;
+    setIsSubmiting(true);
+    try {
+      // check if username taken
+      const usernameQuery = query(
+        collection(db, 'users'),
+        where('username', '==', data.username),
+      );
+      const usernameSnapshot = await getDocs(usernameQuery);
+
+      if (!usernameSnapshot.empty) {
+        setError('username', {
+          type: 'custom',
+          message: 'This username is already taken',
+        });
+        setIsSubmiting(false);
+        return;
+      }
+
+      // update user document in firestore
+      const userDocRef = doc(db, 'users', currentUid);
+      
+      await updateDoc(userDocRef, {
+        displayName: data.displayName,
+        username: data.username
+      });
+
+      // update profile picture in storage
+      await uploadProfileImage();
+
+      router.push('/');
+    } catch (error) {
+      console.error('Error updating profile', error);
+      setError('root', {
+        type: 'custom',
+        message: 'Something went wrong updating profile',
+      });
+    } finally {
+      setIsSubmiting(false);
     }
   };
 
@@ -129,7 +195,9 @@ export default function CreateProfile() {
         keyboardVerticalOffset={10}
       >
         <View className="flex flex-1 flex-col gap-4">
-          <Header title="Create Profile" />
+          <Header
+            title={mode === 'create' ? 'Create Profile' : 'Edit Profile'}
+          />
 
           <View className="flex flex-row items-center gap-4 px-2">
             <Image
@@ -158,9 +226,13 @@ export default function CreateProfile() {
           />
 
           <Button
-            label="Complete Profile"
-            loading={isCreatingProfile}
-            onPress={handleSubmit(onSubmit)}
+            label={mode === 'create' ? 'Complete Profile' : 'Save Changes'}
+            loading={isSubmiting}
+            onPress={
+              mode === 'create'
+                ? handleSubmit(createProfile)
+                : handleSubmit(editProfile)
+            }
           />
         </View>
       </KeyboardAvoidingView>
