@@ -30,7 +30,10 @@ export default function SignUp() {
     setIsLoading(true);
     try {
       await signUp(data.email, data.password);
-      router.push('/auth/create-profile');
+      router.push({
+        pathname: '/auth/create-edit-profile',
+        params: { mode: 'create' },
+      });
     } catch (error: any) {
       console.error('Login Error:', error);
       setError('password', { message: 'Invalid email or password' });

@@ -1,5 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { Env } from '@env';
+import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Linking } from 'react-native';
 
@@ -11,6 +12,7 @@ import { Button, Header, ScreenContainer, ScrollView, View } from '@/ui';
 
 export default function Settings() {
   const signOut = useAuth.use.signOut();
+  const router = useRouter();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const handleLogout = async () => {
     setIsLoggingOut(true);
@@ -22,6 +24,7 @@ export default function Settings() {
       setIsLoggingOut(false);
     }
   };
+
   return (
     <ScreenContainer>
       <Header title="Settings" />
@@ -92,7 +95,20 @@ export default function Settings() {
             />
           </ItemsContainer>
 
-          <View className="my-8">
+          <View className="pt-4">
+            <Button
+              label="Edit Profile"
+              onPress={() =>
+                router.push({
+                  pathname: '/auth/create-edit-profile',
+                  params: { mode: 'edit' },
+                })
+              }
+              variant="item"
+            />
+          </View>
+
+          <View className="py-4">
             <Button
               label="Logout"
               onPress={handleLogout}

@@ -44,7 +44,7 @@ export default function TabLayout() {
 
   // we only redirect when userExists is not null (we have acc checked and set the value)
   if (status === 'signIn' && userExists === false) {
-    return <Redirect href="/auth/create-profile" />;
+    return <Redirect href="/auth/create-edit-profile?mode=create" />;
   }
 
   return (
