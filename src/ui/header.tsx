@@ -43,7 +43,7 @@ export const Header = ({ leftButton, title, rightButton }: Props) => {
 
       {title && ( // center it when there is a left button
         <Text
-          className={`text-xl font-semibold ${leftButton && 'absolute left-1/2 -translate-x-1/2'}`}
+          className={`text-xl font-bold ${leftButton && 'absolute left-1/2 -translate-x-1/2'}`}
         >
           {title}
         </Text>

@@ -9,6 +9,9 @@
       ],
       "@env": [
         "./src/core/env.js"
+      ],
+      "@firebase/auth": [
+        "./node_modules/@firebase/auth/dist/index.rn.d.ts"
       ]
     },
     "esModuleInterop": true,

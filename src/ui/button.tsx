@@ -48,6 +48,12 @@ const button = tv({
         label: 'text-black',
         indicator: 'text-black',
       },
+      item: {
+        container:
+          'rounded-md border border-neutral-200 dark:border-neutral-700 dark:bg-neutral-800',
+        label: 'text-black dark:text-neutral-100',
+        indicator: 'text-black dark:text-neutral-100',
+      },
     },
     size: {
       default: {

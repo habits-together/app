@@ -1,13 +1,19 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
+import { httpsCallable } from 'firebase/functions';
 import { useColorScheme } from 'nativewind';
-import React from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import * as z from 'zod';
 
+import { functions } from '@/api/common/firebase';
 import Logo from '@/components/logo';
 import { Button, ControlledInput, ScreenContainer, Text, View } from '@/ui';
+
+const userExistsSchema = z.object({
+  exists: z.boolean(),
+});
 
 const emailSchema = z.object({
   email: z
@@ -21,10 +27,11 @@ type EmailFormType = z.infer<typeof emailSchema>;
 
 export default function Auth() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const { handleSubmit, control } = useForm<EmailFormType>({
     resolver: zodResolver(emailSchema),
     defaultValues: {
-      email: 'test@gmail.com',
+      email: '',
     },
   });
 
@@ -32,20 +39,30 @@ export default function Auth() {
   const appleIconWhite = require('/assets/apple-icon-white.png');
   const appleIconBlack = require('/assets/apple-icon-black.png');
 
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  const checkUserExists = async (email: string) => {
-    return true; // Change as needed
+  const checkUserExists = async (email: string): Promise<boolean> => {
+    try {
+      const checkUser = httpsCallable(functions, 'checkUserExistsInAuth');
+      const response = await checkUser({ email });
+      const data = userExistsSchema.parse(response.data);
+      return data.exists;
+    } catch (error) {
+      console.error('Error checking user existence:', error);
+      return false;
+    }
   };
 
   const onSubmit = async (data: EmailFormType) => {
-    const userExists = await checkUserExists(data.email);
-    if (userExists) {
+    setIsLoading(true);
+    try {
+      const userExists = await checkUserExists(data.email);
       router.push({
-        pathname: '/auth/login',
+        pathname: userExists ? '/auth/login' : '/auth/sign-up',
         params: { email: data.email },
       });
-    } else {
-      router.push({ pathname: '/auth/sign-up', params: { email: data.email } });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -71,6 +88,7 @@ export default function Auth() {
           />
           <Button
             label="Continue With Email"
+            loading={isLoading}
             onPress={handleSubmit(onSubmit)}
           />
           <View className="flex-row items-center gap-3">

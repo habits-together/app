@@ -1,17 +1,27 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { Env } from '@env';
+import { useState } from 'react';
 import { Linking } from 'react-native';
 
 import { Item } from '@/components/settings/item';
 import { ItemsContainer } from '@/components/settings/items-container';
 import { ThemeItem } from '@/components/settings/theme-item';
 import { useAuth } from '@/core';
-import { Header, ScreenContainer, ScrollView, View } from '@/ui';
+import { Button, Header, ScreenContainer, ScrollView, View } from '@/ui';
 
 export default function Settings() {
   const signOut = useAuth.use.signOut();
-  // const { colorScheme } = useColorScheme();
-  // const iconColor = colorScheme === 'dark' ? colors.neutral[400] : colors.neutral[500];
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await signOut();
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
   return (
     <ScreenContainer>
       <Header title="Settings" />
@@ -83,9 +93,12 @@ export default function Settings() {
           </ItemsContainer>
 
           <View className="my-8">
-            <ItemsContainer>
-              <Item text="Logout" onPress={signOut} />
-            </ItemsContainer>
+            <Button
+              label="Logout"
+              onPress={handleLogout}
+              loading={isLoggingOut}
+              variant="item"
+            />
           </View>
         </View>
       </ScrollView>
