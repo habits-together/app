@@ -1,6 +1,7 @@
 import { createQuery } from 'react-query-kit';
 
-import { type UserIdT } from '../users';
+import { getCurrentUserId } from '@/core';
+
 import { getNotifications } from './firebase-queries';
 import { type FriendNotificationT, type HabitNotificationT } from './types';
 
@@ -10,7 +11,7 @@ type Variables = void;
 export const useNotifications = createQuery<Response, Variables, Error>({
   queryKey: ['notifications'],
   fetcher: async () => {
-    const myId = '1' as UserIdT; // TODO: Get from auth context
+    const myId = getCurrentUserId();
     return await getNotifications(myId);
   },
 });

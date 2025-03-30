@@ -8,9 +8,9 @@ import {
   type HabitCompletionWithDateInfoT,
   type HabitEntryT,
   type HabitT,
-  type UserIdT,
 } from '@/api';
 import { useModifyHabitEntry } from '@/api/habits/use-modify-entry';
+import { getCurrentUserId } from '@/core';
 import { colors, Header, Modal, type ModalMethods, Text, View } from '@/ui';
 
 import { CompletionsSection } from './completions-section';
@@ -94,7 +94,7 @@ export function ModifyEntryModal({
 
     await modifyEntry.mutateAsync({
       habitId: habit.id,
-      userId: '1' as UserIdT,
+      userId: getCurrentUserId(),
       date: selectedCompletion.date,
       modifiedEntry: modifiedEntry,
     });

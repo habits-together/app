@@ -16,7 +16,6 @@ import {
   type HabitT,
   type ParticipantWithIdT,
   useAllUsersHabitCompletions,
-  type UserIdT,
   type UserT,
 } from '@/api';
 import { ErrorMessage } from '@/components/error-message';
@@ -25,6 +24,7 @@ import HabitInfoCard from '@/components/habit-info-card';
 import ModifyHabitEntry from '@/components/modify-habit-entry';
 import { DayNavigation } from '@/components/modify-habit-entry/day-navigation';
 import UserCard, { UserImageNameAndUsername } from '@/components/user-card';
+import { getCurrentUserId } from '@/core';
 import { getTranslucentColor } from '@/core/get-translucent-color';
 import {
   Button,
@@ -42,6 +42,7 @@ import {
 } from '@/ui';
 
 export default function ViewHabit() {
+  const myId = getCurrentUserId();
   const { habitJson } = useLocalSearchParams<{
     habitJson: string;
   }>();
@@ -104,8 +105,8 @@ export default function ViewHabit() {
     .filter((p): p is ParticipantWithIdT => p !== undefined)
     .sort((a, b) => {
       // always show user first
-      if (a.id === '1') return -1;
-      if (b.id === '1') return 1;
+      if (a.id === myId) return -1;
+      if (b.id === myId) return 1;
       if (!a?.lastActivity) {
         console.error('no last activity', a);
         return 1;
@@ -151,15 +152,15 @@ export default function ViewHabit() {
                   <UserWithEntry
                     key={p.id}
                     user={user}
-                    entry={allCompletions[user.id][selectedDayIndex]}
+                    entry={allCompletions?.[user.id]?.[selectedDayIndex] ?? {}}
                     color={parsedHabit.color}
                     isToday={selectedDayIndex === datesList.length - 1}
                     modifyEntryButton={
-                      user.id === '1' && (
+                      user.id === myId && (
                         <ModifyHabitEntry
                           habit={parsedHabit}
                           completions={[
-                            allCompletions[user.id][selectedDayIndex],
+                            allCompletions?.[user.id]?.[selectedDayIndex] ?? {},
                           ]}
                           showAsNormalButton
                         />
@@ -188,7 +189,8 @@ const HabitHeader = ({ habit }: HabitHeaderProps) => {
         entry[1] !== undefined,
     )
     .map(([_, p]) => p);
-  const isOwner = habit.participants['1' as UserIdT]?.isOwner;
+  const myId = getCurrentUserId();
+  const isOwner = habit.participants[myId]?.isOwner;
 
   const handleTransferOwnership = (userId: string) => {
     alert('TODO: Transfer ownership to ' + userId);
@@ -257,7 +259,7 @@ const HabitHeader = ({ habit }: HabitHeaderProps) => {
                       createdAt: p.lastActivity,
                     }}
                     showOwnerBadge={p.isOwner}
-                    showManageOptions={isOwner && p.id !== '1'}
+                    showManageOptions={isOwner && p.id !== myId}
                     onTransferOwnership={() => handleTransferOwnership(p.id)}
                     onKickUser={() => handleKickUser(p.id)}
                     onPress={modal.dismiss}

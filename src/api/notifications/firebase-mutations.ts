@@ -6,6 +6,8 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 
+import { getCurrentUserId } from '@/core';
+
 import { db } from '../common/firebase';
 import { type HabitIdT } from '../habits';
 import { type UserIdT } from '../users';
@@ -15,7 +17,7 @@ export const sendHabitInvite = async (
   habitId: HabitIdT,
   receiverId: UserIdT,
 ) => {
-  const myId = '1' as UserIdT; // TODO: Get from auth context
+  const myId = getCurrentUserId();
   const notification: Omit<DbHabitNotificationT, 'sentAt'> & {
     sentAt: ReturnType<typeof serverTimestamp>;
   } = {
@@ -29,7 +31,7 @@ export const sendHabitInvite = async (
 };
 
 export const sendNudge = async (habitId: HabitIdT, receiverId: UserIdT) => {
-  const myId = '1' as UserIdT; // TODO: Get from auth context
+  const myId = getCurrentUserId();
   const notification: Omit<DbHabitNotificationT, 'sentAt'> & {
     sentAt: ReturnType<typeof serverTimestamp>;
   } = {

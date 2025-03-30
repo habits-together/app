@@ -10,10 +10,15 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 
+import { getCurrentUserId } from '@/core/auth';
 import { type habitColors } from '@/ui/colors';
 
 import { db } from '../common/firebase';
-import { getUserById, type UserIdT } from '../users';
+import {
+  getUserById,
+  getUserWithRelationshipById,
+  type UserIdT,
+} from '../users';
 import {
   type DbHabitT,
   type DbParticipantT,
@@ -27,7 +32,9 @@ type ColorName = keyof typeof habitColors;
 export const createHabit = async (
   habitCreationInfo: HabitCreationT,
 ): Promise<DbHabitT> => {
-  const myId = '1' as UserIdT; // TODO: Get from auth context
+  const myId = getCurrentUserId();
+  const currentUserData = await getUserById(myId);
+  if (currentUserData == null) throw new Error('User data not found');
 
   const newHabit = {
     title: habitCreationInfo.title,
@@ -39,8 +46,8 @@ export const createHabit = async (
     },
     participants: {
       [myId]: {
-        displayName: 'Alex Chen', // TODO: Get from auth context
-        username: 'alexchen',
+        displayName: currentUserData.displayName,
+        username: currentUserData.username,
         lastActivity: serverTimestamp(),
         isOwner: true,
       } satisfies Omit<DbParticipantT, 'lastActivity'> & {
@@ -88,8 +95,8 @@ export const editHabit = async (
 };
 
 export const acceptHabitInvite = async (habitId: HabitIdT): Promise<void> => {
-  const myId = '1' as UserIdT; // TODO: Get from auth context
-  const me = await getUserById(myId);
+  const myId = getCurrentUserId();
+  const me = await getUserWithRelationshipById(myId);
   if (!me) throw new Error('User not found');
 
   const habitRef = doc(db, 'habits', habitId);
