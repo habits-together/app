@@ -1,4 +1,4 @@
-import { getDownloadURL, ref, uploadBytes } from '@firebase/storage';
+import { getDownloadURL, ref } from '@firebase/storage';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as ImagePicker from 'expo-image-picker';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -18,7 +18,8 @@ import { useForm } from 'react-hook-form';
 import { Image, KeyboardAvoidingView } from 'react-native';
 import * as z from 'zod';
 
-import { db, getUserById, storage, type UserT } from '@/api';
+import { db, getUserById, storage } from '@/api';
+import { uploadImageToStorage } from '@/api/common/firebase-utils';
 import { getCurrentUserId } from '@/core';
 import { Button, ControlledInput, Header, ScreenContainer, View } from '@/ui';
 
@@ -34,13 +35,20 @@ export default function CreateProfile() {
   const currentUid = getCurrentUserId();
   const defaultProfilePic = require('/assets/images/default_profile_pic.png');
   const [profileImage, setProfileImage] = useState<string | null>(null);
-  const [currentUserData, setCurrentUserData] = useState<UserT | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isSubmiting, setIsSubmiting] = useState(false);
 
   const { mode } = useLocalSearchParams<{
     mode: 'edit' | 'create';
   }>();
+
+  const { handleSubmit, control, setError, reset } = useForm<ProfileFormType>({
+    resolver: zodResolver(profileSchema),
+    defaultValues: {
+      displayName: '',
+      username: '',
+    },
+  });
 
   useEffect(() => {
     const fetchProfilePic = async () => {
@@ -60,7 +68,10 @@ export default function CreateProfile() {
       try {
         const userData = await getUserById(currentUid);
         if (userData == null) return;
-        setCurrentUserData(userData);
+        reset({
+          displayName: userData.displayName,
+          username: userData.username,
+        });
       } catch (error) {
         console.log('No user Data found.');
       }
@@ -68,15 +79,7 @@ export default function CreateProfile() {
 
     fetchProfilePic();
     getCurrentUserData();
-  }, [mode, currentUid]);
-
-  const { handleSubmit, control, setError } = useForm<ProfileFormType>({
-    resolver: zodResolver(profileSchema),
-    defaultValues: {
-      displayName: '',
-      username: '',
-    },
-  });
+  }, [mode, currentUid, reset]);
 
   const handleImageUpload = async () => {
     setIsUploading(true);
@@ -102,11 +105,8 @@ export default function CreateProfile() {
     if (!profileImage) return;
 
     try {
-      const response = await fetch(profileImage);
-      const blob = await response.blob();
-      const storageRef = ref(storage, `profilePics/${currentUid}`);
-      await uploadBytes(storageRef, blob);
-      return;
+      const filePath = `profilePics/${currentUid}`;
+      await uploadImageToStorage(profileImage, filePath);
     } catch (error) {
       console.error('Failed to upload profile image:', error);
       return;
@@ -166,7 +166,12 @@ export default function CreateProfile() {
       );
       const usernameSnapshot = await getDocs(usernameQuery);
 
-      if (!usernameSnapshot.empty) {
+      // Check if any other user has this username
+      const usernameTakenByAnotherUser = usernameSnapshot.docs.some(
+        (doc) => doc.id !== currentUid,
+      );
+
+      if (usernameTakenByAnotherUser) {
         setError('username', {
           type: 'custom',
           message: 'This username is already taken',
@@ -229,13 +234,11 @@ export default function CreateProfile() {
             control={control}
             name="displayName"
             label="Display Name"
-            defaultValue={currentUserData ? currentUserData.displayName : ''}
           />
           <ControlledInput
             control={control}
             name="username"
             label="Unique Username"
-            defaultValue={currentUserData ? currentUserData.username : ''}
           />
 
           <Button

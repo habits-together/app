@@ -9,6 +9,7 @@ import {
   type HabitEntryT,
   type HabitT,
 } from '@/api';
+import { uploadImageToStorage } from '@/api/common/firebase-utils';
 import { useModifyHabitEntry } from '@/api/habits/use-modify-entry';
 import { getCurrentUserId } from '@/core';
 import { colors, Header, Modal, type ModalMethods, Text, View } from '@/ui';
@@ -46,6 +47,7 @@ export function ModifyEntryModal({
     control: noteControl,
     handleSubmit: handleNoteSubmit,
     watch,
+    setError,
     reset: resetForm,
   } = useForm<NoteFormType>({
     resolver: zodResolver(noteSchema),
@@ -86,15 +88,32 @@ export function ModifyEntryModal({
   };
 
   const handleSave = handleNoteSubmit(async (data) => {
+    let imageUrl: string | undefined = undefined;
+    const myId = getCurrentUserId();
+    if (image && image !== '') {
+      // upload image to storage, store the url in firestore
+      try {
+        const filePath = `habitCompletions/${habit.id}_${myId}_${selectedCompletion.date}`;
+        imageUrl = await uploadImageToStorage(image, filePath);
+      } catch (error) {
+        console.error('Habit Completion Image upload failed:', error);
+        setError('note', {
+          type: 'custom',
+          message: 'Image upload failed. Please try again.',
+        });
+        return;
+      }
+    }
+
     const modifiedEntry: HabitEntryT = {
       numberOfCompletions: numberOfCompletions,
       note: data.note !== '' ? data.note : undefined,
-      image: image !== '' ? image : undefined,
+      image: imageUrl,
     };
 
     await modifyEntry.mutateAsync({
       habitId: habit.id,
-      userId: getCurrentUserId(),
+      userId: myId,
       date: selectedCompletion.date,
       modifiedEntry: modifiedEntry,
     });
