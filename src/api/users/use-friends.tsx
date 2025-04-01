@@ -1,7 +1,9 @@
 import { createQuery } from 'react-query-kit';
 
+import { getCurrentUserId } from '@/core';
+
 import { getFriends } from './firebase-queries';
-import { type UserIdT, type UserWithRelationshipT } from './types';
+import { type UserWithRelationshipT } from './types';
 
 type Response = UserWithRelationshipT[];
 type Variables = void;
@@ -10,7 +12,7 @@ type Variables = void;
 export const useFriends = createQuery<Response, Variables, Error>({
   queryKey: ['friends'],
   fetcher: async () => {
-    const myId = '1' as UserIdT; // TODO: Get from auth context
+    const myId = getCurrentUserId();
     const friends = await getFriends(myId);
     return friends.map((friend) => ({
       ...friend,

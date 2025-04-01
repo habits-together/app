@@ -18,8 +18,8 @@ import { useForm } from 'react-hook-form';
 import { Image, KeyboardAvoidingView } from 'react-native';
 import * as z from 'zod';
 
-import { db, storage } from '@/api';
-import { useAuth } from '@/core';
+import { db, getUserById, storage, type UserT } from '@/api';
+import { getCurrentUserId } from '@/core';
 import { Button, ControlledInput, Header, ScreenContainer, View } from '@/ui';
 
 const profileSchema = z.object({
@@ -31,9 +31,10 @@ type ProfileFormType = z.infer<typeof profileSchema>;
 
 export default function CreateProfile() {
   const router = useRouter();
-  const currentUid = useAuth.getState().user?.uid;
+  const currentUid = getCurrentUserId();
   const defaultProfilePic = require('/assets/images/default_profile_pic.png');
   const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [currentUserData, setCurrentUserData] = useState<UserT | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isSubmiting, setIsSubmiting] = useState(false);
 
@@ -43,7 +44,7 @@ export default function CreateProfile() {
 
   useEffect(() => {
     const fetchProfilePic = async () => {
-      if (mode !== 'edit' || !currentUid) return;
+      if (mode !== 'edit') return;
 
       try {
         const profilePicRef = ref(storage, `profilePics/${currentUid}`);
@@ -54,7 +55,19 @@ export default function CreateProfile() {
       }
     };
 
+    const getCurrentUserData = async () => {
+      if (mode !== 'edit') return;
+      try {
+        const userData = await getUserById(currentUid);
+        if (userData == null) return;
+        setCurrentUserData(userData);
+      } catch (error) {
+        console.log('No user Data found.');
+      }
+    };
+
     fetchProfilePic();
+    getCurrentUserData();
   }, [mode, currentUid]);
 
   const { handleSubmit, control, setError } = useForm<ProfileFormType>({
@@ -86,7 +99,7 @@ export default function CreateProfile() {
   };
 
   const uploadProfileImage = async () => {
-    if (!profileImage || !currentUid) return;
+    if (!profileImage) return;
 
     try {
       const response = await fetch(profileImage);
@@ -101,7 +114,6 @@ export default function CreateProfile() {
   };
 
   const createProfile = async (data: ProfileFormType) => {
-    if (!currentUid) return;
     setIsSubmiting(true);
     try {
       // check if username taken
@@ -145,7 +157,6 @@ export default function CreateProfile() {
   };
 
   const editProfile = async (data: ProfileFormType) => {
-    if (!currentUid) return;
     setIsSubmiting(true);
     try {
       // check if username taken
@@ -166,10 +177,10 @@ export default function CreateProfile() {
 
       // update user document in firestore
       const userDocRef = doc(db, 'users', currentUid);
-      
+
       await updateDoc(userDocRef, {
         displayName: data.displayName,
-        username: data.username
+        username: data.username,
       });
 
       // update profile picture in storage
@@ -218,11 +229,13 @@ export default function CreateProfile() {
             control={control}
             name="displayName"
             label="Display Name"
+            defaultValue={currentUserData ? currentUserData.displayName : ''}
           />
           <ControlledInput
             control={control}
             name="username"
             label="Unique Username"
+            defaultValue={currentUserData ? currentUserData.username : ''}
           />
 
           <Button

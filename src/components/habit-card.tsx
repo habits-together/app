@@ -15,7 +15,7 @@ import {
   type UserIdT,
 } from '@/api';
 import { useHabitCompletions } from '@/api/habits/use-habit-completions';
-import { useHabitOrder } from '@/core';
+import { getCurrentUserId, useHabitOrder } from '@/core';
 import { useConfetti } from '@/core/confetti';
 import { getTranslucentColor } from '@/core/get-translucent-color';
 import {
@@ -41,7 +41,7 @@ interface HabitCardProps {
 }
 export function HabitCard({ habit }: HabitCardProps) {
   const { colorScheme } = useColorScheme();
-  const userId = '1' as UserIdT;
+  const userId = getCurrentUserId();
   const {
     data: completions,
     isPending,

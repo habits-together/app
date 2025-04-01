@@ -8,6 +8,8 @@ import {
 import { doc, getDoc } from 'firebase/firestore';
 import { create } from 'zustand';
 
+import { type UserIdT } from '@/api/users';
+
 import { auth, db } from '../../api/common/firebase';
 import { createSelectors } from '../utils';
 
@@ -99,4 +101,13 @@ export const checkIfUserExistsInFirestore = async (): Promise<boolean> => {
     console.error('Error checking if user exists in Firestore:', error);
     return false;
   }
+};
+export const getCurrentUser = (): User => {
+  const user = _useAuth.getState().user;
+  // if you are trying to get current user, we assume you are logged in
+  if (!user) throw new Error('User not logged in');
+  return user;
+};
+export const getCurrentUserId = (): UserIdT => {
+  return getCurrentUser().uid as UserIdT;
 };

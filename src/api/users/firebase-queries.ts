@@ -7,8 +7,11 @@ import {
   type Timestamp,
   where,
 } from 'firebase/firestore';
+import { getDownloadURL, ref } from 'firebase/storage';
 
-import { db } from '../common/firebase';
+import { getCurrentUserId } from '@/core';
+
+import { db, storage } from '../common/firebase';
 import {
   type DbRelationshipT,
   type DbUserT,
@@ -68,13 +71,19 @@ const getRelationshipStatus = async (
   return convertDbRelationshipToRelationship(relationship as DbRelationshipT);
 };
 
-export const getUserById = async (
+export const getUserById = async (id: UserIdT): Promise<UserT | null> => {
+  const userDoc = await getDoc(doc(db, 'users', id));
+  if (!userDoc.exists()) return null;
+  return convertDbUserToUser(id, userDoc.data() as DbUserT);
+};
+
+export const getUserWithRelationshipById = async (
   id: UserIdT,
 ): Promise<UserWithRelationshipT | null> => {
   const userDoc = await getDoc(doc(db, 'users', id));
   if (!userDoc.exists()) return null;
 
-  const myId = '1' as UserIdT; // TODO: Get from auth context
+  const myId = getCurrentUserId();
   const relationship = await getRelationshipStatus(myId, id);
 
   return {
@@ -141,9 +150,15 @@ export const searchUsers = async (searchQuery: string): Promise<UserT[]> => {
 };
 
 export const getUserPicture = async (userId: UserIdT): Promise<string> => {
-  const pictureDoc = await getDoc(doc(db, 'pictures', userId));
-  if (!pictureDoc.exists()) throw new Error('User picture not found');
-  return pictureDoc.data().url;
+  const defaultProfilePic = require('/assets/images/default_profile_pic.png');
+  try {
+    const pictureRef = ref(storage, `profilePics/${userId}`);
+    const url = await getDownloadURL(pictureRef);
+    return url;
+  } catch (error) {
+    console.log(`No profile image found for ${userId}, using default.`);
+    return defaultProfilePic;
+  }
 };
 
 export const getFriends = async (userId: UserIdT): Promise<UserT[]> => {
@@ -177,7 +192,7 @@ export const getFriends = async (userId: UserIdT): Promise<UserT[]> => {
   // Fetch user data for each friend
   const friends = await Promise.all(
     uniqueFriendIds.map(async (friendId) => {
-      const friend = await getUserById(friendId as UserIdT);
+      const friend = await getUserWithRelationshipById(friendId as UserIdT);
       if (!friend) throw new Error('Friend not found');
       return friend;
     }),

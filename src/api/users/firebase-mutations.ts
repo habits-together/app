@@ -2,19 +2,19 @@ import {
   addDoc,
   collection,
   deleteDoc,
-  doc,
   getDocs,
   query,
   serverTimestamp,
-  setDoc,
   where,
 } from 'firebase/firestore';
+
+import { getCurrentUserId } from '@/core';
 
 import { db } from '../common/firebase';
 import { type DbRelationshipT, type UserIdT } from './types';
 
 export const sendFriendRequest = async (userId: UserIdT) => {
-  const myId = '1' as UserIdT; // TODO: Get from auth context
+  const myId = getCurrentUserId();
   await addDoc(collection(db, 'notifications'), {
     type: 'friendRequest',
     senderId: myId,
@@ -24,9 +24,11 @@ export const sendFriendRequest = async (userId: UserIdT) => {
 };
 
 export const acceptFriendRequest = async (userId: UserIdT) => {
-  const myId = '1' as UserIdT; // TODO: Get from auth context
-  
-  const relationship: Omit<DbRelationshipT, 'friendsSince'> & { friendsSince: ReturnType<typeof serverTimestamp> } = {
+  const myId = getCurrentUserId();
+
+  const relationship: Omit<DbRelationshipT, 'friendsSince'> & {
+    friendsSince: ReturnType<typeof serverTimestamp>;
+  } = {
     status: 'friends',
     friendsSince: serverTimestamp(),
   };
@@ -37,7 +39,7 @@ export const acceptFriendRequest = async (userId: UserIdT) => {
     userId2: userId,
     ...relationship,
   });
-  
+
   await addDoc(collection(db, 'relationships'), {
     userId1: userId,
     userId2: myId,
@@ -46,8 +48,8 @@ export const acceptFriendRequest = async (userId: UserIdT) => {
 };
 
 export const removeFriend = async (userId: UserIdT) => {
-  const myId = '1' as UserIdT; // TODO: Get from auth context
-  
+  const myId = getCurrentUserId();
+
   // Find and delete both relationship documents
   const relationshipsRef = collection(db, 'relationships');
   const q1 = query(
@@ -61,13 +63,10 @@ export const removeFriend = async (userId: UserIdT) => {
     where('userId2', '==', myId),
   );
 
-  const [snapshot1, snapshot2] = await Promise.all([
-    getDocs(q1),
-    getDocs(q2),
-  ]);
+  const [snapshot1, snapshot2] = await Promise.all([getDocs(q1), getDocs(q2)]);
 
   await Promise.all([
     ...snapshot1.docs.map((doc) => deleteDoc(doc.ref)),
     ...snapshot2.docs.map((doc) => deleteDoc(doc.ref)),
   ]);
-}; 
+};
