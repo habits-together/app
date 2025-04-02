@@ -3,9 +3,9 @@ import { createMutation } from 'react-query-kit';
 import { queryClient } from '../common';
 import { type UserIdT } from '../users/types';
 import { modifyHabitEntry } from './firebase-mutations';
-import { type AllCompletionsT, type HabitEntryT, type HabitIdT } from './types';
+import { type HabitEntryT, type HabitIdT } from './types';
 
-type Response = AllCompletionsT;
+type Response = void;
 type Variables = {
   userId: UserIdT;
   habitId: HabitIdT;
@@ -21,7 +21,6 @@ export const useModifyHabitEntry = createMutation<Response, Variables, Error>({
       variables.date,
       variables.modifiedEntry,
     );
-    return {} as AllCompletionsT; // Return type is required but not used
   },
   onSuccess: (_, variables) => {
     queryClient.invalidateQueries({
