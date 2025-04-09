@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 
-import { useUserSearch } from '@/api/users/use-user-search';
+import { useFriendSearch } from '@/api/users/use-friend-search';
 import { ErrorMessage } from '@/components/error-message';
 import UserCard from '@/components/user-card';
 import {
@@ -19,7 +19,7 @@ export default function AddFriends() {
   const [query, setQuery] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
-  const { data, isPending, isError, error, refetch } = useUserSearch({
+  const { data, isPending, isError, error, refetch } = useFriendSearch({
     variables: { query: searchTerm },
     enabled: searchTerm.length > 0,
   });
@@ -37,7 +37,7 @@ export default function AddFriends() {
           <View className="flex w-full flex-row gap-2">
             <View className="flex-1">
               <Input
-                placeholder="Enter username..."
+                placeholder="Username"
                 value={query}
                 onChangeText={setQuery}
                 onSubmitEditing={handleSearch}
