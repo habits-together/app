@@ -149,6 +149,12 @@ export const searchUsers = async (searchQuery: string): Promise<UserT[]> => {
   return rankedUsers.slice(0, 10);
 };
 
+export const searchFriends = async (searchQuery: string): Promise<UserT[]> => {
+  return (await searchUsers(searchQuery)).filter(
+    (friend) => friend.id !== getCurrentUserId(),
+  );
+};
+
 export const getUserPicture = async (userId: UserIdT): Promise<string> => {
   const defaultProfilePic = require('/assets/images/default_profile_pic.png');
   try {
